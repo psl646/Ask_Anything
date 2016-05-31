@@ -30,11 +30,7 @@ var App = React.createClass({
 
   render: function() {
     return (
-      <div>
-        <header>
-          <h1>Ask Anything!</h1>
-          { this.greeting() }
-        </header>
+      <div className="app">
         {this.props.children}
       </div>
     );

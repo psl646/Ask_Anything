@@ -25922,17 +25922,7 @@
 	  render: function () {
 	    return React.createElement(
 	      'div',
-	      null,
-	      React.createElement(
-	        'header',
-	        null,
-	        React.createElement(
-	          'h1',
-	          null,
-	          'Ask Anything!'
-	        ),
-	        this.greeting()
-	      ),
+	      { className: 'app' },
 	      this.props.children
 	    );
 	  }
@@ -32889,8 +32879,9 @@
 	var Link = __webpack_require__(168).Link;
 	var SessionApiUtil = __webpack_require__(253);
 	var SessionStore = __webpack_require__(230);
-	var ErrorStore = __webpack_require__(262);
-	var UserApiUtil = __webpack_require__(263);
+	var ErrorStore = __webpack_require__(258);
+	var UserApiUtil = __webpack_require__(259);
+	var Logo = __webpack_require__(260);
 	
 	var LoginForm = React.createClass({
 	  displayName: 'LoginForm',
@@ -32953,7 +32944,8 @@
 	
 	    return React.createElement(
 	      'ul',
-	      null,
+	      { className: 'error-login' },
+	      'testing',
 	      messages
 	    );
 	  },
@@ -32973,47 +32965,50 @@
 	  },
 	
 	  render: function () {
-	    var navLink;
-	    if (this.formType() === "login") {
-	      navLink = React.createElement(
-	        Link,
-	        { to: '/signup' },
-	        'sign up instead'
-	      );
-	    } else {
-	      navLink = React.createElement(
-	        Link,
-	        { to: '/login' },
-	        'log in instead'
-	      );
-	    }
-	
 	    return React.createElement(
-	      'form',
-	      { onSubmit: this.handleSubmit },
-	      'Welcome to Ask Anything! Please ',
-	      this.formType(),
-	      ' or ',
-	      navLink,
-	      this.fieldErrors("base"),
-	      React.createElement('br', null),
+	      'div',
+	      { className: 'login-container' },
+	      React.createElement(Logo, null),
 	      React.createElement(
-	        'label',
-	        null,
-	        ' Email:',
-	        this.fieldErrors("email"),
-	        React.createElement('input', { type: 'text', value: this.state.email, onChange: this.emailChange })
-	      ),
-	      React.createElement('br', null),
-	      React.createElement(
-	        'label',
-	        null,
-	        ' Password:',
-	        this.fieldErrors("password"),
-	        React.createElement('input', { type: 'password', value: this.state.password, onChange: this.passwordChange })
-	      ),
-	      React.createElement('br', null),
-	      React.createElement('input', { type: 'submit', value: 'Submit' })
+	        'form',
+	        { className: 'login-component soft-edges', onSubmit: this.handleSubmit },
+	        this.fieldErrors('base'),
+	        React.createElement(
+	          'h1',
+	          { className: 'login-head' },
+	          'Log In'
+	        ),
+	        React.createElement('br', null),
+	        React.createElement(
+	          'label',
+	          null,
+	          ' Email ',
+	          React.createElement(
+	            'small',
+	            { className: 'login-email' },
+	            'or username'
+	          ),
+	          React.createElement('br', null),
+	          this.fieldErrors('email'),
+	          React.createElement('input', { className: 'login-input soft-edges', type: 'text', value: this.state.email, onChange: this.emailChange })
+	        ),
+	        React.createElement('br', null),
+	        React.createElement(
+	          'label',
+	          null,
+	          ' Password ',
+	          React.createElement(
+	            'small',
+	            { className: 'lost-password' },
+	            'I forgot my password'
+	          ),
+	          React.createElement('br', null),
+	          this.fieldErrors('password'),
+	          React.createElement('input', { className: 'login-input soft-edges', type: 'password', value: this.state.password, onChange: this.passwordChange })
+	        ),
+	        React.createElement('br', null),
+	        React.createElement('input', { className: 'signin-button soft-edges', type: 'submit', value: 'Sign in with my Ask Anything! account' })
+	      )
 	    );
 	  }
 	});
@@ -33021,11 +33016,7 @@
 	module.exports = LoginForm;
 
 /***/ },
-/* 258 */,
-/* 259 */,
-/* 260 */,
-/* 261 */,
-/* 262 */
+/* 258 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Store = __webpack_require__(235).Store;
@@ -33074,7 +33065,7 @@
 	module.exports = ErrorStore;
 
 /***/ },
-/* 263 */
+/* 259 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var SessionActions = __webpack_require__(254);
@@ -33100,6 +33091,31 @@
 	};
 	
 	module.exports = UserApiUtil;
+
+/***/ },
+/* 260 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	var Logo = React.createClass({
+	  displayName: 'Logo',
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'logo' },
+	      React.createElement('img', { className: 'logo-image', src: 'http://67.media.tumblr.com/493315168e2ec76ebccc50c2995fc356/tumblr_o8243mWDYt1vqr4ifo1_400.png', width: '35', height: '35', alt: 'HTML Dog' }),
+	      React.createElement(
+	        'h1',
+	        { className: 'logo-text' },
+	        'Ask Anything!'
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = Logo;
 
 /***/ }
 /******/ ]);

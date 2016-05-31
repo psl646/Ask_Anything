@@ -4,7 +4,6 @@ var SessionApiUtil = require('./../util/session_api_util');
 var SessionStore = require('./../stores/session_store');
 var ErrorStore = require('./../stores/error_store');
 var UserApiUtil = require('./../util/user_api_util');
-var Logo = require('./Logo.jsx');
 
 var LoginForm = React.createClass({
   getInitialState: function () {
@@ -57,7 +56,7 @@ var LoginForm = React.createClass({
       return <li key={ i }>{ errorMsg }</li>;
     });
 
-    return <ul className='error-login'>testing{ messages }</ul>;
+    return <ul>{ messages }</ul>;
   },
 
   formType: function () {
@@ -75,30 +74,34 @@ var LoginForm = React.createClass({
 	},
 
 	render: function () {
+    var navLink;
+    if (this.formType() === "login") {
+      navLink = <Link to="/signup">sign up instead</Link>;
+    } else {
+      navLink = <Link to="/login">log in instead</Link>;
+    }
+
 		return (
-			<div className='login-container'>
-				<Logo />
-				<form className='login-component soft-edges' onSubmit={this.handleSubmit}>
-					{ this.fieldErrors('base') }
+			<form className='login-component' onSubmit={this.handleSubmit}>
+        Log In { this.formType() } or { navLink }
 
-	        <h1 className='login-head'>Log In</h1>
+        { this.fieldErrors("base") }
 
-	        <br />
-					<label> Email <small className='login-email'>or username</small><br/>
-	          { this.fieldErrors('email') }
-						<input className='login-input soft-edges' type='text' value={this.state.email} onChange={this.emailChange}/>
-					</label>
+        <br />
+				<label> Email:
+          { this.fieldErrors("email") }
+					<input type="text" value={this.state.email} onChange={this.emailChange}/>
+				</label>
 
-	        <br />
-					<label> Password <small className='lost-password'>I forgot my password</small><br/>
-	          { this.fieldErrors('password') }
-						<input className='login-input soft-edges' type='password' value={this.state.password} onChange={this.passwordChange} />
-					</label>
+        <br />
+				<label> Password:
+          { this.fieldErrors("password") }
+					<input type="password" value={this.state.password} onChange={this.passwordChange} />
+				</label>
 
-	        <br />
-					<input className='signin-button soft-edges' type='submit' value='Sign in with my Ask Anything! account' />
-				</form>
-			</div>
+        <br />
+				<input type="submit" value="Log In!" />
+			</form>
 		);
 	}
 });
