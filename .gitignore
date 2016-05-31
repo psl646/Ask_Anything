@@ -13,3 +13,4 @@
 /tmp
 .gitignore
 node_modules/
+bundle.js
