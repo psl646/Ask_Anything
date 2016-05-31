@@ -1,0 +1,21 @@
+/*SIGNUPMAIN*/
+
+.signup-form-container {
+  background: #fff;
+}
+
+.choose {
+  margin: auto;
+  color: #758BA8;
+  font-size: 30px;
+  font-weight: 700;
+  width: 400px;
+}
+
+.bottom {
+  font-size: 10px;
+  margin: auto;
+  width: 350px;
+  opacity: 0.75;
+  font-weight: 400
+}

@@ -55,6 +55,7 @@
 	
 	var App = __webpack_require__(229);
 	var LoginForm = __webpack_require__(257);
+	var SignUpForm = __webpack_require__(262);
 	
 	var SessionStore = __webpack_require__(230);
 	var SessionApiUtil = __webpack_require__(253);
@@ -66,7 +67,7 @@
 	    Route,
 	    { path: '/', component: App },
 	    React.createElement(Route, { path: '/login', component: LoginForm }),
-	    React.createElement(Route, { path: '/signup', component: LoginForm })
+	    React.createElement(Route, { path: '/signup', component: SignUpForm })
 	  )
 	);
 	
@@ -33126,6 +33127,87 @@
 	});
 	
 	module.exports = Logo;
+
+/***/ },
+/* 261 */,
+/* 262 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var Link = __webpack_require__(168).Link;
+	var NavBar = __webpack_require__(263);
+	var Footer = __webpack_require__(264);
+	var SignupPresenter;
+	var SignupForm = React.createClass({
+	  displayName: 'SignupForm',
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'signup-form-container' },
+	      React.createElement(NavBar, null),
+	      React.createElement(
+	        'div',
+	        { className: 'choose' },
+	        'Choose your primary use'
+	      ),
+	      React.createElement(
+	        'ul',
+	        null,
+	        React.createElement(SignupPresenter, null),
+	        React.createElement(SignupParticipant, null)
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'bottom' },
+	        'Whichever you chose, you\'ll still be able to access all of Poll Everywhere.'
+	      ),
+	      React.createElement(Footer, null)
+	    );
+	  }
+	});
+	
+	module.exports = SignupForm;
+
+/***/ },
+/* 263 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	var NavBar = React.createClass({
+	  displayName: 'NavBar',
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      null,
+	      'Navbar here'
+	    );
+	  }
+	});
+	
+	module.exports = NavBar;
+
+/***/ },
+/* 264 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	var Footer = React.createClass({
+	  displayName: 'Footer',
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      null,
+	      'Footer here'
+	    );
+	  }
+	});
+	
+	module.exports = Footer;
 
 /***/ }
 /******/ ]);
