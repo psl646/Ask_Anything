@@ -35,8 +35,8 @@
   "homepage": "https://github.com/psl646/Ask_Anything#readme",
 
   "engines": {
-    "node": "5.10.1", (or whatever your version is)
-    "npm": "3.8.3" (ditto)
+    "node": "5.10.1",
+    "npm": "3.8.3"
  }
 
 }
