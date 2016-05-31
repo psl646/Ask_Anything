@@ -2,25 +2,25 @@ class User < ActiveRecord::Base
 
 	attr_reader :password
 
-	validates :username, :password_digest, :session_token, presence: true
-	validates :username, uniqueness: true
+	validates :first_name, :last_name, :email, :password_digest, :session_token, presence: true
+	validates :email, :session_token, uniqueness: true
 	validates :password, length: {minimum: 6}, allow_nil: :true
 
 	after_initialize :ensure_session_token
 	before_validation :ensure_session_token_uniqueness
 
-	def password= password
+	def password= (password)
 		self.password_digest = BCrypt::Password.create(password)
 		@password = password
 	end
 
-	def self.find_by_credentials username, password
-		user = User.find_by(username: username)
+	def self.find_by_credentials (email, password)
+		user = User.find_by(email: email)
 		return nil unless user
 		user.password_is?(password) ? user : nil
 	end
 
-	def password_is? password
+	def password_is? (password)
 		BCrypt::Password.new(self.password_digest).is_password?(password)
 	end
 
