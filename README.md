@@ -136,5 +136,9 @@ Phase 4 adds organization to the Questions. Questions belong to a Survey, which 
 [phase-three]: ./docs/phases/phase3.md
 [phase-four]: ./docs/phases/phase4.md
 [phase-five]: ./docs/phases/phase5.md
-[phase-five]: ./docs/phases/phase6.md
-[phase-five]: ./docs/phases/phase7.md
+[phase-six]: ./docs/phases/phase6.md
+[phase-seven]: ./docs/phases/phase7.md
+
+
+<!-- ===============LOGIN PAGE================
+Have the Links of Forgot Password + Sign Up go somewhere -->

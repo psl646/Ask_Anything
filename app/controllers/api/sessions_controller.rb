@@ -11,7 +11,7 @@ class Api::SessionsController < ApplicationController
 		else
 			render(
         json: {
-          base: ["Invalid username/password combination"]
+          base: ["We couldn't find a user with that email and password."]
         },
         status: 401
       )

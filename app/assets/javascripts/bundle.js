@@ -32945,7 +32945,6 @@
 	    return React.createElement(
 	      'ul',
 	      { className: 'error-login' },
-	      'testing',
 	      messages
 	    );
 	  },
@@ -32965,6 +32964,8 @@
 	  },
 	
 	  render: function () {
+	    var newSignUpString = "Do you need an account? Create one in a few seconds.";
+	
 	    return React.createElement(
 	      'div',
 	      { className: 'login-container' },
@@ -33000,14 +33001,23 @@
 	          React.createElement(
 	            'small',
 	            { className: 'lost-password' },
-	            'I forgot my password'
+	            React.createElement(
+	              Link,
+	              { to: 'forgotPassword' },
+	              'I forgot my password'
+	            )
 	          ),
 	          React.createElement('br', null),
 	          this.fieldErrors('password'),
 	          React.createElement('input', { className: 'login-input soft-edges', type: 'password', value: this.state.password, onChange: this.passwordChange })
 	        ),
 	        React.createElement('br', null),
-	        React.createElement('input', { className: 'signin-button soft-edges', type: 'submit', value: 'Sign in with my Ask Anything! account' })
+	        React.createElement('input', { className: 'signin-button soft-edges', type: 'submit', value: 'Sign in with my Ask Anything! account' }),
+	        React.createElement(
+	          Link,
+	          { to: 'signup', className: 'signup-link' },
+	          newSignUpString
+	        )
 	      )
 	    );
 	  }

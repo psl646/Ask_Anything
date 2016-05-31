@@ -57,7 +57,7 @@ var LoginForm = React.createClass({
       return <li key={ i }>{ errorMsg }</li>;
     });
 
-    return <ul className='error-login'>testing{ messages }</ul>;
+    return <ul className='error-login'>{ messages }</ul>;
   },
 
   formType: function () {
@@ -75,6 +75,8 @@ var LoginForm = React.createClass({
 	},
 
 	render: function () {
+    var newSignUpString = "Do you need an account? Create one in a few seconds."
+
 		return (
 			<div className='login-container'>
 				<Logo />
@@ -90,13 +92,14 @@ var LoginForm = React.createClass({
 					</label>
 
 	        <br />
-					<label> Password <small className='lost-password'>I forgot my password</small><br/>
+					<label> Password <small className='lost-password'><Link to='forgotPassword'>I forgot my password</Link></small><br/>
 	          { this.fieldErrors('password') }
 						<input className='login-input soft-edges' type='password' value={this.state.password} onChange={this.passwordChange} />
 					</label>
 
 	        <br />
 					<input className='signin-button soft-edges' type='submit' value='Sign in with my Ask Anything! account' />
+          <Link to='signup' className='signup-link'>{newSignUpString}</Link>
 				</form>
 			</div>
 		);
