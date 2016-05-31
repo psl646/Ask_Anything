@@ -33137,7 +33137,9 @@
 	var Link = __webpack_require__(168).Link;
 	var NavBar = __webpack_require__(263);
 	var Footer = __webpack_require__(264);
-	var SignupPresenter;
+	var SignupPresenter = __webpack_require__(265);
+	var SignupPresenter = __webpack_require__(265);
+	
 	var SignupForm = React.createClass({
 	  displayName: 'SignupForm',
 	
@@ -33151,12 +33153,7 @@
 	        { className: 'choose' },
 	        'Choose your primary use'
 	      ),
-	      React.createElement(
-	        'ul',
-	        null,
-	        React.createElement(SignupPresenter, null),
-	        React.createElement(SignupParticipant, null)
-	      ),
+	      React.createElement('ul', null),
 	      React.createElement(
 	        'div',
 	        { className: 'bottom' },
@@ -33208,6 +33205,145 @@
 	});
 	
 	module.exports = Footer;
+
+/***/ },
+/* 265 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var Link = __webpack_require__(168).Link;
+	var SessionApiUtil = __webpack_require__(253);
+	var SessionStore = __webpack_require__(230);
+	var ErrorStore = __webpack_require__(258);
+	var UserApiUtil = __webpack_require__(259);
+	
+	var LoginForm = React.createClass({
+	  displayName: 'LoginForm',
+	
+	  getInitialState: function () {
+	    return {
+	      email: "",
+	      password: ""
+	    };
+	  },
+	
+	  contextTypes: {
+	    router: React.PropTypes.object.isRequired
+	  },
+	
+	  componentDidMount: function () {
+	    this.errorListener = ErrorStore.addListener(this.forceUpdate.bind(this));
+	    this.sessionListener = SessionStore.addListener(this.redirectIfLoggedIn);
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.errorListener.remove();
+	    this.sessionListener.remove();
+	  },
+	
+	  redirectIfLoggedIn: function () {
+	    if (SessionStore.isUserLoggedIn()) {
+	      this.context.router.push("/");
+	    }
+	  },
+	
+	  handleSubmit: function (e) {
+	    e.preventDefault();
+	
+	    var formData = {
+	      email: this.state.email,
+	      password: this.state.password
+	    };
+	
+	    if (this.props.location.pathname === "/login") {
+	      SessionApiUtil.login(formData);
+	    } else {
+	      UserApiUtil.signup(formData);
+	    }
+	  },
+	
+	  fieldErrors: function (field) {
+	    var errors = ErrorStore.formErrors(this.formType());
+	    if (!errors[field]) {
+	      return;
+	    }
+	
+	    var messages = errors[field].map(function (errorMsg, i) {
+	      return React.createElement(
+	        'li',
+	        { key: i },
+	        errorMsg
+	      );
+	    });
+	
+	    return React.createElement(
+	      'ul',
+	      null,
+	      messages
+	    );
+	  },
+	
+	  formType: function () {
+	    return this.props.location.pathname.slice(1);
+	  },
+	
+	  emailChange: function (e) {
+	    var newEmail = e.target.value;
+	    this.setState({ email: newEmail });
+	  },
+	
+	  passwordChange: function (e) {
+	    var newPassword = e.target.value;
+	    this.setState({ password: newPassword });
+	  },
+	
+	  render: function () {
+	    var navLink;
+	    if (this.formType() === "login") {
+	      navLink = React.createElement(
+	        Link,
+	        { to: '/signup' },
+	        'sign up instead'
+	      );
+	    } else {
+	      navLink = React.createElement(
+	        Link,
+	        { to: '/login' },
+	        'log in instead'
+	      );
+	    }
+	
+	    return React.createElement(
+	      'form',
+	      { className: 'login-component', onSubmit: this.handleSubmit },
+	      'Log In ',
+	      this.formType(),
+	      ' or ',
+	      navLink,
+	      this.fieldErrors("base"),
+	      React.createElement('br', null),
+	      React.createElement(
+	        'label',
+	        null,
+	        ' Email:',
+	        this.fieldErrors("email"),
+	        React.createElement('input', { type: 'text', value: this.state.email, onChange: this.emailChange })
+	      ),
+	      React.createElement('br', null),
+	      React.createElement(
+	        'label',
+	        null,
+	        ' Password:',
+	        this.fieldErrors("password"),
+	        React.createElement('input', { type: 'password', value: this.state.password, onChange: this.passwordChange })
+	      ),
+	      React.createElement('br', null),
+	      React.createElement('input', { type: 'submit', value: 'Log In!' })
+	    );
+	  }
+	});
+	
+	module.exports = LoginForm;
 
 /***/ }
 /******/ ]);

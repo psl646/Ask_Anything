@@ -2,7 +2,9 @@ var React = require('react');
 var Link = require('react-router').Link;
 var NavBar = require('./NavBar.jsx');
 var Footer = require('./Footer.jsx');
-var SignupPresenter
+var SignupPresenter = require('./SignupPresenter.jsx')
+var SignupPresenter = require('./SignupPresenter.jsx')
+
 var SignupForm = React.createClass({
 	render: function () {
     return (
@@ -10,8 +12,7 @@ var SignupForm = React.createClass({
         <NavBar />
         <div className='choose'>Choose your primary use</div>
         <ul>
-          <SignupPresenter />
-          <SignupParticipant />
+        
         </ul>
         <div className='bottom'>Whichever you chose, you'll still be able to access all of Poll Everywhere.</div>
         <Footer />
