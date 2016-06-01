@@ -33224,34 +33224,48 @@
 
 	var React = __webpack_require__(1);
 	var Modal = __webpack_require__(265);
+	var SignupForm = __webpack_require__(286);
 	
 	var SignupParticipant = React.createClass({
-		displayName: "SignupParticipant",
+		displayName: 'SignupParticipant',
 	
 		contextTypes: {
 			router: React.PropTypes.object.isRequired
 		},
 	
-		handleClick: function (e) {
-			var clickedTargetWords = e.currentTarget.innerHTML.split("-");
-			console.log(clickedTargetWords.includes("Presenter"));
-			this.context.router.push('signupform');
+		getInitialState: function () {
+			return { modalOpen: false };
+		},
+	
+		closeModal: function () {
+			this.setState({ modalOpen: false });
+		},
+	
+		openModal: function () {
+			this.setState({ modalOpen: true });
 		},
 	
 		render: function () {
 			return React.createElement(
-				"li",
-				{ className: "signup-options", onClick: this.handleClick },
-				React.createElement("img", { className: "signup-images", src: window.askAnythingAssets.participant, width: "90", height: "90", alt: "-Participant-" }),
+				'li',
+				{ className: 'signup-options', onClick: this.openModal },
+				React.createElement('img', { className: 'signup-images', src: window.askAnythingAssets.participant, width: '90', height: '90', alt: '-Participant-' }),
 				React.createElement(
-					"div",
-					{ className: "large-text" },
-					"You're participating"
+					'div',
+					{ className: 'large-text' },
+					'You\'re participating'
 				),
 				React.createElement(
-					"div",
-					{ className: "small-text" },
-					"Select this if you'll mostly respond to other people's questions."
+					'div',
+					{ className: 'small-text' },
+					'Select this if you\'ll mostly respond to other people\'s questions.'
+				),
+				React.createElement(
+					Modal,
+					{
+						isOpen: this.state.modalOpen,
+						onRequestClose: this.closeModal },
+					React.createElement(SignupForm, { type: 'participant' })
 				)
 			);
 		}
@@ -35213,34 +35227,48 @@
 
 	var React = __webpack_require__(1);
 	var Modal = __webpack_require__(265);
+	var SignupForm = __webpack_require__(286);
 	
 	var SignupPresenter = React.createClass({
-		displayName: "SignupPresenter",
+		displayName: 'SignupPresenter',
 	
 		contextTypes: {
 			router: React.PropTypes.object.isRequired
 		},
 	
-		handleClick: function (e) {
-			var clickedTargetWords = e.currentTarget.innerHTML.split("-");
-			console.log(clickedTargetWords.includes("Presenter"));
-			this.context.router.push('signupform');
+		getInitialState: function () {
+			return { modalOpen: false };
+		},
+	
+		closeModal: function () {
+			this.setState({ modalOpen: false });
+		},
+	
+		openModal: function () {
+			this.setState({ modalOpen: true });
 		},
 	
 		render: function () {
 			return React.createElement(
-				"li",
-				{ className: "signup-options", onClick: this.handleClick },
-				React.createElement("img", { className: "signup-images", src: window.askAnythingAssets.presenter, width: "90", height: "90", alt: "-Presenter-" }),
+				'li',
+				{ className: 'signup-options', onClick: this.openModal },
+				React.createElement('img', { className: 'signup-images', src: window.askAnythingAssets.presenter, width: '90', height: '90', alt: '-Presenter-' }),
 				React.createElement(
-					"div",
-					{ className: "large-text" },
-					"You're presenting"
+					'div',
+					{ className: 'large-text' },
+					'You\'re presenting'
 				),
 				React.createElement(
-					"div",
-					{ className: "small-text" },
-					"Select this if you'll mostly create questions for others to respond to."
+					'div',
+					{ className: 'small-text' },
+					'Select this if you\'ll mostly create questions for others to respond to.'
+				),
+				React.createElement(
+					Modal,
+					{
+						isOpen: this.state.modalOpen,
+						onRequestClose: this.closeModal },
+					React.createElement(SignupForm, { type: 'presenter' })
 				)
 			);
 		}
@@ -35262,15 +35290,12 @@
 	var SignupForm = React.createClass({
 	  displayName: 'SignupForm',
 	
-	  getInitialState: function () {
-	    return {
-	      email: "",
-	      password: ""
-	    };
-	  },
-	
 	  contextTypes: {
 	    router: React.PropTypes.object.isRequired
+	  },
+	
+	  getInitialState: function () {
+	    return { first_name: "", last_name: "", email: "", password: "" };
 	  },
 	
 	  componentDidMount: function () {
@@ -35293,17 +35318,16 @@
 	    e.preventDefault();
 	
 	    var formData = {
+	      first_name: this.state.first_name,
+	      last_name: this.state.last_name,
 	      email: this.state.email,
 	      password: this.state.password
 	    };
 	
-	    if (this.props.location.pathname === "/login") {
-	      SessionApiUtil.login(formData);
-	    } else {
-	      UserApiUtil.signup(formData);
-	    }
+	    UserApiUtil.signup(formData);
 	  },
 	
+	  //FOLLOW FORMTYPE IN BENCHBNB FOR FORMERRORS
 	  fieldErrors: function (field) {
 	    var errors = ErrorStore.formErrors(this.formType());
 	    if (!errors[field]) {
@@ -35325,8 +35349,14 @@
 	    );
 	  },
 	
-	  formType: function () {
-	    return this.props.location.pathname.slice(1);
+	  firstNameChange: function (e) {
+	    var newFirstName = e.target.value;
+	    this.setState({ first_name: newFirstName });
+	  },
+	
+	  lastNameChange: function (e) {
+	    var newLastName = e.target.value;
+	    this.setState({ last_name: newLastName });
 	  },
 	
 	  emailChange: function (e) {
@@ -35340,18 +35370,48 @@
 	  },
 	
 	  render: function () {
-	    var navLink;
-	    if (this.formType() === "login") {
-	      navLink = React.createElement(
-	        Link,
-	        { to: '/signup' },
-	        'sign up instead'
+	    var topText;
+	    var bottomText;
+	    if (this.props.type === 'participant') {
+	      topText = React.createElement(
+	        'div',
+	        null,
+	        'Participant sign up'
 	      );
+	      bottomText = "";
 	    } else {
-	      navLink = React.createElement(
-	        Link,
-	        { to: '/login' },
-	        'log in instead'
+	      topText = React.createElement(
+	        'div',
+	        null,
+	        React.createElement(
+	          'div',
+	          null,
+	          'Free plan sign up'
+	        ),
+	        React.createElement(
+	          'div',
+	          null,
+	          'This is your last stop before youre creating polls.'
+	        )
+	      );
+	      bottomText = React.createElement(
+	        'div',
+	        null,
+	        React.createElement(
+	          'div',
+	          null,
+	          'What country will people be texting us from?'
+	        ),
+	        React.createElement(
+	          'div',
+	          null,
+	          'United States'
+	        ),
+	        React.createElement(
+	          'div',
+	          null,
+	          '» Show more countries..'
+	        )
 	      );
 	    }
 	
@@ -35361,29 +35421,49 @@
 	      React.createElement(
 	        'form',
 	        { onSubmit: this.handleSubmit },
-	        'Log In ',
-	        this.formType(),
-	        ' or ',
-	        navLink,
-	        this.fieldErrors("base"),
+	        topText,
 	        React.createElement('br', null),
 	        React.createElement(
 	          'label',
 	          null,
-	          ' Email:',
-	          this.fieldErrors("email"),
-	          React.createElement('input', { type: 'text', value: this.state.email, onChange: this.emailChange })
+	          ' First name ',
+	          React.createElement('br', null),
+	          this.fieldErrors('first_name'),
+	          React.createElement('input', { className: 'soft-edges', type: 'text', value: this.state.first_name, onChange: this.firstNameChange })
 	        ),
 	        React.createElement('br', null),
 	        React.createElement(
 	          'label',
 	          null,
-	          ' Password:',
-	          this.fieldErrors("password"),
-	          React.createElement('input', { type: 'password', value: this.state.password, onChange: this.passwordChange })
+	          ' Last name ',
+	          React.createElement('br', null),
+	          this.fieldErrors('last_name'),
+	          React.createElement('input', { className: 'soft-edges', type: 'text', value: this.state.last_name, onChange: this.lastNameChange })
 	        ),
 	        React.createElement('br', null),
-	        React.createElement('input', { type: 'submit', value: 'Log In!' })
+	        React.createElement(
+	          'label',
+	          null,
+	          ' Email ',
+	          React.createElement('br', null),
+	          this.fieldErrors('email'),
+	          React.createElement('input', { className: 'soft-edges', type: 'text', value: this.state.email, onChange: this.emailChange })
+	        ),
+	        React.createElement('br', null),
+	        React.createElement(
+	          'label',
+	          null,
+	          ' Password ',
+	          React.createElement('br', null),
+	          this.fieldErrors('password'),
+	          React.createElement('input', { className: 'soft-edges', type: 'password', value: this.state.password, onChange: this.passwordChange })
+	        ),
+	        bottomText,
+	        React.createElement('input', {
+	          className: 'signup-button',
+	          type: 'submit',
+	          value: 'Create my Ask Anything! account'
+	        })
 	      )
 	    );
 	  }

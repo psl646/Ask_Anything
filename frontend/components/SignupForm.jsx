@@ -6,15 +6,12 @@ var ErrorStore = require('./../stores/error_store');
 var UserApiUtil = require('./../util/user_api_util');
 
 var SignupForm = React.createClass({
-  getInitialState: function () {
-    return {
-      email: "",
-      password: ""
-    };
-  },
-
   contextTypes: {
     router: React.PropTypes.object.isRequired
+  },
+
+  getInitialState: function () {
+    return ({ first_name: "", last_name: "", email: "", password: "" });
   },
 
   componentDidMount: function () {
@@ -37,17 +34,17 @@ var SignupForm = React.createClass({
 		e.preventDefault();
 
 		var formData = {
+      first_name: this.state.first_name,
+      last_name: this.state.last_name,
 			email: this.state.email,
 			password: this.state.password
 		};
 
-    if (this.props.location.pathname === "/login") {
-      SessionApiUtil.login(formData);
-    } else {
-      UserApiUtil.signup(formData);
-    }
+    UserApiUtil.signup(formData);
 	},
 
+
+  //FOLLOW FORMTYPE IN BENCHBNB FOR FORMERRORS
   fieldErrors: function (field) {
     var errors = ErrorStore.formErrors(this.formType());
     if (!errors[field]) { return; }
@@ -59,9 +56,15 @@ var SignupForm = React.createClass({
     return <ul>{ messages }</ul>;
   },
 
-  formType: function () {
-    return this.props.location.pathname.slice(1);
-  },
+	firstNameChange: function (e) {
+		var newFirstName = e.target.value;
+		this.setState({ first_name: newFirstName })
+	},
+
+	lastNameChange: function (e) {
+		var newLastName = e.target.value;
+		this.setState({ last_name: newLastName })
+	},
 
 	emailChange: function (e) {
 		var newEmail = e.target.value;
@@ -74,35 +77,64 @@ var SignupForm = React.createClass({
 	},
 
 	render: function () {
-    var navLink;
-    if (this.formType() === "login") {
-      navLink = <Link to="/signup">sign up instead</Link>;
+    var topText;
+    var bottomText;
+    if (this.props.type === 'participant') {
+       topText = <div>Participant sign up</div>;
+       bottomText = "";
     } else {
-      navLink = <Link to="/login">log in instead</Link>;
+      topText = (
+        <div>
+          <div>Free plan sign up</div>
+          <div>This is your last stop before youre creating polls.</div>
+        </div>
+      );
+      bottomText = (
+        <div>
+          <div>What country will people be texting us from?</div>
+          <div>United States</div>
+          <div>» Show more countries..</div>
+        </div>
+      );
     }
 
-		return (
+    return (
       <div className='signup-form-container'>
-    		<form onSubmit={this.handleSubmit}>
-          Log In { this.formType() } or { navLink }
-
-          { this.fieldErrors("base") }
+        <form onSubmit={this.handleSubmit}>
+          { topText }
 
           <br />
-    			<label> Email:
-            { this.fieldErrors("email") }
-    				<input type="text" value={this.state.email} onChange={this.emailChange}/>
-    			</label>
+          <label> First name <br/>
+            { this.fieldErrors('first_name') }
+            <input className='soft-edges' type='text' value={this.state.first_name} onChange={this.firstNameChange}/>
+          </label>
 
           <br />
-    			<label> Password:
-            { this.fieldErrors("password") }
-    				<input type="password" value={this.state.password} onChange={this.passwordChange} />
-    			</label>
+          <label> Last name <br/>
+            { this.fieldErrors('last_name') }
+            <input className='soft-edges' type='text' value={this.state.last_name} onChange={this.lastNameChange}/>
+          </label>
 
           <br />
-    			<input type="submit" value="Log In!" />
-    		</form>
+          <label> Email <br/>
+            { this.fieldErrors('email') }
+            <input className='soft-edges' type='text' value={this.state.email} onChange={this.emailChange}/>
+          </label>
+
+          <br />
+          <label> Password <br/>
+            { this.fieldErrors('password') }
+            <input className='soft-edges' type='password' value={this.state.password} onChange={this.passwordChange} />
+          </label>
+
+          { bottomText }
+
+          <input
+            className='signup-button'
+            type='submit'
+            value='Create my Ask Anything! account'
+            />
+        </form>
       </div>
 		);
 	}
