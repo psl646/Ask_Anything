@@ -43,6 +43,13 @@ ul {
   height: 100%;
 }
 
+.h1 {
+  color: #222;
+  font-family: "Source Sans Pro", "Trebuchet MS", Arial, Verdana, sans-serif;
+  font-weight: bolder;
+  font-size: 30px;
+}
+
 .group:after {
   content: "";
   display: block;

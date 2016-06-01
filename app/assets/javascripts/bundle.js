@@ -32977,7 +32977,7 @@
 	        this.fieldErrors('base'),
 	        React.createElement(
 	          'h1',
-	          { className: 'login-head' },
+	          { className: 'h1' },
 	          'Log In'
 	        ),
 	        React.createElement('br', null),
@@ -33137,7 +33137,7 @@
 	var Link = __webpack_require__(168).Link;
 	var NavBar = __webpack_require__(263);
 	var Footer = __webpack_require__(264);
-	var SignupPresenter = __webpack_require__(265);
+	var SignupParticipant = __webpack_require__(266);
 	var SignupPresenter = __webpack_require__(265);
 	
 	var SignupForm = React.createClass({
@@ -33146,18 +33146,23 @@
 	  render: function () {
 	    return React.createElement(
 	      'div',
-	      { className: 'signup-form-container' },
+	      { className: 'signup-form-container group' },
 	      React.createElement(NavBar, null),
 	      React.createElement(
 	        'div',
 	        { className: 'choose' },
 	        'Choose your primary use'
 	      ),
-	      React.createElement('ul', null),
+	      React.createElement(
+	        'ul',
+	        { className: 'signup-options-container group' },
+	        React.createElement(SignupParticipant, null),
+	        React.createElement(SignupPresenter, null)
+	      ),
 	      React.createElement(
 	        'div',
 	        { className: 'bottom' },
-	        'Whichever you chose, you\'ll still be able to access all of Poll Everywhere.'
+	        'Whichever you choose, you\'ll still be able to access all of Ask Anything!'
 	      ),
 	      React.createElement(Footer, null)
 	    );
@@ -33212,138 +33217,61 @@
 
 	var React = __webpack_require__(1);
 	var Link = __webpack_require__(168).Link;
-	var SessionApiUtil = __webpack_require__(253);
-	var SessionStore = __webpack_require__(230);
-	var ErrorStore = __webpack_require__(258);
-	var UserApiUtil = __webpack_require__(259);
 	
-	var LoginForm = React.createClass({
-	  displayName: 'LoginForm',
+	var SignupPresenter = React.createClass({
+		displayName: 'SignupPresenter',
 	
-	  getInitialState: function () {
-	    return {
-	      email: "",
-	      password: ""
-	    };
-	  },
-	
-	  contextTypes: {
-	    router: React.PropTypes.object.isRequired
-	  },
-	
-	  componentDidMount: function () {
-	    this.errorListener = ErrorStore.addListener(this.forceUpdate.bind(this));
-	    this.sessionListener = SessionStore.addListener(this.redirectIfLoggedIn);
-	  },
-	
-	  componentWillUnmount: function () {
-	    this.errorListener.remove();
-	    this.sessionListener.remove();
-	  },
-	
-	  redirectIfLoggedIn: function () {
-	    if (SessionStore.isUserLoggedIn()) {
-	      this.context.router.push("/");
-	    }
-	  },
-	
-	  handleSubmit: function (e) {
-	    e.preventDefault();
-	
-	    var formData = {
-	      email: this.state.email,
-	      password: this.state.password
-	    };
-	
-	    if (this.props.location.pathname === "/login") {
-	      SessionApiUtil.login(formData);
-	    } else {
-	      UserApiUtil.signup(formData);
-	    }
-	  },
-	
-	  fieldErrors: function (field) {
-	    var errors = ErrorStore.formErrors(this.formType());
-	    if (!errors[field]) {
-	      return;
-	    }
-	
-	    var messages = errors[field].map(function (errorMsg, i) {
-	      return React.createElement(
-	        'li',
-	        { key: i },
-	        errorMsg
-	      );
-	    });
-	
-	    return React.createElement(
-	      'ul',
-	      null,
-	      messages
-	    );
-	  },
-	
-	  formType: function () {
-	    return this.props.location.pathname.slice(1);
-	  },
-	
-	  emailChange: function (e) {
-	    var newEmail = e.target.value;
-	    this.setState({ email: newEmail });
-	  },
-	
-	  passwordChange: function (e) {
-	    var newPassword = e.target.value;
-	    this.setState({ password: newPassword });
-	  },
-	
-	  render: function () {
-	    var navLink;
-	    if (this.formType() === "login") {
-	      navLink = React.createElement(
-	        Link,
-	        { to: '/signup' },
-	        'sign up instead'
-	      );
-	    } else {
-	      navLink = React.createElement(
-	        Link,
-	        { to: '/login' },
-	        'log in instead'
-	      );
-	    }
-	
-	    return React.createElement(
-	      'form',
-	      { className: 'login-component', onSubmit: this.handleSubmit },
-	      'Log In ',
-	      this.formType(),
-	      ' or ',
-	      navLink,
-	      this.fieldErrors("base"),
-	      React.createElement('br', null),
-	      React.createElement(
-	        'label',
-	        null,
-	        ' Email:',
-	        this.fieldErrors("email"),
-	        React.createElement('input', { type: 'text', value: this.state.email, onChange: this.emailChange })
-	      ),
-	      React.createElement('br', null),
-	      React.createElement(
-	        'label',
-	        null,
-	        ' Password:',
-	        this.fieldErrors("password"),
-	        React.createElement('input', { type: 'password', value: this.state.password, onChange: this.passwordChange })
-	      ),
-	      React.createElement('br', null),
-	      React.createElement('input', { type: 'submit', value: 'Log In!' })
-	    );
-	  }
+		render: function () {
+			return React.createElement(
+				'li',
+				{ className: 'signup-options' },
+				React.createElement('img', { className: 'signup-images', src: window.askAnythingAssets.presenter, width: '90', height: '90', alt: 'Presenter' }),
+				React.createElement(
+					'div',
+					{ className: 'large-text' },
+					'You\'re presenting'
+				),
+				React.createElement(
+					'div',
+					{ className: 'small-text' },
+					'Select this if you\'ll mostly create questions for others to respond to.'
+				)
+			);
+		}
 	});
 	
-	module.exports = LoginForm;
+	module.exports = SignupPresenter;
+
+/***/ },
+/* 266 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var Link = __webpack_require__(168).Link;
+	
+	var SignupParticipant = React.createClass({
+		displayName: 'SignupParticipant',
+	
+		render: function () {
+			return React.createElement(
+				'li',
+				{ className: 'signup-options' },
+				React.createElement('img', { className: 'signup-images', src: window.askAnythingAssets.participant, width: '90', height: '90', alt: 'Participant' }),
+				React.createElement(
+					'div',
+					{ className: 'large-text' },
+					'You\'re participating'
+				),
+				React.createElement(
+					'div',
+					{ className: 'small-text' },
+					'Select this if you\'ll mostly respond to other people\'s questions.'
+				)
+			);
+		}
+	});
+	
+	module.exports = SignupParticipant;
 
 /***/ }
 /******/ ]);

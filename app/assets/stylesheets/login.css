@@ -28,13 +28,6 @@
   margin: 10px 0;
 }
 
-.login-head {
-  color: #222;
-  font-family: "Source Sans Pro", "Trebuchet MS", Arial, Verdana, sans-serif;
-  font-weight: bolder;
-  font-size: 30px;
-}
-
 .login-input {
   background: rgb(250, 255, 189);
   border: 1px solid #BCBFC3;

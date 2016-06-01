@@ -19,3 +19,35 @@
   opacity: 0.75;
   font-weight: 400
 }
+
+.signup-options-container {
+  width: 600px;
+  margin: auto;
+  margin-top: 10px;
+  margin-bottom: 40px;
+}
+
+.signup-options {
+  float: left;
+  margin: 20px;
+  width: 250px;
+  padding: 2px;
+}
+
+.signup-images {
+  margin: 20px 80px;
+}
+
+.large-text {
+  font-family: "Source Sans Pro", "Trebuchet MS", Arial, Verdana, sans-serif;
+  font-weight: bolder;
+  font-size: 20px;
+  text-align: center;
+
+}
+
+.small-text {
+  font-size: 12px;
+  text-align: center;
+  padding: 19px;
+}
