@@ -63,7 +63,7 @@
 	var SessionStore = __webpack_require__(230);
 	var SessionApiUtil = __webpack_require__(253);
 	
-	// test component
+	// test component DELETE later
 	var Test = __webpack_require__(287);
 	
 	var Router = React.createElement(
@@ -95,8 +95,8 @@
 	}
 	
 	document.addEventListener('DOMContentLoaded', function () {
-	  var root = document.getElementById('content');
 	  Modal.setAppElement(document.body);
+	  var root = document.getElementById('content');
 	  ReactDOM.render(Router, root);
 	});
 

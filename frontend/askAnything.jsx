@@ -18,7 +18,7 @@ var SessionStore = require('./stores/session_store.js');
 var SessionApiUtil = require('./util/session_api_util.js');
 
 
-// test component
+// test component DELETE later
 var Test = require('./components/test.jsx');
 
 
@@ -49,7 +49,7 @@ function _ensureLoggedIn(nextState, replace, asyncDoneCallback) {
 }
 
 document.addEventListener('DOMContentLoaded', function(){
-  var root = document.getElementById('content');
   Modal.setAppElement(document.body);
+  var root = document.getElementById('content');
   ReactDOM.render(Router, root);
 });
