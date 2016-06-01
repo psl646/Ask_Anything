@@ -142,7 +142,8 @@ Phase 4 adds organization to the Questions. Questions belong to a Survey, which 
 
 
 <!-- ===============LOGIN PAGE================
-
+Move Logo from Text a bit
+Add logo to button
 
 
 =================SIGNUPPAGE==================

@@ -2,7 +2,11 @@ var React = require('react');
 
 var Footer = React.createClass({
   render: function () {
-    return <div>Footer here</div>
+    return (
+      <div className="footer-container">
+        Footer here
+      </div>
+    )
   }
 });
 

@@ -2,7 +2,7 @@ var React = require('react');
 
 var NavBar = React.createClass({
   render: function () {
-    return <div>Navbar here</div>
+    return <div className="navbar-container">Navbar here</div>
   }
 });
 

@@ -35130,13 +35130,13 @@
 	var React = __webpack_require__(1);
 	
 	var NavBar = React.createClass({
-	  displayName: 'NavBar',
+	  displayName: "NavBar",
 	
 	  render: function () {
 	    return React.createElement(
-	      'div',
-	      null,
-	      'Navbar here'
+	      "div",
+	      { className: "navbar-container" },
+	      "Navbar here"
 	    );
 	  }
 	});
@@ -35150,13 +35150,13 @@
 	var React = __webpack_require__(1);
 	
 	var Footer = React.createClass({
-	  displayName: 'Footer',
+	  displayName: "Footer",
 	
 	  render: function () {
 	    return React.createElement(
-	      'div',
-	      null,
-	      'Footer here'
+	      "div",
+	      { className: "footer-container" },
+	      "Footer here"
 	    );
 	  }
 	});
@@ -35238,8 +35238,8 @@
 	    content: {
 	      position: 'fixed',
 	      top: '100px',
-	      left: '150px',
-	      right: '150px',
+	      left: 0,
+	      right: 0,
 	      bottom: '100px',
 	      padding: '20px',
 	      backgroundColor: 'white',

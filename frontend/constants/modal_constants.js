@@ -12,8 +12,8 @@ module.exports = {
     content : {
       position        : 'fixed',
       top             : '100px',
-      left            : '150px',
-      right           : '150px',
+      left            : 0,
+      right           : 0,
       bottom          : '100px',
       padding         : '20px',
       backgroundColor : 'white',
