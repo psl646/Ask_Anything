@@ -14,6 +14,7 @@
     "flux": "^2.1.1",
     "react": "^15.1.0",
     "react-dom": "^15.1.0",
+    "react-modal": "^1.3.0",
     "react-router": "^2.4.1",
     "webpack": "^1.13.1"
   },
@@ -33,10 +34,8 @@
     "url": "https://github.com/psl646/Ask_Anything/issues"
   },
   "homepage": "https://github.com/psl646/Ask_Anything#readme",
-
   "engines": {
     "node": "5.10.1",
     "npm": "3.8.3"
- }
-
+  }
 }

@@ -1,6 +1,6 @@
 /*SIGNUPMAIN*/
 
-.signup-form-container {
+.signup-page-container {
   background: #fff;
 }
 
@@ -34,13 +34,17 @@
   padding: 2px;
 }
 
+.signup-options:hover {
+  cursor: pointer;
+}
+
 .signup-images {
   margin: 20px 80px;
 }
 
 .large-text {
   font-family: "Source Sans Pro", "Trebuchet MS", Arial, Verdana, sans-serif;
-  font-weight: bolder;
+  font-weight: 900;
   font-size: 20px;
   text-align: center;
 
