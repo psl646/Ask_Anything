@@ -7,10 +7,28 @@ class Api::UsersController < ApplicationController
 			login(@user)
 			render "api/users/show"
 		else
-			@user.errors.messages[:first_name] = ["First name can't be blank"]
-			@user.errors.messages[:last_name] = ["Last name can't be blank"]
-			@user.errors.messages[:email] = ["That email doesn't seem right. We'll never share or sell your email address."]
-			@user.errors.messages[:password] = ["We need at least a 7 character password to keep your account safe"]
+			user_errors = @user.errors.messages
+			if (user_errors[:first_name])
+				user_errors[:first_name] = ["First name can't be blank"]
+			end
+
+			if (user_errors[:last_name])
+				user_errors[:last_name] = ["Last name can't be blank"]
+			end
+
+			if (user_errors[:email])
+				if (user_errors[:email] == ["can't be blank"])
+					user_errors[:email] = ["Email can't be blank"]
+				elsif (user_errors[:email] = ["has already been taken"])
+					user_errors[:email] = ["Email has already been taken"]
+				end
+			end
+
+			if (user_errors[:password])
+				user_errors[:password] = ["We need at least a 7 character password to keep your account safe"]
+			end
+
+			# @user.errors.full_messages... fix this later to dry up code
 			render json: @user.errors, status: 422
 		end
 	end

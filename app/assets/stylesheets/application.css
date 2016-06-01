@@ -10,14 +10,14 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
- *= require_tree .
  *= require_self
+ *= require_tree .
  */
 
 div, h1, h2, h3, h4, h5, h6, a, input, form, ul,
 li, html, body, main, title, link, meta, script, br, small,
 logo, choose, Modal, .ReactModalPortal {
- padding: 0;
+  padding: 0;
   border: 0;
   margin: 0;
 

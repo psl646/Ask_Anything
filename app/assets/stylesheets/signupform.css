@@ -18,7 +18,20 @@
 }
 
 .error-signup {
-  display: block;
-  border: 5px solid black;
-  background: pink;
+  color: #fff;
+  border-radius: 5px;
+  background: #ff9582;
+  border: 1px solid #d95347;
+}
+
+.error-large {
+
+}
+
+.error-small {
+
+}
+
+.error-message {
+
 }

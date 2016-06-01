@@ -4,6 +4,7 @@ var SessionApiUtil = require('./../util/session_api_util');
 var SessionStore = require('./../stores/session_store');
 var ErrorStore = require('./../stores/error_store');
 var UserApiUtil = require('./../util/user_api_util');
+var ErrorActions = require('../actions/error_actions')
 
 var SignupForm = React.createClass({
   contextTypes: {
@@ -30,8 +31,29 @@ var SignupForm = React.createClass({
     }
   },
 
+  firstNameChange: function (e) {
+    var newFirstName = e.target.value;
+    this.setState({ first_name: newFirstName })
+  },
+
+  lastNameChange: function (e) {
+    var newLastName = e.target.value;
+    this.setState({ last_name: newLastName })
+  },
+
+  emailChange: function (e) {
+    var newEmail = e.target.value;
+    this.setState({ email: newEmail })
+  },
+
+  passwordChange: function (e) {
+    var newPassword = e.target.value;
+    this.setState({ password: newPassword })
+  },
+
 	handleSubmit: function (e) {
 		e.preventDefault();
+    ErrorActions.clearErrors();
 
 		var formData = {
       first_name: this.state.first_name,
@@ -41,44 +63,45 @@ var SignupForm = React.createClass({
 		};
 
     UserApiUtil.signup(formData);
+
 	},
 
   fieldErrors: function (field) {
-    console.log(this.props.params);
     var errors = ErrorStore.formErrors("signup");
     if (!errors[field]) { return; }
-
     var messages = errors[field].map(function (errorMsg, i) {
       return <li key={ i }>{ errorMsg }</li>;
     });
 
-    console.log(messages);
-    // return <ul className="error-signup">"test"</ul>;
+    return <ul className="error-message">{ messages }</ul>;
   },
 
-	firstNameChange: function (e) {
-		var newFirstName = e.target.value;
-		this.setState({ first_name: newFirstName })
-	},
+  errorMessages: function () {
+    return Object.keys(this.state).map(function(field){
+      return this.fieldErrors(field);
+    }.bind(this));
+  },
 
-	lastNameChange: function (e) {
-		var newLastName = e.target.value;
-		this.setState({ last_name: newLastName })
-	},
+  checkForErrors: function () {
+    var status = false;
+    var errorMessages = this.errorMessages();
 
-	emailChange: function (e) {
-		var newEmail = e.target.value;
-		this.setState({ email: newEmail })
-	},
+    errorMessages.forEach(function(error){
+      if (error instanceof Object) {
+        status = true;
+      };
+    });
 
-	passwordChange: function (e) {
-		var newPassword = e.target.value;
-		this.setState({ password: newPassword })
-	},
+    return status;
+  },
 
 	render: function () {
+    var errorText = "";
+    var allErrorMessages = "";
+    var renderErrors = "";
     var topText;
     var bottomText;
+
     if (this.props.type === 'participant') {
        topText = <div>Participant sign up</div>;
        bottomText = "";
@@ -99,17 +122,25 @@ var SignupForm = React.createClass({
     }
 
 
-    var errorSignup = Object.keys(this.state).map(function (field){
-      return <li>{ this.fieldErrors(field) }</li>
-    }.bind(this));
+    if (this.checkForErrors()) {
+      errorText = (
+        <div>
+          <div className="error-large">Oops! We couldn't create your account.</div>
+          <div className="error-small">There were problems with the following fields:</div>
+        </div>
+      );
+      allErrorMessages = this.errorMessages();
+      renderErrors = (
+        <ul className="error-signup">
+          { errorText }
+          { allErrorMessages }
+        </ul>
+      );
+    }
 
     return (
       <div className="signup-form-container">
-            <ul>
-              <div className="error-large">Oops! We couldn't create your account.</div>
-              <div className="error-small">There were problems with the following fields:</div>
-              { errorSignup }
-            </ul>
+        { renderErrors }
 
         <form onSubmit={this.handleSubmit}>
           { topText }

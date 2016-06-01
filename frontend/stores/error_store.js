@@ -26,7 +26,6 @@ ErrorStore.form = function () {
   return _form.slice();
 };
 
-
 ErrorStore.__onDispatch = function (payload) {
   switch (payload.actionType) {
     case ErrorConstants.SET_ERRORS:

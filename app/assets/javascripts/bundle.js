@@ -35261,6 +35261,7 @@
 	var SessionStore = __webpack_require__(250);
 	var ErrorStore = __webpack_require__(278);
 	var UserApiUtil = __webpack_require__(279);
+	var ErrorActions = __webpack_require__(275);
 	
 	var SignupForm = React.createClass({
 	  displayName: 'SignupForm',
@@ -35289,38 +35290,6 @@
 	    }
 	  },
 	
-	  handleSubmit: function (e) {
-	    e.preventDefault();
-	
-	    var formData = {
-	      first_name: this.state.first_name,
-	      last_name: this.state.last_name,
-	      email: this.state.email,
-	      password: this.state.password
-	    };
-	
-	    UserApiUtil.signup(formData);
-	  },
-	
-	  fieldErrors: function (field) {
-	    console.log(this.props.params);
-	    var errors = ErrorStore.formErrors("signup");
-	    if (!errors[field]) {
-	      return;
-	    }
-	
-	    var messages = errors[field].map(function (errorMsg, i) {
-	      return React.createElement(
-	        'li',
-	        { key: i },
-	        errorMsg
-	      );
-	    });
-	
-	    console.log(messages);
-	    // return <ul className="error-signup">"test"</ul>;
-	  },
-	
 	  firstNameChange: function (e) {
 	    var newFirstName = e.target.value;
 	    this.setState({ first_name: newFirstName });
@@ -35341,9 +35310,66 @@
 	    this.setState({ password: newPassword });
 	  },
 	
+	  handleSubmit: function (e) {
+	    e.preventDefault();
+	    ErrorActions.clearErrors();
+	
+	    var formData = {
+	      first_name: this.state.first_name,
+	      last_name: this.state.last_name,
+	      email: this.state.email,
+	      password: this.state.password
+	    };
+	
+	    UserApiUtil.signup(formData);
+	  },
+	
+	  fieldErrors: function (field) {
+	    var errors = ErrorStore.formErrors("signup");
+	    if (!errors[field]) {
+	      return;
+	    }
+	    var messages = errors[field].map(function (errorMsg, i) {
+	      return React.createElement(
+	        'li',
+	        { key: i },
+	        errorMsg
+	      );
+	    });
+	
+	    return React.createElement(
+	      'ul',
+	      { className: 'error-message' },
+	      messages
+	    );
+	  },
+	
+	  errorMessages: function () {
+	    return Object.keys(this.state).map(function (field) {
+	      return this.fieldErrors(field);
+	    }.bind(this));
+	  },
+	
+	  checkForErrors: function () {
+	    var status = false;
+	    var errorMessages = this.errorMessages();
+	
+	    errorMessages.forEach(function (error) {
+	      if (error instanceof Object) {
+	        status = true;
+	      };
+	    });
+	
+	    return status;
+	  },
+	
 	  render: function () {
+	    var errorText = "";
+	    var allErrorMessages = "";
+	    var renderErrors = "";
 	    var topText;
 	    var bottomText;
+	
 	    if (this.props.type === 'participant') {
 	      topText = React.createElement(
 	        'div',
@@ -35387,19 +35413,9 @@
 	      );
 	    }
 	
-	    var errorSignup = Object.keys(this.state).map(function (field) {
-	      return React.createElement(
-	        'li',
-	        null,
-	        this.fieldErrors(field)
-	      );
-	    }.bind(this));
-	
-	    return React.createElement(
-	      'div',
-	      { className: 'signup-form-container' },
-	      React.createElement(
-	        'ul',
+	    if (this.checkForErrors()) {
+	      errorText = React.createElement(
+	        'div',
 	        null,
 	        React.createElement(
 	          'div',
@@ -35410,9 +35426,21 @@
 	          'div',
 	          { className: 'error-small' },
 	          'There were problems with the following fields:'
-	        ),
-	        errorSignup
-	      ),
+	        )
+	      );
+	      allErrorMessages = this.errorMessages();
+	      renderErrors = React.createElement(
+	        'ul',
+	        { className: 'error-signup' },
+	        errorText,
+	        allErrorMessages
+	      );
+	    }
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'signup-form-container' },
+	      renderErrors,
 	      React.createElement(
 	        'form',
 	        { onSubmit: this.handleSubmit },
