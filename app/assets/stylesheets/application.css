@@ -16,7 +16,7 @@
 
 div, h1, h2, h3, h4, h5, h6, a, input, form, ul,
 li, html, body, main, title, link, meta, script, br, small,
-logo, choose {
+logo, choose, Modal, .ReactModalPortal {
  padding: 0;
   border: 0;
   margin: 0;

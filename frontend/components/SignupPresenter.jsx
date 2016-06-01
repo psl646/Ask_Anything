@@ -1,5 +1,6 @@
 var React = require('react');
-var Modal = require("react-modal");
+var Modal = require('react-modal');
+var ModalConstants = require('../constants/modal_constants.js');
 var SignupForm = require('./SignupForm.jsx');
 
 var SignupPresenter = React.createClass({
@@ -21,13 +22,14 @@ var SignupPresenter = React.createClass({
 
 	render: function () {
     return (
-			<li className='signup-options' onClick={this.openModal}>
-				<img className='signup-images' src={window.askAnythingAssets.presenter} width='90' height='90' alt='-Presenter-' />
-				<div className='large-text'>You're presenting</div>
-				<div className='small-text'>Select this if you'll mostly create questions for others to respond to.</div>
+			<li className="signup-options" onClick={this.openModal}>
+				<img className="signup-images" src={window.askAnythingAssets.presenter} width="90" height="90" alt="-Presenter-" />
+				<div className="large-text">You're presenting</div>
+				<div className="small-text">Select this if you'll mostly create questions for others to respond to.</div>
 				<Modal
 					isOpen={this.state.modalOpen}
-          onRequestClose={this.closeModal}>
+          onRequestClose={this.closeModal}
+					style={ ModalConstants.SIGNUP }>
 
 						<SignupForm type="presenter" />
 

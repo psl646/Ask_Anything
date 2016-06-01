@@ -1,3 +1,24 @@
 .signup-form-container {
   background: green;
 }
+
+.signup-input {
+  background: rgb(250, 255, 189);
+  border: 1px solid #BCBFC3;
+  width: 275px;
+  padding: 10px;
+  margin: 5px 0;
+}
+
+.signup-button {
+  color: rgba(255,255,255,0.95);
+  background: #d95347;
+  padding: 10px 20px;
+  margin: 10px 0;
+}
+
+.error-signup {
+  display: block;
+  border: 5px solid black;
+  background: pink;
+}

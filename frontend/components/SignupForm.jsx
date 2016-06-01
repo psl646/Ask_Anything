@@ -43,17 +43,17 @@ var SignupForm = React.createClass({
     UserApiUtil.signup(formData);
 	},
 
-
-  //FOLLOW FORMTYPE IN BENCHBNB FOR FORMERRORS
   fieldErrors: function (field) {
-    var errors = ErrorStore.formErrors(this.formType());
+    console.log(this.props.params);
+    var errors = ErrorStore.formErrors("signup");
     if (!errors[field]) { return; }
 
     var messages = errors[field].map(function (errorMsg, i) {
       return <li key={ i }>{ errorMsg }</li>;
     });
 
-    return <ul>{ messages }</ul>;
+    console.log(messages);
+    // return <ul className="error-signup">"test"</ul>;
   },
 
 	firstNameChange: function (e) {
@@ -98,41 +98,50 @@ var SignupForm = React.createClass({
       );
     }
 
+
+    var errorSignup = Object.keys(this.state).map(function (field){
+      return <li>{ this.fieldErrors(field) }</li>
+    }.bind(this));
+
     return (
-      <div className='signup-form-container'>
+      <div className="signup-form-container">
+            <ul>
+              <div className="error-large">Oops! We couldn't create your account.</div>
+              <div className="error-small">There were problems with the following fields:</div>
+              { errorSignup }
+            </ul>
+
         <form onSubmit={this.handleSubmit}>
           { topText }
 
           <br />
           <label> First name <br/>
-            { this.fieldErrors('first_name') }
-            <input className='soft-edges' type='text' value={this.state.first_name} onChange={this.firstNameChange}/>
+            <input className="signup-input soft-edges" type="text" value={this.state.first_name} onChange={this.firstNameChange}/>
           </label>
 
           <br />
           <label> Last name <br/>
-            { this.fieldErrors('last_name') }
-            <input className='soft-edges' type='text' value={this.state.last_name} onChange={this.lastNameChange}/>
+            <input className="signup-input soft-edges" type="text" value={this.state.last_name} onChange={this.lastNameChange}/>
           </label>
 
           <br />
           <label> Email <br/>
-            { this.fieldErrors('email') }
-            <input className='soft-edges' type='text' value={this.state.email} onChange={this.emailChange}/>
+            <input className="signup-input soft-edges" type="text" value={this.state.email} onChange={this.emailChange}/>
           </label>
 
           <br />
           <label> Password <br/>
-            { this.fieldErrors('password') }
-            <input className='soft-edges' type='password' value={this.state.password} onChange={this.passwordChange} />
+            <input className="signup-input soft-edges" type="password" value={this.state.password} onChange={this.passwordChange} />
           </label>
 
           { bottomText }
 
+          <br />
+
           <input
-            className='signup-button'
-            type='submit'
-            value='Create my Ask Anything! account'
+            className="signup-button"
+            type="submit"
+            value="Create my Ask Anything! account"
             />
         </form>
       </div>
