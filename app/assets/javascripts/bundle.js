@@ -35195,7 +35195,7 @@
 			return React.createElement(
 				'li',
 				{ className: 'signup-options hover-pointer', onClick: this.openModal },
-				React.createElement('img', { className: 'signup-images', src: window.askAnythingAssets.participant, width: '90', height: '90', alt: '-Participant-' }),
+				React.createElement('img', { className: 'signup-images', src: window.askAnythingAssets.participant, width: '90', height: '90', alt: 'Participant' }),
 				React.createElement(
 					'div',
 					{ className: 'large-text' },
