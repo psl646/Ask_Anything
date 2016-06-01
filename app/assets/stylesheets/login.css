@@ -54,10 +54,6 @@
   margin: 10px 0;
 }
 
-.signin-button:hover {
-  cursor: pointer;
-}
-
 .signup-link {
    color: #666;
    font-size: 10px;

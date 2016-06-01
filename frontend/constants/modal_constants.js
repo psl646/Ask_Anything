@@ -16,7 +16,7 @@ module.exports = {
       right           : '150px',
       bottom          : '100px',
       padding         : '20px',
-      backgroundColor : 'blue',
+      backgroundColor : 'white',
       zIndex					: 11
     }
   }

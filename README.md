@@ -2,7 +2,7 @@
 
 [Heroku link][heroku] **NB:** This will be a link to your production site after Day 1.
 
-[heroku]: http://www.herokuapp.com
+[heroku]: http://ask--anything.herokuapp.com/
 
 ## Minimum Viable Product
 
@@ -140,5 +140,19 @@ Phase 4 adds organization to the Questions. Questions belong to a Survey, which 
 [phase-seven]: ./docs/phases/phase7.md
 
 
+
 <!-- ===============LOGIN PAGE================
-Have the Links of Forgot Password + Sign Up go somewhere -->
+
+
+
+=================SIGNUPPAGE==================
+refactor signup presenter/participant to signup options
+
+
+====================ERRORS====================
+refactor @user.errors => @user.errors.full_messages
+
+
+=================LINKS GO SOMEWHERE=================
+LoginForm - forgotPassword
+SignupForm - tos, privacyPolicy, moreCountries -->

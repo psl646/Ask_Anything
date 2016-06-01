@@ -1,37 +1,90 @@
 .signup-form-container {
-  background: green;
+  background: #fff;
+  width: 450px;
+  margin: auto;
 }
 
 .signup-input {
-  background: rgb(250, 255, 189);
+  background: white;
   border: 1px solid #BCBFC3;
-  width: 275px;
+  width: 420px;
   padding: 10px;
-  margin: 5px 0;
+  margin: auto;
+  margin-bottom: 30px;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: bolder;
 }
 
 .signup-button {
-  color: rgba(255,255,255,0.95);
+  color: #e9eff4;
   background: #d95347;
-  padding: 10px 20px;
+  font-size: 13px;
+  font-weight: 700;
+  width: 442px;
+  padding: 10px 110px;
   margin: 10px 0;
 }
 
 .error-signup {
   color: #fff;
-  border-radius: 5px;
   background: #ff9582;
+  border-radius: 5px;
+  width: 420px;
   border: 1px solid #d95347;
+  padding: 15px 10px;
 }
 
 .error-large {
-
+  font-size: 19px;
+  font-weight: 700;
 }
 
 .error-small {
-
+  font-size: 12.5px;
+  padding: 20px 0;
 }
 
 .error-message {
+  font-size: 12.5px;
+  margin-top: 10px;
+}
 
+.h2 {
+  font-size: 30px;
+  font-weight: 900;
+}
+
+.h4 {
+  font-size: 30px;
+  font-weight: 900;
+  margin-bottom: 25px;
+}
+
+.h3 {
+  font-size: 17.5px;
+  font-weight: 600;
+  opacity: 0.5;
+  margin-bottom: 30px;
+}
+
+.h5 {
+  font-size: 13px;
+  margin: 10px 0;
+}
+
+.agreement {
+  color: #BCBFC3;
+  font-size: 13px;
+  text-align: center;
+}
+
+.link {
+  color: #d95347;
+}
+
+.radio {
+  margin-right: 10px;
 }

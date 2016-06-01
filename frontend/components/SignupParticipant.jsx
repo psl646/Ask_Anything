@@ -22,7 +22,7 @@ var SignupParticipant = React.createClass({
 
 	render: function () {
     return (
-			<li className="signup-options" onClick={this.openModal}>
+			<li className="signup-options hover-pointer" onClick={this.openModal}>
 				<img className="signup-images" src={window.askAnythingAssets.participant} width="90" height="90" alt="-Participant-" />
 				<div className="large-text">You're participating</div>
 				<div className="small-text">Select this if you'll mostly respond to other people's questions.</div>

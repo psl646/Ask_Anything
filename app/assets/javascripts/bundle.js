@@ -58,7 +58,6 @@
 	var App = __webpack_require__(249);
 	var LoginForm = __webpack_require__(277);
 	var SignupPage = __webpack_require__(281);
-	var SignupForm = __webpack_require__(286);
 	
 	var SessionStore = __webpack_require__(250);
 	var SessionApiUtil = __webpack_require__(273);
@@ -73,9 +72,7 @@
 	    Route,
 	    { path: '/', component: App },
 	    React.createElement(Route, { path: 'login', component: LoginForm }),
-	    React.createElement(Route, { path: 'signup', component: SignupPage }),
-	    React.createElement(Route, { path: 'signupform', component: SignupForm }),
-	    React.createElement(Route, { path: 'test', component: Test })
+	    React.createElement(Route, { path: 'signup', component: SignupPage })
 	  )
 	);
 	
@@ -34970,7 +34967,7 @@
 	          React.createElement('input', { className: 'login-input soft-edges', type: 'password', value: this.state.password, onChange: this.passwordChange })
 	        ),
 	        React.createElement('br', null),
-	        React.createElement('input', { className: 'signin-button soft-edges', type: 'submit', value: 'Sign in with my Ask Anything! account' }),
+	        React.createElement('input', { className: 'signin-button soft-edges hover-pointer', type: 'submit', value: 'Sign in with my Ask Anything! account' }),
 	        React.createElement(
 	          Link,
 	          { to: 'signup', className: 'signup-link' },
@@ -35110,7 +35107,7 @@
 	      ),
 	      React.createElement(
 	        'ul',
-	        { className: 'signup-options-container group' },
+	        { className: 'signup-options-container group hover-pointer' },
 	        React.createElement(SignupParticipant, null),
 	        React.createElement(SignupPresenter, null)
 	      ),
@@ -35197,7 +35194,7 @@
 		render: function () {
 			return React.createElement(
 				'li',
-				{ className: 'signup-options', onClick: this.openModal },
+				{ className: 'signup-options hover-pointer', onClick: this.openModal },
 				React.createElement('img', { className: 'signup-images', src: window.askAnythingAssets.participant, width: '90', height: '90', alt: '-Participant-' }),
 				React.createElement(
 					'div',
@@ -35245,7 +35242,7 @@
 	      right: '150px',
 	      bottom: '100px',
 	      padding: '20px',
-	      backgroundColor: 'blue',
+	      backgroundColor: 'white',
 	      zIndex: 11
 	    }
 	  }
@@ -35280,6 +35277,7 @@
 	  },
 	
 	  componentWillUnmount: function () {
+	    ErrorActions.clearErrors();
 	    this.errorListener.remove();
 	    this.sessionListener.remove();
 	  },
@@ -35332,16 +35330,12 @@
 	    var messages = errors[field].map(function (errorMsg, i) {
 	      return React.createElement(
 	        'li',
-	        { key: i },
+	        { key: i, className: 'error-message' },
 	        errorMsg
 	      );
 	    });
 	
-	    return React.createElement(
-	      'ul',
-	      { className: 'error-message' },
-	      messages
-	    );
+	    return messages;
 	  },
 	
 	  errorMessages: function () {
@@ -35373,7 +35367,7 @@
 	    if (this.props.type === 'participant') {
 	      topText = React.createElement(
 	        'div',
-	        null,
+	        { className: 'h4' },
 	        'Participant sign up'
 	      );
 	      bottomText = "";
@@ -35383,12 +35377,12 @@
 	        null,
 	        React.createElement(
 	          'div',
-	          null,
+	          { className: 'h2' },
 	          'Free plan sign up'
 	        ),
 	        React.createElement(
 	          'div',
-	          null,
+	          { className: 'h3' },
 	          'This is your last stop before youre creating polls.'
 	        )
 	      );
@@ -35397,18 +35391,19 @@
 	        null,
 	        React.createElement(
 	          'div',
-	          null,
+	          { className: 'label' },
 	          'What country will people be texting us from?'
 	        ),
 	        React.createElement(
 	          'div',
-	          null,
+	          { className: 'hover-pointer h5' },
+	          React.createElement('input', { className: 'radio', type: 'radio', checked: true }),
 	          'United States'
 	        ),
 	        React.createElement(
-	          'div',
-	          null,
-	          '» Show more countries..'
+	          Link,
+	          { to: 'moreCountries', className: 'link h5' },
+	          '» Show more countries...'
 	        )
 	      );
 	    }
@@ -35432,23 +35427,31 @@
 	      renderErrors = React.createElement(
 	        'ul',
 	        { className: 'error-signup' },
-	        errorText,
-	        allErrorMessages
+	        React.createElement(
+	          'div',
+	          null,
+	          errorText
+	        ),
+	        React.createElement(
+	          'div',
+	          null,
+	          allErrorMessages
+	        )
 	      );
 	    }
 	
 	    return React.createElement(
 	      'div',
 	      { className: 'signup-form-container' },
-	      renderErrors,
 	      React.createElement(
 	        'form',
 	        { onSubmit: this.handleSubmit },
 	        topText,
+	        renderErrors,
 	        React.createElement('br', null),
 	        React.createElement(
 	          'label',
-	          null,
+	          { className: 'hover-pointer label' },
 	          ' First name ',
 	          React.createElement('br', null),
 	          React.createElement('input', { className: 'signup-input soft-edges', type: 'text', value: this.state.first_name, onChange: this.firstNameChange })
@@ -35456,7 +35459,7 @@
 	        React.createElement('br', null),
 	        React.createElement(
 	          'label',
-	          null,
+	          { className: 'hover-pointer label' },
 	          ' Last name ',
 	          React.createElement('br', null),
 	          React.createElement('input', { className: 'signup-input soft-edges', type: 'text', value: this.state.last_name, onChange: this.lastNameChange })
@@ -35464,7 +35467,7 @@
 	        React.createElement('br', null),
 	        React.createElement(
 	          'label',
-	          null,
+	          { className: 'hover-pointer label' },
 	          ' Email ',
 	          React.createElement('br', null),
 	          React.createElement('input', { className: 'signup-input soft-edges', type: 'text', value: this.state.email, onChange: this.emailChange })
@@ -35472,7 +35475,7 @@
 	        React.createElement('br', null),
 	        React.createElement(
 	          'label',
-	          null,
+	          { className: 'hover-pointer label' },
 	          ' Password ',
 	          React.createElement('br', null),
 	          React.createElement('input', { className: 'signup-input soft-edges', type: 'password', value: this.state.password, onChange: this.passwordChange })
@@ -35480,10 +35483,31 @@
 	        bottomText,
 	        React.createElement('br', null),
 	        React.createElement('input', {
-	          className: 'signup-button',
+	          className: 'signup-button soft-edges hover-pointer',
 	          type: 'submit',
 	          value: 'Create my Ask Anything! account'
 	        })
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'agreement' },
+	        'By proceeding you agree to Ask Anything!'
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'agreement' },
+	        React.createElement(
+	          Link,
+	          { to: 'tos', className: 'link' },
+	          'Terms of Service'
+	        ),
+	        ' and ',
+	        React.createElement(
+	          Link,
+	          { to: 'privacyPolicy', className: 'link' },
+	          'Privacy Policy'
+	        ),
+	        '.'
 	      )
 	    );
 	  }
@@ -35522,7 +35546,7 @@
 		render: function () {
 			return React.createElement(
 				'li',
-				{ className: 'signup-options', onClick: this.openModal },
+				{ className: 'signup-options hover-pointer', onClick: this.openModal },
 				React.createElement('img', { className: 'signup-images', src: window.askAnythingAssets.presenter, width: '90', height: '90', alt: '-Presenter-' }),
 				React.createElement(
 					'div',
@@ -35540,7 +35564,7 @@
 						isOpen: this.state.modalOpen,
 						onRequestClose: this.closeModal,
 						style: ModalConstants.SIGNUP },
-					React.createElement(SignupForm, { type: 'presenter' })
+					React.createElement(SignupForm, null)
 				)
 			);
 		}

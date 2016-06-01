@@ -10,7 +10,7 @@ var SignupPage = React.createClass({
       <div className="signup-page-container group">
         <NavBar />
         <div className="choose">Choose your primary use</div>
-        <ul className="signup-options-container group">
+        <ul className="signup-options-container group hover-pointer">
           <SignupParticipant />
           <SignupPresenter />
         </ul>

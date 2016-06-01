@@ -98,7 +98,7 @@ var LoginForm = React.createClass({
 					</label>
 
 	        <br />
-					<input className="signin-button soft-edges" type="submit" value="Sign in with my Ask Anything! account" />
+					<input className="signin-button soft-edges hover-pointer" type="submit" value="Sign in with my Ask Anything! account" />
           <Link to="signup" className="signup-link">{newSignUpString}</Link>
 				</form>
 			</div>

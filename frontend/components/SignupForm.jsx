@@ -21,6 +21,7 @@ var SignupForm = React.createClass({
   },
 
   componentWillUnmount: function () {
+    ErrorActions.clearErrors();
     this.errorListener.remove();
     this.sessionListener.remove();
   },
@@ -70,10 +71,10 @@ var SignupForm = React.createClass({
     var errors = ErrorStore.formErrors("signup");
     if (!errors[field]) { return; }
     var messages = errors[field].map(function (errorMsg, i) {
-      return <li key={ i }>{ errorMsg }</li>;
+      return <li key={ i } className="error-message">{ errorMsg }</li>;
     });
 
-    return <ul className="error-message">{ messages }</ul>;
+    return messages;
   },
 
   errorMessages: function () {
@@ -103,20 +104,20 @@ var SignupForm = React.createClass({
     var bottomText;
 
     if (this.props.type === 'participant') {
-       topText = <div>Participant sign up</div>;
+       topText = <div className="h4">Participant sign up</div>;
        bottomText = "";
     } else {
       topText = (
         <div>
-          <div>Free plan sign up</div>
-          <div>This is your last stop before youre creating polls.</div>
+          <div className="h2">Free plan sign up</div>
+          <div className="h3">This is your last stop before youre creating polls.</div>
         </div>
       );
       bottomText = (
         <div>
-          <div>What country will people be texting us from?</div>
-          <div>United States</div>
-          <div>» Show more countries..</div>
+          <div className="label">What country will people be texting us from?</div>
+          <div className="hover-pointer h5"><input className="radio" type="radio" checked />United States</div>
+          <Link to="moreCountries" className="link h5">» Show more countries...</Link>
         </div>
       );
     }
@@ -132,36 +133,37 @@ var SignupForm = React.createClass({
       allErrorMessages = this.errorMessages();
       renderErrors = (
         <ul className="error-signup">
-          { errorText }
-          { allErrorMessages }
+          <div>{ errorText }</div>
+          <div>{ allErrorMessages }</div>
         </ul>
       );
     }
 
     return (
       <div className="signup-form-container">
-        { renderErrors }
 
         <form onSubmit={this.handleSubmit}>
           { topText }
 
+          { renderErrors }
+
           <br />
-          <label> First name <br/>
+          <label className="hover-pointer label"> First name <br/>
             <input className="signup-input soft-edges" type="text" value={this.state.first_name} onChange={this.firstNameChange}/>
           </label>
 
           <br />
-          <label> Last name <br/>
+          <label className="hover-pointer label"> Last name <br/>
             <input className="signup-input soft-edges" type="text" value={this.state.last_name} onChange={this.lastNameChange}/>
           </label>
 
           <br />
-          <label> Email <br/>
+          <label className="hover-pointer label"> Email <br/>
             <input className="signup-input soft-edges" type="text" value={this.state.email} onChange={this.emailChange}/>
           </label>
 
           <br />
-          <label> Password <br/>
+          <label className="hover-pointer label"> Password <br/>
             <input className="signup-input soft-edges" type="password" value={this.state.password} onChange={this.passwordChange} />
           </label>
 
@@ -170,11 +172,14 @@ var SignupForm = React.createClass({
           <br />
 
           <input
-            className="signup-button"
+            className="signup-button soft-edges hover-pointer"
             type="submit"
             value="Create my Ask Anything! account"
             />
         </form>
+
+        <div className="agreement">By proceeding you agree to Ask Anything!</div>
+        <div className="agreement"  ><Link to="tos" className="link">Terms of Service</Link> and <Link to="privacyPolicy" className="link">Privacy Policy</Link>.</div>
       </div>
 		);
 	}

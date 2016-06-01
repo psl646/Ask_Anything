@@ -55,3 +55,7 @@ ul {
   display: block;
   clear: both;
 }
+
+.hover-pointer:hover {
+  cursor: pointer;
+}

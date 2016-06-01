@@ -22,7 +22,7 @@ var SignupPresenter = React.createClass({
 
 	render: function () {
     return (
-			<li className="signup-options" onClick={this.openModal}>
+			<li className="signup-options hover-pointer" onClick={this.openModal}>
 				<img className="signup-images" src={window.askAnythingAssets.presenter} width="90" height="90" alt="-Presenter-" />
 				<div className="large-text">You're presenting</div>
 				<div className="small-text">Select this if you'll mostly create questions for others to respond to.</div>
@@ -31,7 +31,7 @@ var SignupPresenter = React.createClass({
           onRequestClose={this.closeModal}
 					style={ ModalConstants.SIGNUP }>
 
-						<SignupForm type="presenter" />
+						<SignupForm />
 
         </Modal>
 			</li>
