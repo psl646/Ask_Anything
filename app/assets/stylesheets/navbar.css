@@ -1,6 +1,6 @@
 .navbar-container {
   display: block;
-  color: white;
+  color: rgb(246, 246, 246);
   background: #203349;
   height: 75px;
   min-width: 1100px;
@@ -8,11 +8,12 @@
 
 .navbar-right-ul {
   float: right;
-  background: pink;
   height: 75px;
+  width:400px;
+  text-align: center;
 }
 
-.navbar-right-li {
+.navbar-right-ul > li {
   float: left;
   height: 25px;
   padding: 25px 5px;
@@ -20,7 +21,12 @@
 
 .navbar-right-li:hover {
   display: block;
-  background: green;
+  background: rgb(29, 67, 93);
+}
+
+.user-info-container {
+  width: 100%;
+  height: 100%;
 }
 
 .user-info {
@@ -28,8 +34,8 @@
   position: relative;
   right: 5px;
   top: 32px;
-  color: white;
-  background: red;
+  color: #203349;
+  background: rgb(246, 246, 246);
   height: 55px;
   z-index: 1;
 }
@@ -40,7 +46,7 @@
 }
 
 .logout-button:hover {
-  background: purple;
+  background: rgb(61, 85, 110);
 }
 
 li:hover .user-info {

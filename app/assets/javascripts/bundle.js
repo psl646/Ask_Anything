@@ -34855,7 +34855,7 @@
 	    if (SessionStore.isUserLoggedIn()) {
 	      return React.createElement(
 	        'ul',
-	        null,
+	        { className: 'user-info-container' },
 	        SessionStore.currentUser().email,
 	        React.createElement(
 	          'li',
@@ -34878,11 +34878,21 @@
 	      'NavBar here',
 	      React.createElement(
 	        'ul',
-	        { className: 'navbar-right-ul' },
+	        { className: 'navbar-right-ul hover-pointer' },
 	        React.createElement(
 	          'li',
 	          { className: 'navbar-right-li' },
-	          'Other stuff'
+	          ' Pricing & Upgrades '
+	        ),
+	        React.createElement(
+	          'li',
+	          { className: 'navbar-right-li' },
+	          ' Help '
+	        ),
+	        React.createElement(
+	          'li',
+	          { className: 'navbar-right-li' },
+	          '  New Features '
 	        ),
 	        React.createElement(
 	          'li',

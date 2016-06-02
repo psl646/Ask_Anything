@@ -10,7 +10,7 @@ var NavBar = React.createClass({
   greeting: function(){
     if (SessionStore.isUserLoggedIn()) {
       return (
-        <ul>
+        <ul className="user-info-container">
           { SessionStore.currentUser().email }
           <li className="user-info">
             <input className="logout-button hover-pointer" type="submit" value="Log Out" onClick={ this.handleClick } />
@@ -29,8 +29,10 @@ var NavBar = React.createClass({
     return (
       <div className="navbar-container">
         NavBar here
-        <ul className="navbar-right-ul">
-          <li className="navbar-right-li">Other stuff</li>
+        <ul className="navbar-right-ul hover-pointer">
+          <li className="navbar-right-li"> Pricing & Upgrades </li>
+          <li className="navbar-right-li"> Help </li>
+          <li className="navbar-right-li">  New Features </li>
           <li className="navbar-right-li">
             { this.greeting() }
           </li>
