@@ -17,7 +17,7 @@ Ask Anything is a web application inspired by Poll Everywhere that will be build
             Questions organized into ungrouped(single questions)/grouped(surveys)
             Website-enabled response - via a link/tinyurl
             Charts/analytics on results
-- [ ] Hosting on Heroku
+- [X] Hosting on Heroku
 - [ ] CSS styling that is satisfactorily visually appealing and representative of the actual site's look/feel
 - [ ] A production README, replacing this README -- I'll write this later
 
@@ -25,7 +25,7 @@ Ask Anything is a web application inspired by Poll Everywhere that will be build
 
 Ask Anything will allow users to do the following:
 
-- [ ] Create an account (MVP)
+- [X] Create an account (MVP)
 - [ ] Log in / Log out, including as a Guest/Demo User (MVP)
 - [ ] Create, read, edit, and delete Surveys (MVP)
 - [ ] Organize Questions within Surveys (MVP)
@@ -50,20 +50,20 @@ Ask Anything will allow users to do the following:
 
 **Objective:** Functioning rails project with Authentication
 
-- [ ] create new project
-- [ ] create `User` model
-- [ ] authentication
-- [ ] user signup/signin pages
-- [ ] user logout
-- [ ] seed the database with a guest user
+- [X] create new project
+- [X] create `User` model
+- [X] authentication
+- [X] user signup/signin pages
+- [X] user logout
+- [X] seed the database with a guest user
 
 ### Phase 2: Survey Model, API, Flux Architecture, basic APIUtil, router (2 days)
 
 **Objective:** Surveys can be created, read, edited and destroyed through
 the UI.
 
-- [ ] create `Survey` model
-- [ ] set up validations
+- [X] create `Survey` model
+- [X] set up validations
 - [ ] require user login before using Update after a survey is created
 - [ ] seed the database with a small amount of test data
 - [ ] CRUD API for surveys (`SurveysController`)
@@ -83,17 +83,17 @@ the UI.
 **Objective:** Existing pages (sigup/signin/UI) will look good.
 
 - [ ] position elements on the page
-- [ ] add basic colors & styles
-- [ ] put in modals
-- [ ] follow Poll Everywhere's style - see wireframes
+- [X] add basic colors & styles
+- [X] put in modals
+- [X] follow Poll Everywhere's style - see wireframes
 
 ### Phase 4: Question Model (1 day)
 
 **Objective:** Questions belong to Surveys, and can be viewed by survey.
 
-- [ ] create `Survey` model
+- [ ] create `Question` model
 - build out API, Flux loop, and components for:
-  - [ ] Survey CRUD
+  - [ ] Question CRUD
   - [ ] adding questions to survey
   - [ ] moving questions to a different survey
   - [ ] viewing questions by survey
@@ -142,7 +142,6 @@ Phase 4 adds organization to the Questions. Questions belong to a Survey, which 
 
 
 <!-- ===============LOGIN PAGE================
-Move Logo from Text a bit
 Add logo to button
 
 

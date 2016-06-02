@@ -71,7 +71,7 @@
 	  { history: hashHistory },
 	  React.createElement(
 	    Route,
-	    { path: '/', component: App, onEnter: _ensureLoggedOut },
+	    { path: '/', component: App },
 	    React.createElement(Route, { path: 'login', component: LoginForm, onEnter: _ensureLoggedOut }),
 	    React.createElement(Route, { path: 'signup', component: SignupPage, onEnter: _ensureLoggedOut }),
 	    React.createElement(Route, { path: 'surveys', component: SurveysIndex, onEnter: _ensureLoggedIn }),

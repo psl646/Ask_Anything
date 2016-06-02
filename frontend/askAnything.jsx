@@ -23,7 +23,7 @@ var Test = require('./components/test.jsx');
 
 var Router = (
   <Router history={ hashHistory }>
-    <Route path="/" component={ App } onEnter={ _ensureLoggedOut }>
+    <Route path="/" component={ App } >
       <Route path="login" component={ LoginForm } onEnter={ _ensureLoggedOut } />
       <Route path="signup" component={ SignupPage } onEnter={ _ensureLoggedOut } />
       <Route path="surveys" component={ SurveysIndex } onEnter={ _ensureLoggedIn }/> // Maybe take out this onEnter hook later to allow non-users to use the site
