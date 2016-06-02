@@ -34843,6 +34843,7 @@
 	var React = __webpack_require__(1);
 	var SessionStore = __webpack_require__(250);
 	var SessionApiUtil = __webpack_require__(273);
+	var Logo = __webpack_require__(282);
 	
 	var NavBar = React.createClass({
 	  displayName: 'NavBar',
@@ -34876,6 +34877,7 @@
 	      'div',
 	      { className: 'navbar-container' },
 	      'NavBar here',
+	      React.createElement('img', { className: 'logo-image navbar-logo', src: window.askAnythingAssets.logo, width: '35', height: '35', alt: 'Logo' }),
 	      React.createElement(
 	        'ul',
 	        { className: 'navbar-right-ul hover-pointer' },
@@ -34896,7 +34898,7 @@
 	        ),
 	        React.createElement(
 	          'li',
-	          { className: 'navbar-right-li' },
+	          { className: 'navbar-right-li user-info-container' },
 	          this.greeting()
 	        )
 	      )

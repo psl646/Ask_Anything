@@ -1,6 +1,7 @@
 var React = require('react');
 var SessionStore = require('./../stores/session_store');
 var SessionApiUtil = require('./../util/session_api_util');
+var Logo = require('./Logo');
 
 var NavBar = React.createClass({
   contextTypes: {
@@ -29,11 +30,13 @@ var NavBar = React.createClass({
     return (
       <div className="navbar-container">
         NavBar here
+        <img className="logo-image navbar-logo" src={window.askAnythingAssets.logo} width="35" height="35" alt="Logo" />
+
         <ul className="navbar-right-ul hover-pointer">
           <li className="navbar-right-li"> Pricing & Upgrades </li>
           <li className="navbar-right-li"> Help </li>
           <li className="navbar-right-li">  New Features </li>
-          <li className="navbar-right-li">
+          <li className="navbar-right-li user-info-container">
             { this.greeting() }
           </li>
         </ul>
