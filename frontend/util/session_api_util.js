@@ -8,7 +8,6 @@ var SessionApiUtil = {
 			type: 'POST',
 			data: {user: credentials},
 			success: function (currentUser) {
-        console.log("Login success (SessionApiUtil#login)");
         SessionActions.receiveCurrentUser(currentUser);
       },
 			error: function (xhr) {
@@ -20,7 +19,6 @@ var SessionApiUtil = {
 	},
 
 	logout: function () {
-		console.log("You clicked the logout button");
 		$.ajax({
 			url: '/api/session',
 			method: 'DELETE',

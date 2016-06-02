@@ -4,9 +4,17 @@ var SessionStore = require('./../stores/session_store');
 var SessionApiUtil = require('./../util/session_api_util');
 
 var App = React.createClass({
+  contextTypes: {
+    router: React.PropTypes.object.isRequired
+  },
 
   componentDidMount: function () {
     SessionStore.addListener(this.forceUpdate.bind(this));
+  },
+
+  handleClick: function () {
+    SessionApiUtil.logout();
+    this.context.router.push("/login")
   },
 
   greeting: function(){
@@ -14,23 +22,16 @@ var App = React.createClass({
     	return (
     		<hgroup>
     			<h2>Hi, {SessionStore.currentUser().email}!</h2>
-    			<input type="submit" value="logout" onClick={ SessionApiUtil.logout } />
+    			<input type="submit" value="logout" onClick={ this.handleClick } />
     		</hgroup>
     	);
-    } else if (["/login", "/signup"].indexOf(this.props.location.pathname) === -1) {
-      return (
-        <nav>
-          <Link to="/login" activeClassName="current">Login</Link>
-          &nbsp;or&nbsp;
-          <Link to="/signup" activeClassName="current">Sign up!</Link>
-        </nav>
-      );
     }
   },
 
   render: function() {
     return (
       <div className="app">
+        { this.greeting() }
         {this.props.children}
       </div>
     );

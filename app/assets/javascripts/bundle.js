@@ -71,10 +71,11 @@
 	  { history: hashHistory },
 	  React.createElement(
 	    Route,
-	    { path: '/', component: App },
+	    { path: '/', component: App, onEnter: _ensureLoggedOut },
 	    React.createElement(Route, { path: 'login', component: LoginForm, onEnter: _ensureLoggedOut }),
 	    React.createElement(Route, { path: 'signup', component: SignupPage, onEnter: _ensureLoggedOut }),
-	    React.createElement(Route, { path: 'surveys', component: SurveysIndex, onEnter: _ensureLoggedIn })
+	    React.createElement(Route, { path: 'surveys', component: SurveysIndex, onEnter: _ensureLoggedIn }),
+	    ' // Maybe take out this onEnter hook later to allow non-users to use the site'
 	  )
 	);
 	
@@ -27853,9 +27854,17 @@
 	var App = React.createClass({
 	  displayName: 'App',
 	
+	  contextTypes: {
+	    router: React.PropTypes.object.isRequired
+	  },
 	
 	  componentDidMount: function () {
 	    SessionStore.addListener(this.forceUpdate.bind(this));
+	  },
+	
+	  handleClick: function () {
+	    SessionApiUtil.logout();
+	    this.context.router.push("/login");
 	  },
 	
 	  greeting: function () {
@@ -27870,23 +27879,7 @@
 	          SessionStore.currentUser().email,
 	          '!'
 	        ),
-	        React.createElement('input', { type: 'submit', value: 'logout', onClick: SessionApiUtil.logout })
-	      );
-	    } else if (["/login", "/signup"].indexOf(this.props.location.pathname) === -1) {
-	      return React.createElement(
-	        'nav',
-	        null,
-	        React.createElement(
-	          Link,
-	          { to: '/login', activeClassName: 'current' },
-	          'Login'
-	        ),
-	        ' or ',
-	        React.createElement(
-	          Link,
-	          { to: '/signup', activeClassName: 'current' },
-	          'Sign up!'
-	        )
+	        React.createElement('input', { type: 'submit', value: 'logout', onClick: this.handleClick })
 	      );
 	    }
 	  },
@@ -27895,6 +27888,7 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'app' },
+	      this.greeting(),
 	      this.props.children
 	    );
 	  }
@@ -34736,7 +34730,6 @@
 				type: 'POST',
 				data: { user: credentials },
 				success: function (currentUser) {
-					console.log("Login success (SessionApiUtil#login)");
 					SessionActions.receiveCurrentUser(currentUser);
 				},
 				error: function (xhr) {
@@ -34748,7 +34741,6 @@
 		},
 	
 		logout: function () {
-			console.log("You clicked the logout button");
 			$.ajax({
 				url: '/api/session',
 				method: 'DELETE',

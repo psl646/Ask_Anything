@@ -1,3 +1,5 @@
+require_relative 'survey'
+
 class User < ActiveRecord::Base
 
 	attr_reader :password
@@ -6,7 +8,7 @@ class User < ActiveRecord::Base
 	validates :email, :session_token, uniqueness: true
 	validates :password, length: {minimum: 7}, allow_nil: :true
 
-	after_initialize :ensure_session_token
+	after_initialize :ensure_session_token, :ensure_initial_survey
 	before_validation :ensure_session_token_uniqueness
 
 	has_many(
@@ -55,4 +57,9 @@ class User < ActiveRecord::Base
 		end
 	end
 
+	def ensure_initial_survey
+		if self.surveys.where(title: "Ungrouped").length == 0
+			Survey.create(title: "Ungrouped", author_id: self.id)
+		end
+	end
 end
