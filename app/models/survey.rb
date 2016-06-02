@@ -9,4 +9,12 @@ class Survey < ActiveRecord::Base
     primary_key: :id
   )
 
+  has_many(
+    :questions,
+    class_name: "Question",
+    foreign_key: :survey_id,
+    primary_key: :id,
+    dependent: :destroy
+  )
+
 end

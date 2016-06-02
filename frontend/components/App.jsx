@@ -3,7 +3,8 @@ var Link = require('react-router').Link;
 var SessionStore = require('./../stores/session_store');
 var SessionApiUtil = require('./../util/session_api_util');
 var Footer = require('./Footer');
-var NavBar = require('./NavBar');
+var UserNavBar = require('./UserNavBar');
+var NoUserNavBar = require('./NoUserNavBar');
 
 var App = React.createClass({
   componentDidMount: function () {
@@ -16,9 +17,16 @@ var App = React.createClass({
   },
 
   render: function() {
+    var navigationBar;
+    if (SessionStore.isUserLoggedIn()) {
+      navigationBar = <UserNavBar />;
+    } else {
+      navigationBar = <NoUserNavBar />;
+    }
+
     return (
       <div className="app">
-        <NavBar />
+        { navigationBar }
         {this.props.children}
         <Footer />
       </div>

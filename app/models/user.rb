@@ -19,6 +19,12 @@ class User < ActiveRecord::Base
 		dependent: :destroy
   )
 
+	has_many(
+		:questions,
+		through: :surveys,
+		source: :questions
+	)
+
 	def password= (password)
 		self.password_digest = BCrypt::Password.create(password)
 		@password = password

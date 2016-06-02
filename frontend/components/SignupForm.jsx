@@ -62,7 +62,6 @@ var SignupForm = React.createClass({
   fieldErrors: function (field) {
     var errors = ErrorStore.formErrors("signup");
     if (!errors[field]) { return; }
-    // field??
     var messages = errors[field].map(function (errorMsg, i) {
       return <li key={ i } className="error-message">{ errorMsg }</li>;
     });
@@ -110,7 +109,7 @@ var SignupForm = React.createClass({
       bottomText = (
         <div>
           <div className="label">What country will people be texting us from?</div>
-          <div className="hover-pointer h5"><input className="radio" type="radio" checked />United States</div>
+          <div className="hover-pointer h5"><input className="radio" type="radio" checked readOnly/>United States</div>
           <Link to="moreCountries" className="link h5">» Show more countries...</Link>
         </div>
       );

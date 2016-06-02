@@ -27851,7 +27851,8 @@
 	var SessionStore = __webpack_require__(250);
 	var SessionApiUtil = __webpack_require__(273);
 	var Footer = __webpack_require__(277);
-	var NavBar = __webpack_require__(278);
+	var UserNavBar = __webpack_require__(296);
+	var NoUserNavBar = __webpack_require__(297);
 	
 	var App = React.createClass({
 	  displayName: 'App',
@@ -27866,10 +27867,17 @@
 	  },
 	
 	  render: function () {
+	    var navigationBar;
+	    if (SessionStore.isUserLoggedIn()) {
+	      navigationBar = React.createElement(UserNavBar, null);
+	    } else {
+	      navigationBar = React.createElement(NoUserNavBar, null);
+	    }
+	
 	    return React.createElement(
 	      'div',
 	      { className: 'app' },
-	      React.createElement(NavBar, null),
+	      navigationBar,
 	      this.props.children,
 	      React.createElement(Footer, null)
 	    );
@@ -34837,78 +34845,7 @@
 	module.exports = Footer;
 
 /***/ },
-/* 278 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var SessionStore = __webpack_require__(250);
-	var SessionApiUtil = __webpack_require__(273);
-	var Logo = __webpack_require__(282);
-	
-	var NavBar = React.createClass({
-	  displayName: 'NavBar',
-	
-	  contextTypes: {
-	    router: React.PropTypes.object.isRequired
-	  },
-	
-	  greeting: function () {
-	    if (SessionStore.isUserLoggedIn()) {
-	      return React.createElement(
-	        'ul',
-	        { className: 'user-info-container' },
-	        SessionStore.currentUser().email,
-	        React.createElement(
-	          'li',
-	          { className: 'user-info' },
-	          React.createElement('input', { className: 'logout-button hover-pointer', type: 'submit', value: 'Log Out', onClick: this.handleClick })
-	        )
-	      );
-	    }
-	  },
-	
-	  handleClick: function () {
-	    SessionApiUtil.logout();
-	    this.context.router.push("login");
-	  },
-	
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      { className: 'navbar-container' },
-	      'NavBar here',
-	      React.createElement('img', { className: 'logo-image navbar-logo', src: window.askAnythingAssets.logo, width: '35', height: '35', alt: 'Logo' }),
-	      React.createElement(
-	        'ul',
-	        { className: 'navbar-right-ul hover-pointer' },
-	        React.createElement(
-	          'li',
-	          { className: 'navbar-right-li' },
-	          ' Pricing & Upgrades '
-	        ),
-	        React.createElement(
-	          'li',
-	          { className: 'navbar-right-li' },
-	          ' Help '
-	        ),
-	        React.createElement(
-	          'li',
-	          { className: 'navbar-right-li' },
-	          '  New Features '
-	        ),
-	        React.createElement(
-	          'li',
-	          { className: 'navbar-right-li user-info-container' },
-	          this.greeting()
-	        )
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = NavBar;
-
-/***/ },
+/* 278 */,
 /* 279 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -35162,8 +35099,6 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var NavBar = __webpack_require__(278);
-	var Footer = __webpack_require__(277);
 	var SignupParticipant = __webpack_require__(284);
 	var SignupPresenter = __webpack_require__(287);
 	var SessionStore = __webpack_require__(250);
@@ -35376,7 +35311,6 @@
 	    if (!errors[field]) {
 	      return;
 	    }
-	    // field??
 	    var messages = errors[field].map(function (errorMsg, i) {
 	      return React.createElement(
 	        'li',
@@ -35448,7 +35382,7 @@
 	        React.createElement(
 	          'div',
 	          { className: 'hover-pointer h5' },
-	          React.createElement('input', { className: 'radio', type: 'radio', checked: true }),
+	          React.createElement('input', { className: 'radio', type: 'radio', checked: true, readOnly: true }),
 	          'United States'
 	        ),
 	        React.createElement(
@@ -35854,6 +35788,120 @@
 	});
 	
 	module.exports = SideNav;
+
+/***/ },
+/* 296 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var SessionStore = __webpack_require__(250);
+	var SessionApiUtil = __webpack_require__(273);
+	var Logo = __webpack_require__(282);
+	
+	var UserNavBar = React.createClass({
+	  displayName: 'UserNavBar',
+	
+	  contextTypes: {
+	    router: React.PropTypes.object.isRequired
+	  },
+	
+	  greeting: function () {
+	    if (SessionStore.isUserLoggedIn()) {
+	      return React.createElement(
+	        'ul',
+	        { className: 'user-info-container' },
+	        SessionStore.currentUser().email,
+	        React.createElement(
+	          'li',
+	          { className: 'user-info' },
+	          React.createElement('input', { className: 'logout-button hover-pointer', type: 'submit', value: 'Log Out', onClick: this.handleClick })
+	        )
+	      );
+	    }
+	  },
+	
+	  handleClick: function () {
+	    SessionApiUtil.logout();
+	    this.context.router.push("login");
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'navbar-container' },
+	      'UserNavBar here',
+	      React.createElement('img', { className: 'logo-image navbar-logo', src: window.askAnythingAssets.logo, width: '35', height: '35', alt: 'Logo' }),
+	      React.createElement(
+	        'ul',
+	        { className: 'navbar-right-ul hover-pointer' },
+	        React.createElement(
+	          'li',
+	          { className: 'navbar-right-li' },
+	          ' Pricing & Upgrades '
+	        ),
+	        React.createElement(
+	          'li',
+	          { className: 'navbar-right-li' },
+	          ' Help '
+	        ),
+	        React.createElement(
+	          'li',
+	          { className: 'navbar-right-li' },
+	          '  New Features '
+	        ),
+	        React.createElement(
+	          'li',
+	          { className: 'navbar-right-li user-info-container' },
+	          this.greeting()
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = UserNavBar;
+
+/***/ },
+/* 297 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	var NoUserNavBar = React.createClass({
+	  displayName: "NoUserNavBar",
+	
+	  contextTypes: {
+	    router: React.PropTypes.object.isRequired
+	  },
+	
+	  handleClick: function () {
+	    this.context.router.push("login");
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      "div",
+	      { className: "navbar-container" },
+	      React.createElement("img", { className: "logo-image nouser-navbar-logo", src: window.askAnythingAssets.logo, width: "35", height: "35", alt: "Logo" }),
+	      React.createElement(
+	        "ul",
+	        { className: "navbar-right-ul hover-pointer" },
+	        React.createElement(
+	          "li",
+	          { className: "navbar-right-li" },
+	          " Log in "
+	        ),
+	        React.createElement(
+	          "li",
+	          { className: "navbar-right-li" },
+	          "  Sign up "
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = NoUserNavBar;
 
 /***/ }
 /******/ ]);

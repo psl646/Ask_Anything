@@ -1,6 +1,4 @@
 var React = require('react');
-var NavBar = require('./NavBar');
-var Footer = require('./Footer');
 var SignupParticipant = require('./SignupParticipant')
 var SignupPresenter = require('./SignupPresenter')
 var SessionStore = require('./../stores/session_store');

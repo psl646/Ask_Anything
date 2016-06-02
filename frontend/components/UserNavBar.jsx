@@ -3,7 +3,7 @@ var SessionStore = require('./../stores/session_store');
 var SessionApiUtil = require('./../util/session_api_util');
 var Logo = require('./Logo');
 
-var NavBar = React.createClass({
+var UserNavBar = React.createClass({
   contextTypes: {
     router: React.PropTypes.object.isRequired
   },
@@ -29,7 +29,7 @@ var NavBar = React.createClass({
   render: function () {
     return (
       <div className="navbar-container">
-        NavBar here
+        UserNavBar here
         <img className="logo-image navbar-logo" src={window.askAnythingAssets.logo} width="35" height="35" alt="Logo" />
 
         <ul className="navbar-right-ul hover-pointer">
@@ -45,4 +45,4 @@ var NavBar = React.createClass({
   }
 });
 
-module.exports = NavBar;
+module.exports = UserNavBar;
