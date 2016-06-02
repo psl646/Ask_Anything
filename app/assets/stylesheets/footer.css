@@ -1,5 +1,6 @@
 .footer-container {
   display: block;
-  background: red;
+  color: white;
+  background: black;
   height: 300px;
 }

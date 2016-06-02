@@ -3,8 +3,33 @@ var NavBar = require('./NavBar');
 var Footer = require('./Footer');
 var SignupParticipant = require('./SignupParticipant')
 var SignupPresenter = require('./SignupPresenter')
+var SessionStore = require('./../stores/session_store');
+
 
 var SignupPage = React.createClass({
+	contextTypes: {
+		router: React.PropTypes.object.isRequired
+	},
+
+	componentDidMount: function () {
+		this.sessionListener = SessionStore.addListener(this.redirectIfLoggedIn);
+	},
+
+	componentWillUnmount: function () {
+		this.sessionListener.remove();
+	},
+
+	redirectIfLoggedIn: function () {
+		var that = this;
+		if (SessionStore.isUserLoggedIn()) {
+			window.setTimeout(
+				function(){
+					that.context.router.push("surveys");
+				}, 0
+			);
+		}
+	},
+
 	render: function () {
     return (
       <div className="signup-page-container group">

@@ -17,19 +17,11 @@ var SignupForm = React.createClass({
 
   componentDidMount: function () {
     this.errorListener = ErrorStore.addListener(this.forceUpdate.bind(this));
-    this.sessionListener = SessionStore.addListener(this.redirectIfLoggedIn);
   },
 
   componentWillUnmount: function () {
     ErrorActions.clearErrors();
     this.errorListener.remove();
-    this.sessionListener.remove();
-  },
-
-  redirectIfLoggedIn: function () {
-    if (SessionStore.isUserLoggedIn()) {
-      this.context.router.push("/");
-    }
   },
 
   firstNameChange: function (e) {
@@ -70,6 +62,7 @@ var SignupForm = React.createClass({
   fieldErrors: function (field) {
     var errors = ErrorStore.formErrors("signup");
     if (!errors[field]) { return; }
+    // field??
     var messages = errors[field].map(function (errorMsg, i) {
       return <li key={ i } className="error-message">{ errorMsg }</li>;
     });
@@ -97,6 +90,7 @@ var SignupForm = React.createClass({
   },
 
 	render: function () {
+    var that = this;
     var errorText = "";
     var allErrorMessages = "";
     var renderErrors = "";
@@ -139,6 +133,7 @@ var SignupForm = React.createClass({
       );
     }
 
+
     return (
       <div className="signup-form-container">
 
@@ -149,22 +144,22 @@ var SignupForm = React.createClass({
 
           <br />
           <label className="hover-pointer label"> First name <br/>
-            <input className="signup-input soft-edges" type="text" value={this.state.first_name} onChange={this.firstNameChange}/>
+            <input className={"signup-input soft-edges "} type="text" value={this.state.first_name} onChange={this.firstNameChange}/>
           </label>
 
           <br />
           <label className="hover-pointer label"> Last name <br/>
-            <input className="signup-input soft-edges" type="text" value={this.state.last_name} onChange={this.lastNameChange}/>
+            <input className={"signup-input soft-edges "} type="text" value={this.state.last_name} onChange={this.lastNameChange}/>
           </label>
 
           <br />
           <label className="hover-pointer label"> Email <br/>
-            <input className="signup-input soft-edges" type="text" value={this.state.email} onChange={this.emailChange}/>
+            <input className={"signup-input soft-edges "} type="text" value={this.state.email} onChange={this.emailChange}/>
           </label>
 
           <br />
           <label className="hover-pointer label"> Password <br/>
-            <input className="signup-input soft-edges" type="password" value={this.state.password} onChange={this.passwordChange} />
+            <input className={"signup-input soft-edges "} type="password" value={this.state.password} onChange={this.passwordChange} />
           </label>
 
           { bottomText }
@@ -179,7 +174,7 @@ var SignupForm = React.createClass({
         </form>
 
         <div className="agreement">By proceeding you agree to Ask Anything!</div>
-        <div className="agreement"  ><Link to="tos" className="link">Terms of Service</Link> and <Link to="privacyPolicy" className="link">Privacy Policy</Link>.</div>
+        <div className="agreement"><Link to="tos" className="link">Terms of Service</Link> and <Link to="privacyPolicy" className="link">Privacy Policy</Link>.</div>
       </div>
 		);
 	}

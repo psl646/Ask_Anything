@@ -1,5 +1,6 @@
 .navbar-container {
   display: block;
-  background: green;
-  height: 200px;
+  color: white;
+  background: #203349;
+  height: 75px;
 }

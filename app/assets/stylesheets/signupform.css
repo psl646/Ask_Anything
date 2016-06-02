@@ -13,6 +13,10 @@
   margin-bottom: 30px;
 }
 
+.signup-input-error {
+  border: 1px solid #ff9582;
+}
+
 .label {
   font-size: 14px;
   font-weight: bolder;
@@ -49,7 +53,7 @@
 
 .error-message {
   font-size: 12.5px;
-  margin-top: 10px;
+  margin-top: 14px;
 }
 
 .h2 {

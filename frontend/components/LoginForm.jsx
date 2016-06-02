@@ -7,15 +7,12 @@ var UserApiUtil = require('./../util/user_api_util');
 var Logo = require('./Logo');
 
 var LoginForm = React.createClass({
-  getInitialState: function () {
-    return {
-      email: "",
-      password: ""
-    };
-  },
-
   contextTypes: {
     router: React.PropTypes.object.isRequired
+  },
+
+  getInitialState: function () {
+    return { email: "", password: "" };
   },
 
   componentDidMount: function () {
@@ -30,7 +27,7 @@ var LoginForm = React.createClass({
 
   redirectIfLoggedIn: function () {
     if (SessionStore.isUserLoggedIn()) {
-      this.context.router.push("/");
+      this.context.router.push("surveys");
     }
   },
 
@@ -42,15 +39,11 @@ var LoginForm = React.createClass({
 			password: this.state.password
 		};
 
-    if (this.props.location.pathname === "/login") {
-      SessionApiUtil.login(formData);
-    } else {
-      UserApiUtil.signup(formData);
-    }
+    SessionApiUtil.login(formData);
 	},
 
   fieldErrors: function (field) {
-    var errors = ErrorStore.formErrors(this.formType());
+    var errors = ErrorStore.formErrors("login");
     if (!errors[field]) { return; }
 
     var messages = errors[field].map(function (errorMsg, i) {
@@ -58,10 +51,6 @@ var LoginForm = React.createClass({
     });
 
     return <ul className="error-login">{ messages }</ul>;
-  },
-
-  formType: function () {
-    return this.props.location.pathname.slice(1);
   },
 
 	emailChange: function (e) {

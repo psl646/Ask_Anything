@@ -58,12 +58,13 @@
 	var App = __webpack_require__(249);
 	var LoginForm = __webpack_require__(277);
 	var SignupPage = __webpack_require__(281);
+	var SurveysIndex = __webpack_require__(288);
 	
 	var SessionStore = __webpack_require__(250);
 	var SessionApiUtil = __webpack_require__(273);
 	
 	// test component DELETE later
-	var Test = __webpack_require__(288);
+	var Test = __webpack_require__(289);
 	
 	var Router = React.createElement(
 	  Router,
@@ -71,8 +72,9 @@
 	  React.createElement(
 	    Route,
 	    { path: '/', component: App },
-	    React.createElement(Route, { path: 'login', component: LoginForm }),
-	    React.createElement(Route, { path: 'signup', component: SignupPage })
+	    React.createElement(Route, { path: 'login', component: LoginForm, onEnter: _ensureLoggedOut }),
+	    React.createElement(Route, { path: 'signup', component: SignupPage, onEnter: _ensureLoggedOut }),
+	    React.createElement(Route, { path: 'surveys', component: SurveysIndex, onEnter: _ensureLoggedIn })
 	  )
 	);
 	
@@ -86,6 +88,21 @@
 	  function redirectIfNotLoggedIn() {
 	    if (!SessionStore.isUserLoggedIn()) {
 	      replace('/login');
+	    }
+	    asyncDoneCallback();
+	  }
+	}
+	
+	function _ensureLoggedOut(nextState, replace, asyncDoneCallback) {
+	  if (!SessionStore.currentUserHasBeenFetched()) {
+	    redirectIfLoggedIn();
+	  } else {
+	    SessionApiUtil.fetchCurrentUser(redirectIfLoggedIn);
+	  }
+	
+	  function redirectIfLoggedIn() {
+	    if (SessionStore.isUserLoggedIn()) {
+	      replace('/surveys');
 	    }
 	    asyncDoneCallback();
 	  }
@@ -34736,7 +34753,6 @@
 				url: '/api/session',
 				method: 'DELETE',
 				success: function () {
-					console.log("Logout success (SessionApiUtil#logout)");
 					SessionActions.removeCurrentUser();
 				},
 				error: function () {
@@ -34839,143 +34855,132 @@
 	var Logo = __webpack_require__(280);
 	
 	var LoginForm = React.createClass({
-	  displayName: 'LoginForm',
+			displayName: 'LoginForm',
 	
-	  getInitialState: function () {
-	    return {
-	      email: "",
-	      password: ""
-	    };
-	  },
+			contextTypes: {
+					router: React.PropTypes.object.isRequired
+			},
 	
-	  contextTypes: {
-	    router: React.PropTypes.object.isRequired
-	  },
+			getInitialState: function () {
+					return { email: "", password: "" };
+			},
 	
-	  componentDidMount: function () {
-	    this.errorListener = ErrorStore.addListener(this.forceUpdate.bind(this));
-	    this.sessionListener = SessionStore.addListener(this.redirectIfLoggedIn);
-	  },
+			componentDidMount: function () {
+					this.errorListener = ErrorStore.addListener(this.forceUpdate.bind(this));
+					this.sessionListener = SessionStore.addListener(this.redirectIfLoggedIn);
+			},
 	
-	  componentWillUnmount: function () {
-	    this.errorListener.remove();
-	    this.sessionListener.remove();
-	  },
+			componentWillUnmount: function () {
+					this.errorListener.remove();
+					this.sessionListener.remove();
+			},
 	
-	  redirectIfLoggedIn: function () {
-	    if (SessionStore.isUserLoggedIn()) {
-	      this.context.router.push("/");
-	    }
-	  },
+			redirectIfLoggedIn: function () {
+					if (SessionStore.isUserLoggedIn()) {
+							this.context.router.push("surveys");
+					}
+			},
 	
-	  handleSubmit: function (e) {
-	    e.preventDefault();
+			handleSubmit: function (e) {
+					e.preventDefault();
 	
-	    var formData = {
-	      email: this.state.email,
-	      password: this.state.password
-	    };
+					var formData = {
+							email: this.state.email,
+							password: this.state.password
+					};
 	
-	    if (this.props.location.pathname === "/login") {
-	      SessionApiUtil.login(formData);
-	    } else {
-	      UserApiUtil.signup(formData);
-	    }
-	  },
+					SessionApiUtil.login(formData);
+			},
 	
-	  fieldErrors: function (field) {
-	    var errors = ErrorStore.formErrors(this.formType());
-	    if (!errors[field]) {
-	      return;
-	    }
+			fieldErrors: function (field) {
+					var errors = ErrorStore.formErrors("login");
+					if (!errors[field]) {
+							return;
+					}
 	
-	    var messages = errors[field].map(function (errorMsg, i) {
-	      return React.createElement(
-	        'li',
-	        { key: i },
-	        errorMsg
-	      );
-	    });
+					var messages = errors[field].map(function (errorMsg, i) {
+							return React.createElement(
+									'li',
+									{ key: i },
+									errorMsg
+							);
+					});
 	
-	    return React.createElement(
-	      'ul',
-	      { className: 'error-login' },
-	      messages
-	    );
-	  },
+					return React.createElement(
+							'ul',
+							{ className: 'error-login' },
+							messages
+					);
+			},
 	
-	  formType: function () {
-	    return this.props.location.pathname.slice(1);
-	  },
+			emailChange: function (e) {
+					var newEmail = e.target.value;
+					this.setState({ email: newEmail });
+			},
 	
-	  emailChange: function (e) {
-	    var newEmail = e.target.value;
-	    this.setState({ email: newEmail });
-	  },
+			passwordChange: function (e) {
+					var newPassword = e.target.value;
+					this.setState({ password: newPassword });
+			},
 	
-	  passwordChange: function (e) {
-	    var newPassword = e.target.value;
-	    this.setState({ password: newPassword });
-	  },
+			render: function () {
+					var newSignUpString = "Do you need an account? Create one in a few seconds.";
 	
-	  render: function () {
-	    var newSignUpString = "Do you need an account? Create one in a few seconds.";
-	
-	    return React.createElement(
-	      'div',
-	      { className: 'login-container' },
-	      React.createElement(Logo, null),
-	      React.createElement(
-	        'form',
-	        { className: 'login-component soft-edges', onSubmit: this.handleSubmit },
-	        this.fieldErrors("base"),
-	        React.createElement(
-	          'h1',
-	          { className: 'h1' },
-	          'Log In'
-	        ),
-	        React.createElement('br', null),
-	        React.createElement(
-	          'label',
-	          null,
-	          ' Email ',
-	          React.createElement(
-	            'small',
-	            { className: 'login-email' },
-	            'or username'
-	          ),
-	          React.createElement('br', null),
-	          this.fieldErrors("email"),
-	          React.createElement('input', { className: 'login-input soft-edges', type: 'text', value: this.state.email, onChange: this.emailChange })
-	        ),
-	        React.createElement('br', null),
-	        React.createElement(
-	          'label',
-	          null,
-	          ' Password ',
-	          React.createElement(
-	            'small',
-	            { className: 'lost-password' },
-	            React.createElement(
-	              Link,
-	              { to: 'forgotPassword' },
-	              'I forgot my password'
-	            )
-	          ),
-	          React.createElement('br', null),
-	          this.fieldErrors("password"),
-	          React.createElement('input', { className: 'login-input soft-edges', type: 'password', value: this.state.password, onChange: this.passwordChange })
-	        ),
-	        React.createElement('br', null),
-	        React.createElement('input', { className: 'signin-button soft-edges hover-pointer', type: 'submit', value: 'Sign in with my Ask Anything! account' }),
-	        React.createElement(
-	          Link,
-	          { to: 'signup', className: 'signup-link' },
-	          newSignUpString
-	        )
-	      )
-	    );
-	  }
+					return React.createElement(
+							'div',
+							{ className: 'login-container' },
+							React.createElement(Logo, null),
+							React.createElement(
+									'form',
+									{ className: 'login-component soft-edges', onSubmit: this.handleSubmit },
+									this.fieldErrors("base"),
+									React.createElement(
+											'h1',
+											{ className: 'h1' },
+											'Log In'
+									),
+									React.createElement('br', null),
+									React.createElement(
+											'label',
+											null,
+											' Email ',
+											React.createElement(
+													'small',
+													{ className: 'login-email' },
+													'or username'
+											),
+											React.createElement('br', null),
+											this.fieldErrors("email"),
+											React.createElement('input', { className: 'login-input soft-edges', type: 'text', value: this.state.email, onChange: this.emailChange })
+									),
+									React.createElement('br', null),
+									React.createElement(
+											'label',
+											null,
+											' Password ',
+											React.createElement(
+													'small',
+													{ className: 'lost-password' },
+													React.createElement(
+															Link,
+															{ to: 'forgotPassword' },
+															'I forgot my password'
+													)
+											),
+											React.createElement('br', null),
+											this.fieldErrors("password"),
+											React.createElement('input', { className: 'login-input soft-edges', type: 'password', value: this.state.password, onChange: this.passwordChange })
+									),
+									React.createElement('br', null),
+									React.createElement('input', { className: 'signin-button soft-edges hover-pointer', type: 'submit', value: 'Sign in with my Ask Anything! account' }),
+									React.createElement(
+											Link,
+											{ to: 'signup', className: 'signup-link' },
+											newSignUpString
+									)
+							)
+					);
+			}
 	});
 	
 	module.exports = LoginForm;
@@ -35091,34 +35096,56 @@
 	var Footer = __webpack_require__(283);
 	var SignupParticipant = __webpack_require__(284);
 	var SignupPresenter = __webpack_require__(287);
+	var SessionStore = __webpack_require__(250);
 	
 	var SignupPage = React.createClass({
-	  displayName: 'SignupPage',
+		displayName: 'SignupPage',
 	
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      { className: 'signup-page-container group' },
-	      React.createElement(NavBar, null),
-	      React.createElement(
-	        'div',
-	        { className: 'choose' },
-	        'Choose your primary use'
-	      ),
-	      React.createElement(
-	        'ul',
-	        { className: 'signup-options-container group hover-pointer' },
-	        React.createElement(SignupParticipant, null),
-	        React.createElement(SignupPresenter, null)
-	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'bottom' },
-	        'Whichever you choose, you\'ll still be able to access all of Ask Anything!'
-	      ),
-	      React.createElement(Footer, null)
-	    );
-	  }
+		contextTypes: {
+			router: React.PropTypes.object.isRequired
+		},
+	
+		componentDidMount: function () {
+			this.sessionListener = SessionStore.addListener(this.redirectIfLoggedIn);
+		},
+	
+		componentWillUnmount: function () {
+			this.sessionListener.remove();
+		},
+	
+		redirectIfLoggedIn: function () {
+			var that = this;
+			if (SessionStore.isUserLoggedIn()) {
+				window.setTimeout(function () {
+					that.context.router.push("surveys");
+				}, 0);
+			}
+		},
+	
+		render: function () {
+			return React.createElement(
+				'div',
+				{ className: 'signup-page-container group' },
+				React.createElement(NavBar, null),
+				React.createElement(
+					'div',
+					{ className: 'choose' },
+					'Choose your primary use'
+				),
+				React.createElement(
+					'ul',
+					{ className: 'signup-options-container group hover-pointer' },
+					React.createElement(SignupParticipant, null),
+					React.createElement(SignupPresenter, null)
+				),
+				React.createElement(
+					'div',
+					{ className: 'bottom' },
+					'Whichever you choose, you\'ll still be able to access all of Ask Anything!'
+				),
+				React.createElement(Footer, null)
+			);
+		}
 	});
 	
 	module.exports = SignupPage;
@@ -35273,19 +35300,11 @@
 	
 	  componentDidMount: function () {
 	    this.errorListener = ErrorStore.addListener(this.forceUpdate.bind(this));
-	    this.sessionListener = SessionStore.addListener(this.redirectIfLoggedIn);
 	  },
 	
 	  componentWillUnmount: function () {
 	    ErrorActions.clearErrors();
 	    this.errorListener.remove();
-	    this.sessionListener.remove();
-	  },
-	
-	  redirectIfLoggedIn: function () {
-	    if (SessionStore.isUserLoggedIn()) {
-	      this.context.router.push("/");
-	    }
 	  },
 	
 	  firstNameChange: function (e) {
@@ -35327,6 +35346,7 @@
 	    if (!errors[field]) {
 	      return;
 	    }
+	    // field??
 	    var messages = errors[field].map(function (errorMsg, i) {
 	      return React.createElement(
 	        'li',
@@ -35358,6 +35378,7 @@
 	  },
 	
 	  render: function () {
+	    var that = this;
 	    var errorText = "";
 	    var allErrorMessages = "";
 	    var renderErrors = "";
@@ -35454,7 +35475,7 @@
 	          { className: 'hover-pointer label' },
 	          ' First name ',
 	          React.createElement('br', null),
-	          React.createElement('input', { className: 'signup-input soft-edges', type: 'text', value: this.state.first_name, onChange: this.firstNameChange })
+	          React.createElement('input', { className: "signup-input soft-edges ", type: 'text', value: this.state.first_name, onChange: this.firstNameChange })
 	        ),
 	        React.createElement('br', null),
 	        React.createElement(
@@ -35462,7 +35483,7 @@
 	          { className: 'hover-pointer label' },
 	          ' Last name ',
 	          React.createElement('br', null),
-	          React.createElement('input', { className: 'signup-input soft-edges', type: 'text', value: this.state.last_name, onChange: this.lastNameChange })
+	          React.createElement('input', { className: "signup-input soft-edges ", type: 'text', value: this.state.last_name, onChange: this.lastNameChange })
 	        ),
 	        React.createElement('br', null),
 	        React.createElement(
@@ -35470,7 +35491,7 @@
 	          { className: 'hover-pointer label' },
 	          ' Email ',
 	          React.createElement('br', null),
-	          React.createElement('input', { className: 'signup-input soft-edges', type: 'text', value: this.state.email, onChange: this.emailChange })
+	          React.createElement('input', { className: "signup-input soft-edges ", type: 'text', value: this.state.email, onChange: this.emailChange })
 	        ),
 	        React.createElement('br', null),
 	        React.createElement(
@@ -35478,7 +35499,7 @@
 	          { className: 'hover-pointer label' },
 	          ' Password ',
 	          React.createElement('br', null),
-	          React.createElement('input', { className: 'signup-input soft-edges', type: 'password', value: this.state.password, onChange: this.passwordChange })
+	          React.createElement('input', { className: "signup-input soft-edges ", type: 'password', value: this.state.password, onChange: this.passwordChange })
 	        ),
 	        bottomText,
 	        React.createElement('br', null),
@@ -35574,6 +35595,26 @@
 
 /***/ },
 /* 288 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	var SurveysIndex = React.createClass({
+	  displayName: 'SurveysIndex',
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      null,
+	      'SURVEYSINDEX!!!!'
+	    );
+	  }
+	});
+	
+	module.exports = SurveysIndex;
+
+/***/ },
+/* 289 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);

@@ -25,7 +25,6 @@ var SessionApiUtil = {
 			url: '/api/session',
 			method: 'DELETE',
 			success: function () {
-        console.log("Logout success (SessionApiUtil#logout)");
         SessionActions.removeCurrentUser();
       },
 			error: function () {
