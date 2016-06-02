@@ -1,3 +1,5 @@
+// DELETE THIS FILE LATER ONCE FINISHED WITH APP
+
 var React = require('react');
 var Modal = require("react-modal");
 

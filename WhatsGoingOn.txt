@@ -1,3 +1,3 @@
-1) Why does refreshing seems to ignore the login/logout onEnter hook?
-2) Do I need to put in a before_action in my controllers?
-3) Sticky footer?
+1) Sticky footer?
+2) D3JS
+3) Modal overlay/content? Adjust size?

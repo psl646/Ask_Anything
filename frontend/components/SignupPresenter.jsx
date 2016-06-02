@@ -31,7 +31,7 @@ var SignupPresenter = React.createClass({
           onRequestClose={this.closeModal}
 					style={ ModalConstants.SIGNUP }>
 
-						<SignupForm />
+						<SignupForm type="presenter" />
 
         </Modal>
 			</li>

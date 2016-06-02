@@ -2,7 +2,7 @@
 
 .signup-page-container {
   background: #fff;
-  margin-bottom: 0;
+  height: 800px;
 }
 
 .choose {
@@ -11,6 +11,7 @@
   font-size: 30px;
   font-weight: 700;
   width: 400px;
+  padding-top: 50px;
 }
 
 .bottom {

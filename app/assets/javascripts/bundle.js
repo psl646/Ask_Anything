@@ -56,23 +56,23 @@
 	var Modal = __webpack_require__(229);
 	
 	var App = __webpack_require__(249);
-	var LoginForm = __webpack_require__(277);
-	var SignupPage = __webpack_require__(281);
+	var LoginForm = __webpack_require__(279);
+	var SignupPage = __webpack_require__(283);
 	var SurveysIndex = __webpack_require__(288);
 	
 	var SessionStore = __webpack_require__(250);
 	var SessionApiUtil = __webpack_require__(273);
 	
 	// test component DELETE later
-	var Test = __webpack_require__(289);
+	var Test = __webpack_require__(294);
 	
 	var Router = React.createElement(
 	  Router,
 	  { history: hashHistory },
+	  React.createElement(Route, { path: '/login', component: LoginForm, onEnter: _ensureLoggedOut }),
 	  React.createElement(
 	    Route,
 	    { path: '/', component: App },
-	    React.createElement(Route, { path: 'login', component: LoginForm, onEnter: _ensureLoggedOut }),
 	    React.createElement(Route, { path: 'signup', component: SignupPage, onEnter: _ensureLoggedOut }),
 	    React.createElement(Route, { path: 'surveys', component: SurveysIndex, onEnter: _ensureLoggedIn }),
 	    ' // Maybe take out this onEnter hook later to allow non-users to use the site'
@@ -27850,6 +27850,8 @@
 	var Link = __webpack_require__(168).Link;
 	var SessionStore = __webpack_require__(250);
 	var SessionApiUtil = __webpack_require__(273);
+	var Footer = __webpack_require__(277);
+	var NavBar = __webpack_require__(278);
 	
 	var App = React.createClass({
 	  displayName: 'App',
@@ -27860,36 +27862,16 @@
 	
 	  componentDidMount: function () {
 	    SessionStore.addListener(this.forceUpdate.bind(this));
-	  },
-	
-	  handleClick: function () {
-	    SessionApiUtil.logout();
-	    this.context.router.push("/login");
-	  },
-	
-	  greeting: function () {
-	    if (SessionStore.isUserLoggedIn()) {
-	      return React.createElement(
-	        'hgroup',
-	        null,
-	        React.createElement(
-	          'h2',
-	          null,
-	          'Hi, ',
-	          SessionStore.currentUser().email,
-	          '!'
-	        ),
-	        React.createElement('input', { type: 'submit', value: 'logout', onClick: this.handleClick })
-	      );
-	    }
+	    SessionApiUtil.fetchCurrentUser();
 	  },
 	
 	  render: function () {
 	    return React.createElement(
 	      'div',
 	      { className: 'app' },
-	      this.greeting(),
-	      this.props.children
+	      React.createElement(NavBar, null),
+	      this.props.children,
+	      React.createElement(Footer, null)
 	    );
 	  }
 	});
@@ -34839,146 +34821,215 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	
+	var Footer = React.createClass({
+	  displayName: "Footer",
+	
+	  render: function () {
+	    return React.createElement(
+	      "div",
+	      { className: "footer-container" },
+	      "Footer here"
+	    );
+	  }
+	});
+	
+	module.exports = Footer;
+
+/***/ },
+/* 278 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var SessionStore = __webpack_require__(250);
+	var SessionApiUtil = __webpack_require__(273);
+	
+	var NavBar = React.createClass({
+	  displayName: 'NavBar',
+	
+	  greeting: function () {
+	    if (SessionStore.isUserLoggedIn()) {
+	      return React.createElement(
+	        'hgroup',
+	        null,
+	        React.createElement(
+	          'h2',
+	          null,
+	          'Hi, ',
+	          SessionStore.currentUser().email,
+	          '!'
+	        ),
+	        React.createElement('input', { type: 'submit', value: 'logout', onClick: this.handleClick })
+	      );
+	    }
+	  },
+	
+	  handleClick: function () {
+	    SessionApiUtil.logout();
+	    this.context.router.push("/login");
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'navbar-container' },
+	      'navbar',
+	      this.greeting()
+	    );
+	  }
+	});
+	
+	module.exports = NavBar;
+
+/***/ },
+/* 279 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
 	var Link = __webpack_require__(168).Link;
 	var SessionApiUtil = __webpack_require__(273);
 	var SessionStore = __webpack_require__(250);
-	var ErrorStore = __webpack_require__(278);
-	var UserApiUtil = __webpack_require__(279);
-	var Logo = __webpack_require__(280);
+	var ErrorStore = __webpack_require__(280);
+	var UserApiUtil = __webpack_require__(281);
+	var Logo = __webpack_require__(282);
 	
 	var LoginForm = React.createClass({
-			displayName: 'LoginForm',
+	  displayName: 'LoginForm',
 	
-			contextTypes: {
-					router: React.PropTypes.object.isRequired
-			},
+	  contextTypes: {
+	    router: React.PropTypes.object.isRequired
+	  },
 	
-			getInitialState: function () {
-					return { email: "", password: "" };
-			},
+	  getInitialState: function () {
+	    return { email: "", password: "" };
+	  },
 	
-			componentDidMount: function () {
-					this.errorListener = ErrorStore.addListener(this.forceUpdate.bind(this));
-					this.sessionListener = SessionStore.addListener(this.redirectIfLoggedIn);
-			},
+	  componentDidMount: function () {
+	    this.errorListener = ErrorStore.addListener(this.forceUpdate.bind(this));
+	    this.sessionListener = SessionStore.addListener(this.redirectIfLoggedIn);
+	  },
 	
-			componentWillUnmount: function () {
-					this.errorListener.remove();
-					this.sessionListener.remove();
-			},
+	  componentWillUnmount: function () {
+	    this.errorListener.remove();
+	    this.sessionListener.remove();
+	  },
 	
-			redirectIfLoggedIn: function () {
-					if (SessionStore.isUserLoggedIn()) {
-							this.context.router.push("surveys");
-					}
-			},
+	  redirectIfLoggedIn: function () {
+	    if (SessionStore.isUserLoggedIn()) {
+	      this.context.router.push("surveys");
+	    }
+	  },
 	
-			handleSubmit: function (e) {
-					e.preventDefault();
+	  handleSubmit: function (e) {
+	    e.preventDefault();
 	
-					var formData = {
-							email: this.state.email,
-							password: this.state.password
-					};
+	    var formData = {
+	      email: this.state.email,
+	      password: this.state.password
+	    };
 	
-					SessionApiUtil.login(formData);
-			},
+	    SessionApiUtil.login(formData);
+	  },
 	
-			fieldErrors: function (field) {
-					var errors = ErrorStore.formErrors("login");
-					if (!errors[field]) {
-							return;
-					}
+	  fieldErrors: function (field) {
+	    var errors = ErrorStore.formErrors("login");
+	    if (!errors[field]) {
+	      return;
+	    }
 	
-					var messages = errors[field].map(function (errorMsg, i) {
-							return React.createElement(
-									'li',
-									{ key: i },
-									errorMsg
-							);
-					});
+	    var messages = errors[field].map(function (errorMsg, i) {
+	      return React.createElement(
+	        'li',
+	        { key: i },
+	        errorMsg
+	      );
+	    });
 	
-					return React.createElement(
-							'ul',
-							{ className: 'error-login' },
-							messages
-					);
-			},
+	    return React.createElement(
+	      'ul',
+	      { className: 'error-login' },
+	      messages
+	    );
+	  },
 	
-			emailChange: function (e) {
-					var newEmail = e.target.value;
-					this.setState({ email: newEmail });
-			},
+	  emailChange: function (e) {
+	    var newEmail = e.target.value;
+	    this.setState({ email: newEmail });
+	  },
 	
-			passwordChange: function (e) {
-					var newPassword = e.target.value;
-					this.setState({ password: newPassword });
-			},
+	  passwordChange: function (e) {
+	    var newPassword = e.target.value;
+	    this.setState({ password: newPassword });
+	  },
 	
-			render: function () {
-					var newSignUpString = "Do you need an account? Create one in a few seconds.";
+	  render: function () {
+	    var newSignUpString = "Do you need an account? Create one in a few seconds.";
 	
-					return React.createElement(
-							'div',
-							{ className: 'login-container' },
-							React.createElement(Logo, null),
-							React.createElement(
-									'form',
-									{ className: 'login-component soft-edges', onSubmit: this.handleSubmit },
-									this.fieldErrors("base"),
-									React.createElement(
-											'h1',
-											{ className: 'h1' },
-											'Log In'
-									),
-									React.createElement('br', null),
-									React.createElement(
-											'label',
-											null,
-											' Email ',
-											React.createElement(
-													'small',
-													{ className: 'login-email' },
-													'or username'
-											),
-											React.createElement('br', null),
-											this.fieldErrors("email"),
-											React.createElement('input', { className: 'login-input soft-edges', type: 'text', value: this.state.email, onChange: this.emailChange })
-									),
-									React.createElement('br', null),
-									React.createElement(
-											'label',
-											null,
-											' Password ',
-											React.createElement(
-													'small',
-													{ className: 'lost-password' },
-													React.createElement(
-															Link,
-															{ to: 'forgotPassword' },
-															'I forgot my password'
-													)
-											),
-											React.createElement('br', null),
-											this.fieldErrors("password"),
-											React.createElement('input', { className: 'login-input soft-edges', type: 'password', value: this.state.password, onChange: this.passwordChange })
-									),
-									React.createElement('br', null),
-									React.createElement('input', { className: 'signin-button soft-edges hover-pointer', type: 'submit', value: 'Sign in with my Ask Anything! account' }),
-									React.createElement(
-											Link,
-											{ to: 'signup', className: 'signup-link' },
-											newSignUpString
-									)
-							)
-					);
-			}
+	    return React.createElement(
+	      'div',
+	      { className: 'app' },
+	      React.createElement(
+	        'div',
+	        { className: 'login-container' },
+	        React.createElement(Logo, null),
+	        React.createElement(
+	          'form',
+	          { className: 'login-component soft-edges', onSubmit: this.handleSubmit },
+	          this.fieldErrors("base"),
+	          React.createElement(
+	            'h1',
+	            { className: 'h1' },
+	            'Log In'
+	          ),
+	          React.createElement('br', null),
+	          React.createElement(
+	            'label',
+	            null,
+	            ' Email ',
+	            React.createElement(
+	              'small',
+	              { className: 'login-email' },
+	              'or username'
+	            ),
+	            React.createElement('br', null),
+	            this.fieldErrors("email"),
+	            React.createElement('input', { className: 'login-input soft-edges', type: 'text', value: this.state.email, onChange: this.emailChange })
+	          ),
+	          React.createElement('br', null),
+	          React.createElement(
+	            'label',
+	            null,
+	            ' Password ',
+	            React.createElement(
+	              'small',
+	              { className: 'lost-password' },
+	              React.createElement(
+	                Link,
+	                { to: 'forgotPassword' },
+	                'I forgot my password'
+	              )
+	            ),
+	            React.createElement('br', null),
+	            this.fieldErrors("password"),
+	            React.createElement('input', { className: 'login-input soft-edges', type: 'password', value: this.state.password, onChange: this.passwordChange })
+	          ),
+	          React.createElement('br', null),
+	          React.createElement('input', { className: 'signin-button soft-edges hover-pointer', type: 'submit', value: 'Sign in with my Ask Anything! account' }),
+	          React.createElement(
+	            Link,
+	            { to: 'signup', className: 'signup-link' },
+	            newSignUpString
+	          )
+	        )
+	      )
+	    );
+	  }
 	});
 	
 	module.exports = LoginForm;
 
 /***/ },
-/* 278 */
+/* 280 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Store = __webpack_require__(255).Store;
@@ -35027,7 +35078,7 @@
 	module.exports = ErrorStore;
 
 /***/ },
-/* 279 */
+/* 281 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var SessionActions = __webpack_require__(274);
@@ -35055,7 +35106,7 @@
 	module.exports = UserApiUtil;
 
 /***/ },
-/* 280 */
+/* 282 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -35080,12 +35131,12 @@
 	module.exports = Logo;
 
 /***/ },
-/* 281 */
+/* 283 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var NavBar = __webpack_require__(282);
-	var Footer = __webpack_require__(283);
+	var NavBar = __webpack_require__(278);
+	var Footer = __webpack_require__(277);
 	var SignupParticipant = __webpack_require__(284);
 	var SignupPresenter = __webpack_require__(287);
 	var SessionStore = __webpack_require__(250);
@@ -35118,7 +35169,6 @@
 			return React.createElement(
 				'div',
 				{ className: 'signup-page-container group' },
-				React.createElement(NavBar, null),
 				React.createElement(
 					'div',
 					{ className: 'choose' },
@@ -35134,53 +35184,12 @@
 					'div',
 					{ className: 'bottom' },
 					'Whichever you choose, you\'ll still be able to access all of Ask Anything!'
-				),
-				React.createElement(Footer, null)
+				)
 			);
 		}
 	});
 	
 	module.exports = SignupPage;
-
-/***/ },
-/* 282 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	
-	var NavBar = React.createClass({
-	  displayName: "NavBar",
-	
-	  render: function () {
-	    return React.createElement(
-	      "div",
-	      { className: "navbar-container" },
-	      "Navbar here"
-	    );
-	  }
-	});
-	
-	module.exports = NavBar;
-
-/***/ },
-/* 283 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	
-	var Footer = React.createClass({
-	  displayName: "Footer",
-	
-	  render: function () {
-	    return React.createElement(
-	      "div",
-	      { className: "footer-container" },
-	      "Footer here"
-	    );
-	  }
-	});
-	
-	module.exports = Footer;
 
 /***/ },
 /* 284 */
@@ -35243,10 +35252,11 @@
 /* 285 */
 /***/ function(module, exports) {
 
-	module.exports = {
+	var ModalConstants = {
 	  SIGNUP: {
 	    overlay: {
-	      position: 'fixed',
+	      position: 'absolute',
+	      height: '100%',
 	      top: 0,
 	      left: 0,
 	      right: 0,
@@ -35256,16 +35266,17 @@
 	    },
 	    content: {
 	      position: 'fixed',
-	      top: '100px',
+	      top: '75px',
 	      left: 0,
 	      right: 0,
-	      bottom: '100px',
-	      padding: '20px',
+	      bottom: 0,
 	      backgroundColor: 'white',
 	      zIndex: 11
 	    }
 	  }
 	};
+	
+	module.exports = ModalConstants;
 
 /***/ },
 /* 286 */
@@ -35275,8 +35286,8 @@
 	var Link = __webpack_require__(168).Link;
 	var SessionApiUtil = __webpack_require__(273);
 	var SessionStore = __webpack_require__(250);
-	var ErrorStore = __webpack_require__(278);
-	var UserApiUtil = __webpack_require__(279);
+	var ErrorStore = __webpack_require__(280);
+	var UserApiUtil = __webpack_require__(281);
 	var ErrorActions = __webpack_require__(275);
 	
 	var SignupForm = React.createClass({
@@ -35577,7 +35588,7 @@
 						isOpen: this.state.modalOpen,
 						onRequestClose: this.closeModal,
 						style: ModalConstants.SIGNUP },
-					React.createElement(SignupForm, null)
+					React.createElement(SignupForm, { type: 'presenter' })
 				)
 			);
 		}
@@ -35590,15 +35601,48 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var ClientSurveyActions = __webpack_require__(289);
+	var SurveyStore = __webpack_require__(293);
 	
 	var SurveysIndex = React.createClass({
 	  displayName: 'SurveysIndex',
 	
+	  getInitialState: function () {
+	    return { surveys: SurveyStore.all() };
+	  },
+	
+	  componentDidMount: function () {
+	    this.surveyListener = SurveyStore.addListener(this._onChange);
+	    ClientSurveyActions.fetchAllSurveys();
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.surveyListener.remove();
+	  },
+	
+	  _onChange: function () {
+	    this.setState({ surveys: SurveyStore.all() });
+	  },
+	
 	  render: function () {
+	    var mySurveys = this.state.surveys;
+	    var surveys = Object.keys(mySurveys).map(function (key) {
+	      console.log("Current key: " + key);
+	      return React.createElement(
+	        'li',
+	        { className: 'surveysindex-li', key: key },
+	        mySurveys[key].title
+	      );
+	    }.bind(this));
+	
 	    return React.createElement(
 	      'div',
-	      null,
-	      'SURVEYSINDEX!!!!'
+	      { className: 'surveysindex-container' },
+	      React.createElement(
+	        'ul',
+	        null,
+	        surveys
+	      )
 	    );
 	  }
 	});
@@ -35609,6 +35653,113 @@
 /* 289 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var AppDispatcher = __webpack_require__(251);
+	var SurveyApiUtil = __webpack_require__(290);
+	
+	var ClientSurveyActions = {
+	  fetchAllSurveys: function () {
+	    SurveyApiUtil.fetchAllSurveys();
+	  }
+	};
+	
+	module.exports = ClientSurveyActions;
+
+/***/ },
+/* 290 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var ServerSurveyActions = __webpack_require__(291);
+	
+	var SurveyApiUtil = {
+	  fetchAllSurveys: function () {
+	    $.ajax({
+	      url: 'api/surveys',
+	      type: 'GET',
+	      dataType: 'json',
+	      success: function (surveys) {
+	        console.log("FROM DB: " + surveys);
+	        ServerSurveyActions.receiveAllSurveys(surveys);
+	      }
+	    });
+	  }
+	};
+	
+	module.exports = SurveyApiUtil;
+
+/***/ },
+/* 291 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(251);
+	var SurveyConstants = __webpack_require__(292);
+	
+	var ServerSurveyActions = {
+	  receiveAllSurveys: function (surveys) {
+	    console.log("FROM SERVERACTION: " + surveys);
+	    AppDispatcher.dispatch({
+	      actionType: SurveyConstants.SURVEYS_RECEIVED,
+	      surveys: surveys
+	    });
+	  }
+	};
+	
+	module.exports = ServerSurveyActions;
+
+/***/ },
+/* 292 */
+/***/ function(module, exports) {
+
+	var SurveyConstants = {
+	  SURVEYS_RECEIVED: "SURVEYS_RECEIVED"
+	};
+	
+	module.exports = SurveyConstants;
+
+/***/ },
+/* 293 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(251);
+	var Store = __webpack_require__(255).Store;
+	var SurveyConstants = __webpack_require__(292);
+	
+	var SurveyStore = new Store(AppDispatcher);
+	
+	var _surveys = {};
+	
+	var _resetSurveys = function (surveys) {
+	  console.log("Before reset: " + _surveys);
+	  _surveys = {};
+	
+	  surveys.forEach(function (survey) {
+	    _surveys[survey.id] = survey;
+	  });
+	  console.log("After reset: " + _surveys);
+	};
+	
+	SurveyStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case SurveyConstants.SURVEYS_RECEIVED:
+	      _resetSurveys(payload.surveys);
+	      SurveyStore.__emitChange();
+	      break;
+	  }
+	};
+	
+	SurveyStore.all = function () {
+	  var allSurveys = Object.assign({}, _surveys);
+	  console.log("Allsurveys: " + allSurveys);
+	  return allSurveys;
+	};
+	
+	module.exports = SurveyStore;
+
+/***/ },
+/* 294 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// DELETE THIS FILE LATER ONCE FINISHED WITH APP
+	
 	var React = __webpack_require__(1);
 	var Modal = __webpack_require__(229);
 	

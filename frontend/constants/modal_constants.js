@@ -1,7 +1,8 @@
-module.exports = {
+var ModalConstants = {
   SIGNUP: {
     overlay : {
-      position        : 'fixed',
+      position        : 'absolute',
+      height          : '100%',
       top             : 0,
       left            : 0,
       right           : 0,
@@ -11,13 +12,14 @@ module.exports = {
     },
     content : {
       position        : 'fixed',
-      top             : '100px',
+      top             : '75px',
       left            : 0,
       right           : 0,
-      bottom          : '100px',
-      padding         : '20px',
+      bottom          : 0,
       backgroundColor : 'white',
       zIndex					: 11
     }
   }
 }
+
+module.exports = ModalConstants;

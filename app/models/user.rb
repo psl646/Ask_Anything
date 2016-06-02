@@ -58,8 +58,8 @@ class User < ActiveRecord::Base
 	end
 
 	def ensure_initial_survey
-		if self.surveys.where(title: "Ungrouped").length == 0
-			Survey.create(title: "Ungrouped", author_id: self.id)
+		if self.surveys.where(ungrouped: "true").length == 0
+			Survey.create(title: "Ungrouped", author_id: self.id, ungrouped: "true")
 		end
 	end
 end
