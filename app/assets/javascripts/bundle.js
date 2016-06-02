@@ -34855,11 +34855,12 @@
 	    if (SessionStore.isUserLoggedIn()) {
 	      return React.createElement(
 	        'ul',
-	        { value: SessionStore.currentUser().email },
+	        null,
+	        SessionStore.currentUser().email,
 	        React.createElement(
 	          'li',
-	          { className: 'user-dropdown' },
-	          React.createElement('input', { type: 'submit', value: 'Log Out', onClick: this.handleClick })
+	          { className: 'user-info' },
+	          React.createElement('input', { className: 'logout-button hover-pointer', type: 'submit', value: 'Log Out', onClick: this.handleClick })
 	        )
 	      );
 	    }
@@ -34874,10 +34875,15 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'navbar-container' },
-	      'navbar',
+	      'NavBar here',
 	      React.createElement(
 	        'ul',
 	        { className: 'navbar-right-ul' },
+	        React.createElement(
+	          'li',
+	          { className: 'navbar-right-li' },
+	          'Other stuff'
+	        ),
 	        React.createElement(
 	          'li',
 	          { className: 'navbar-right-li' },

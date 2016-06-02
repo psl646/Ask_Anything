@@ -11,3 +11,6 @@ Survey.destroy_all
 
 User.create(first_name: "Peter", last_name: "Lin", email: "Peter.Lin646@gmail.com", password: "password")
 User.create(first_name: "test", last_name: "test", email: "test", password: "testing")
+User.create(first_name: "user123", last_name: "user123", email: "user123", password: "user123")
+
+Survey.create(title: "New Survey", author_id: User.all.last.id)
