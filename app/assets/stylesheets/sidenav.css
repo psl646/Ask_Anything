@@ -1,0 +1,7 @@
+.sidenav-container {
+  float: left;
+  display: block;
+  background: red;
+  width: 180px;
+  margin: 20px;
+}

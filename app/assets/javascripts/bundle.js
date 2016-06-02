@@ -34854,16 +34854,13 @@
 	  greeting: function () {
 	    if (SessionStore.isUserLoggedIn()) {
 	      return React.createElement(
-	        'hgroup',
-	        null,
+	        'ul',
+	        { value: SessionStore.currentUser().email },
 	        React.createElement(
-	          'h2',
-	          null,
-	          'Hi, ',
-	          SessionStore.currentUser().email,
-	          '!'
-	        ),
-	        React.createElement('input', { type: 'submit', value: 'logout', onClick: this.handleClick })
+	          'li',
+	          { className: 'user-dropdown' },
+	          React.createElement('input', { type: 'submit', value: 'Log Out', onClick: this.handleClick })
+	        )
 	      );
 	    }
 	  },
@@ -34878,7 +34875,15 @@
 	      'div',
 	      { className: 'navbar-container' },
 	      'navbar',
-	      this.greeting()
+	      React.createElement(
+	        'ul',
+	        { className: 'navbar-right-ul' },
+	        React.createElement(
+	          'li',
+	          { className: 'navbar-right-li' },
+	          this.greeting()
+	        )
+	      )
 	    );
 	  }
 	});
@@ -35607,6 +35612,7 @@
 	var React = __webpack_require__(1);
 	var ClientSurveyActions = __webpack_require__(289);
 	var SurveyStore = __webpack_require__(293);
+	var SideNav = __webpack_require__(295);
 	
 	var SurveysIndex = React.createClass({
 	  displayName: 'SurveysIndex',
@@ -35641,9 +35647,10 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'surveysindex-container' },
+	      React.createElement(SideNav, null),
 	      React.createElement(
 	        'ul',
-	        null,
+	        { className: 'surveysindex-ul' },
 	        surveys
 	      )
 	    );
@@ -35808,6 +35815,27 @@
 	});
 	
 	module.exports = Test;
+
+/***/ },
+/* 295 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	var SideNav = React.createClass({
+	  displayName: "SideNav",
+	
+	  render: function () {
+	    return React.createElement(
+	      "div",
+	      { className: "sidenav-container" },
+	      "you are in the side navyou are in the side navyou are in the side navyou are in the side nav",
+	      React.createElement("ul", null)
+	    );
+	  }
+	});
+	
+	module.exports = SideNav;
 
 /***/ }
 /******/ ]);

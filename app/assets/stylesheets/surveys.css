@@ -1,7 +1,20 @@
 .surveysindex-container {
-  background: red;
+  position: relative;
+  background: green;
+  min-width: 1100px;
+}
+
+.surveysindex-ul {
+  float: left;
+  left: 200px;
+  width: calc(100% - 300px);
+  margin: 20px;
+  padding: 20px;
+  background: blue;
 }
 
 .surveysindex-li {
-  background: blue;
+  background: #bad0e0;
+  height: 50px;
+  border: 2px solid red;
 }

@@ -10,10 +10,11 @@ var NavBar = React.createClass({
   greeting: function(){
     if (SessionStore.isUserLoggedIn()) {
       return (
-        <hgroup>
-          <h2>Hi, {SessionStore.currentUser().email}!</h2>
-          <input type="submit" value="logout" onClick={ this.handleClick } />
-        </hgroup>
+        <ul value={SessionStore.currentUser().email}>
+          <li className="user-dropdown">
+            <input type="submit" value="Log Out" onClick={ this.handleClick } />
+          </li>
+        </ul>
       );
     }
   },
@@ -27,7 +28,9 @@ var NavBar = React.createClass({
     return (
       <div className="navbar-container">
         navbar
-        { this.greeting() }
+        <ul className="navbar-right-ul">
+          <li className="navbar-right-li">{ this.greeting() }</li>
+        </ul>
       </div>
     )
   }

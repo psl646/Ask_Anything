@@ -1,6 +1,7 @@
 var React = require('react');
 var ClientSurveyActions = require('../actions/client_survey_actions');
 var SurveyStore = require('../stores/survey_store');
+var SideNav = require('./SideNav');
 
 var SurveysIndex = React.createClass ({
   getInitialState: function () {
@@ -28,7 +29,8 @@ var SurveysIndex = React.createClass ({
 
     return (
       <div className="surveysindex-container">
-        <ul >
+        <SideNav />
+        <ul className="surveysindex-ul">
           { surveys }
         </ul>
       </div>
