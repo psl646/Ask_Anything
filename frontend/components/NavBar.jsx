@@ -3,6 +3,10 @@ var SessionStore = require('./../stores/session_store');
 var SessionApiUtil = require('./../util/session_api_util');
 
 var NavBar = React.createClass({
+  contextTypes: {
+    router: React.PropTypes.object.isRequired
+  },
+
   greeting: function(){
     if (SessionStore.isUserLoggedIn()) {
       return (
@@ -16,7 +20,7 @@ var NavBar = React.createClass({
 
   handleClick: function () {
     SessionApiUtil.logout();
-    this.context.router.push("/login")
+    this.context.router.push("login")
   },
 
   render: function () {

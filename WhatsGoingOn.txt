@@ -1,3 +1,7 @@
 1) Sticky footer?
 2) D3JS
 3) Modal overlay/content? Adjust size?
+4) ForceUpdate??? If I take it out, refreshing logs out?
+    warning.js:45 Warning: forceUpdate(...): Can only update a mounted or mounting component.
+    This usually means you called forceUpdate() on an unmounted component. This is a no-op.
+    Please check the code for the App component.

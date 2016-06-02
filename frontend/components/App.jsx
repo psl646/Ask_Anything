@@ -6,13 +6,13 @@ var Footer = require('./Footer');
 var NavBar = require('./NavBar');
 
 var App = React.createClass({
-  contextTypes: {
-    router: React.PropTypes.object.isRequired
+  componentDidMount: function () {
+    this.sessionListener = SessionStore.addListener(this.forceUpdate.bind(this));
+    SessionApiUtil.fetchCurrentUser();
   },
 
-  componentDidMount: function () {
-    SessionStore.addListener(this.forceUpdate.bind(this));
-    SessionApiUtil.fetchCurrentUser();
+  componentWillUnmount: function () {
+    this.sessionListener.remove();
   },
 
   render: function() {

@@ -27856,13 +27856,13 @@
 	var App = React.createClass({
 	  displayName: 'App',
 	
-	  contextTypes: {
-	    router: React.PropTypes.object.isRequired
+	  componentDidMount: function () {
+	    this.sessionListener = SessionStore.addListener(this.forceUpdate.bind(this));
+	    SessionApiUtil.fetchCurrentUser();
 	  },
 	
-	  componentDidMount: function () {
-	    SessionStore.addListener(this.forceUpdate.bind(this));
-	    SessionApiUtil.fetchCurrentUser();
+	  componentWillUnmount: function () {
+	    this.sessionListener.remove();
 	  },
 	
 	  render: function () {
@@ -34847,6 +34847,10 @@
 	var NavBar = React.createClass({
 	  displayName: 'NavBar',
 	
+	  contextTypes: {
+	    router: React.PropTypes.object.isRequired
+	  },
+	
 	  greeting: function () {
 	    if (SessionStore.isUserLoggedIn()) {
 	      return React.createElement(
@@ -34866,7 +34870,7 @@
 	
 	  handleClick: function () {
 	    SessionApiUtil.logout();
-	    this.context.router.push("/login");
+	    this.context.router.push("login");
 	  },
 	
 	  render: function () {
@@ -35627,7 +35631,6 @@
 	  render: function () {
 	    var mySurveys = this.state.surveys;
 	    var surveys = Object.keys(mySurveys).map(function (key) {
-	      console.log("Current key: " + key);
 	      return React.createElement(
 	        'li',
 	        { className: 'surveysindex-li', key: key },
@@ -35677,7 +35680,6 @@
 	      type: 'GET',
 	      dataType: 'json',
 	      success: function (surveys) {
-	        console.log("FROM DB: " + surveys);
 	        ServerSurveyActions.receiveAllSurveys(surveys);
 	      }
 	    });
@@ -35695,7 +35697,6 @@
 	
 	var ServerSurveyActions = {
 	  receiveAllSurveys: function (surveys) {
-	    console.log("FROM SERVERACTION: " + surveys);
 	    AppDispatcher.dispatch({
 	      actionType: SurveyConstants.SURVEYS_RECEIVED,
 	      surveys: surveys
@@ -35728,13 +35729,11 @@
 	var _surveys = {};
 	
 	var _resetSurveys = function (surveys) {
-	  console.log("Before reset: " + _surveys);
 	  _surveys = {};
 	
 	  surveys.forEach(function (survey) {
 	    _surveys[survey.id] = survey;
 	  });
-	  console.log("After reset: " + _surveys);
 	};
 	
 	SurveyStore.__onDispatch = function (payload) {
@@ -35748,7 +35747,6 @@
 	
 	SurveyStore.all = function () {
 	  var allSurveys = Object.assign({}, _surveys);
-	  console.log("Allsurveys: " + allSurveys);
 	  return allSurveys;
 	};
 	

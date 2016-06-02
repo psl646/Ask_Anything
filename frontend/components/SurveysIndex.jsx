@@ -23,7 +23,6 @@ var SurveysIndex = React.createClass ({
   render: function () {
     var mySurveys = this.state.surveys;
     var surveys = Object.keys(mySurveys).map(function(key){
-      console.log("Current key: " + key);
       return <li className="surveysindex-li" key={ key }>{ mySurveys[key].title }</li>;
     }.bind(this));
 
