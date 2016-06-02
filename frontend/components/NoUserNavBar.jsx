@@ -1,4 +1,5 @@
 var React = require('react');
+var Link = require('react-router').Link;
 
 var NoUserNavBar = React.createClass({
   contextTypes: {
@@ -12,11 +13,14 @@ var NoUserNavBar = React.createClass({
   render: function () {
     return (
       <div className="navbar-container">
-        <img className="logo-image nouser-navbar-logo" src={window.askAnythingAssets.logo} width="35" height="35" alt="Logo" />
 
-        <ul className="navbar-right-ul hover-pointer">
-          <li className="navbar-right-li"> Log in </li>
-          <li className="navbar-right-li">  Sign up </li>
+        <ul className="navbar-right-ul">
+          <li className="nouser-navbar-right-li">
+            <Link to="login">Log in</Link>
+          </li>
+          <li>
+            <Link to="signup" className="signup-main soft-edges">Sign up</Link>
+          </li>
         </ul>
       </div>
     )
@@ -24,3 +28,5 @@ var NoUserNavBar = React.createClass({
 });
 
 module.exports = NoUserNavBar;
+
+// </div><img className="logo-image nouser-navbar" src={window.askAnythingAssets.logo} width="35" height="35" alt="Logo" />

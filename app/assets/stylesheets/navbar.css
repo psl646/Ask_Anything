@@ -61,3 +61,21 @@
 li:hover .user-info {
   display: block;
 }
+
+.nouser-navbar-right-li {
+  margin: 0 20px;
+}
+
+.nouser-navbar-right-li:hover {
+  color: rgba(217, 81, 34, 0.81);
+  text-decoration: underline;
+  transition: 0.5s;
+}
+
+.signup-main {
+  display: block;
+  position: absolute;
+  top: 15px;
+  background: rgb(38, 72, 116);
+  padding: 10px;
+}

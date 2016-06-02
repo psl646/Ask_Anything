@@ -35866,9 +35866,10 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var Link = __webpack_require__(168).Link;
 	
 	var NoUserNavBar = React.createClass({
-	  displayName: "NoUserNavBar",
+	  displayName: 'NoUserNavBar',
 	
 	  contextTypes: {
 	    router: React.PropTypes.object.isRequired
@@ -35880,21 +35881,28 @@
 	
 	  render: function () {
 	    return React.createElement(
-	      "div",
-	      { className: "navbar-container" },
-	      React.createElement("img", { className: "logo-image nouser-navbar-logo", src: window.askAnythingAssets.logo, width: "35", height: "35", alt: "Logo" }),
+	      'div',
+	      { className: 'navbar-container' },
 	      React.createElement(
-	        "ul",
-	        { className: "navbar-right-ul hover-pointer" },
+	        'ul',
+	        { className: 'navbar-right-ul' },
 	        React.createElement(
-	          "li",
-	          { className: "navbar-right-li" },
-	          " Log in "
+	          'li',
+	          { className: 'nouser-navbar-right-li' },
+	          React.createElement(
+	            Link,
+	            { to: 'login' },
+	            'Log in'
+	          )
 	        ),
 	        React.createElement(
-	          "li",
-	          { className: "navbar-right-li" },
-	          "  Sign up "
+	          'li',
+	          null,
+	          React.createElement(
+	            Link,
+	            { to: 'signup', className: 'signup-main soft-edges' },
+	            'Sign up'
+	          )
 	        )
 	      )
 	    );
@@ -35902,6 +35910,8 @@
 	});
 	
 	module.exports = NoUserNavBar;
+	
+	// </div><img className="logo-image nouser-navbar" src={window.askAnythingAssets.logo} width="35" height="35" alt="Logo" />
 
 /***/ }
 /******/ ]);
