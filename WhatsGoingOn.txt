@@ -1,7 +1,8 @@
 1) Stack level too deep on Heroku seed
 2) Pseudocontent IMAGE on Navbar
 3) Ask about LOOKING STUFF UP THROUGH ASSOCIATION
-  Question.where(author: currentuser)
+  Had to add an author_id column in Questions because I couldnt do:
+  Question.where(author: current_user)
 4) N-queries on Questions?? based on Number of Index
 
 Look up
