@@ -10,7 +10,12 @@ class Api::QuestionsController < ApplicationController
   end
 
   def create
-
+    if (Question.performTransaction(params, current_user))
+      @question = Question.last
+      render "api/questions/show"
+    else
+      render @question.errors.full_messages
+    end
   end
 
   def destroy
@@ -18,6 +23,8 @@ class Api::QuestionsController < ApplicationController
   end
 
 end
+
+
 
 #   def create
 #     @question = Question.new(questions_params)
@@ -27,8 +34,7 @@ end
 #   end
 #   @question.save!
 # end
-#
-#
+
 # $.ajax({
 #    url: ".."
 #    data: {

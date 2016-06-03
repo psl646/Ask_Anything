@@ -6,8 +6,13 @@ var QuestionsIndex = require('./QuestionsIndex');
 
 
 var SurveysIndex = React.createClass ({
+
   getInitialState: function () {
     return ({ surveys: SurveyStore.all() });
+  },
+
+  _onChange: function () {
+    this.setState({ surveys: SurveyStore.all() });
   },
 
   componentDidMount: function () {
@@ -17,10 +22,6 @@ var SurveysIndex = React.createClass ({
 
   componentWillUnmount: function () {
     this.surveyListener.remove();
-  },
-
-  _onChange: function () {
-    this.setState({ surveys: SurveyStore.all() });
   },
 
   render: function () {

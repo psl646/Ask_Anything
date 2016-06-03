@@ -5,3 +5,22 @@ D3JS
 TODO:
 Work on footer
 Fix Modal styling.  Window re-sizing affects the modal.
+
+
+
+
+<!-- ===============LOGIN PAGE================
+Add logo to button
+
+
+=================SIGNUPPAGE==================
+refactor signup presenter/participant to signup options
+
+
+====================ERRORS====================
+refactor @user.errors => @user.errors.full_messages
+
+
+=================LINKS GO SOMEWHERE=================
+LoginForm - forgotPassword
+SignupForm - tos, privacyPolicy, moreCountries -->

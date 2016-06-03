@@ -1,6 +1,6 @@
 var React = require('react');
 var Modal = require('react-modal');
-var ModalConstants = require('../constants/modal_constants.js');
+var ModalConstants = require('../constants/modal_constants');
 var SignupForm = require('./SignupForm.jsx');
 
 var SignupPresenter = React.createClass({

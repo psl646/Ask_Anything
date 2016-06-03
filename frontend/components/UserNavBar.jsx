@@ -3,10 +3,23 @@ var SessionStore = require('./../stores/session_store');
 var SessionApiUtil = require('./../util/session_api_util');
 var Logo = require('./Logo');
 var Link = require('react-router').Link;
+var ModalConstants = require('../constants/modal_constants');
 
 var UserNavBar = React.createClass({
   contextTypes: {
     router: React.PropTypes.object.isRequired
+  },
+
+  getInitialState: function () {
+    return ({ modalOpen: false });
+  },
+
+  closeModal: function(){
+    this.setState({ modalOpen: false })
+  },
+
+  openModal: function(){
+    this.setState({ modalOpen: true })
   },
 
   greeting: function(){

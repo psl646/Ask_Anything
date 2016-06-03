@@ -34855,12 +34855,25 @@
 	var SessionApiUtil = __webpack_require__(273);
 	var Logo = __webpack_require__(279);
 	var Link = __webpack_require__(168).Link;
+	var ModalConstants = __webpack_require__(286);
 	
 	var UserNavBar = React.createClass({
 	  displayName: 'UserNavBar',
 	
 	  contextTypes: {
 	    router: React.PropTypes.object.isRequired
+	  },
+	
+	  getInitialState: function () {
+	    return { modalOpen: false };
+	  },
+	
+	  closeModal: function () {
+	    this.setState({ modalOpen: false });
+	  },
+	
+	  openModal: function () {
+	    this.setState({ modalOpen: true });
 	  },
 	
 	  greeting: function () {
@@ -35786,8 +35799,13 @@
 	var SurveysIndex = React.createClass({
 	  displayName: 'SurveysIndex',
 	
+	
 	  getInitialState: function () {
 	    return { surveys: SurveyStore.all() };
+	  },
+	
+	  _onChange: function () {
+	    this.setState({ surveys: SurveyStore.all() });
 	  },
 	
 	  componentDidMount: function () {
@@ -35797,10 +35815,6 @@
 	
 	  componentWillUnmount: function () {
 	    this.surveyListener.remove();
-	  },
-	
-	  _onChange: function () {
-	    this.setState({ surveys: SurveyStore.all() });
 	  },
 	
 	  render: function () {
@@ -35943,21 +35957,79 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var ModalConstants = __webpack_require__(286);
+	var QuestionFormGenerator = __webpack_require__(304);
 	
 	var SideNav = React.createClass({
-	  displayName: "SideNav",
+	  displayName: 'SideNav',
+	
+	  contextTypes: {
+	    router: React.PropTypes.object.isRequired
+	  },
+	  getInitialState: function () {
+	    return { modalOpen: false };
+	  },
+	
+	  closeModal: function () {
+	    this.setState({ modalOpen: false });
+	  },
+	
+	  openModal: function () {
+	    this.setState({ modalOpen: true });
+	  },
 	
 	  render: function () {
 	    return React.createElement(
-	      "div",
-	      { className: "sidenav-container" },
-	      "you are in the side navyou are in the side navyou are in the side navyou are in the side nav",
-	      React.createElement("ul", null)
+	      'div',
+	      { className: 'sidenav-container' },
+	      React.createElement(
+	        'ul',
+	        null,
+	        React.createElement(
+	          'li',
+	          { className: 'hover-pointer', onClick: this.openModal },
+	          React.createElement(QuestionFormGenerator, null)
+	        ),
+	        React.createElement(
+	          'li',
+	          null,
+	          'My Polls'
+	        ),
+	        React.createElement(
+	          'li',
+	          null,
+	          'Account Polls'
+	        )
+	      )
 	    );
 	  }
 	});
 	
 	module.exports = SideNav;
+	
+	React.createElement(
+	  'li',
+	  { className: 'signup-options hover-pointer', onClick: this.openModal },
+	  React.createElement('img', { className: 'signup-images', src: window.askAnythingAssets.participant, width: '90', height: '90', alt: 'Participant' }),
+	  React.createElement(
+	    'div',
+	    { className: 'large-text' },
+	    'You\'re participating'
+	  ),
+	  React.createElement(
+	    'div',
+	    { className: 'small-text' },
+	    'Select this if you\'ll mostly respond to other people\'s questions.'
+	  ),
+	  React.createElement(
+	    Modal,
+	    {
+	      isOpen: this.state.modalOpen,
+	      onRequestClose: this.closeModal,
+	      style: ModalConstants.SIGNUP },
+	    React.createElement(SignupForm, { type: 'participant' })
+	  )
+	);
 
 /***/ },
 /* 296 */
@@ -36269,6 +36341,30 @@
 	});
 	
 	module.exports = Test;
+
+/***/ },
+/* 304 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	var QuestionFormGenerator = React.createClass({
+	  displayName: 'QuestionFormGenerator',
+	
+	  contextTypes: {
+	    router: React.PropTypes.object.isRequired
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      null,
+	      'This is the Question Form Generator'
+	    );
+	  }
+	});
+	
+	module.exports = QuestionFormGenerator;
 
 /***/ }
 /******/ ]);
