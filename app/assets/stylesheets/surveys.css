@@ -6,14 +6,14 @@
 .surveysindex-ul {
   float: left;
   left: 200px;
-  width: calc(100% - 260px);
+  width: calc(100% - 230px);
   margin: 10px;
   background: blue;
   z-index: -10;
 }
 
 .surveysindex-li {
-  background: #bad0e0;
+  background: #c8d8e4;
   height: 50px;
   border: 2px solid red;
 }

@@ -1,4 +1,5 @@
 var React = require('react');
+var Modal = require('react-modal');
 var ModalConstants = require('../constants/modal_constants');
 var QuestionFormGenerator = require('./QuestionFormGenerator');
 
@@ -21,16 +22,24 @@ var SideNav = React.createClass ({
   render: function () {
     return (
       <div className="sidenav-container">
-        <ul>
-          <li className="hover-pointer" onClick={this.openModal}>
-            <QuestionFormGenerator />
+        <ul className="sidenav-list">
+          <li className="question-form-button soft-edges hover-pointer" onClick={this.openModal}>
+            Create
+            <Modal
+              isOpen={this.state.modalOpen}
+              onRequestClose={this.closeModal}
+              style={ ModalConstants.QUESTIONFORM }>
+
+                <QuestionFormGenerator type="participant" />
+
+            </Modal>
           </li>
 
-          <li>
+          <li className="sidenav-list-li hover-pointer">
             My Polls
           </li>
 
-          <li>
+          <li className="sidenav-list-li hover-pointer">
             Account Polls
           </li>
         </ul>
@@ -40,19 +49,3 @@ var SideNav = React.createClass ({
 });
 
 module.exports = SideNav;
-
-
-
-<li className="signup-options hover-pointer" onClick={this.openModal}>
-  <img className="signup-images" src={window.askAnythingAssets.participant} width="90" height="90" alt="Participant" />
-  <div className="large-text">You're participating</div>
-  <div className="small-text">Select this if you'll mostly respond to other people's questions.</div>
-  <Modal
-    isOpen={this.state.modalOpen}
-    onRequestClose={this.closeModal}
-    style={ ModalConstants.SIGNUP }>
-
-      <SignupForm type="participant" />
-
-  </Modal>
-</li>

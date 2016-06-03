@@ -35464,6 +35464,28 @@
 	      backgroundColor: 'white',
 	      zIndex: 11
 	    }
+	  },
+	
+	  QUESTIONFORM: {
+	    overlay: {
+	      position: 'fixed',
+	      top: 0,
+	      left: 0,
+	      right: 0,
+	      bottom: 0,
+	      backgroundColor: 'rgba(18, 18, 15, 0.75)',
+	      zIndex: 10
+	    },
+	    content: {
+	      position: 'fixed',
+	      top: '100px',
+	      left: '150px',
+	      right: '150px',
+	      bottom: '100px',
+	      border: '1px solid #ccc',
+	      padding: '20px',
+	      zIndex: 11
+	    }
 	  }
 	};
 	
@@ -35957,6 +35979,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var Modal = __webpack_require__(229);
 	var ModalConstants = __webpack_require__(286);
 	var QuestionFormGenerator = __webpack_require__(304);
 	
@@ -35984,20 +36007,28 @@
 	      { className: 'sidenav-container' },
 	      React.createElement(
 	        'ul',
-	        null,
+	        { className: 'sidenav-list' },
 	        React.createElement(
 	          'li',
-	          { className: 'hover-pointer', onClick: this.openModal },
-	          React.createElement(QuestionFormGenerator, null)
+	          { className: 'question-form-button soft-edges hover-pointer', onClick: this.openModal },
+	          'Create',
+	          React.createElement(
+	            Modal,
+	            {
+	              isOpen: this.state.modalOpen,
+	              onRequestClose: this.closeModal,
+	              style: ModalConstants.QUESTIONFORM },
+	            React.createElement(QuestionFormGenerator, { type: 'participant' })
+	          )
 	        ),
 	        React.createElement(
 	          'li',
-	          null,
+	          { className: 'sidenav-list-li hover-pointer' },
 	          'My Polls'
 	        ),
 	        React.createElement(
 	          'li',
-	          null,
+	          { className: 'sidenav-list-li hover-pointer' },
 	          'Account Polls'
 	        )
 	      )
@@ -36006,30 +36037,6 @@
 	});
 	
 	module.exports = SideNav;
-	
-	React.createElement(
-	  'li',
-	  { className: 'signup-options hover-pointer', onClick: this.openModal },
-	  React.createElement('img', { className: 'signup-images', src: window.askAnythingAssets.participant, width: '90', height: '90', alt: 'Participant' }),
-	  React.createElement(
-	    'div',
-	    { className: 'large-text' },
-	    'You\'re participating'
-	  ),
-	  React.createElement(
-	    'div',
-	    { className: 'small-text' },
-	    'Select this if you\'ll mostly respond to other people\'s questions.'
-	  ),
-	  React.createElement(
-	    Modal,
-	    {
-	      isOpen: this.state.modalOpen,
-	      onRequestClose: this.closeModal,
-	      style: ModalConstants.SIGNUP },
-	    React.createElement(SignupForm, { type: 'participant' })
-	  )
-	);
 
 /***/ },
 /* 296 */

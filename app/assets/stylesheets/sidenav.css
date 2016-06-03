@@ -1,7 +1,26 @@
 .sidenav-container {
   float: left;
   display: block;
-  background: red;
-  width: 180px;
+  width: 155px;
   margin: 20px;
+}
+
+.sidenav-list-li {
+  margin-top: 15px;
+  background: red;
+}
+
+.question-form-button {
+  color: rgb(241, 242, 233);
+  text-align: center;
+  font-size: .75em;
+  font-weight: 900;
+  background: #db5c50;
+  padding: 9px 0;
+
+}
+
+.sidenav-list-li {
+  background: #c8d8e4;
+  padding-left: 10px;
 }
