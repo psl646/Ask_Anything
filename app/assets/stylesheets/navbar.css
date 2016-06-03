@@ -3,8 +3,9 @@
   display: block;
   color: rgb(246, 246, 246);
   background: #203349;
-  height: 75px;
+  height: 55px;
   min-width: 1100px;
+  z-index: 1;
 }
 
 .navbar-logo {
@@ -17,49 +18,60 @@
 
 .navbar-right-ul {
   float: right;
-  height: 75px;
-  width:400px;
+  font-size: 11px;
+  height: 55px;
+  width: 400px;
 }
 
-.navbar-right-ul > li {
-  float: left;
-  height: 25px;
-  padding: 25px 5px;
-}
-
-.navbar-right-li:hover {
-  display: block;
+.blue-hover:hover {
   background: rgb(29, 67, 93);
 }
 
+.navbar-right-li {
+  float: left;
+  height: 19px;
+  padding: 18px 11px;
+}
+
+/*Pseudocontent image*/
 .user-info-container {
-  padding-left: 5px;
-  padding-right: 4px;
+  width: 106px;
+  padding: 18px 15px;
+}
+
+
+.user-info-container:hover > ul {
+  display: block;
 }
 
 .user-info {
   display: none;
-  position: relative;
-  right: 5px;
-  top: 32px;
-  color: #203349;
+  float: right;
+  position: absolute;
+  right: 0;
+  top: 55px;
+  width: 137px;
+}
+
+.user-info > li {
   background: rgb(246, 246, 246);
-  height: 55px;
-  z-index: 1;
+  color: rgb(36, 91, 121);
+  font-size: 14px;
+  width: 121px;
+  padding: 10px 0 10px 15px;
+  border-left: 1px solid rgba(176, 185, 189, 0.56);
+  border-bottom: 1px solid rgba(176, 185, 189, 0.56);
 }
 
-.logout-button {
-  width: 100%;
-  height: 100%;
-  color: #255073;
+.user-info > li:hover {
+  background: rgb(223, 227, 231);
+  padding-left: 14px;
+  border-left: 2px solid #203349;
 }
 
-.logout-button:hover {
-  background: rgb(141, 162, 185);
-}
-
-li:hover .user-info {
-  display: block;
+/*NOUSER NAV SPECIFIC*/
+.nouser-nav {
+  height: 75px;
 }
 
 .nouser-navbar-right-li {

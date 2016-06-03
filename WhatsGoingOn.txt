@@ -1,2 +1,2 @@
 1) D3JS
-2) NAVBAR User Dropdown - fill up size?
+2) Pseudocontent IMAGE on Navbar

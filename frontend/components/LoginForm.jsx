@@ -12,7 +12,7 @@ var LoginForm = React.createClass({
   },
 
   getInitialState: function () {
-    return { email: "", password: "" };
+    return { emailOrUsername: "", password: "" };
   },
 
   componentDidMount: function () {
@@ -35,10 +35,12 @@ var LoginForm = React.createClass({
 		e.preventDefault();
 
 		var formData = {
-			email: this.state.email,
+      username: this.state.emailOrUsername,
+			email: this.state.emailOrUsername,
 			password: this.state.password
 		};
 
+    this.setState({ emailOrUsername: "", password: "" });
     SessionApiUtil.login(formData);
 	},
 
@@ -53,13 +55,15 @@ var LoginForm = React.createClass({
     return <ul className="error-login">{ messages }</ul>;
   },
 
-	emailChange: function (e) {
-		var newEmail = e.target.value;
-		this.setState({ email: newEmail })
+	emailOrUsernameChange: function (e) {
+		var newemailOrUsername = e.target.value;
+    console.log(newemailOrUsername);
+		this.setState({ emailOrUsername: newemailOrUsername });
 	},
 
 	passwordChange: function (e) {
 		var newPassword = e.target.value;
+    console.log(newPassword);
 		this.setState({ password: newPassword })
 	},
 
@@ -78,7 +82,7 @@ var LoginForm = React.createClass({
   	        <br />
   					<label> Email <small className="login-email">or username</small><br/>
   	          { this.fieldErrors("email") }
-  						<input className="login-input soft-edges" type="text" value={this.state.email} onChange={this.emailChange}/>
+  						<input className="login-input soft-edges" type="text" value={this.state.emailOrUsername} onChange={this.emailOrUsernameChange} />
   					</label>
 
   	        <br />

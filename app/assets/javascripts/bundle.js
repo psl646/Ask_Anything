@@ -56,15 +56,15 @@
 	var Modal = __webpack_require__(229);
 	
 	var App = __webpack_require__(249);
-	var LoginForm = __webpack_require__(279);
-	var SignupPage = __webpack_require__(283);
-	var SurveysIndex = __webpack_require__(288);
+	var LoginForm = __webpack_require__(281);
+	var SignupPage = __webpack_require__(284);
+	var SurveysIndex = __webpack_require__(289);
 	
 	var SessionStore = __webpack_require__(250);
 	var SessionApiUtil = __webpack_require__(273);
 	
 	// test component DELETE later
-	var Test = __webpack_require__(294);
+	var Test = __webpack_require__(296);
 	
 	var Router = React.createElement(
 	  Router,
@@ -95,7 +95,7 @@
 	}
 	
 	function _ensureLoggedOut(nextState, replace, asyncDoneCallback) {
-	  if (!SessionStore.currentUserHasBeenFetched()) {
+	  if (SessionStore.currentUserHasBeenFetched()) {
 	    redirectIfLoggedIn();
 	  } else {
 	    SessionApiUtil.fetchCurrentUser(redirectIfLoggedIn);
@@ -27851,8 +27851,8 @@
 	var SessionStore = __webpack_require__(250);
 	var SessionApiUtil = __webpack_require__(273);
 	var Footer = __webpack_require__(277);
-	var UserNavBar = __webpack_require__(296);
-	var NoUserNavBar = __webpack_require__(297);
+	var UserNavBar = __webpack_require__(278);
+	var NoUserNavBar = __webpack_require__(280);
 	
 	var App = React.createClass({
 	  displayName: 'App',
@@ -34845,17 +34845,175 @@
 	module.exports = Footer;
 
 /***/ },
-/* 278 */,
+/* 278 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var SessionStore = __webpack_require__(250);
+	var SessionApiUtil = __webpack_require__(273);
+	var Logo = __webpack_require__(279);
+	var Link = __webpack_require__(168).Link;
+	
+	var UserNavBar = React.createClass({
+	  displayName: 'UserNavBar',
+	
+	  contextTypes: {
+	    router: React.PropTypes.object.isRequired
+	  },
+	
+	  greeting: function () {
+	    var username = SessionStore.currentUser().username;
+	
+	    return React.createElement(
+	      'li',
+	      { className: 'navbar-right-li user-info-container blue-hover' },
+	      username,
+	      React.createElement(
+	        'ul',
+	        { className: 'user-info' },
+	        React.createElement(
+	          'li',
+	          null,
+	          React.createElement(
+	            Link,
+	            { to: 'settings' },
+	            'Settings'
+	          )
+	        ),
+	        React.createElement(
+	          'li',
+	          null,
+	          React.createElement('input', { className: 'hover-pointer', type: 'submit', value: 'Log Out', onClick: this.handleClick })
+	        )
+	      )
+	    );
+	  },
+	  // <img className="user-icon" src={window.askAnythingAssets.usericon} width="25" height="25" alt="UserIcon" />
+	  handleClick: function () {
+	    SessionApiUtil.logout();
+	    this.context.router.push("/");
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'navbar-container' },
+	      'UserNavBar here',
+	      React.createElement('img', { className: 'logo-image navbar-logo', src: window.askAnythingAssets.logo, width: '35', height: '35', alt: 'Logo' }),
+	      React.createElement(
+	        'ul',
+	        { className: 'navbar-right-ul hover-pointer' },
+	        React.createElement(
+	          'li',
+	          { className: 'navbar-right-li blue-hover' },
+	          ' Pricing & Upgrades '
+	        ),
+	        React.createElement(
+	          'li',
+	          { className: 'navbar-right-li blue-hover' },
+	          ' Help '
+	        ),
+	        React.createElement(
+	          'li',
+	          { className: 'navbar-right-li blue-hover' },
+	          '  New Features '
+	        ),
+	        this.greeting()
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = UserNavBar;
+
+/***/ },
 /* 279 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	var Logo = React.createClass({
+	  displayName: "Logo",
+	
+	  render: function () {
+	    return React.createElement(
+	      "div",
+	      { className: "logo" },
+	      React.createElement("img", { className: "logo-image", src: window.askAnythingAssets.logo, width: "35", height: "35", alt: "Logo" }),
+	      React.createElement(
+	        "h1",
+	        { className: "logo-text" },
+	        "Ask Anything!"
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = Logo;
+
+/***/ },
+/* 280 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var Link = __webpack_require__(168).Link;
+	
+	var NoUserNavBar = React.createClass({
+	  displayName: 'NoUserNavBar',
+	
+	  contextTypes: {
+	    router: React.PropTypes.object.isRequired
+	  },
+	
+	  handleClick: function () {
+	    this.context.router.push("login");
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'navbar-container nouser-nav' },
+	      React.createElement(
+	        'ul',
+	        { className: 'navbar-right-ul' },
+	        React.createElement(
+	          'li',
+	          { className: 'nouser-navbar-right-li' },
+	          React.createElement(
+	            Link,
+	            { to: 'login' },
+	            'Log in'
+	          )
+	        ),
+	        React.createElement(
+	          'li',
+	          null,
+	          React.createElement(
+	            Link,
+	            { to: 'signup', className: 'signup-main soft-edges' },
+	            'Sign up'
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = NoUserNavBar;
+	
+	// </div><img className="logo-image nouser-navbar" src={window.askAnythingAssets.logo} width="35" height="35" alt="Logo" />
+
+/***/ },
+/* 281 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var Link = __webpack_require__(168).Link;
 	var SessionApiUtil = __webpack_require__(273);
 	var SessionStore = __webpack_require__(250);
-	var ErrorStore = __webpack_require__(280);
-	var UserApiUtil = __webpack_require__(281);
-	var Logo = __webpack_require__(282);
+	var ErrorStore = __webpack_require__(282);
+	var UserApiUtil = __webpack_require__(283);
+	var Logo = __webpack_require__(279);
 	
 	var LoginForm = React.createClass({
 	  displayName: 'LoginForm',
@@ -34865,7 +35023,7 @@
 	  },
 	
 	  getInitialState: function () {
-	    return { email: "", password: "" };
+	    return { emailOrUsername: "", password: "" };
 	  },
 	
 	  componentDidMount: function () {
@@ -34888,10 +35046,12 @@
 	    e.preventDefault();
 	
 	    var formData = {
-	      email: this.state.email,
+	      username: this.state.emailOrUsername,
+	      email: this.state.emailOrUsername,
 	      password: this.state.password
 	    };
 	
+	    this.setState({ emailOrUsername: "", password: "" });
 	    SessionApiUtil.login(formData);
 	  },
 	
@@ -34916,13 +35076,15 @@
 	    );
 	  },
 	
-	  emailChange: function (e) {
-	    var newEmail = e.target.value;
-	    this.setState({ email: newEmail });
+	  emailOrUsernameChange: function (e) {
+	    var newemailOrUsername = e.target.value;
+	    console.log(newemailOrUsername);
+	    this.setState({ emailOrUsername: newemailOrUsername });
 	  },
 	
 	  passwordChange: function (e) {
 	    var newPassword = e.target.value;
+	    console.log(newPassword);
 	    this.setState({ password: newPassword });
 	  },
 	
@@ -34957,7 +35119,7 @@
 	            ),
 	            React.createElement('br', null),
 	            this.fieldErrors("email"),
-	            React.createElement('input', { className: 'login-input soft-edges', type: 'text', value: this.state.email, onChange: this.emailChange })
+	            React.createElement('input', { className: 'login-input soft-edges', type: 'text', value: this.state.emailOrUsername, onChange: this.emailOrUsernameChange })
 	          ),
 	          React.createElement('br', null),
 	          React.createElement(
@@ -34993,7 +35155,7 @@
 	module.exports = LoginForm;
 
 /***/ },
-/* 280 */
+/* 282 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Store = __webpack_require__(255).Store;
@@ -35042,7 +35204,7 @@
 	module.exports = ErrorStore;
 
 /***/ },
-/* 281 */
+/* 283 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var SessionActions = __webpack_require__(274);
@@ -35070,37 +35232,12 @@
 	module.exports = UserApiUtil;
 
 /***/ },
-/* 282 */
+/* 284 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	
-	var Logo = React.createClass({
-	  displayName: "Logo",
-	
-	  render: function () {
-	    return React.createElement(
-	      "div",
-	      { className: "logo" },
-	      React.createElement("img", { className: "logo-image", src: window.askAnythingAssets.logo, width: "35", height: "35", alt: "Logo" }),
-	      React.createElement(
-	        "h1",
-	        { className: "logo-text" },
-	        "Ask Anything!"
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = Logo;
-
-/***/ },
-/* 283 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var SignupParticipant = __webpack_require__(284);
-	var SignupPresenter = __webpack_require__(287);
+	var SignupParticipant = __webpack_require__(285);
+	var SignupPresenter = __webpack_require__(288);
 	var SessionStore = __webpack_require__(250);
 	
 	var SignupPage = React.createClass({
@@ -35154,13 +35291,13 @@
 	module.exports = SignupPage;
 
 /***/ },
-/* 284 */
+/* 285 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var Modal = __webpack_require__(229);
-	var ModalConstants = __webpack_require__(285);
-	var SignupForm = __webpack_require__(286);
+	var ModalConstants = __webpack_require__(286);
+	var SignupForm = __webpack_require__(287);
 	
 	var SignupParticipant = React.createClass({
 		displayName: 'SignupParticipant',
@@ -35211,7 +35348,7 @@
 	module.exports = SignupParticipant;
 
 /***/ },
-/* 285 */
+/* 286 */
 /***/ function(module, exports) {
 
 	var ModalConstants = {
@@ -35241,15 +35378,15 @@
 	module.exports = ModalConstants;
 
 /***/ },
-/* 286 */
+/* 287 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var Link = __webpack_require__(168).Link;
 	var SessionApiUtil = __webpack_require__(273);
 	var SessionStore = __webpack_require__(250);
-	var ErrorStore = __webpack_require__(280);
-	var UserApiUtil = __webpack_require__(281);
+	var ErrorStore = __webpack_require__(282);
+	var UserApiUtil = __webpack_require__(283);
 	var ErrorActions = __webpack_require__(275);
 	
 	var SignupForm = React.createClass({
@@ -35501,13 +35638,13 @@
 	module.exports = SignupForm;
 
 /***/ },
-/* 287 */
+/* 288 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var Modal = __webpack_require__(229);
-	var ModalConstants = __webpack_require__(285);
-	var SignupForm = __webpack_require__(286);
+	var ModalConstants = __webpack_require__(286);
+	var SignupForm = __webpack_require__(287);
 	
 	var SignupPresenter = React.createClass({
 		displayName: 'SignupPresenter',
@@ -35558,12 +35695,12 @@
 	module.exports = SignupPresenter;
 
 /***/ },
-/* 288 */
+/* 289 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var ClientSurveyActions = __webpack_require__(289);
-	var SurveyStore = __webpack_require__(293);
+	var ClientSurveyActions = __webpack_require__(290);
+	var SurveyStore = __webpack_require__(294);
 	var SideNav = __webpack_require__(295);
 	
 	var SurveysIndex = React.createClass({
@@ -35612,11 +35749,11 @@
 	module.exports = SurveysIndex;
 
 /***/ },
-/* 289 */
+/* 290 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(251);
-	var SurveyApiUtil = __webpack_require__(290);
+	var SurveyApiUtil = __webpack_require__(291);
 	
 	var ClientSurveyActions = {
 	  fetchAllSurveys: function () {
@@ -35627,10 +35764,10 @@
 	module.exports = ClientSurveyActions;
 
 /***/ },
-/* 290 */
+/* 291 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var ServerSurveyActions = __webpack_require__(291);
+	var ServerSurveyActions = __webpack_require__(292);
 	
 	var SurveyApiUtil = {
 	  fetchAllSurveys: function () {
@@ -35648,11 +35785,11 @@
 	module.exports = SurveyApiUtil;
 
 /***/ },
-/* 291 */
+/* 292 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(251);
-	var SurveyConstants = __webpack_require__(292);
+	var SurveyConstants = __webpack_require__(293);
 	
 	var ServerSurveyActions = {
 	  receiveAllSurveys: function (surveys) {
@@ -35666,7 +35803,7 @@
 	module.exports = ServerSurveyActions;
 
 /***/ },
-/* 292 */
+/* 293 */
 /***/ function(module, exports) {
 
 	var SurveyConstants = {
@@ -35676,12 +35813,12 @@
 	module.exports = SurveyConstants;
 
 /***/ },
-/* 293 */
+/* 294 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(251);
 	var Store = __webpack_require__(255).Store;
-	var SurveyConstants = __webpack_require__(292);
+	var SurveyConstants = __webpack_require__(293);
 	
 	var SurveyStore = new Store(AppDispatcher);
 	
@@ -35712,7 +35849,28 @@
 	module.exports = SurveyStore;
 
 /***/ },
-/* 294 */
+/* 295 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	var SideNav = React.createClass({
+	  displayName: "SideNav",
+	
+	  render: function () {
+	    return React.createElement(
+	      "div",
+	      { className: "sidenav-container" },
+	      "you are in the side navyou are in the side navyou are in the side navyou are in the side nav",
+	      React.createElement("ul", null)
+	    );
+	  }
+	});
+	
+	module.exports = SideNav;
+
+/***/ },
+/* 296 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// DELETE THIS FILE LATER ONCE FINISHED WITH APP
@@ -35767,151 +35925,6 @@
 	});
 	
 	module.exports = Test;
-
-/***/ },
-/* 295 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	
-	var SideNav = React.createClass({
-	  displayName: "SideNav",
-	
-	  render: function () {
-	    return React.createElement(
-	      "div",
-	      { className: "sidenav-container" },
-	      "you are in the side navyou are in the side navyou are in the side navyou are in the side nav",
-	      React.createElement("ul", null)
-	    );
-	  }
-	});
-	
-	module.exports = SideNav;
-
-/***/ },
-/* 296 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var SessionStore = __webpack_require__(250);
-	var SessionApiUtil = __webpack_require__(273);
-	var Logo = __webpack_require__(282);
-	
-	var UserNavBar = React.createClass({
-	  displayName: 'UserNavBar',
-	
-	  contextTypes: {
-	    router: React.PropTypes.object.isRequired
-	  },
-	
-	  greeting: function () {
-	    if (SessionStore.isUserLoggedIn()) {
-	      return React.createElement(
-	        'ul',
-	        { className: 'user-info-container' },
-	        SessionStore.currentUser().email,
-	        React.createElement(
-	          'li',
-	          { className: 'user-info' },
-	          React.createElement('input', { className: 'logout-button hover-pointer', type: 'submit', value: 'Log Out', onClick: this.handleClick })
-	        )
-	      );
-	    }
-	  },
-	
-	  handleClick: function () {
-	    SessionApiUtil.logout();
-	    this.context.router.push("login");
-	  },
-	
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      { className: 'navbar-container' },
-	      'UserNavBar here',
-	      React.createElement('img', { className: 'logo-image navbar-logo', src: window.askAnythingAssets.logo, width: '35', height: '35', alt: 'Logo' }),
-	      React.createElement(
-	        'ul',
-	        { className: 'navbar-right-ul hover-pointer' },
-	        React.createElement(
-	          'li',
-	          { className: 'navbar-right-li' },
-	          ' Pricing & Upgrades '
-	        ),
-	        React.createElement(
-	          'li',
-	          { className: 'navbar-right-li' },
-	          ' Help '
-	        ),
-	        React.createElement(
-	          'li',
-	          { className: 'navbar-right-li' },
-	          '  New Features '
-	        ),
-	        React.createElement(
-	          'li',
-	          { className: 'navbar-right-li user-info-container' },
-	          this.greeting()
-	        )
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = UserNavBar;
-
-/***/ },
-/* 297 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var Link = __webpack_require__(168).Link;
-	
-	var NoUserNavBar = React.createClass({
-	  displayName: 'NoUserNavBar',
-	
-	  contextTypes: {
-	    router: React.PropTypes.object.isRequired
-	  },
-	
-	  handleClick: function () {
-	    this.context.router.push("login");
-	  },
-	
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      { className: 'navbar-container' },
-	      React.createElement(
-	        'ul',
-	        { className: 'navbar-right-ul' },
-	        React.createElement(
-	          'li',
-	          { className: 'nouser-navbar-right-li' },
-	          React.createElement(
-	            Link,
-	            { to: 'login' },
-	            'Log in'
-	          )
-	        ),
-	        React.createElement(
-	          'li',
-	          null,
-	          React.createElement(
-	            Link,
-	            { to: 'signup', className: 'signup-main soft-edges' },
-	            'Sign up'
-	          )
-	        )
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = NoUserNavBar;
-	
-	// </div><img className="logo-image nouser-navbar" src={window.askAnythingAssets.logo} width="35" height="35" alt="Logo" />
 
 /***/ }
 /******/ ]);

@@ -8,7 +8,7 @@ class User < ActiveRecord::Base
 	validates :email, :session_token, uniqueness: true
 	validates :password, length: {minimum: 7}, allow_nil: :true
 
-	after_initialize :ensure_session_token, :ensure_initial_survey
+	after_initialize :ensure_session_token, :ensure_initial_survey, :ensure_username
 	before_validation :ensure_session_token_uniqueness
 
 	has_many(
@@ -30,8 +30,9 @@ class User < ActiveRecord::Base
 		@password = password
 	end
 
-	def self.find_by_credentials (email, password)
-		user = User.find_by(email: email)
+	# Check for email first since there is a uniqueness constraint on email
+	def self.find_by_credentials (username, email, password)
+		user = User.find_by(email: email) || User.find_by(username: username)
 		return nil unless user
 		user.password_is?(password) ? user : nil
 	end
@@ -67,5 +68,28 @@ class User < ActiveRecord::Base
 		if self.surveys.where(ungrouped: "true").length == 0
 			Survey.create(title: "Ungrouped", author_id: self.id, ungrouped: "true")
 		end
+	end
+
+	def ensure_username
+		username = ""
+		if self[:username].nil?
+			until (User.find_by(username: username).nil?) && (username.length == 11)
+				username = ""
+				username.concat(self[:first_name].upcase[0,5])
+				username.concat(self[:last_name].upcase[0,3])
+				username = generate_numbers_to_eleven_chars(username)
+			end
+			self[:username] = username
+			self.save
+		end
+	end
+
+	# generates numbers to append to username until username is 11 characters
+	def generate_numbers_to_eleven_chars(username_before_numbers)
+		while username_before_numbers.length < 11
+			username_before_numbers.concat(Random.rand(10).to_s)
+		end
+
+		username_before_numbers
 	end
 end

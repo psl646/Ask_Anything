@@ -2,6 +2,7 @@ var React = require('react');
 var SessionStore = require('./../stores/session_store');
 var SessionApiUtil = require('./../util/session_api_util');
 var Logo = require('./Logo');
+var Link = require('react-router').Link;
 
 var UserNavBar = React.createClass({
   contextTypes: {
@@ -9,21 +10,28 @@ var UserNavBar = React.createClass({
   },
 
   greeting: function(){
-    if (SessionStore.isUserLoggedIn()) {
-      return (
-        <ul className="user-info-container">
-          { SessionStore.currentUser().email }
-          <li className="user-info">
-            <input className="logout-button hover-pointer" type="submit" value="Log Out" onClick={ this.handleClick } />
+    var username = SessionStore.currentUser().username;
+
+    return (
+      <li className="navbar-right-li user-info-container blue-hover">{ username }
+
+        <ul className="user-info">
+          <li>
+            <Link to="settings">Settings</Link>
+          </li>
+
+          <li>
+            <input className="hover-pointer" type="submit" value="Log Out" onClick={ this.handleClick } />
           </li>
         </ul>
-      );
-    }
-  },
 
+      </li>
+    );
+  },
+// <img className="user-icon" src={window.askAnythingAssets.usericon} width="25" height="25" alt="UserIcon" />
   handleClick: function () {
     SessionApiUtil.logout();
-    this.context.router.push("login");
+    this.context.router.push("/");
   },
 
   render: function () {
@@ -33,12 +41,10 @@ var UserNavBar = React.createClass({
         <img className="logo-image navbar-logo" src={window.askAnythingAssets.logo} width="35" height="35" alt="Logo" />
 
         <ul className="navbar-right-ul hover-pointer">
-          <li className="navbar-right-li"> Pricing & Upgrades </li>
-          <li className="navbar-right-li"> Help </li>
-          <li className="navbar-right-li">  New Features </li>
-          <li className="navbar-right-li user-info-container">
-            { this.greeting() }
-          </li>
+          <li className="navbar-right-li blue-hover"> Pricing & Upgrades </li>
+          <li className="navbar-right-li blue-hover"> Help </li>
+          <li className="navbar-right-li blue-hover">  New Features </li>
+          { this.greeting() }
         </ul>
       </div>
     )

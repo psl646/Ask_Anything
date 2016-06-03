@@ -1,16 +1,15 @@
 .surveysindex-container {
   position: relative;
-  background: green;
   min-width: 1100px;
 }
 
 .surveysindex-ul {
   float: left;
   left: 200px;
-  width: calc(100% - 300px);
-  margin: 20px;
-  padding: 20px;
+  width: calc(100% - 260px);
+  margin: 10px;
   background: blue;
+  z-index: -10;
 }
 
 .surveysindex-li {

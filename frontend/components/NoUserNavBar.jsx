@@ -12,7 +12,7 @@ var NoUserNavBar = React.createClass({
 
   render: function () {
     return (
-      <div className="navbar-container">
+      <div className="navbar-container nouser-nav">
 
         <ul className="navbar-right-ul">
           <li className="nouser-navbar-right-li">

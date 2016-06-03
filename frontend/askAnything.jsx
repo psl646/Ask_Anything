@@ -47,14 +47,14 @@ function _ensureLoggedIn(nextState, replace, asyncDoneCallback) {
 }
 
 function _ensureLoggedOut(nextState, replace, asyncDoneCallback) {
-  if (!SessionStore.currentUserHasBeenFetched()) {
+  if (SessionStore.currentUserHasBeenFetched()) {
     redirectIfLoggedIn();
   } else {
     SessionApiUtil.fetchCurrentUser(redirectIfLoggedIn);
   }
 
-  function redirectIfLoggedIn() {
-    if (SessionStore.isUserLoggedIn()) {
+  function redirectIfLoggedIn () {
+    if(SessionStore.isUserLoggedIn()) {
       replace('/surveys');
     }
     asyncDoneCallback();
