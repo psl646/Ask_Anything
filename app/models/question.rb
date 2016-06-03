@@ -1,5 +1,5 @@
 class Question < ActiveRecord::Base
-  validates :question, :category, :survey_id, presence: true
+  validates :question, :category, :survey_id, :author_id, presence: true
 
   belongs_to(
     :survey,
@@ -8,9 +8,16 @@ class Question < ActiveRecord::Base
     primary_key: :id
   )
 
-  has_one(
+  # has_one(
+  #   :author,
+  #   through: :survey,
+  #   source: :author
+  # )
+
+  belongs_to(
     :author,
-    through: :survey,
-    source: :author
+    class_name: "User",
+    foreign_key: :author_id,
+    primary_key: :id
   )
 end

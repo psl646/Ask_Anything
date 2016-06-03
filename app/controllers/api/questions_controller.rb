@@ -1,9 +1,21 @@
 class Api::QuestionsController < ApplicationController
-#   def index
-#     @questions = Question.where(survey_id: ).all
-#     render json: @questions
-#   end
-# sadf
+  def index
+    @questions = Question.where(author_id: params[:author_id]).all
+    render json: @questions
+  end
+
+  def show
+    @question = Question.find_by_id(params[:id])
+    render json: @question
+  end
+
+  def create
+
+  end
+
+  def destroy
+
+  end
 
 end
 

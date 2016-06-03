@@ -57,13 +57,11 @@ var LoginForm = React.createClass({
 
 	emailOrUsernameChange: function (e) {
 		var newemailOrUsername = e.target.value;
-    console.log(newemailOrUsername);
 		this.setState({ emailOrUsername: newemailOrUsername });
 	},
 
 	passwordChange: function (e) {
 		var newPassword = e.target.value;
-    console.log(newPassword);
 		this.setState({ password: newPassword })
 	},
 

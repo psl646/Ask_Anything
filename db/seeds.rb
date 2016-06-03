@@ -8,9 +8,13 @@
 
 User.destroy_all
 Survey.destroy_all
+Question.destroy_all
 
 User.create(first_name: "Peter", last_name: "Lin", email: "Peter.Lin646@gmail.com", password: "password")
 User.create(first_name: "Guest", last_name: "User", email: "GuestUser@guest.com", password: "password")
 User.create(first_name: "user123", last_name: "user123", email: "user123", password: "user123")
 
-Survey.create(title: "New Survey", author_id: User.all.last.id)
+Question.create(question: "This question should be under Ungrouped", category: "MC", survey_id: Survey.last.id, author_id: User.last.id)
+
+Survey.create(title: "New Survey", author_id: User.last.id)
+Question.create(question: "This question should be under New Survey", category: "MC", survey_id: Survey.last.id, author_id: User.last.id)

@@ -19,10 +19,18 @@ class User < ActiveRecord::Base
 		dependent: :destroy
   )
 
+	# has_many(
+	# 	:questions,
+	# 	through: :surveys,
+	# 	source: :questions
+	# )
+
 	has_many(
 		:questions,
-		through: :surveys,
-		source: :questions
+		class_name: "Question",
+		foreign_key: :author_id,
+		primary_key: :id,
+		dependent: :destroy
 	)
 
 	def password= (password)

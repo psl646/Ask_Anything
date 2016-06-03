@@ -2,6 +2,8 @@ var React = require('react');
 var ClientSurveyActions = require('../actions/client_survey_actions');
 var SurveyStore = require('../stores/survey_store');
 var SideNav = require('./SideNav');
+var QuestionsIndex = require('./QuestionsIndex');
+
 
 var SurveysIndex = React.createClass ({
   getInitialState: function () {
@@ -23,12 +25,20 @@ var SurveysIndex = React.createClass ({
 
   render: function () {
     var mySurveys = this.state.surveys;
-    var surveys = Object.keys(mySurveys).map(function(key){
-      return <li className="surveysindex-li" key={ key }>{ mySurveys[key].title }</li>;
+
+    var surveys = Object.keys(mySurveys).map(function(survey_id){
+      var currentSurvey = mySurveys[survey_id];
+      return (
+        <li className="surveysindex-li" key={ survey_id }>{ currentSurvey.title }
+          <ul className="survey-index-items">
+            <QuestionsIndex survey={ currentSurvey }/>
+          </ul>
+        </li>
+      );
     }.bind(this));
 
     return (
-      <div className="surveysindex-container">
+      <div className="surveysindex-container group">
         <SideNav />
         <ul className="surveysindex-ul">
           { surveys }

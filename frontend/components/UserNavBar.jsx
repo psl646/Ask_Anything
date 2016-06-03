@@ -21,7 +21,7 @@ var UserNavBar = React.createClass({
           </li>
 
           <li>
-            <input className="hover-pointer" type="submit" value="Log Out" onClick={ this.handleClick } />
+            <input className="hover-pointer" type="submit" value="Log Out" onClick={ this.handleLogOut } />
           </li>
         </ul>
 
@@ -29,8 +29,12 @@ var UserNavBar = React.createClass({
     );
   },
 // <img className="user-icon" src={window.askAnythingAssets.usericon} width="25" height="25" alt="UserIcon" />
-  handleClick: function () {
+  handleLogOut: function () {
     SessionApiUtil.logout();
+    this.context.router.push("/");
+  },
+
+  handleImageClick: function () {
     this.context.router.push("/");
   },
 
@@ -38,7 +42,7 @@ var UserNavBar = React.createClass({
     return (
       <div className="navbar-container">
         UserNavBar here
-        <img className="logo-image navbar-logo" src={window.askAnythingAssets.logo} width="35" height="35" alt="Logo" />
+        <img className="logo-image navbar-logo hover-pointer" onClick={ this.handleImageClick } src={window.askAnythingAssets.logo} width="35" height="35" alt="Logo" />
 
         <ul className="navbar-right-ul hover-pointer">
           <li className="navbar-right-li blue-hover"> Pricing & Upgrades </li>

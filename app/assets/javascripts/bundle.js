@@ -59,12 +59,13 @@
 	var LoginForm = __webpack_require__(281);
 	var SignupPage = __webpack_require__(284);
 	var SurveysIndex = __webpack_require__(289);
+	var QuestionIndexItem = __webpack_require__(302);
 	
 	var SessionStore = __webpack_require__(250);
 	var SessionApiUtil = __webpack_require__(273);
 	
 	// test component DELETE later
-	var Test = __webpack_require__(296);
+	var Test = __webpack_require__(303);
 	
 	var Router = React.createElement(
 	  Router,
@@ -75,7 +76,8 @@
 	    { path: '/', component: App },
 	    React.createElement(Route, { path: 'signup', component: SignupPage, onEnter: _ensureLoggedOut }),
 	    React.createElement(Route, { path: 'surveys', component: SurveysIndex, onEnter: _ensureLoggedIn }),
-	    ' // Maybe take out this onEnter hook later to allow non-users to use the site'
+	    ' // Maybe take out this onEnter hook later to allow non-users to use the site',
+	    React.createElement(Route, { path: 'questions/:questionId', component: QuestionIndexItem, onEnter: _ensureLoggedIn })
 	  )
 	);
 	
@@ -34883,14 +34885,18 @@
 	        React.createElement(
 	          'li',
 	          null,
-	          React.createElement('input', { className: 'hover-pointer', type: 'submit', value: 'Log Out', onClick: this.handleClick })
+	          React.createElement('input', { className: 'hover-pointer', type: 'submit', value: 'Log Out', onClick: this.handleLogOut })
 	        )
 	      )
 	    );
 	  },
 	  // <img className="user-icon" src={window.askAnythingAssets.usericon} width="25" height="25" alt="UserIcon" />
-	  handleClick: function () {
+	  handleLogOut: function () {
 	    SessionApiUtil.logout();
+	    this.context.router.push("/");
+	  },
+	
+	  handleImageClick: function () {
 	    this.context.router.push("/");
 	  },
 	
@@ -34899,7 +34905,7 @@
 	      'div',
 	      { className: 'navbar-container' },
 	      'UserNavBar here',
-	      React.createElement('img', { className: 'logo-image navbar-logo', src: window.askAnythingAssets.logo, width: '35', height: '35', alt: 'Logo' }),
+	      React.createElement('img', { className: 'logo-image navbar-logo hover-pointer', onClick: this.handleImageClick, src: window.askAnythingAssets.logo, width: '35', height: '35', alt: 'Logo' }),
 	      React.createElement(
 	        'ul',
 	        { className: 'navbar-right-ul hover-pointer' },
@@ -35078,13 +35084,11 @@
 	
 	  emailOrUsernameChange: function (e) {
 	    var newemailOrUsername = e.target.value;
-	    console.log(newemailOrUsername);
 	    this.setState({ emailOrUsername: newemailOrUsername });
 	  },
 	
 	  passwordChange: function (e) {
 	    var newPassword = e.target.value;
-	    console.log(newPassword);
 	    this.setState({ password: newPassword });
 	  },
 	
@@ -35702,6 +35706,7 @@
 	var ClientSurveyActions = __webpack_require__(290);
 	var SurveyStore = __webpack_require__(294);
 	var SideNav = __webpack_require__(295);
+	var QuestionsIndex = __webpack_require__(296);
 	
 	var SurveysIndex = React.createClass({
 	  displayName: 'SurveysIndex',
@@ -35725,17 +35730,24 @@
 	
 	  render: function () {
 	    var mySurveys = this.state.surveys;
-	    var surveys = Object.keys(mySurveys).map(function (key) {
+	
+	    var surveys = Object.keys(mySurveys).map(function (survey_id) {
+	      var currentSurvey = mySurveys[survey_id];
 	      return React.createElement(
 	        'li',
-	        { className: 'surveysindex-li', key: key },
-	        mySurveys[key].title
+	        { className: 'surveysindex-li', key: survey_id },
+	        currentSurvey.title,
+	        React.createElement(
+	          'ul',
+	          { className: 'survey-index-items' },
+	          React.createElement(QuestionsIndex, { survey: currentSurvey })
+	        )
 	      );
 	    }.bind(this));
 	
 	    return React.createElement(
 	      'div',
-	      { className: 'surveysindex-container' },
+	      { className: 'surveysindex-container group' },
 	      React.createElement(SideNav, null),
 	      React.createElement(
 	        'ul',
@@ -35871,6 +35883,262 @@
 
 /***/ },
 /* 296 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ClientQuestionActions = __webpack_require__(297);
+	var QuestionStore = __webpack_require__(301);
+	var Link = __webpack_require__(168).Link;
+	var SessionStore = __webpack_require__(250);
+	
+	var QuestionsIndex = React.createClass({
+	  displayName: 'QuestionsIndex',
+	
+	  getInitialState: function () {
+	    return { questions: QuestionStore.all() };
+	  },
+	
+	  componentDidMount: function () {
+	    this.questionListener = QuestionStore.addListener(this._onChange);
+	    ClientQuestionActions.fetchAllQuestions(parseInt(SessionStore.currentUser().id));
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.questionListener.remove();
+	  },
+	
+	  _onChange: function () {
+	    this.setState({ questions: QuestionStore.all() });
+	  },
+	
+	  render: function () {
+	    var questions = this.state.questions;
+	    var mySurvey = this.props.survey;
+	    var questionsList = Object.keys(questions).map(function (question_id) {
+	      if (questions[question_id].survey_id === parseInt(mySurvey.id)) {
+	        return React.createElement(
+	          'li',
+	          { key: question_id },
+	          React.createElement(
+	            Link,
+	            { to: "questions/" + question_id },
+	            questions[question_id].question
+	          )
+	        );
+	      }
+	    });
+	
+	    return React.createElement(
+	      'div',
+	      null,
+	      questionsList
+	    );
+	  }
+	});
+	
+	module.exports = QuestionsIndex;
+
+/***/ },
+/* 297 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(251);
+	var QuestionApiUtil = __webpack_require__(298);
+	
+	var ClientQuestionActions = {
+	  fetchAllQuestions: function (author_id) {
+	    QuestionApiUtil.fetchAllQuestions(author_id);
+	  },
+	
+	  getQuestionById: function (question_id) {
+	    QuestionApiUtil.getQuestionById(question_id);
+	  }
+	
+	};
+	
+	module.exports = ClientQuestionActions;
+
+/***/ },
+/* 298 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var ServerQuestionActions = __webpack_require__(299);
+	
+	var QuestionApiUtil = {
+	  fetchAllQuestions: function (author_id) {
+	    $.ajax({
+	      url: 'api/questions',
+	      type: 'GET',
+	      dataType: 'json',
+	      data: { author_id: author_id },
+	      success: function (questions) {
+	        ServerQuestionActions.receiveAllQuestions(questions);
+	      },
+	      error: function () {
+	        console.log("Fetch error in QuestionApiUtil#fetchAllQuestions");
+	      }
+	    });
+	  },
+	
+	  getQuestionById: function (question_id) {
+	    $.ajax({
+	      url: 'api/questions/' + question_id,
+	      type: 'GET',
+	      dataType: 'json',
+	      success: function (question) {
+	        ServerQuestionActions.receiveQuestion(question);
+	      },
+	      error: function () {
+	        console.log("Fetch error in QuestionApiUtil#getQuestionById");
+	      }
+	    });
+	  }
+	};
+	
+	module.exports = QuestionApiUtil;
+
+/***/ },
+/* 299 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(251);
+	var QuestionConstants = __webpack_require__(300);
+	
+	var ServerQuestionActions = {
+	  receiveAllQuestions: function (questions) {
+	    AppDispatcher.dispatch({
+	      actionType: QuestionConstants.QUESTIONS_RECEIVED,
+	      questions: questions
+	    });
+	  },
+	
+	  receiveQuestion: function (question) {
+	    AppDispatcher.dispatch({
+	      actionType: QuestionConstants.QUESTION_RECEIVED,
+	      question: question
+	    });
+	  }
+	};
+	
+	module.exports = ServerQuestionActions;
+
+/***/ },
+/* 300 */
+/***/ function(module, exports) {
+
+	var QuestionConstants = {
+	  QUESTIONS_RECEIVED: "QUESTIONS_RECEIVED",
+	  QUESTION_RECEIVED: "QUESTION_RECEIVED"
+	};
+	
+	module.exports = QuestionConstants;
+
+/***/ },
+/* 301 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(251);
+	var Store = __webpack_require__(255).Store;
+	var QuestionConstants = __webpack_require__(300);
+	
+	var QuestionStore = new Store(AppDispatcher);
+	
+	var _questions = {};
+	var _currentQuestion = {};
+	
+	var _resetQuestions = function (questions) {
+	  _questions = {};
+	
+	  questions.forEach(function (question) {
+	    _questions[question.id] = question;
+	  });
+	};
+	
+	var _setCurrentQuestion = function (question) {
+	  _currentQuestion[question.id] = question;
+	};
+	
+	QuestionStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case QuestionConstants.QUESTIONS_RECEIVED:
+	      _resetQuestions(payload.questions);
+	      QuestionStore.__emitChange();
+	      break;
+	    case QuestionConstants.QUESTION_RECEIVED:
+	      _setCurrentQuestion(payload.question);
+	      QuestionStore.__emitChange();
+	      break;
+	  }
+	};
+	
+	QuestionStore.all = function () {
+	  var allQuestions = Object.assign({}, _questions);
+	  return allQuestions;
+	};
+	
+	QuestionStore.getQuestionById = function (questionId) {
+	  return _currentQuestion[questionId];
+	};
+	
+	QuestionStore.findQuestionsCountBySurveyId = function (survey_id) {
+	  var count = 0;
+	
+	  Object.keys(_questions).forEach(function (question_id) {
+	    if (_questions[question_id].survey_id === survey_id) {
+	      count++;
+	    }
+	  });
+	
+	  return count;
+	};
+	
+	module.exports = QuestionStore;
+
+/***/ },
+/* 302 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ClientQuestionActions = __webpack_require__(297);
+	var QuestionStore = __webpack_require__(301);
+	
+	var QuestionIndexItem = React.createClass({
+	  displayName: 'QuestionIndexItem',
+	
+	  getInitialState: function () {
+	    var questionId = parseInt(this.props.params.questionId);
+	    var question = QuestionStore.getQuestionById(questionId) || {};
+	    return { question: question };
+	  },
+	
+	  componentDidMount: function () {
+	    this.questionListener = QuestionStore.addListener(this._onChange);
+	    ClientQuestionActions.getQuestionById(parseInt(this.props.params.questionId));
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.questionListener.remove();
+	  },
+	
+	  _onChange: function () {
+	    var questionId = parseInt(this.props.params.questionId);
+	    var question = QuestionStore.getQuestionById(questionId) || {};
+	    this.setState({ question: question });
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      null,
+	      this.state.question.question
+	    );
+	  }
+	});
+	
+	module.exports = QuestionIndexItem;
+
+/***/ },
+/* 303 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// DELETE THIS FILE LATER ONCE FINISHED WITH APP
