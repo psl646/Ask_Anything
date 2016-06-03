@@ -4,12 +4,12 @@ class User < ActiveRecord::Base
 
 	attr_reader :password
 
-	validates :first_name, :last_name, :email, :password_digest, :session_token, presence: true
+	validates :first_name, :last_name, :email, :password_digest, :session_token, :unique_email, presence: true
 	validates :email, :session_token, uniqueness: true
 	validates :password, length: {minimum: 7}, allow_nil: :true
 
 	after_initialize :ensure_session_token, :ensure_initial_survey, :ensure_username
-	before_validation :ensure_session_token_uniqueness
+	before_validation :ensure_session_token_uniqueness, :ensure_email_uniqueness
 
 	has_many(
     :surveys,
@@ -19,17 +19,10 @@ class User < ActiveRecord::Base
 		dependent: :destroy
   )
 
-	# has_many(
-	# 	:questions,
-	# 	through: :surveys,
-	# 	source: :questions
-	# )
-
 	has_many(
 		:questions,
-		class_name: "Question",
-		foreign_key: :author_id,
-		primary_key: :id,
+		through: :surveys,
+		source: :questions,
 		dependent: :destroy
 	)
 
@@ -39,8 +32,8 @@ class User < ActiveRecord::Base
 	end
 
 	# Check for email first since there is a uniqueness constraint on email
-	def self.find_by_credentials (username, email, password)
-		user = User.find_by(email: email) || User.find_by(username: username)
+	def self.find_by_credentials (username, unique_email, password)
+		user = User.find_by(unique_email: unique_email) || User.find_by(username: username)
 		return nil unless user
 		user.password_is?(password) ? user : nil
 	end
@@ -72,8 +65,16 @@ class User < ActiveRecord::Base
 		end
 	end
 
+	def ensure_email_uniqueness
+		unique_email = self[:email].upcase
+
+		if User.find_by(unique_email: unique_email).nil?
+			self[:unique_email] = unique_email
+		end
+	end
+
 	def ensure_initial_survey
-		if self.surveys.where(ungrouped: "true").length == 0
+		if self.surveys.where(ungrouped: "true").empty?
 			Survey.create(title: "Ungrouped", author_id: self.id, ungrouped: "true")
 		end
 	end

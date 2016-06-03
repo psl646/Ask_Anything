@@ -11,7 +11,7 @@ var QuestionsIndex = React.createClass ({
 
   componentDidMount: function () {
     this.questionListener = QuestionStore.addListener(this._onChange);
-    ClientQuestionActions.fetchAllQuestions(parseInt(SessionStore.currentUser().id));
+    ClientQuestionActions.fetchAllQuestions();
   },
 
   componentWillUnmount: function () {
@@ -37,7 +37,6 @@ var QuestionsIndex = React.createClass ({
 
     return (
       <div>
-
         { questionsList }
       </div>
     )

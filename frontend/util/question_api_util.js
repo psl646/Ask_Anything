@@ -1,12 +1,11 @@
 var ServerQuestionActions = require('./../actions/server_question_actions');
 
 var QuestionApiUtil = {
-  fetchAllQuestions: function (author_id) {
+  fetchAllQuestions: function () {
     $.ajax({
       url: 'api/questions',
       type: 'GET',
       dataType: 'json',
-      data: {author_id: author_id},
       success: function (questions) {
         ServerQuestionActions.receiveAllQuestions(questions);
       },

@@ -13,7 +13,7 @@ var UserNavBar = React.createClass({
     var username = SessionStore.currentUser().username;
 
     return (
-      <li className="navbar-right-li user-info-container blue-hover">{ username }
+      <li className="li-float-loggedin user-info-container blue-hover">{ username }
 
         <ul className="user-info">
           <li>
@@ -28,7 +28,10 @@ var UserNavBar = React.createClass({
       </li>
     );
   },
-// <img className="user-icon" src={window.askAnythingAssets.usericon} width="25" height="25" alt="UserIcon" />
+
+  // This is the image/pseudocontent for the above
+  // <img className="user-icon" src={window.askAnythingAssets.usericon} width="25" height="25" alt="UserIcon" />
+
   handleLogOut: function () {
     SessionApiUtil.logout();
     this.context.router.push("/");
@@ -41,13 +44,21 @@ var UserNavBar = React.createClass({
   render: function () {
     return (
       <div className="navbar-container">
-        UserNavBar here
-        <img className="logo-image navbar-logo hover-pointer" onClick={ this.handleImageClick } src={window.askAnythingAssets.logo} width="35" height="35" alt="Logo" />
+        <ul className="navbar-left-ul hover-pointer">
+          <li className="li-float-loggedin left-navbar-padding create-question"> + </li>
+          <li className="li-float-loggedin left-navbar-padding my-surveys">
+            <Link to="surveys">Questions</Link>
+          </li>
+          <li className="li-float-loggedin left-navbar-padding blue-hover"> Participants </li>
+          <li className="li-float-loggedin left-navbar-padding blue-hover"> Reports </li>
+        </ul>
+
+        <img className="logo-image user-navbar-logo hover-pointer" onClick={ this.handleImageClick } src={window.askAnythingAssets.logo} width="35" height="35" alt="Logo" />
 
         <ul className="navbar-right-ul hover-pointer">
-          <li className="navbar-right-li blue-hover"> Pricing & Upgrades </li>
-          <li className="navbar-right-li blue-hover"> Help </li>
-          <li className="navbar-right-li blue-hover">  New Features </li>
+          <li className="li-float-loggedin blue-hover"> Pricing & Upgrades </li>
+          <li className="li-float-loggedin blue-hover"> Help </li>
+          <li className="li-float-loggedin blue-hover">  New Features </li>
           { this.greeting() }
         </ul>
       </div>

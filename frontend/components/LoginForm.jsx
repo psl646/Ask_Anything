@@ -33,10 +33,12 @@ var LoginForm = React.createClass({
 
 	handleSubmit: function (e) {
 		e.preventDefault();
+    var uniqueEmailOrUsername = (this.state.emailOrUsername).toUpperCase();
+    console.log(uniqueEmailOrUsername);
 
 		var formData = {
-      username: this.state.emailOrUsername,
-			email: this.state.emailOrUsername,
+      username: uniqueEmailOrUsername,
+			unique_email: uniqueEmailOrUsername,
 			password: this.state.password
 		};
 

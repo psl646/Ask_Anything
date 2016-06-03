@@ -1,12 +1,12 @@
 class Api::QuestionsController < ApplicationController
   def index
-    @questions = Question.where(author_id: params[:author_id]).all
-    render json: @questions
+    @questions = current_user.questions
+    render "api/questions/index"
   end
 
   def show
     @question = Question.find_by_id(params[:id])
-    render json: @question
+    render "api/questions/show"
   end
 
   def create

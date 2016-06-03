@@ -1,5 +1,6 @@
 var React = require('react');
 var Link = require('react-router').Link;
+var Logo = require('./Logo');
 
 var NoUserNavBar = React.createClass({
   contextTypes: {
@@ -12,11 +13,18 @@ var NoUserNavBar = React.createClass({
 
   render: function () {
     return (
-      <div className="navbar-container nouser-nav">
+      <div className="nouser-nav-main-container group">
+        <Logo />
 
-        <ul className="navbar-right-ul">
-          <li className="nouser-navbar-right-li">
-            <Link to="login">Log in</Link>
+        <ul className="nouser-navbar-left-ul">
+          <li className="hover-nouser-nav"> Plans & Pricing </li>
+          <li className="hover-nouser-nav"> Take a tour </li>
+          <li className="hover-nouser-nav"> Help & FAQ </li>
+        </ul>
+
+        <ul className="nouser-navbar-right-ul">
+          <li className="hover-nouser-nav">
+            <Link to="login" className="nouser-nav-link">Log in</Link>
           </li>
           <li>
             <Link to="signup" className="signup-main soft-edges">Sign up</Link>

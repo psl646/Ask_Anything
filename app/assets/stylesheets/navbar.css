@@ -8,12 +8,11 @@
   z-index: 1;
 }
 
-.navbar-logo {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  top: 50%;
-  transform: translateY(-50%);
+.navbar-left-ul {
+  float: left;
+  font-size: 13px;
+  height: 55px;
+  width: 356px;
 }
 
 .navbar-right-ul {
@@ -27,10 +26,26 @@
   background: rgb(29, 67, 93);
 }
 
-.navbar-right-li {
+.li-float-loggedin {
   float: left;
   height: 19px;
   padding: 18px 11px;
+}
+
+.left-navbar-padding {
+  padding: 18px 20px;
+}
+
+.my-surveys {
+  background: rgb(37, 80, 115);
+}
+
+.create-question {
+  background: rgb(60, 116, 158);
+}
+
+.create-question:hover {
+  background: rgb(77, 133, 175);
 }
 
 /*Pseudocontent image*/
@@ -70,15 +85,27 @@
 }
 
 /*NOUSER NAV SPECIFIC*/
-.nouser-nav {
+.nouser-nav-main-container {
+  position: relative;
+  display: block;
+  color: rgb(246, 246, 246);
+  background: #203349;
+  font-size: 14px;
   height: 75px;
+  min-width: 960px;
+  margin: auto;
+  z-index: 1;
 }
 
-.nouser-navbar-right-li {
-  margin: 0 20px;
+.nouser-navbar-left-ul {
+
 }
 
-.nouser-navbar-right-li:hover {
+.nouser-navbar-right-ul {
+
+}
+
+.hover-nouser-nav:hover {
   color: rgba(217, 81, 34, 0.81);
   text-decoration: underline;
   transition: 0.5s;
@@ -87,6 +114,7 @@
 .signup-main {
   display: block;
   position: absolute;
+  font-size: 14px;
   top: 15px;
   background: rgb(38, 72, 116);
   padding: 10px;

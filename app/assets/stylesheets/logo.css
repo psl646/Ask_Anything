@@ -1,11 +1,12 @@
 /*LOGO*/
 
-.logo {
+.login-logo {
   display: block;
   width: 200px;
   margin: 15px auto;
   padding: 20px;
 }
+
 
 .logo-text {
   color: rgba(255,255,255,0.95);
@@ -18,4 +19,18 @@
   float: left;
   border-radius: 50%;
   margin-right: 10px;
+}
+
+.nouser-navbar-logo {
+  padding: 20px 0;
+  width: 200px;
+  height:35px;
+}
+
+.user-navbar-logo {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 50%;
+  transform: translateY(-50%);
 }

@@ -34868,7 +34868,7 @@
 	
 	    return React.createElement(
 	      'li',
-	      { className: 'navbar-right-li user-info-container blue-hover' },
+	      { className: 'li-float-loggedin user-info-container blue-hover' },
 	      username,
 	      React.createElement(
 	        'ul',
@@ -34890,7 +34890,10 @@
 	      )
 	    );
 	  },
+	
+	  // This is the image/pseudocontent for the above
 	  // <img className="user-icon" src={window.askAnythingAssets.usericon} width="25" height="25" alt="UserIcon" />
+	
 	  handleLogOut: function () {
 	    SessionApiUtil.logout();
 	    this.context.router.push("/");
@@ -34904,24 +34907,51 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'navbar-container' },
-	      'UserNavBar here',
-	      React.createElement('img', { className: 'logo-image navbar-logo hover-pointer', onClick: this.handleImageClick, src: window.askAnythingAssets.logo, width: '35', height: '35', alt: 'Logo' }),
+	      React.createElement(
+	        'ul',
+	        { className: 'navbar-left-ul hover-pointer' },
+	        React.createElement(
+	          'li',
+	          { className: 'li-float-loggedin left-navbar-padding create-question' },
+	          ' + '
+	        ),
+	        React.createElement(
+	          'li',
+	          { className: 'li-float-loggedin left-navbar-padding my-surveys' },
+	          React.createElement(
+	            Link,
+	            { to: 'surveys' },
+	            'Questions'
+	          )
+	        ),
+	        React.createElement(
+	          'li',
+	          { className: 'li-float-loggedin left-navbar-padding blue-hover' },
+	          ' Participants '
+	        ),
+	        React.createElement(
+	          'li',
+	          { className: 'li-float-loggedin left-navbar-padding blue-hover' },
+	          ' Reports '
+	        )
+	      ),
+	      React.createElement('img', { className: 'logo-image user-navbar-logo hover-pointer', onClick: this.handleImageClick, src: window.askAnythingAssets.logo, width: '35', height: '35', alt: 'Logo' }),
 	      React.createElement(
 	        'ul',
 	        { className: 'navbar-right-ul hover-pointer' },
 	        React.createElement(
 	          'li',
-	          { className: 'navbar-right-li blue-hover' },
+	          { className: 'li-float-loggedin blue-hover' },
 	          ' Pricing & Upgrades '
 	        ),
 	        React.createElement(
 	          'li',
-	          { className: 'navbar-right-li blue-hover' },
+	          { className: 'li-float-loggedin blue-hover' },
 	          ' Help '
 	        ),
 	        React.createElement(
 	          'li',
-	          { className: 'navbar-right-li blue-hover' },
+	          { className: 'li-float-loggedin blue-hover' },
 	          '  New Features '
 	        ),
 	        this.greeting()
@@ -34937,19 +34967,38 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var Link = __webpack_require__(168).Link;
 	
 	var Logo = React.createClass({
-	  displayName: "Logo",
+	  displayName: 'Logo',
+	
+	  contextTypes: {
+	    router: React.PropTypes.object.isRequired
+	  },
+	
+	  handleClick: function () {
+	    this.context.router.push("/");
+	  },
+	
+	  isLogin: function () {
+	    return window.location.hash.slice(2, 7).toUpperCase() === "LOGIN";
+	  },
 	
 	  render: function () {
+	    var logoPlacement = "nouser-navbar-logo";
+	
+	    if (this.isLogin()) {
+	      logoPlacement = "login-logo";
+	    }
+	
 	    return React.createElement(
-	      "div",
-	      { className: "logo" },
-	      React.createElement("img", { className: "logo-image", src: window.askAnythingAssets.logo, width: "35", height: "35", alt: "Logo" }),
+	      'div',
+	      { className: logoPlacement },
+	      React.createElement('img', { className: 'hover-pointer logo-image', src: window.askAnythingAssets.logo, width: '35', height: '35', alt: 'Logo', onClick: this.handleClick }),
 	      React.createElement(
-	        "h1",
-	        { className: "logo-text" },
-	        "Ask Anything!"
+	        'h1',
+	        { className: 'hover-pointer logo-text', onClick: this.handleClick },
+	        'Ask Anything!'
 	      )
 	    );
 	  }
@@ -34963,6 +35012,7 @@
 
 	var React = __webpack_require__(1);
 	var Link = __webpack_require__(168).Link;
+	var Logo = __webpack_require__(279);
 	
 	var NoUserNavBar = React.createClass({
 	  displayName: 'NoUserNavBar',
@@ -34978,16 +35028,36 @@
 	  render: function () {
 	    return React.createElement(
 	      'div',
-	      { className: 'navbar-container nouser-nav' },
+	      { className: 'nouser-nav-main-container group' },
+	      React.createElement(Logo, null),
 	      React.createElement(
 	        'ul',
-	        { className: 'navbar-right-ul' },
+	        { className: 'nouser-navbar-left-ul' },
 	        React.createElement(
 	          'li',
-	          { className: 'nouser-navbar-right-li' },
+	          { className: 'hover-nouser-nav' },
+	          ' Plans & Pricing '
+	        ),
+	        React.createElement(
+	          'li',
+	          { className: 'hover-nouser-nav' },
+	          ' Take a tour '
+	        ),
+	        React.createElement(
+	          'li',
+	          { className: 'hover-nouser-nav' },
+	          ' Help & FAQ '
+	        )
+	      ),
+	      React.createElement(
+	        'ul',
+	        { className: 'nouser-navbar-right-ul' },
+	        React.createElement(
+	          'li',
+	          { className: 'hover-nouser-nav' },
 	          React.createElement(
 	            Link,
-	            { to: 'login' },
+	            { to: 'login', className: 'nouser-nav-link' },
 	            'Log in'
 	          )
 	        ),
@@ -35050,10 +35120,12 @@
 	
 	  handleSubmit: function (e) {
 	    e.preventDefault();
+	    var uniqueEmailOrUsername = this.state.emailOrUsername.toUpperCase();
+	    console.log(uniqueEmailOrUsername);
 	
 	    var formData = {
-	      username: this.state.emailOrUsername,
-	      email: this.state.emailOrUsername,
+	      username: uniqueEmailOrUsername,
+	      unique_email: uniqueEmailOrUsername,
 	      password: this.state.password
 	    };
 	
@@ -35788,7 +35860,11 @@
 	      type: 'GET',
 	      dataType: 'json',
 	      success: function (surveys) {
+	        console.log(surveys);
 	        ServerSurveyActions.receiveAllSurveys(surveys);
+	      },
+	      errors: function () {
+	        console.log("Fetching error in SurveyApiUtil#fetchAllSurveys");
 	      }
 	    });
 	  }
@@ -35805,6 +35881,7 @@
 	
 	var ServerSurveyActions = {
 	  receiveAllSurveys: function (surveys) {
+	    console.log(surveys);
 	    AppDispatcher.dispatch({
 	      actionType: SurveyConstants.SURVEYS_RECEIVED,
 	      surveys: surveys
@@ -35900,7 +35977,7 @@
 	
 	  componentDidMount: function () {
 	    this.questionListener = QuestionStore.addListener(this._onChange);
-	    ClientQuestionActions.fetchAllQuestions(parseInt(SessionStore.currentUser().id));
+	    ClientQuestionActions.fetchAllQuestions();
 	  },
 	
 	  componentWillUnmount: function () {
@@ -35946,8 +36023,8 @@
 	var QuestionApiUtil = __webpack_require__(298);
 	
 	var ClientQuestionActions = {
-	  fetchAllQuestions: function (author_id) {
-	    QuestionApiUtil.fetchAllQuestions(author_id);
+	  fetchAllQuestions: function () {
+	    QuestionApiUtil.fetchAllQuestions();
 	  },
 	
 	  getQuestionById: function (question_id) {
@@ -35965,12 +36042,11 @@
 	var ServerQuestionActions = __webpack_require__(299);
 	
 	var QuestionApiUtil = {
-	  fetchAllQuestions: function (author_id) {
+	  fetchAllQuestions: function () {
 	    $.ajax({
 	      url: 'api/questions',
 	      type: 'GET',
 	      dataType: 'json',
-	      data: { author_id: author_id },
 	      success: function (questions) {
 	        ServerQuestionActions.receiveAllQuestions(questions);
 	      },
