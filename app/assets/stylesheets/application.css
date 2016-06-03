@@ -12,6 +12,7 @@
  *
  *= require_self
  *= require_tree .
+  *= require font-awesome
  */
 
 div, h1, h2, h3, h4, h5, h6, a, input, form, ul,

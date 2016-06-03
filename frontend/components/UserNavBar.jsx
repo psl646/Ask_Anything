@@ -11,11 +11,12 @@ var UserNavBar = React.createClass({
 
   greeting: function(){
     var username = SessionStore.currentUser().username;
-
     return (
       <li className="li-float-loggedin user-info-container blue-hover">
         { username }
-
+        <div className="cog-position">
+          <i className="fa fa-cog fa-2x" aria-hidden="true"></i>
+        </div>
         <ul className="user-info">
           <li>
             <Link to="settings">Settings</Link>

@@ -84,6 +84,13 @@
   border-left: 2px solid #203349;
 }
 
+.cog-position {
+  position: absolute;
+  top: 14px;
+  right: 15px;
+  color: rgba(179, 188, 194, 0.75);
+}
+
 /*NOUSER NAV SPECIFIC*/
 .nouser-nav-main-container {
   color: rgb(246, 246, 246);

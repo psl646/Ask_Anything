@@ -34865,11 +34865,15 @@
 	
 	  greeting: function () {
 	    var username = SessionStore.currentUser().username;
-	
 	    return React.createElement(
 	      'li',
 	      { className: 'li-float-loggedin user-info-container blue-hover' },
 	      username,
+	      React.createElement(
+	        'div',
+	        { className: 'cog-position' },
+	        React.createElement('i', { className: 'fa fa-cog fa-2x', 'aria-hidden': 'true' })
+	      ),
 	      React.createElement(
 	        'ul',
 	        { className: 'user-info' },
@@ -35121,7 +35125,6 @@
 	  handleSubmit: function (e) {
 	    e.preventDefault();
 	    var uniqueEmailOrUsername = this.state.emailOrUsername.toUpperCase();
-	    console.log(uniqueEmailOrUsername);
 	
 	    var formData = {
 	      username: uniqueEmailOrUsername,
@@ -36199,13 +36202,11 @@
 	    var question = QuestionStore.getQuestionById(questionId) || {};
 	    this.setState({ question: question });
 	  },
-	
 	  render: function () {
 	    return React.createElement(
 	      'div',
 	      null,
-	      this.state.question.question,
-	      React.createElement('i', { 'class': 'fa fa-cog', 'aria-hidden': 'true' })
+	      this.state.question.question
 	    );
 	  }
 	});
