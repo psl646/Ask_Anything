@@ -1,2 +1,7 @@
 Look up
 D3JS
+
+
+TODO:
+Work on footer
+Fix Modal styling.  Window re-sizing affects the modal.

@@ -35035,17 +35035,17 @@
 	        { className: 'nouser-navbar-left-ul' },
 	        React.createElement(
 	          'li',
-	          { className: 'hover-nouser-nav' },
+	          { className: 'hover-nouser-nav make-me-red' },
 	          ' Plans & Pricing '
 	        ),
 	        React.createElement(
 	          'li',
-	          { className: 'hover-nouser-nav' },
+	          { className: 'hover-nouser-nav make-me-red' },
 	          ' Take a tour '
 	        ),
 	        React.createElement(
 	          'li',
-	          { className: 'hover-nouser-nav' },
+	          { className: 'hover-nouser-nav make-me-red' },
 	          ' Help & FAQ '
 	        )
 	      ),
@@ -35054,7 +35054,7 @@
 	        { className: 'nouser-navbar-right-ul' },
 	        React.createElement(
 	          'li',
-	          { className: 'hover-nouser-nav' },
+	          { className: 'hover-nouser-nav make-me-red' },
 	          React.createElement(
 	            Link,
 	            { to: 'login', className: 'nouser-nav-link' },
@@ -35860,7 +35860,6 @@
 	      type: 'GET',
 	      dataType: 'json',
 	      success: function (surveys) {
-	        console.log(surveys);
 	        ServerSurveyActions.receiveAllSurveys(surveys);
 	      },
 	      errors: function () {
@@ -35881,7 +35880,6 @@
 	
 	var ServerSurveyActions = {
 	  receiveAllSurveys: function (surveys) {
-	    console.log(surveys);
 	    AppDispatcher.dispatch({
 	      actionType: SurveyConstants.SURVEYS_RECEIVED,
 	      surveys: surveys
@@ -36206,7 +36204,8 @@
 	    return React.createElement(
 	      'div',
 	      null,
-	      this.state.question.question
+	      this.state.question.question,
+	      React.createElement('i', { 'class': 'fa fa-cog', 'aria-hidden': 'true' })
 	    );
 	  }
 	});

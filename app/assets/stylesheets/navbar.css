@@ -86,8 +86,6 @@
 
 /*NOUSER NAV SPECIFIC*/
 .nouser-nav-main-container {
-  position: relative;
-  display: block;
   color: rgb(246, 246, 246);
   background: #203349;
   font-size: 14px;
@@ -98,14 +96,15 @@
 }
 
 .nouser-navbar-left-ul {
-
+  float: left;
 }
 
 .nouser-navbar-right-ul {
-
+  float: right;
 }
 
 .hover-nouser-nav:hover {
+  cursor: pointer;
   color: rgba(217, 81, 34, 0.81);
   text-decoration: underline;
   transition: 0.5s;
@@ -118,4 +117,9 @@
   top: 15px;
   background: rgb(38, 72, 116);
   padding: 10px;
+}
+
+.make-me-red {
+  color: red;
+  background:green;
 }

@@ -13,7 +13,8 @@ var UserNavBar = React.createClass({
     var username = SessionStore.currentUser().username;
 
     return (
-      <li className="li-float-loggedin user-info-container blue-hover">{ username }
+      <li className="li-float-loggedin user-info-container blue-hover">
+        { username }
 
         <ul className="user-info">
           <li>

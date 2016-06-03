@@ -7,7 +7,6 @@ var SurveyApiUtil = {
       type: 'GET',
       dataType: 'json',
       success: function (surveys) {
-        console.log(surveys);
         ServerSurveyActions.receiveAllSurveys(surveys);
       },
       errors: function () {

@@ -17,13 +17,13 @@ var NoUserNavBar = React.createClass({
         <Logo />
 
         <ul className="nouser-navbar-left-ul">
-          <li className="hover-nouser-nav"> Plans & Pricing </li>
-          <li className="hover-nouser-nav"> Take a tour </li>
-          <li className="hover-nouser-nav"> Help & FAQ </li>
+          <li className="hover-nouser-nav make-me-red"> Plans & Pricing </li>
+          <li className="hover-nouser-nav make-me-red"> Take a tour </li>
+          <li className="hover-nouser-nav make-me-red"> Help & FAQ </li>
         </ul>
 
         <ul className="nouser-navbar-right-ul">
-          <li className="hover-nouser-nav">
+          <li className="hover-nouser-nav make-me-red">
             <Link to="login" className="nouser-nav-link">Log in</Link>
           </li>
           <li>

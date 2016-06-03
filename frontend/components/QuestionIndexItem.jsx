@@ -29,6 +29,7 @@ var QuestionIndexItem = React.createClass ({
     return (
       <div>
         { this.state.question.question }
+        <i class="fa fa-cog" aria-hidden="true"></i>
       </div>
     )
   }
