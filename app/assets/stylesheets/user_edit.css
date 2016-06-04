@@ -1,0 +1,15 @@
+.user-edit-container {
+  width: 800px;
+  margin: 30px auto;
+  border: 1px solid black;
+}
+
+.user-edit-form {
+
+}
+
+.h7 {
+  color: #3c749e;
+  font-size: 19px;
+  font-weight: 900;
+}

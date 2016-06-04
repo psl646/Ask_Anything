@@ -33,6 +33,15 @@ class Api::UsersController < ApplicationController
 		end
 	end
 
+	def update
+		@user = User.find(params[:user][:id])
+
+		if @user.update(user_params)
+			session[:session_token] = @user.session_token
+			render 'api/users/show'
+		end
+	end
+
 	private
 
 	def user_params

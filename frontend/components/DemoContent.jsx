@@ -55,7 +55,7 @@ var DemoContent = React.createClass({
     return numbers;
   },
 
-  handleCreateFirstPollClick: function () {
+  handleCreateFirstQuestionClick: function () {
     if (SessionStore.isUserLoggedIn()) {
       this.context.router.push("surveys");
     } else {
@@ -77,22 +77,24 @@ var DemoContent = React.createClass({
 
     return (
       <div className="demo-container">
-        <div>
+        <div className="h6 demo-header">
           Live Audience Participation
         </div>
-        <div>
+        <div className="demo-description">
           Ask Anything! lets you engage your audience or class in real time
         </div>
-        <ul>
-          <li className="hover-pointer" onClick={ this.handleCreateFirstPollClick }>
-            Create your first poll
+        <ul className="demo-options">
+          <li className="hover-pointer soft-edges create-question-button" onClick={ this.handleCreateFirstQuestionClick }>
+            Create your first question
           </li>
-          <div>
-            Takes 30 seconds. No signup required
-          </div>
-          <li>
+
+          <li className="hover-pointer soft-edges watch-video">
             Watch our 2 min video
           </li>
+
+          <div className="h5 thirty-seconds">
+            Takes 30 seconds. No signup required
+          </div>
         </ul>
       </div>
     );

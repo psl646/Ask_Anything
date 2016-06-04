@@ -3,7 +3,6 @@ var Link = require('react-router').Link;
 var SessionApiUtil = require('./../util/session_api_util');
 var SessionStore = require('./../stores/session_store');
 var ErrorStore = require('./../stores/error_store');
-var UserApiUtil = require('./../util/user_api_util');
 var Logo = require('./Logo');
 
 var LoginForm = React.createClass({

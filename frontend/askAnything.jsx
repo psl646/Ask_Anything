@@ -13,7 +13,9 @@ var App = require('./components/App.jsx');
 var LoginForm = require('./components/LoginForm.jsx');
 var SignupPage = require('./components/SignupPage.jsx');
 var SurveysIndex = require('./components/SurveysIndex.jsx');
-var QuestionIndexItem = require('./components/QuestionIndexItem.jsx')
+var QuestionIndexItem = require('./components/QuestionIndexItem.jsx');
+var UserEditForm = require('./components/UserEditForm.jsx');
+
 
 var SessionStore = require('./stores/session_store.js');
 var SessionApiUtil = require('./util/session_api_util.js');
@@ -29,6 +31,7 @@ var Router = (
       <Route path="signup" component={ SignupPage } onEnter={ _ensureLoggedOut } />
       <Route path="surveys" component={ SurveysIndex } onEnter={ _ensureLoggedIn }/> // Maybe take out this onEnter hook later to allow non-users to use the site
       <Route path="questions/:questionId" component={ QuestionIndexItem } onEnter={ _ensureLoggedIn }/>
+      <Route path="settings" component={ UserEditForm } onEnter={ _ensureLoggedIn }/>
     </Route>
   </Router>
 );

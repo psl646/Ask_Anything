@@ -17,6 +17,22 @@ var UserApiUtil = {
         ErrorActions.setErrors("signup", errors);
       }
     });
+  },
+
+  updateUserName: function (formData) {
+    $.ajax({
+      url: '/api/user',
+      type: 'PATCH',
+      dataType: 'json',
+      data: {user: formData},
+      success: function (currentUser) {
+        SessionActions.receiveCurrentUser(currentUser);
+        alert("Your profile was updated");
+      },
+      error: function () {
+        console.log("Error in UserApiUtil#updateUserName");
+      }
+    })
   }
 };
 

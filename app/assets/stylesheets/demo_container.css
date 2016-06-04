@@ -1,0 +1,51 @@
+.demo-container {
+  color: white;
+  background: grey;
+  width: 800px;
+  height: 600px;
+  margin: auto;
+  border: 5px solid black;
+  text-align: center;
+}
+
+.demo-options {
+  position: relative;
+}
+
+.demo-options >li {
+  float: left;
+  width: 370px;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 10px 0;
+  margin: 15px;
+}
+
+.create-question-button {
+  background: #db5242;
+}
+
+.watch-video {
+  background: green;
+}
+
+.h6 {
+  font-size: 45px;
+  font-weight: 900;
+}
+
+.demo-header {
+  margin-top: 55px;
+}
+
+.demo-description {
+  font-size: 17.5px;
+  font-weight: 600;
+  margin: 20px;
+}
+
+.thirty-seconds {
+  position: absolute;
+  top: 50px;
+  left: 77px;
+}

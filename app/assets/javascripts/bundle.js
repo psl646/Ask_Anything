@@ -56,16 +56,17 @@
 	var Modal = __webpack_require__(229);
 	
 	var App = __webpack_require__(249);
-	var LoginForm = __webpack_require__(286);
+	var LoginForm = __webpack_require__(287);
 	var SignupPage = __webpack_require__(289);
 	var SurveysIndex = __webpack_require__(293);
 	var QuestionIndexItem = __webpack_require__(306);
+	var UserEditForm = __webpack_require__(307);
 	
 	var SessionStore = __webpack_require__(250);
 	var SessionApiUtil = __webpack_require__(273);
 	
 	// test component DELETE later
-	var Test = __webpack_require__(307);
+	var Test = __webpack_require__(308);
 	
 	var Router = React.createElement(
 	  Router,
@@ -77,7 +78,8 @@
 	    React.createElement(Route, { path: 'signup', component: SignupPage, onEnter: _ensureLoggedOut }),
 	    React.createElement(Route, { path: 'surveys', component: SurveysIndex, onEnter: _ensureLoggedIn }),
 	    ' // Maybe take out this onEnter hook later to allow non-users to use the site',
-	    React.createElement(Route, { path: 'questions/:questionId', component: QuestionIndexItem, onEnter: _ensureLoggedIn })
+	    React.createElement(Route, { path: 'questions/:questionId', component: QuestionIndexItem, onEnter: _ensureLoggedIn }),
+	    React.createElement(Route, { path: 'settings', component: UserEditForm, onEnter: _ensureLoggedIn })
 	  )
 	);
 	
@@ -35227,7 +35229,7 @@
 	var React = __webpack_require__(1);
 	var Link = __webpack_require__(168).Link;
 	var GuestUserConstants = __webpack_require__(285);
-	var UserApiUtil = __webpack_require__(288);
+	var UserApiUtil = __webpack_require__(286);
 	var SessionStore = __webpack_require__(250);
 	
 	var DemoContent = React.createClass({
@@ -35283,7 +35285,7 @@
 	    return numbers;
 	  },
 	
-	  handleCreateFirstPollClick: function () {
+	  handleCreateFirstQuestionClick: function () {
 	    if (SessionStore.isUserLoggedIn()) {
 	      this.context.router.push("surveys");
 	    } else {
@@ -35308,31 +35310,31 @@
 	      { className: 'demo-container' },
 	      React.createElement(
 	        'div',
-	        null,
+	        { className: 'h6 demo-header' },
 	        'Live Audience Participation'
 	      ),
 	      React.createElement(
 	        'div',
-	        null,
+	        { className: 'demo-description' },
 	        'Ask Anything! lets you engage your audience or class in real time'
 	      ),
 	      React.createElement(
 	        'ul',
-	        null,
+	        { className: 'demo-options' },
 	        React.createElement(
 	          'li',
-	          { className: 'hover-pointer', onClick: this.handleCreateFirstPollClick },
-	          'Create your first poll'
+	          { className: 'hover-pointer soft-edges create-question-button', onClick: this.handleCreateFirstQuestionClick },
+	          'Create your first question'
+	        ),
+	        React.createElement(
+	          'li',
+	          { className: 'hover-pointer soft-edges watch-video' },
+	          'Watch our 2 min video'
 	        ),
 	        React.createElement(
 	          'div',
-	          null,
+	          { className: 'h5 thirty-seconds' },
 	          'Takes 30 seconds. No signup required'
-	        ),
-	        React.createElement(
-	          'li',
-	          null,
-	          'Watch our 2 min video'
 	        )
 	      )
 	    );
@@ -35356,12 +35358,55 @@
 /* 286 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var SessionActions = __webpack_require__(274);
+	var ErrorActions = __webpack_require__(275);
+	
+	var UserApiUtil = {
+	  signup: function (formData) {
+	    $.ajax({
+	      url: '/api/user',
+	      type: 'POST',
+	      dataType: 'json',
+	      data: { user: formData },
+	      success: function (currentUser) {
+	        SessionActions.receiveCurrentUser(currentUser);
+	      },
+	      error: function (xhr) {
+	        console.log('UserApiUtil#createAccount error');
+	        var errors = xhr.responseJSON;
+	        ErrorActions.setErrors("signup", errors);
+	      }
+	    });
+	  },
+	
+	  updateUserName: function (formData) {
+	    $.ajax({
+	      url: '/api/user',
+	      type: 'PATCH',
+	      dataType: 'json',
+	      data: { user: formData },
+	      success: function (currentUser) {
+	        SessionActions.receiveCurrentUser(currentUser);
+	        alert("Your profile was updated");
+	      },
+	      error: function () {
+	        console.log("Error in UserApiUtil#updateUserName");
+	      }
+	    });
+	  }
+	};
+	
+	module.exports = UserApiUtil;
+
+/***/ },
+/* 287 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var React = __webpack_require__(1);
 	var Link = __webpack_require__(168).Link;
 	var SessionApiUtil = __webpack_require__(273);
 	var SessionStore = __webpack_require__(250);
-	var ErrorStore = __webpack_require__(287);
-	var UserApiUtil = __webpack_require__(288);
+	var ErrorStore = __webpack_require__(288);
 	var Logo = __webpack_require__(280);
 	
 	var LoginForm = React.createClass({
@@ -35503,7 +35548,7 @@
 	module.exports = LoginForm;
 
 /***/ },
-/* 287 */
+/* 288 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Store = __webpack_require__(255).Store;
@@ -35550,34 +35595,6 @@
 	};
 	
 	module.exports = ErrorStore;
-
-/***/ },
-/* 288 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var SessionActions = __webpack_require__(274);
-	var ErrorActions = __webpack_require__(275);
-	
-	var UserApiUtil = {
-	  signup: function (formData) {
-	    $.ajax({
-	      url: '/api/user',
-	      type: 'POST',
-	      dataType: 'json',
-	      data: { user: formData },
-	      success: function (currentUser) {
-	        SessionActions.receiveCurrentUser(currentUser);
-	      },
-	      error: function (xhr) {
-	        console.log('UserApiUtil#createAccount error');
-	        var errors = xhr.responseJSON;
-	        ErrorActions.setErrors("signup", errors);
-	      }
-	    });
-	  }
-	};
-	
-	module.exports = UserApiUtil;
 
 /***/ },
 /* 289 */
@@ -35701,10 +35718,8 @@
 
 	var React = __webpack_require__(1);
 	var Link = __webpack_require__(168).Link;
-	var SessionApiUtil = __webpack_require__(273);
-	var SessionStore = __webpack_require__(250);
-	var ErrorStore = __webpack_require__(287);
-	var UserApiUtil = __webpack_require__(288);
+	var ErrorStore = __webpack_require__(288);
+	var UserApiUtil = __webpack_require__(286);
 	var ErrorActions = __webpack_require__(275);
 	
 	var SignupForm = React.createClass({
@@ -36498,6 +36513,111 @@
 
 /***/ },
 /* 307 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var Link = __webpack_require__(168).Link;
+	var SessionApiUtil = __webpack_require__(273);
+	var SessionStore = __webpack_require__(250);
+	var UserApiUtil = __webpack_require__(286);
+	var ErrorActions = __webpack_require__(275);
+	
+	var UserEditForm = React.createClass({
+	  displayName: 'UserEditForm',
+	
+	  contextTypes: {
+	    router: React.PropTypes.object.isRequired
+	  },
+	
+	  getInitialState: function () {
+	    var user = SessionStore.currentUser();
+	    return { id: user.id, first_name: user.first_name, last_name: user.last_name };
+	  },
+	
+	  componentDidMount: function () {
+	    this.sessionListener = SessionStore.addListener(this._onChange);
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.sessionListener.remove();
+	  },
+	
+	  _onChange: function () {
+	    var user = SessionStore.currentUser();
+	    this.setState({ id: user.id, first_name: user.first_name, last_name: user.last_name });
+	  },
+	
+	  firstNameChange: function (e) {
+	    var newFirstName = e.target.value;
+	    this.setState({ first_name: newFirstName });
+	  },
+	
+	  lastNameChange: function (e) {
+	    var newLastName = e.target.value;
+	    this.setState({ last_name: newLastName });
+	  },
+	
+	  handleSubmit: function (e) {
+	    e.preventDefault();
+	
+	    var formData = {
+	      id: this.state.id,
+	      first_name: this.state.first_name,
+	      last_name: this.state.last_name
+	    };
+	
+	    UserApiUtil.updateUserName(formData);
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'user-edit-container' },
+	      React.createElement(
+	        'div',
+	        { className: 'h7' },
+	        'User Settings'
+	      ),
+	      React.createElement(
+	        'form',
+	        { className: 'user-edit-form', onSubmit: this.handleSubmit },
+	        React.createElement('br', null),
+	        React.createElement(
+	          'label',
+	          { className: 'hover-pointer label' },
+	          ' First name ',
+	          React.createElement('br', null),
+	          React.createElement('input', { className: "signup-input soft-edges ", type: 'text', value: this.state.first_name, onChange: this.firstNameChange })
+	        ),
+	        React.createElement('br', null),
+	        React.createElement(
+	          'label',
+	          { className: 'hover-pointer label' },
+	          ' Last name ',
+	          React.createElement('br', null),
+	          React.createElement('input', { className: "signup-input soft-edges ", type: 'text', value: this.state.last_name, onChange: this.lastNameChange })
+	        ),
+	        React.createElement('br', null),
+	        React.createElement('input', {
+	          className: 'soft-edges hover-pointer',
+	          type: 'submit',
+	          value: 'Update profile'
+	        }),
+	        '  or  ',
+	        React.createElement(
+	          Link,
+	          { to: 'surveys' },
+	          'cancel'
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = UserEditForm;
+
+/***/ },
+/* 308 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// DELETE THIS FILE LATER ONCE FINISHED WITH APP
