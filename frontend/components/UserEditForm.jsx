@@ -12,7 +12,7 @@ var UserEditForm = React.createClass({
 
   getInitialState: function () {
     var user = SessionStore.currentUser();
-    return({ id: user.id, first_name: user.first_name, last_name: user.last_name, });
+    return({ id: user.id, first_name: user.first_name, last_name: user.last_name, email: user.email, username: user.username });
   },
 
   componentDidMount: function () {
@@ -25,7 +25,7 @@ var UserEditForm = React.createClass({
 
   _onChange: function () {
     var user = SessionStore.currentUser();
-    this.setState({ id: user.id, first_name: user.first_name, last_name: user.last_name });
+    this.setState({ id: user.id, first_name: user.first_name, last_name: user.last_name, email: user.email, username: user.username });
   },
 
   firstNameChange: function (e) {
@@ -58,25 +58,40 @@ var UserEditForm = React.createClass({
         </div>
         <form className="user-edit-form" onSubmit={this.handleSubmit}>
           <br />
-          <label className="hover-pointer label"> First name <br/>
-            <input className={"signup-input soft-edges "} type="text" value={this.state.first_name} onChange={this.firstNameChange}/>
+          <label className="label"> Username <br/>
+            AskAny.com/<input className={"signup-input soft-edges "} type="text" value={ this.state.username.toLowerCase() } readOnly />
           </label>
 
           <br />
-          <label className="hover-pointer label"> Last name <br/>
-            <input className={"signup-input soft-edges "} type="text" value={this.state.last_name} onChange={this.lastNameChange}/>
+          <label className="hover-text label"> Email <br/>
+            { this.state.email } Change
+          </label>
+
+          <br />
+          <label className="hover-text label"> Password <br/>
+            Change your password
+          </label>
+
+          <br />
+          <label className="label"> First name <br/>
+            <input className={"signup-input soft-edges "} type="text" value={ this.state.first_name } onChange={ this.firstNameChange }/>
+          </label>
+
+          <br />
+          <label className="label"> Last name <br/>
+            <input className={"signup-input soft-edges "} type="text" value={ this.state.last_name } onChange={ this.lastNameChange }/>
           </label>
 
           <br />
 
           <input
-            className="soft-edges hover-pointer"
+            className="edit-button soft-edges hover-pointer"
             type="submit"
             value="Update profile"
             />
 
           &nbsp; or &nbsp;
-          <Link to="surveys">cancel</Link>
+          <Link to="surveys" className="cancel-edit">cancel</Link>
         </form>
       </div>
 		);

@@ -36531,7 +36531,7 @@
 	
 	  getInitialState: function () {
 	    var user = SessionStore.currentUser();
-	    return { id: user.id, first_name: user.first_name, last_name: user.last_name };
+	    return { id: user.id, first_name: user.first_name, last_name: user.last_name, email: user.email, username: user.username };
 	  },
 	
 	  componentDidMount: function () {
@@ -36544,7 +36544,7 @@
 	
 	  _onChange: function () {
 	    var user = SessionStore.currentUser();
-	    this.setState({ id: user.id, first_name: user.first_name, last_name: user.last_name });
+	    this.setState({ id: user.id, first_name: user.first_name, last_name: user.last_name, email: user.email, username: user.username });
 	  },
 	
 	  firstNameChange: function (e) {
@@ -36584,7 +36584,33 @@
 	        React.createElement('br', null),
 	        React.createElement(
 	          'label',
-	          { className: 'hover-pointer label' },
+	          { className: 'label' },
+	          ' Username ',
+	          React.createElement('br', null),
+	          'AskAny.com/',
+	          React.createElement('input', { className: "signup-input soft-edges ", type: 'text', value: this.state.username.toLowerCase(), readOnly: true })
+	        ),
+	        React.createElement('br', null),
+	        React.createElement(
+	          'label',
+	          { className: 'hover-text label' },
+	          ' Email ',
+	          React.createElement('br', null),
+	          this.state.email,
+	          ' Change'
+	        ),
+	        React.createElement('br', null),
+	        React.createElement(
+	          'label',
+	          { className: 'hover-text label' },
+	          ' Password ',
+	          React.createElement('br', null),
+	          'Change your password'
+	        ),
+	        React.createElement('br', null),
+	        React.createElement(
+	          'label',
+	          { className: 'label' },
 	          ' First name ',
 	          React.createElement('br', null),
 	          React.createElement('input', { className: "signup-input soft-edges ", type: 'text', value: this.state.first_name, onChange: this.firstNameChange })
@@ -36592,21 +36618,21 @@
 	        React.createElement('br', null),
 	        React.createElement(
 	          'label',
-	          { className: 'hover-pointer label' },
+	          { className: 'label' },
 	          ' Last name ',
 	          React.createElement('br', null),
 	          React.createElement('input', { className: "signup-input soft-edges ", type: 'text', value: this.state.last_name, onChange: this.lastNameChange })
 	        ),
 	        React.createElement('br', null),
 	        React.createElement('input', {
-	          className: 'soft-edges hover-pointer',
+	          className: 'edit-button soft-edges hover-pointer',
 	          type: 'submit',
 	          value: 'Update profile'
 	        }),
 	        '  or  ',
 	        React.createElement(
 	          Link,
-	          { to: 'surveys' },
+	          { to: 'surveys', className: 'cancel-edit' },
 	          'cancel'
 	        )
 	      )

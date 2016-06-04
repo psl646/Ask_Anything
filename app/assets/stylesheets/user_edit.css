@@ -1,15 +1,33 @@
 .user-edit-container {
+  font-size: 13px;
   width: 800px;
   margin: 30px auto;
-  border: 1px solid black;
-}
-
-.user-edit-form {
-
+  /*border: 1px solid black;*/
 }
 
 .h7 {
   color: #3c749e;
   font-size: 19px;
   font-weight: 900;
+}
+
+.edit-button {
+  color: white;
+  background: #255073;
+  font-size: 12px;
+  font-weight: bolder;
+  padding: 10px 15px;
+}
+
+.cancel-edit {
+  font-weight: lighter;
+  color: rgb(221, 92, 78);
+}
+
+.cancel-edit:hover {
+  text-decoration: underline;
+}
+
+.hover-text:hover {
+  cursor: text;
 }
