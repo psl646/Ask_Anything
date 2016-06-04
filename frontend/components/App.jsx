@@ -37,7 +37,6 @@ var App = React.createClass({
       rootPageContent = "";
     }
 
-    console.log(this.isRootPage());
     return (
       <div className="app">
         { navigationBar }

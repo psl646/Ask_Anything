@@ -1,5 +1,6 @@
 var React = require('react');
 var Link = require('react-router').Link;
+var DemoContent = require('./DemoContent');
 
 var RootPageContent = React.createClass({
   componentDidMount: function () {
@@ -10,7 +11,11 @@ var RootPageContent = React.createClass({
 
   render: function() {
     return (
-      <div>ROOT PAGE CONTENT</div>
+      <div>
+
+        <DemoContent className="demo-content-position"/>
+
+      </div>
     );
   }
 });

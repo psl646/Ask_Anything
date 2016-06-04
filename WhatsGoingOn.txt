@@ -7,7 +7,11 @@ Work on footer - how to make footer be at the bottom forever???
 Fix Modal styling.  Window re-sizing affects the modal.
 Method missing for placeholder links/routes - "You reached " + xyz
 Have Survey create call Question create
+Have create first poll to "click/open modal"
 
+
+EMAIL VERIFICATION: @ .com .net .org. gov .edu .io
+short of action mailers
 
 
 <!-- ===============LOGIN PAGE================

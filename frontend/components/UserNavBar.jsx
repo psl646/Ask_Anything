@@ -20,6 +20,10 @@ var UserNavBar = React.createClass({
   },
 
   openModal: function(){
+    if (window.location.hash.slice(2, 9).toUpperCase() !== "SURVEYS") {
+      this.context.router.push("surveys");
+    }
+
     this.setState({ modalOpen: true })
   },
 
