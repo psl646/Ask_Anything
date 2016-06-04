@@ -25,13 +25,13 @@ class User < ActiveRecord::Base
 		source: :questions,
 		dependent: :destroy
 	)
-	
+
 	def password= (password)
 		self.password_digest = BCrypt::Password.create(password)
 		@password = password
 	end
 
-	# Check for email first since there is a uniqueness constraint on email
+	# Check for email first since there is a uniqueness constraint & validation on email
 	def self.find_by_credentials (username, unique_email, password)
 		user = User.find_by(unique_email: unique_email) || User.find_by(username: username)
 		return nil unless user
@@ -82,6 +82,10 @@ class User < ActiveRecord::Base
 	def ensure_username
 		username = ""
 		if self[:username].nil?
+			# Revisit this later.  If we have 1000 users with the same first 5 chars(first_name)
+			# and the same first 3 chars (last_name); the 1001 user will cause the below
+			# condition User.find_by(username: username).nil? to ALWAYS be false
+			# IE PETERLIN000 to PETERLIN999 users will exist
 			until (User.find_by(username: username).nil?) && (username.length == 11)
 				username = ""
 				username.concat(self[:first_name].upcase[0,5])
