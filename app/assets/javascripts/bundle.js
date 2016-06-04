@@ -35044,52 +35044,52 @@
 	    router: React.PropTypes.object.isRequired
 	  },
 	
-	  handleClick: function () {
+	  handleLoginClick: function () {
 	    this.context.router.push("login");
+	  },
+	
+	  handleSignupClick: function () {
+	    this.context.router.push("signup");
 	  },
 	
 	  render: function () {
 	    return React.createElement(
 	      'div',
-	      { className: 'nouser-nav-main-container group' },
-	      React.createElement(Logo, null),
+	      { className: 'nouser-nav-main-container' },
 	      React.createElement(
-	        'ul',
-	        { className: 'nouser-navbar-left-ul' },
+	        'div',
+	        { className: 'nouser-navbar group' },
+	        React.createElement(Logo, null),
 	        React.createElement(
-	          'li',
-	          { className: 'hover-nouser-nav make-me-red' },
-	          ' Plans & Pricing '
-	        ),
-	        React.createElement(
-	          'li',
-	          { className: 'hover-nouser-nav make-me-red' },
-	          ' Take a tour '
-	        ),
-	        React.createElement(
-	          'li',
-	          { className: 'hover-nouser-nav make-me-red' },
-	          ' Help & FAQ '
-	        )
-	      ),
-	      React.createElement(
-	        'ul',
-	        { className: 'nouser-navbar-right-ul' },
-	        React.createElement(
-	          'li',
-	          { className: 'hover-nouser-nav make-me-red' },
+	          'ul',
+	          { className: 'nouser-navbar-left-ul group' },
 	          React.createElement(
-	            Link,
-	            { to: 'login', className: 'nouser-nav-link' },
-	            'Log in'
+	            'li',
+	            { className: 'hover-nouser-nav' },
+	            ' Plans & Pricing '
+	          ),
+	          React.createElement(
+	            'li',
+	            { className: 'hover-nouser-nav' },
+	            ' Take a tour '
+	          ),
+	          React.createElement(
+	            'li',
+	            { className: 'hover-nouser-nav' },
+	            ' Help & FAQ '
 	          )
 	        ),
 	        React.createElement(
-	          'li',
-	          null,
+	          'ul',
+	          { className: 'nouser-navbar-right-ul group' },
 	          React.createElement(
-	            Link,
-	            { to: 'signup', className: 'signup-main soft-edges' },
+	            'li',
+	            { className: 'login-main hover-nouser-nav', onClick: this.handleLoginClick },
+	            'Log in'
+	          ),
+	          React.createElement(
+	            'li',
+	            { className: 'signup-main soft-edges hover-pointer', onClick: this.handleSignupClick },
 	            'Sign up'
 	          )
 	        )

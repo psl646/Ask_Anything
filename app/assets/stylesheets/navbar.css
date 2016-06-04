@@ -95,19 +95,36 @@
 .nouser-nav-main-container {
   color: rgb(246, 246, 246);
   background: #203349;
-  font-size: 14px;
+  font-size: 13px;
   height: 75px;
-  min-width: 960px;
-  margin: auto;
+  width: 100%;
   z-index: 1;
+}
+
+.nouser-navbar {
+  width: 960px;
+  margin: auto;
 }
 
 .nouser-navbar-left-ul {
   float: left;
 }
 
+.nouser-navbar-left-ul > li {
+  float: left;
+  margin: 29px 0 29px 45px;
+}
+
 .nouser-navbar-right-ul {
   float: right;
+}
+
+.nouser-navbar-right-ul > li {
+  float: left;
+}
+
+.login-main {
+  margin: 29px 35px 29px 0;
 }
 
 .hover-nouser-nav:hover {
@@ -118,15 +135,8 @@
 }
 
 .signup-main {
-  display: block;
-  position: absolute;
-  font-size: 14px;
-  top: 15px;
-  background: rgb(38, 72, 116);
+  font-weight: 600;
+  background: rgb(45, 89, 126);
   padding: 10px;
-}
-
-.make-me-red {
-  color: red;
-  background:green;
+  margin: 19px 35px 19px 0;
 }

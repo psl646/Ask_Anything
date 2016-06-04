@@ -22,6 +22,7 @@
 }
 
 .nouser-navbar-logo {
+  float: left;
   padding: 20px 0;
   width: 200px;
   height:35px;
