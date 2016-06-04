@@ -27855,6 +27855,7 @@
 	var Footer = __webpack_require__(277);
 	var UserNavBar = __webpack_require__(278);
 	var NoUserNavBar = __webpack_require__(280);
+	var RootPageContent = __webpack_require__(305);
 	
 	var App = React.createClass({
 	  displayName: 'App',
@@ -27868,18 +27869,32 @@
 	    this.sessionListener.remove();
 	  },
 	
+	  isRootPage: function () {
+	    return window.location.hash.slice(0, 4).toUpperCase() === "#/?_";
+	  },
+	
 	  render: function () {
 	    var navigationBar;
+	    var rootPageContent;
+	
 	    if (SessionStore.isUserLoggedIn()) {
 	      navigationBar = React.createElement(UserNavBar, null);
 	    } else {
 	      navigationBar = React.createElement(NoUserNavBar, null);
 	    }
 	
+	    if (this.isRootPage()) {
+	      rootPageContent = React.createElement(RootPageContent, null);
+	    } else {
+	      rootPageContent = "";
+	    }
+	
+	    console.log(this.isRootPage());
 	    return React.createElement(
 	      'div',
 	      { className: 'app' },
 	      navigationBar,
+	      rootPageContent,
 	      this.props.children,
 	      React.createElement(Footer, null)
 	    );
@@ -36376,6 +36391,31 @@
 	});
 	
 	module.exports = QuestionFormGenerator;
+
+/***/ },
+/* 305 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var Link = __webpack_require__(168).Link;
+	
+	var RootPageContent = React.createClass({
+	  displayName: 'RootPageContent',
+	
+	  componentDidMount: function () {},
+	
+	  componentWillUnmount: function () {},
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      null,
+	      'ROOT PAGE CONTENT'
+	    );
+	  }
+	});
+	
+	module.exports = RootPageContent;
 
 /***/ }
 /******/ ]);
