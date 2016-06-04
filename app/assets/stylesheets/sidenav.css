@@ -12,15 +12,27 @@
 
 .question-form-button {
   color: rgb(241, 242, 233);
+  background: #d15145;
   text-align: center;
   font-size: .75em;
   font-weight: 900;
-  background: #db5c50;
   padding: 9px 0;
 
 }
 
 .sidenav-list-li {
+  color: #203349;
   background: #c8d8e4;
-  padding-left: 10px;
+  font-size: 13.5px;
+  font-weight: bold;
+  padding: 5px 10px;
+}
+
+.sidenav-list-li:hover {
+  background: rgb(223, 227, 231);
+}
+
+.blue-color-text {
+  color: #3c749e;
+  font-weight: normal;
 }

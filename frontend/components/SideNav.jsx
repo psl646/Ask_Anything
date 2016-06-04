@@ -30,16 +30,16 @@ var SideNav = React.createClass ({
               onRequestClose={this.closeModal}
               style={ ModalConstants.QUESTIONFORM }>
 
-                <QuestionFormGenerator type="participant" />
+                <QuestionFormGenerator />
 
             </Modal>
           </li>
 
-          <li className="sidenav-list-li hover-pointer">
+          <li className="sidenav-list-li soft-edges hover-pointer">
             My Polls
           </li>
 
-          <li className="sidenav-list-li hover-pointer">
+          <li className="sidenav-list-li soft-edges hover-pointer blue-color-text">
             Account Polls
           </li>
         </ul>

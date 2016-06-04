@@ -1,9 +1,10 @@
 var React = require('react');
+var Modal = require('react-modal');
+var ModalConstants = require('../constants/modal_constants');
 var SessionStore = require('./../stores/session_store');
 var SessionApiUtil = require('./../util/session_api_util');
 var Logo = require('./Logo');
-var Link = require('react-router').Link;
-var ModalConstants = require('../constants/modal_constants');
+var QuestionFormGenerator = require('./QuestionFormGenerator');
 
 var UserNavBar = React.createClass({
   contextTypes: {
@@ -31,21 +32,18 @@ var UserNavBar = React.createClass({
           <i className="fa fa-cog fa-2x" aria-hidden="true"></i>
         </div>
         <ul className="user-info">
-          <li>
-            <Link to="settings">Settings</Link>
+          <li onClick={ this.handleSettingsClicked}>
+            Settings
           </li>
 
-          <li>
-            <input className="hover-pointer" type="submit" value="Log Out" onClick={ this.handleLogOut } />
+          <li onClick={ this.handleLogOut } >
+            <input className="hover-pointer" type="submit" value="Log Out" />
           </li>
         </ul>
 
       </li>
     );
   },
-
-  // This is the image/pseudocontent for the above
-  // <img className="user-icon" src={window.askAnythingAssets.usericon} width="25" height="25" alt="UserIcon" />
 
   handleLogOut: function () {
     SessionApiUtil.logout();
@@ -56,14 +54,35 @@ var UserNavBar = React.createClass({
     this.context.router.push("/");
   },
 
+  handleSettingsClicked: function () {
+    this.context.router.push("settings");
+  },
+
+  handleQuestionsClick: function () {
+    this.context.router.push("surveys");
+  },
+
+
   render: function () {
     return (
       <div className="navbar-container">
         <ul className="navbar-left-ul hover-pointer">
-          <li className="li-float-loggedin left-navbar-padding create-question"> + </li>
-          <li className="li-float-loggedin left-navbar-padding my-surveys">
-            <Link to="surveys">Questions</Link>
+          <li className="li-float-loggedin left-navbar-padding create-question" onClick={ this.openModal }>
+            +
+            <Modal
+              isOpen={this.state.modalOpen}
+              onRequestClose={this.closeModal}
+              style={ ModalConstants.QUESTIONFORM }>
+
+                <QuestionFormGenerator />
+
+            </Modal>
           </li>
+
+          <li className="li-float-loggedin left-navbar-padding my-surveys" onClick={ this.handleQuestionsClick }>
+            Questions
+          </li>
+
           <li className="li-float-loggedin left-navbar-padding blue-hover"> Participants </li>
           <li className="li-float-loggedin left-navbar-padding blue-hover"> Reports </li>
         </ul>

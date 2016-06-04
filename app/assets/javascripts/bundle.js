@@ -34851,11 +34851,12 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var Modal = __webpack_require__(229);
+	var ModalConstants = __webpack_require__(286);
 	var SessionStore = __webpack_require__(250);
 	var SessionApiUtil = __webpack_require__(273);
 	var Logo = __webpack_require__(279);
-	var Link = __webpack_require__(168).Link;
-	var ModalConstants = __webpack_require__(286);
+	var QuestionFormGenerator = __webpack_require__(304);
 	
 	var UserNavBar = React.createClass({
 	  displayName: 'UserNavBar',
@@ -34892,24 +34893,17 @@
 	        { className: 'user-info' },
 	        React.createElement(
 	          'li',
-	          null,
-	          React.createElement(
-	            Link,
-	            { to: 'settings' },
-	            'Settings'
-	          )
+	          { onClick: this.handleSettingsClicked },
+	          'Settings'
 	        ),
 	        React.createElement(
 	          'li',
-	          null,
-	          React.createElement('input', { className: 'hover-pointer', type: 'submit', value: 'Log Out', onClick: this.handleLogOut })
+	          { onClick: this.handleLogOut },
+	          React.createElement('input', { className: 'hover-pointer', type: 'submit', value: 'Log Out' })
 	        )
 	      )
 	    );
 	  },
-	
-	  // This is the image/pseudocontent for the above
-	  // <img className="user-icon" src={window.askAnythingAssets.usericon} width="25" height="25" alt="UserIcon" />
 	
 	  handleLogOut: function () {
 	    SessionApiUtil.logout();
@@ -34918,6 +34912,14 @@
 	
 	  handleImageClick: function () {
 	    this.context.router.push("/");
+	  },
+	
+	  handleSettingsClicked: function () {
+	    this.context.router.push("settings");
+	  },
+	
+	  handleQuestionsClick: function () {
+	    this.context.router.push("surveys");
 	  },
 	
 	  render: function () {
@@ -34929,17 +34931,21 @@
 	        { className: 'navbar-left-ul hover-pointer' },
 	        React.createElement(
 	          'li',
-	          { className: 'li-float-loggedin left-navbar-padding create-question' },
-	          ' + '
+	          { className: 'li-float-loggedin left-navbar-padding create-question', onClick: this.openModal },
+	          '+',
+	          React.createElement(
+	            Modal,
+	            {
+	              isOpen: this.state.modalOpen,
+	              onRequestClose: this.closeModal,
+	              style: ModalConstants.QUESTIONFORM },
+	            React.createElement(QuestionFormGenerator, null)
+	          )
 	        ),
 	        React.createElement(
 	          'li',
-	          { className: 'li-float-loggedin left-navbar-padding my-surveys' },
-	          React.createElement(
-	            Link,
-	            { to: 'surveys' },
-	            'Questions'
-	          )
+	          { className: 'li-float-loggedin left-navbar-padding my-surveys', onClick: this.handleQuestionsClick },
+	          'Questions'
 	        ),
 	        React.createElement(
 	          'li',
@@ -35093,8 +35099,6 @@
 	});
 	
 	module.exports = NoUserNavBar;
-	
-	// </div><img className="logo-image nouser-navbar" src={window.askAnythingAssets.logo} width="35" height="35" alt="Logo" />
 
 /***/ },
 /* 281 */
@@ -36018,17 +36022,17 @@
 	              isOpen: this.state.modalOpen,
 	              onRequestClose: this.closeModal,
 	              style: ModalConstants.QUESTIONFORM },
-	            React.createElement(QuestionFormGenerator, { type: 'participant' })
+	            React.createElement(QuestionFormGenerator, null)
 	          )
 	        ),
 	        React.createElement(
 	          'li',
-	          { className: 'sidenav-list-li hover-pointer' },
+	          { className: 'sidenav-list-li soft-edges hover-pointer' },
 	          'My Polls'
 	        ),
 	        React.createElement(
 	          'li',
-	          { className: 'sidenav-list-li hover-pointer' },
+	          { className: 'sidenav-list-li soft-edges hover-pointer blue-color-text' },
 	          'Account Polls'
 	        )
 	      )

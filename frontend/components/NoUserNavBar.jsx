@@ -36,5 +36,3 @@ var NoUserNavBar = React.createClass({
 });
 
 module.exports = NoUserNavBar;
-
-// </div><img className="logo-image nouser-navbar" src={window.askAnythingAssets.logo} width="35" height="35" alt="Logo" />
