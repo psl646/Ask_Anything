@@ -4,6 +4,7 @@ var ClientSurveyActions = require('../actions/client_survey_actions');
 var QuestionStore = require('../stores/question_store');
 var ErrorStore = require('../stores/error_store');
 var ErrorActions = require('../actions/error_actions');
+var QuestionForm = require('./QuestionForm');
 
 var QuestionFormGenerator = React.createClass({
   contextTypes: {
@@ -13,6 +14,7 @@ var QuestionFormGenerator = React.createClass({
   getInitialState: function () {
     return ({
       title: "",
+      numberQuestions: 0,
       questions: [],
       currentQuestion: "",
       isSurvey: false,
@@ -52,25 +54,27 @@ var QuestionFormGenerator = React.createClass({
       questions: this.state.questions
     };
 
-    console.log(formData);
-
-    // if (this.state.isSurvey) {
-    //   formData.title = this.state.title;
-    //   ClientSurveyActions.createSurvey(formData);
-    // } else {
-    //   ClientQuestionActions.createQuestions(formData);
-    // }
+    if (this.state.isSurvey) {
+      formData.title = this.state.title;
+      ClientSurveyActions.createSurvey(formData);
+    } else {
+      ClientQuestionActions.createQuestions(formData);
+    }
   },
 
   handleQuestionInputChange: function (e) {
-    var newQuestion = e.target.value;
+    var newQuestionValue = e.target.value;
+    var newQuestion = <QuestionForm question={ newQuestionValue }/>
     console.log(newQuestion);
-    // this.setState({ this.state.currentQuestion });
+    this.setState({
+      questions: this.state.questions.concat( newQuestion ),
+      numberQuestions: this.state.numberQuestions + 1
+    })
   },
 
   handleSurveyTitleChange: function (e) {
     var newSurveyTitle = e.target.value;
-    this.setState({ this.state.title: newSurveyTitle });
+    this.setState({ title: newSurveyTitle });
   },
 
 	render: function () {
@@ -80,8 +84,17 @@ var QuestionFormGenerator = React.createClass({
     var createText = "Create";
     var surveyInput = "";
 
-    if (this.state.questions.length !== 0) {
+    console.log(this.state.questions);
+    if (this.state.numberQuestions !== 0) {
+      console.log(this.state.questions);
       addQuestion = "Add a question:"
+      myNewQuestions = this.state.questions.map(function(currentQuestion, idx){
+        return (
+          <li key={ idx }>
+            { currentQuestion }
+          </li>
+        );
+      });
     }
 
     if (this.state.isSurvey) {
@@ -92,7 +105,7 @@ var QuestionFormGenerator = React.createClass({
                       placeholder="Survey title"
                       onChange={ this.handleSurveyTitleChange }
                     </label>
-    }
+    };
 
     return (
       <div>
@@ -104,7 +117,9 @@ var QuestionFormGenerator = React.createClass({
 
             { surveyInput }
 
-            { myNewQuestions }
+            <ul>
+              { myNewQuestions }
+            </ul>
 
             <input
               className=""

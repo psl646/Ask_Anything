@@ -20,18 +20,17 @@ var SurveyApiUtil = {
       url: 'api/surveys',
       type: 'POST',
       dataType: 'json',
-      data: { data: formData }
+      data: { data: formData },
       success: function (surveys) {
         ServerSurveyActions.receiveAllSurveys(surveys);
       },
-      error: function () {
-        console.log("Fetching error in SurveyApiUtil#createSurvey");
+      error: function (xhr) {
+        console.log("POST Error in SurveyApiUtil#createSurvey");
+        var errors = xhr.responseJSON;
+        ErrorActions.setErrors(errors);
       }
     });
   }
 };
 
 module.exports = SurveyApiUtil;
-
-
-SurveyApiUtil.createSurvey(formData);

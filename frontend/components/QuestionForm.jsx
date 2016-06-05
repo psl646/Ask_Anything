@@ -1,15 +1,7 @@
-// {questions: [ {
-//   question: "What's up?",
-//   category: "multiple_choice",
-//   answers: [ {answer: "Aasdfsdf" }, { }, { }, { } ]
-// }, {
-//   question: "What's up?",
-//   category: "multiple_choice",
-//   answers: [ {answer: "Aasdfasdf" }, { }, { }, { } ]
-// }]}
-
 var React = require('react');
 var Link = require('react-router').Link;
+var QuestionConstants = require('../constants/question_constants');
+var AnswerInput = require('./AnswersForm');
 
 var QuestionForm = React.createClass({
   contextTypes: {
@@ -17,14 +9,11 @@ var QuestionForm = React.createClass({
   },
 
   getInitialState: function () {
-    return ({ num_questions: 0, questions: [], question: "" });
-  },
-
-
-
-
-  _onChange: function () {
-
+    return ({
+      question: this.props.question,
+      category: "Multiple Choice",
+      answers: [<AnswerInput />, <AnswerInput />]
+    });
   },
 
   componentDidMount: function () {
@@ -35,14 +24,18 @@ var QuestionForm = React.createClass({
     this.questionListener.remove();
   },
 
+  _onChange: function () {
+
+  },
+
 	handleSubmit: function (e) {
 		e.preventDefault();
 
 		var formData = {
-      questions: this.state.questions
+      question: this.state.question,
+      category: this.state.category,
+      answers: this.state.answers
 		};
-
-    // PROB QUESTIONAPIUTIL
 	},
 
   questionChange: function (e) {
@@ -50,21 +43,72 @@ var QuestionForm = React.createClass({
     this.setState({ question: newQuestion});
   },
 
+  categoryChange: function (e) {
+    console.log("categoryChange");
+    var newCategory = e.target.value;
+    this.setState({ category: newCategory});
+  },
+
+  addAnswersChange: function (e) {
+
+  },
+
+  handleDeleteQuestion: function (e) {
+    e.preventDefault();
+
+  },
+
 	render: function () {
+    var categories = QuestionConstants.QUESTION_CATEGORIES.map(function(category, idx) {
+      return (
+        <li key={ idx }> { category }
+          <input
+            type="radio"
+            name="questionCategory"
+            value={ category }
+            checked={ this.state.category === category }
+            onChange={this.categoryChange}
+            />
+        </li>
+      );
+    }.bind(this));
+    console.log("after");
+    console.log(categories);
+
+    var myNewAnswers = this.state.answers.map(function(answer, idx){
+      return (
+        <li key={ idx }>
+          { answer }
+        </li>
+      );
+    });
+
     return (
       <div className="signup-form-container">
+        <div onClick={ this.handleDeleteQuestion }>
+          X
+        </div>
 
-        <form onSubmit={this.handleSubmit}>
-          <label> Question <br/>
-            <input type="string" value={this.state.question} onChange={this.questionChange} />
-          </label>
-
+        <br />
+        <label> Question: <br/>
           <input
-            className="signup-button soft-edges hover-pointer"
-            type="submit"
-            value="Create my Ask Anything! account"
-            />
-        </form>
+            type="text"
+            value={this.state.question}
+            onChange={this.questionChange} />
+        </label>
+
+        <br />
+
+        <div>How will my audience respond?
+          <ul>
+            { categories }
+          </ul>
+
+          <ul> Your audience can select from these answers:
+            { myNewAnswers }
+          </ul>
+        </div>
+
 
         <div className="agreement">By proceeding you agree to Ask Anything!</div>
         <div className="agreement"><Link to="tos" className="link">Terms of Service</Link> and <Link to="privacyPolicy" className="link">Privacy Policy</Link>.</div>

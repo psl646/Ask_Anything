@@ -1,6 +1,12 @@
 class Question < ActiveRecord::Base
   validates :question, :category, :survey_id, presence: true
-  validates :category, inclusion: { in: %w(multiple_choice open_ended q_and_a ranking clickable_image) }
+  validates :category, inclusion: { in: [
+    "Multiple Choice",
+    "Open Ended",
+    "Q&A",
+    "Ranking",
+    "Clickable Image"
+  ] }
 
   belongs_to(
     :survey,

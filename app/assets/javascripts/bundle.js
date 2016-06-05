@@ -56,13 +56,13 @@
 	var Modal = __webpack_require__(229);
 	
 	var App = __webpack_require__(249);
-	var LoginForm = __webpack_require__(293);
-	var SignupPage = __webpack_require__(295);
-	var SurveysIndex = __webpack_require__(299);
-	var QuestionIndexItem = __webpack_require__(307);
-	var UserEditForm = __webpack_require__(308);
-	var UserEmailPasswordEditForm = __webpack_require__(309);
-	var ForgotPasswordSuccess = __webpack_require__(310);
+	var LoginForm = __webpack_require__(298);
+	var SignupPage = __webpack_require__(300);
+	var SurveysIndex = __webpack_require__(304);
+	var QuestionIndexItem = __webpack_require__(308);
+	var UserEditForm = __webpack_require__(309);
+	var UserEmailPasswordEditForm = __webpack_require__(310);
+	var ForgotPasswordSuccess = __webpack_require__(311);
 	
 	var SessionStore = __webpack_require__(250);
 	var SessionApiUtil = __webpack_require__(273);
@@ -27857,8 +27857,8 @@
 	var SessionApiUtil = __webpack_require__(273);
 	var Footer = __webpack_require__(277);
 	var UserNavBar = __webpack_require__(278);
-	var NoUserNavBar = __webpack_require__(288);
-	var RootPageContent = __webpack_require__(289);
+	var NoUserNavBar = __webpack_require__(293);
+	var RootPageContent = __webpack_require__(294);
 	
 	var App = React.createClass({
 	  displayName: 'App',
@@ -35052,7 +35052,7 @@
 	var SessionStore = __webpack_require__(250);
 	var SessionApiUtil = __webpack_require__(273);
 	var Logo = __webpack_require__(280);
-	var QuestionFormGenerator = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./QuestionFormGenerator\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	var QuestionFormGenerator = __webpack_require__(281);
 	
 	var UserNavBar = React.createClass({
 	  displayName: 'UserNavBar',
@@ -35318,7 +35318,161 @@
 	module.exports = Logo;
 
 /***/ },
-/* 281 */,
+/* 281 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ClientQuestionActions = __webpack_require__(282);
+	var ClientSurveyActions = __webpack_require__(286);
+	var QuestionStore = __webpack_require__(290);
+	var ErrorStore = __webpack_require__(291);
+	var ErrorActions = __webpack_require__(275);
+	var QuestionForm = __webpack_require__(292);
+	
+	var QuestionFormGenerator = React.createClass({
+	  displayName: 'QuestionFormGenerator',
+	
+	  contextTypes: {
+	    router: React.PropTypes.object.isRequired
+	  },
+	
+	  getInitialState: function () {
+	    return {
+	      title: "",
+	      numberQuestions: 0,
+	      questions: [],
+	      currentQuestion: "",
+	      isSurvey: false,
+	      errors: false
+	    };
+	  },
+	
+	  componentDidMount: function () {
+	    this.errorListener = ErrorStore.addListener(this._handleErrors);
+	    this.questionListener = QuestionStore.addListener(this._questionsCreated);
+	  },
+	
+	  componentWillUnmount: function () {
+	    ErrorActions.clearErrors();
+	    this.errorListener.remove();
+	    this.questionListener.remove();
+	  },
+	
+	  closeMyself: function () {
+	    this.props.closeThisModal();
+	  },
+	
+	  _handleErrors: function () {
+	    this.setState({ questions: [], errors: true });
+	  },
+	
+	  _questionsCreated: function () {
+	    this.closeMyself();
+	    var question = QuestionStore.getNewQuestion();
+	    this.context.router.push("questions/" + question.id);
+	  },
+	
+	  handleSubmit: function (e) {
+	    e.preventDefault();
+	
+	    var formData = {
+	      questions: this.state.questions
+	    };
+	
+	    if (this.state.isSurvey) {
+	      formData.title = this.state.title;
+	      ClientSurveyActions.createSurvey(formData);
+	    } else {
+	      ClientQuestionActions.createQuestions(formData);
+	    }
+	  },
+	
+	  handleQuestionInputChange: function (e) {
+	    var newQuestionValue = e.target.value;
+	    var newQuestion = React.createElement(QuestionForm, { question: newQuestionValue });
+	    console.log(newQuestion);
+	    this.setState({
+	      questions: this.state.questions.concat(newQuestion),
+	      numberQuestions: this.state.numberQuestions + 1
+	    });
+	  },
+	
+	  handleSurveyTitleChange: function (e) {
+	    var newSurveyTitle = e.target.value;
+	    this.setState({ title: newSurveyTitle });
+	  },
+	
+	  render: function () {
+	    var addQuestion = "Question:";
+	    var myNewQuestions = "";
+	    var surveyText = "";
+	    var createText = "Create";
+	    var surveyInput = "";
+	
+	    console.log(this.state.questions);
+	    if (this.state.numberQuestions !== 0) {
+	      console.log(this.state.questions);
+	      addQuestion = "Add a question:";
+	      myNewQuestions = this.state.questions.map(function (currentQuestion, idx) {
+	        return React.createElement(
+	          'li',
+	          { key: idx },
+	          currentQuestion
+	        );
+	      });
+	    }
+	
+	    if (this.state.isSurvey) {
+	      surveyText = "Combine multiple questions into a survey. Send the link to participants, and they can answer on a mobile-friendly response page, at their own pace.";
+	      createText = "Create survey";
+	      surveyInput = React.createElement(
+	        'label',
+	        null,
+	        ' Title: ',
+	        React.createElement('br', null),
+	        'type="text" placeholder="Survey title" onChange=',
+	        this.handleSurveyTitleChange
+	      );
+	    };
+	
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'form',
+	        { onSubmit: this.handleSubmit },
+	        React.createElement(
+	          'label',
+	          null,
+	          addQuestion,
+	          surveyText,
+	          surveyInput,
+	          React.createElement(
+	            'ul',
+	            null,
+	            myNewQuestions
+	          ),
+	          React.createElement('input', {
+	            className: '',
+	            type: 'text',
+	            placeholder: 'What\'s your favorite color? Red, Blue, or Green',
+	            onChange: this.handleQuestionInputChange
+	          })
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'cancel-forgot hover-underline display-inline hover-pointer', onClick: this.closeMyself },
+	          'Cancel'
+	        ),
+	        React.createElement('input', { className: 'soft-edges hover-pointer', type: 'submit', value: createText })
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = QuestionFormGenerator;
+
+/***/ },
 /* 282 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -35427,13 +35581,102 @@
 
 	var QuestionConstants = {
 	  QUESTIONS_RECEIVED: "QUESTIONS_RECEIVED",
-	  QUESTION_RECEIVED: "QUESTION_RECEIVED"
+	  QUESTION_RECEIVED: "QUESTION_RECEIVED",
+	  QUESTION_CATEGORIES: ["Multiple Choice", "Open Ended", "Q&A", "Ranking", "Clickable Image"]
 	};
 	
 	module.exports = QuestionConstants;
 
 /***/ },
 /* 286 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(251);
+	var SurveyApiUtil = __webpack_require__(287);
+	
+	var ClientSurveyActions = {
+	  fetchAllSurveys: function () {
+	    SurveyApiUtil.fetchAllSurveys();
+	  },
+	
+	  createSurvey: function (formData) {
+	    SurveyApiUtil.createSurvey(formData);
+	  }
+	};
+	
+	module.exports = ClientSurveyActions;
+
+/***/ },
+/* 287 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var ServerSurveyActions = __webpack_require__(288);
+	
+	var SurveyApiUtil = {
+	  fetchAllSurveys: function () {
+	    $.ajax({
+	      url: 'api/surveys',
+	      type: 'GET',
+	      dataType: 'json',
+	      success: function (surveys) {
+	        ServerSurveyActions.receiveAllSurveys(surveys);
+	      },
+	      error: function () {
+	        console.log("Fetching error in SurveyApiUtil#fetchAllSurveys");
+	      }
+	    });
+	  },
+	
+	  createSurvey: function (formData) {
+	    $.ajax({
+	      url: 'api/surveys',
+	      type: 'POST',
+	      dataType: 'json',
+	      data: { data: formData },
+	      success: function (surveys) {
+	        ServerSurveyActions.receiveAllSurveys(surveys);
+	      },
+	      error: function (xhr) {
+	        console.log("POST Error in SurveyApiUtil#createSurvey");
+	        var errors = xhr.responseJSON;
+	        ErrorActions.setErrors(errors);
+	      }
+	    });
+	  }
+	};
+	
+	module.exports = SurveyApiUtil;
+
+/***/ },
+/* 288 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(251);
+	var SurveyConstants = __webpack_require__(289);
+	
+	var ServerSurveyActions = {
+	  receiveAllSurveys: function (surveys) {
+	    AppDispatcher.dispatch({
+	      actionType: SurveyConstants.SURVEYS_RECEIVED,
+	      surveys: surveys
+	    });
+	  }
+	};
+	
+	module.exports = ServerSurveyActions;
+
+/***/ },
+/* 289 */
+/***/ function(module, exports) {
+
+	var SurveyConstants = {
+	  SURVEYS_RECEIVED: "SURVEYS_RECEIVED"
+	};
+	
+	module.exports = SurveyConstants;
+
+/***/ },
+/* 290 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(251);
@@ -35500,7 +35743,7 @@
 	module.exports = QuestionStore;
 
 /***/ },
-/* 287 */
+/* 291 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Store = __webpack_require__(255).Store;
@@ -35538,7 +35781,158 @@
 	module.exports = ErrorStore;
 
 /***/ },
-/* 288 */
+/* 292 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var Link = __webpack_require__(168).Link;
+	var QuestionConstants = __webpack_require__(285);
+	var AnswerInput = __webpack_require__(312);
+	
+	var QuestionForm = React.createClass({
+	  displayName: 'QuestionForm',
+	
+	  contextTypes: {
+	    router: React.PropTypes.object.isRequired
+	  },
+	
+	  getInitialState: function () {
+	    return {
+	      question: this.props.question,
+	      category: "Multiple Choice",
+	      answers: [React.createElement(AnswerInput, null), React.createElement(AnswerInput, null)]
+	    };
+	  },
+	
+	  componentDidMount: function () {
+	    this.questionListener = QuestionStore.addListener(this._onChange);
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.questionListener.remove();
+	  },
+	
+	  _onChange: function () {},
+	
+	  handleSubmit: function (e) {
+	    e.preventDefault();
+	
+	    var formData = {
+	      question: this.state.question,
+	      category: this.state.category,
+	      answers: this.state.answers
+	    };
+	  },
+	
+	  questionChange: function (e) {
+	    var newQuestion = e.target.value;
+	    this.setState({ question: newQuestion });
+	  },
+	
+	  categoryChange: function (e) {
+	    console.log("categoryChange");
+	    var newCategory = e.target.value;
+	    this.setState({ category: newCategory });
+	  },
+	
+	  addAnswersChange: function (e) {},
+	
+	  handleDeleteQuestion: function (e) {
+	    e.preventDefault();
+	  },
+	
+	  render: function () {
+	    var categories = QuestionConstants.QUESTION_CATEGORIES.map(function (category, idx) {
+	      return React.createElement(
+	        'li',
+	        { key: idx },
+	        ' ',
+	        category,
+	        React.createElement('input', {
+	          type: 'radio',
+	          name: 'questionCategory',
+	          value: category,
+	          checked: this.state.category === category,
+	          onChange: this.categoryChange
+	        })
+	      );
+	    }.bind(this));
+	    console.log("after");
+	    console.log(categories);
+	
+	    var myNewAnswers = this.state.answers.map(function (answer, idx) {
+	      return React.createElement(
+	        'li',
+	        { key: idx },
+	        answer
+	      );
+	    });
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'signup-form-container' },
+	      React.createElement(
+	        'div',
+	        { onClick: this.handleDeleteQuestion },
+	        'X'
+	      ),
+	      React.createElement('br', null),
+	      React.createElement(
+	        'label',
+	        null,
+	        ' Question: ',
+	        React.createElement('br', null),
+	        React.createElement('input', {
+	          type: 'text',
+	          value: this.state.question,
+	          onChange: this.questionChange })
+	      ),
+	      React.createElement('br', null),
+	      React.createElement(
+	        'div',
+	        null,
+	        'How will my audience respond?',
+	        React.createElement(
+	          'ul',
+	          null,
+	          categories
+	        ),
+	        React.createElement(
+	          'ul',
+	          null,
+	          ' Your audience can select from these answers:',
+	          myNewAnswers
+	        )
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'agreement' },
+	        'By proceeding you agree to Ask Anything!'
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'agreement' },
+	        React.createElement(
+	          Link,
+	          { to: 'tos', className: 'link' },
+	          'Terms of Service'
+	        ),
+	        ' and ',
+	        React.createElement(
+	          Link,
+	          { to: 'privacyPolicy', className: 'link' },
+	          'Privacy Policy'
+	        ),
+	        '.'
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = QuestionForm;
+
+/***/ },
+/* 293 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -35609,12 +36003,12 @@
 	module.exports = NoUserNavBar;
 
 /***/ },
-/* 289 */
+/* 294 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var Link = __webpack_require__(168).Link;
-	var DemoContent = __webpack_require__(290);
+	var DemoContent = __webpack_require__(295);
 	
 	var RootPageContent = React.createClass({
 	  displayName: 'RootPageContent',
@@ -35635,13 +36029,13 @@
 	module.exports = RootPageContent;
 
 /***/ },
-/* 290 */
+/* 295 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var Link = __webpack_require__(168).Link;
-	var GuestUserConstants = __webpack_require__(291);
-	var UserApiUtil = __webpack_require__(292);
+	var GuestUserConstants = __webpack_require__(296);
+	var UserApiUtil = __webpack_require__(297);
 	var SessionStore = __webpack_require__(250);
 	
 	var DemoContent = React.createClass({
@@ -35756,7 +36150,7 @@
 	module.exports = DemoContent;
 
 /***/ },
-/* 291 */
+/* 296 */
 /***/ function(module, exports) {
 
 	var GuestUserConstants = {
@@ -35767,7 +36161,7 @@
 	module.exports = GuestUserConstants;
 
 /***/ },
-/* 292 */
+/* 297 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var SessionActions = __webpack_require__(274);
@@ -35851,19 +36245,19 @@
 	module.exports = UserApiUtil;
 
 /***/ },
-/* 293 */
+/* 298 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var Link = __webpack_require__(168).Link;
 	var SessionApiUtil = __webpack_require__(273);
 	var SessionStore = __webpack_require__(250);
-	var ErrorStore = __webpack_require__(287);
+	var ErrorStore = __webpack_require__(291);
 	var ErrorActions = __webpack_require__(275);
 	var Logo = __webpack_require__(280);
 	var Modal = __webpack_require__(229);
 	var ModalConstants = __webpack_require__(279);
-	var ForgotPassword = __webpack_require__(294);
+	var ForgotPassword = __webpack_require__(299);
 	
 	var LoginForm = React.createClass({
 	  displayName: 'LoginForm',
@@ -36041,15 +36435,15 @@
 	module.exports = LoginForm;
 
 /***/ },
-/* 294 */
+/* 299 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var Link = __webpack_require__(168).Link;
 	var SessionStore = __webpack_require__(250);
-	var ErrorStore = __webpack_require__(287);
+	var ErrorStore = __webpack_require__(291);
 	var ErrorActions = __webpack_require__(275);
-	var UserApiUtil = __webpack_require__(292);
+	var UserApiUtil = __webpack_require__(297);
 	
 	var Logo = __webpack_require__(280);
 	
@@ -36199,12 +36593,12 @@
 	module.exports = ForgotPassword;
 
 /***/ },
-/* 295 */
+/* 300 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var SignupParticipant = __webpack_require__(296);
-	var SignupPresenter = __webpack_require__(298);
+	var SignupParticipant = __webpack_require__(301);
+	var SignupPresenter = __webpack_require__(303);
 	var SessionStore = __webpack_require__(250);
 	
 	var SignupPage = React.createClass({
@@ -36258,13 +36652,13 @@
 	module.exports = SignupPage;
 
 /***/ },
-/* 296 */
+/* 301 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var Modal = __webpack_require__(229);
 	var ModalConstants = __webpack_require__(279);
-	var SignupForm = __webpack_require__(297);
+	var SignupForm = __webpack_require__(302);
 	
 	var SignupParticipant = React.createClass({
 		displayName: 'SignupParticipant',
@@ -36315,13 +36709,13 @@
 	module.exports = SignupParticipant;
 
 /***/ },
-/* 297 */
+/* 302 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var Link = __webpack_require__(168).Link;
-	var ErrorStore = __webpack_require__(287);
-	var UserApiUtil = __webpack_require__(292);
+	var ErrorStore = __webpack_require__(291);
+	var UserApiUtil = __webpack_require__(297);
 	var ErrorActions = __webpack_require__(275);
 	
 	var SignupForm = React.createClass({
@@ -36557,13 +36951,13 @@
 	module.exports = SignupForm;
 
 /***/ },
-/* 298 */
+/* 303 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var Modal = __webpack_require__(229);
 	var ModalConstants = __webpack_require__(279);
-	var SignupForm = __webpack_require__(297);
+	var SignupForm = __webpack_require__(302);
 	
 	var SignupPresenter = React.createClass({
 		displayName: 'SignupPresenter',
@@ -36614,14 +37008,14 @@
 	module.exports = SignupPresenter;
 
 /***/ },
-/* 299 */
+/* 304 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var ClientSurveyActions = __webpack_require__(300);
-	var SurveyStore = __webpack_require__(304);
-	var SideNav = __webpack_require__(305);
-	var QuestionsIndex = __webpack_require__(306);
+	var ClientSurveyActions = __webpack_require__(286);
+	var SurveyStore = __webpack_require__(305);
+	var SideNav = __webpack_require__(306);
+	var QuestionsIndex = __webpack_require__(307);
 	
 	var SurveysIndex = React.createClass({
 	  displayName: 'SurveysIndex',
@@ -36677,43 +37071,12 @@
 	module.exports = SurveysIndex;
 
 /***/ },
-/* 300 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var AppDispatcher = __webpack_require__(251);
-	var SurveyApiUtil = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../util/survey_api_util\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
-	
-	var ClientSurveyActions = {
-	  fetchAllSurveys: function () {
-	    SurveyApiUtil.fetchAllSurveys();
-	  },
-	
-	  createSurvey: function (formData) {
-	    SurveyApiUtil.createSurvey(formData);
-	  }
-	};
-	
-	module.exports = ClientSurveyActions;
-
-/***/ },
-/* 301 */,
-/* 302 */,
-/* 303 */
-/***/ function(module, exports) {
-
-	var SurveyConstants = {
-	  SURVEYS_RECEIVED: "SURVEYS_RECEIVED"
-	};
-	
-	module.exports = SurveyConstants;
-
-/***/ },
-/* 304 */
+/* 305 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(251);
 	var Store = __webpack_require__(255).Store;
-	var SurveyConstants = __webpack_require__(303);
+	var SurveyConstants = __webpack_require__(289);
 	
 	var SurveyStore = new Store(AppDispatcher);
 	
@@ -36744,13 +37107,13 @@
 	module.exports = SurveyStore;
 
 /***/ },
-/* 305 */
+/* 306 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var Modal = __webpack_require__(229);
 	var ModalConstants = __webpack_require__(279);
-	var QuestionFormGenerator = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./QuestionFormGenerator\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	var QuestionFormGenerator = __webpack_require__(281);
 	
 	var SideNav = React.createClass({
 	  displayName: 'SideNav',
@@ -36808,12 +37171,12 @@
 	module.exports = SideNav;
 
 /***/ },
-/* 306 */
+/* 307 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var ClientQuestionActions = __webpack_require__(282);
-	var QuestionStore = __webpack_require__(286);
+	var QuestionStore = __webpack_require__(290);
 	var Link = __webpack_require__(168).Link;
 	var SessionStore = __webpack_require__(250);
 	
@@ -36865,12 +37228,12 @@
 	module.exports = QuestionsIndex;
 
 /***/ },
-/* 307 */
+/* 308 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var ClientQuestionActions = __webpack_require__(282);
-	var QuestionStore = __webpack_require__(286);
+	var QuestionStore = __webpack_require__(290);
 	
 	var QuestionIndexItem = React.createClass({
 	  displayName: 'QuestionIndexItem',
@@ -36907,15 +37270,15 @@
 	module.exports = QuestionIndexItem;
 
 /***/ },
-/* 308 */
+/* 309 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var Link = __webpack_require__(168).Link;
 	var SessionStore = __webpack_require__(250);
-	var UserApiUtil = __webpack_require__(292);
-	var UserEmailPasswordEditForm = __webpack_require__(309);
-	var ErrorStore = __webpack_require__(287);
+	var UserApiUtil = __webpack_require__(297);
+	var UserEmailPasswordEditForm = __webpack_require__(310);
+	var ErrorStore = __webpack_require__(291);
 	
 	var UserEditForm = React.createClass({
 	  displayName: 'UserEditForm',
@@ -37159,16 +37522,16 @@
 	module.exports = UserEditForm;
 
 /***/ },
-/* 309 */
+/* 310 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var Link = __webpack_require__(168).Link;
 	var SessionApiUtil = __webpack_require__(273);
 	var SessionStore = __webpack_require__(250);
-	var UserApiUtil = __webpack_require__(292);
+	var UserApiUtil = __webpack_require__(297);
 	var ErrorActions = __webpack_require__(275);
-	var ErrorStore = __webpack_require__(287);
+	var ErrorStore = __webpack_require__(291);
 	
 	var UserEditForm = React.createClass({
 	  displayName: 'UserEditForm',
@@ -37402,7 +37765,7 @@
 	module.exports = UserEditForm;
 
 /***/ },
-/* 310 */
+/* 311 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -37441,6 +37804,78 @@
 	});
 	
 	module.exports = ForgotPasswordSuccess;
+
+/***/ },
+/* 312 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var Link = __webpack_require__(168).Link;
+	var QuestionConstants = __webpack_require__(285);
+	var AnswersForm = __webpack_require__(312);
+	
+	var AnswersForm = React.createClass({
+	  displayName: 'AnswersForm',
+	
+	  contextTypes: {
+	    router: React.PropTypes.object.isRequired
+	  },
+	
+	  getInitialState: function () {
+	    return { answer: "" };
+	  },
+	
+	  componentDidMount: function () {
+	    this.questionListener = QuestionStore.addListener(this._onChange);
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.questionListener.remove();
+	  },
+	
+	  _onChange: function () {},
+	
+	  handleSubmit: function (e) {
+	    e.preventDefault();
+	
+	    var formData = {
+	      answers: this.state.answer
+	    };
+	  },
+	
+	  questionChange: function (e) {
+	    var newQuestion = e.target.value;
+	    this.setState({ question: newQuestion });
+	  },
+	
+	  categoryChange: function (e) {
+	    var newCategory = e.target.value;
+	    this.setState({ category: newCategory });
+	  },
+	
+	  answerChange: function (e) {},
+	
+	  render: function () {
+	
+	    return React.createElement(
+	      'li',
+	      null,
+	      React.createElement('br', null),
+	      React.createElement(
+	        'label',
+	        null,
+	        ' Question: ',
+	        React.createElement('br', null),
+	        React.createElement('input', {
+	          type: 'text',
+	          value: this.state.question,
+	          onChange: this.questionChange })
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = AnswersForm;
 
 /***/ }
 /******/ ]);
