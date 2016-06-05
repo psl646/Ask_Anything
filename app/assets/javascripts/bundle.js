@@ -56,9 +56,9 @@
 	var Modal = __webpack_require__(229);
 	
 	var App = __webpack_require__(249);
-	var LoginForm = __webpack_require__(287);
-	var SignupPage = __webpack_require__(290);
-	var SurveysIndex = __webpack_require__(294);
+	var LoginForm = __webpack_require__(293);
+	var SignupPage = __webpack_require__(295);
+	var SurveysIndex = __webpack_require__(299);
 	var QuestionIndexItem = __webpack_require__(307);
 	var UserEditForm = __webpack_require__(308);
 	var UserEmailPasswordEditForm = __webpack_require__(309);
@@ -27857,8 +27857,8 @@
 	var SessionApiUtil = __webpack_require__(273);
 	var Footer = __webpack_require__(277);
 	var UserNavBar = __webpack_require__(278);
-	var NoUserNavBar = __webpack_require__(282);
-	var RootPageContent = __webpack_require__(283);
+	var NoUserNavBar = __webpack_require__(288);
+	var RootPageContent = __webpack_require__(289);
 	
 	var App = React.createClass({
 	  displayName: 'App',
@@ -35138,8 +35138,8 @@
 	            {
 	              isOpen: this.state.modalOpen,
 	              onRequestClose: this.closeModal,
-	              style: ModalConstants.QUESTIONFORM },
-	            React.createElement(QuestionFormGenerator, null)
+	              style: ModalConstants.QUESTION_FORM },
+	            React.createElement(QuestionFormGenerator, { closeThisModal: this.closeModal })
 	          )
 	        ),
 	        React.createElement(
@@ -35212,7 +35212,7 @@
 	    }
 	  },
 	
-	  QUESTIONFORM: {
+	  QUESTION_FORM: {
 	    overlay: {
 	      position: 'fixed',
 	      top: 0,
@@ -35224,12 +35224,16 @@
 	    },
 	    content: {
 	      position: 'fixed',
-	      top: '100px',
-	      left: '100px',
-	      right: '100px',
-	      bottom: '100px',
-	      border: '1px solid #ccc',
-	      padding: '20px',
+	      top: 0,
+	      left: 0,
+	      right: 0,
+	      bottom: 0,
+	      width: '700px',
+	      height: '190px',
+	      padding: 0,
+	      margin: 'auto',
+	      border: 0,
+	      borderRadius: 0,
 	      zIndex: 11
 	    }
 	  },
@@ -35318,6 +35322,225 @@
 /* 282 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var AppDispatcher = __webpack_require__(251);
+	var QuestionApiUtil = __webpack_require__(283);
+	
+	var ClientQuestionActions = {
+	  fetchAllQuestions: function () {
+	    QuestionApiUtil.fetchAllQuestions();
+	  },
+	
+	  getQuestionById: function (question_id) {
+	    QuestionApiUtil.getQuestionById(question_id);
+	  },
+	
+	  createQuestions: function (formData) {
+	    QuestionApiUtil.createQuestions(formData);
+	  }
+	};
+	
+	module.exports = ClientQuestionActions;
+
+/***/ },
+/* 283 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var ServerQuestionActions = __webpack_require__(284);
+	
+	var QuestionApiUtil = {
+	  fetchAllQuestions: function () {
+	    $.ajax({
+	      url: 'api/questions',
+	      type: 'GET',
+	      dataType: 'json',
+	      success: function (questions) {
+	        ServerQuestionActions.receiveAllQuestions(questions);
+	      },
+	      error: function () {
+	        console.log("Fetch error in QuestionApiUtil#fetchAllQuestions");
+	      }
+	    });
+	  },
+	
+	  getQuestionById: function (question_id) {
+	    $.ajax({
+	      url: 'api/questions/' + question_id,
+	      type: 'GET',
+	      dataType: 'json',
+	      success: function (question) {
+	        ServerQuestionActions.receiveQuestion(question);
+	      },
+	      error: function () {
+	        console.log("Fetch error in QuestionApiUtil#getQuestionById");
+	      }
+	    });
+	  },
+	
+	  createQuestions: function (formData) {
+	    $.ajax({
+	      url: 'api/questions',
+	      type: 'POST',
+	      dataType: 'json',
+	      data: { data: formData },
+	      success: function (question) {
+	        ServerQuestionActions.receiveQuestion(question);
+	      },
+	      error: function (xhr) {
+	        console.log("POST Error in QuestionApiUtil#createQuestions");
+	        var errors = xhr.responseJSON;
+	        ErrorActions.setErrors(errors);
+	      }
+	    });
+	  }
+	};
+	
+	module.exports = QuestionApiUtil;
+
+/***/ },
+/* 284 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(251);
+	var QuestionConstants = __webpack_require__(285);
+	
+	var ServerQuestionActions = {
+	  receiveAllQuestions: function (questions) {
+	    AppDispatcher.dispatch({
+	      actionType: QuestionConstants.QUESTIONS_RECEIVED,
+	      questions: questions
+	    });
+	  },
+	
+	  receiveQuestion: function (question) {
+	    AppDispatcher.dispatch({
+	      actionType: QuestionConstants.QUESTION_RECEIVED,
+	      question: question
+	    });
+	  }
+	};
+	
+	module.exports = ServerQuestionActions;
+
+/***/ },
+/* 285 */
+/***/ function(module, exports) {
+
+	var QuestionConstants = {
+	  QUESTIONS_RECEIVED: "QUESTIONS_RECEIVED",
+	  QUESTION_RECEIVED: "QUESTION_RECEIVED"
+	};
+	
+	module.exports = QuestionConstants;
+
+/***/ },
+/* 286 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(251);
+	var Store = __webpack_require__(255).Store;
+	var QuestionConstants = __webpack_require__(285);
+	
+	var QuestionStore = new Store(AppDispatcher);
+	
+	var _questions = {};
+	var _currentQuestion = {};
+	
+	var _resetQuestions = function (questions) {
+	  _questions = {};
+	
+	  questions.forEach(function (question) {
+	    _questions[question.id] = question;
+	  });
+	};
+	
+	var _setCurrentQuestion = function (question) {
+	  _currentQuestion[question.id] = question;
+	};
+	
+	QuestionStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case QuestionConstants.QUESTIONS_RECEIVED:
+	      _resetQuestions(payload.questions);
+	      QuestionStore.__emitChange();
+	      break;
+	    case QuestionConstants.QUESTION_RECEIVED:
+	      _setCurrentQuestion(payload.question);
+	      QuestionStore.__emitChange();
+	      break;
+	  }
+	};
+	
+	QuestionStore.all = function () {
+	  var allQuestions = Object.assign({}, _questions);
+	  return allQuestions;
+	};
+	
+	QuestionStore.getNewQuestion = function () {
+	  var keys = Object.keys(_questions);
+	  var maxKey = Math.max.apply(null, keys);
+	  return _questions[maxKey];
+	};
+	
+	QuestionStore.getQuestionById = function (questionId) {
+	  return _currentQuestion[questionId];
+	};
+	
+	QuestionStore.findQuestionsCountBySurveyId = function (survey_id) {
+	  var count = 0;
+	
+	  Object.keys(_questions).forEach(function (question_id) {
+	    if (_questions[question_id].survey_id === survey_id) {
+	      count++;
+	    }
+	  });
+	
+	  return count;
+	};
+	
+	module.exports = QuestionStore;
+
+/***/ },
+/* 287 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Store = __webpack_require__(255).Store;
+	var AppDispatcher = __webpack_require__(251);
+	var ErrorConstants = __webpack_require__(276);
+	var ErrorStore = new Store(AppDispatcher);
+	
+	var _errors = [];
+	
+	var _resetErrors = function (errors) {
+	  _errors = errors;
+	};
+	
+	ErrorStore.getErrors = function () {
+	  var result = _errors.map(function (currentError) {
+	    return currentError.error;
+	  });
+	
+	  return result;
+	};
+	
+	ErrorStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case ErrorConstants.SET_ERRORS:
+	      _resetErrors(payload.errors);
+	      ErrorStore.__emitChange();
+	      break;
+	    case ErrorConstants.CLEAR_ERRORS:
+	      _errors = [];
+	      ErrorStore.__emitChange();
+	      break;
+	  }
+	};
+	
+	module.exports = ErrorStore;
+
+/***/ },
+/* 288 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var React = __webpack_require__(1);
 	var Link = __webpack_require__(168).Link;
 	var Logo = __webpack_require__(280);
@@ -35386,12 +35609,12 @@
 	module.exports = NoUserNavBar;
 
 /***/ },
-/* 283 */
+/* 289 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var Link = __webpack_require__(168).Link;
-	var DemoContent = __webpack_require__(284);
+	var DemoContent = __webpack_require__(290);
 	
 	var RootPageContent = React.createClass({
 	  displayName: 'RootPageContent',
@@ -35412,13 +35635,13 @@
 	module.exports = RootPageContent;
 
 /***/ },
-/* 284 */
+/* 290 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var Link = __webpack_require__(168).Link;
-	var GuestUserConstants = __webpack_require__(285);
-	var UserApiUtil = __webpack_require__(286);
+	var GuestUserConstants = __webpack_require__(291);
+	var UserApiUtil = __webpack_require__(292);
 	var SessionStore = __webpack_require__(250);
 	
 	var DemoContent = React.createClass({
@@ -35533,7 +35756,7 @@
 	module.exports = DemoContent;
 
 /***/ },
-/* 285 */
+/* 291 */
 /***/ function(module, exports) {
 
 	var GuestUserConstants = {
@@ -35544,7 +35767,7 @@
 	module.exports = GuestUserConstants;
 
 /***/ },
-/* 286 */
+/* 292 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var SessionActions = __webpack_require__(274);
@@ -35628,19 +35851,19 @@
 	module.exports = UserApiUtil;
 
 /***/ },
-/* 287 */
+/* 293 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var Link = __webpack_require__(168).Link;
 	var SessionApiUtil = __webpack_require__(273);
 	var SessionStore = __webpack_require__(250);
-	var ErrorStore = __webpack_require__(288);
+	var ErrorStore = __webpack_require__(287);
 	var ErrorActions = __webpack_require__(275);
 	var Logo = __webpack_require__(280);
 	var Modal = __webpack_require__(229);
 	var ModalConstants = __webpack_require__(279);
-	var ForgotPassword = __webpack_require__(289);
+	var ForgotPassword = __webpack_require__(294);
 	
 	var LoginForm = React.createClass({
 	  displayName: 'LoginForm',
@@ -35762,7 +35985,11 @@
 	              'or username'
 	            ),
 	            React.createElement('br', null),
-	            React.createElement('input', { className: 'login-input soft-edges', type: 'text', value: this.state.emailOrUsername, onChange: this.emailOrUsernameChange })
+	            React.createElement('input', {
+	              className: 'login-input soft-edges',
+	              type: 'text',
+	              value: this.state.emailOrUsername,
+	              onChange: this.emailOrUsernameChange })
 	          ),
 	          React.createElement('br', null),
 	          React.createElement(
@@ -35783,11 +36010,23 @@
 	              )
 	            ),
 	            React.createElement('br', null),
-	            React.createElement('input', { className: 'login-input soft-edges', type: 'password', value: this.state.password, onChange: this.passwordChange })
+	            React.createElement('input', {
+	              className: 'login-input soft-edges',
+	              type: 'password',
+	              value: this.state.password,
+	              onChange: this.passwordChange })
 	          ),
 	          React.createElement('br', null),
-	          React.createElement('input', { className: 'signin-button soft-edges hover-pointer', type: 'submit', value: 'Sign in with my Ask Anything! account' }),
-	          React.createElement('img', { className: 'logo-image logo-login-button', src: window.askAnythingAssets.logo, width: '15', height: '15', alt: 'Logo' }),
+	          React.createElement('input', {
+	            className: 'signin-button soft-edges hover-pointer',
+	            type: 'submit',
+	            value: 'Sign in with my Ask Anything! account' }),
+	          React.createElement('img', {
+	            className: 'logo-image logo-login-button',
+	            src: window.askAnythingAssets.logo,
+	            width: '15',
+	            height: '15',
+	            alt: 'Logo' }),
 	          React.createElement(
 	            Link,
 	            { to: 'signup', className: 'signup-link' },
@@ -35802,53 +36041,15 @@
 	module.exports = LoginForm;
 
 /***/ },
-/* 288 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Store = __webpack_require__(255).Store;
-	var AppDispatcher = __webpack_require__(251);
-	var ErrorConstants = __webpack_require__(276);
-	var ErrorStore = new Store(AppDispatcher);
-	
-	var _errors = [];
-	
-	var _resetErrors = function (errors) {
-	  _errors = errors;
-	};
-	
-	ErrorStore.getErrors = function () {
-	  var result = _errors.map(function (currentError) {
-	    return currentError.error;
-	  });
-	
-	  return result;
-	};
-	
-	ErrorStore.__onDispatch = function (payload) {
-	  switch (payload.actionType) {
-	    case ErrorConstants.SET_ERRORS:
-	      _resetErrors(payload.errors);
-	      ErrorStore.__emitChange();
-	      break;
-	    case ErrorConstants.CLEAR_ERRORS:
-	      _errors = [];
-	      ErrorStore.__emitChange();
-	      break;
-	  }
-	};
-	
-	module.exports = ErrorStore;
-
-/***/ },
-/* 289 */
+/* 294 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var Link = __webpack_require__(168).Link;
 	var SessionStore = __webpack_require__(250);
-	var ErrorStore = __webpack_require__(288);
+	var ErrorStore = __webpack_require__(287);
 	var ErrorActions = __webpack_require__(275);
-	var UserApiUtil = __webpack_require__(286);
+	var UserApiUtil = __webpack_require__(292);
 	
 	var Logo = __webpack_require__(280);
 	
@@ -35998,12 +36199,12 @@
 	module.exports = ForgotPassword;
 
 /***/ },
-/* 290 */
+/* 295 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var SignupParticipant = __webpack_require__(291);
-	var SignupPresenter = __webpack_require__(293);
+	var SignupParticipant = __webpack_require__(296);
+	var SignupPresenter = __webpack_require__(298);
 	var SessionStore = __webpack_require__(250);
 	
 	var SignupPage = React.createClass({
@@ -36057,13 +36258,13 @@
 	module.exports = SignupPage;
 
 /***/ },
-/* 291 */
+/* 296 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var Modal = __webpack_require__(229);
 	var ModalConstants = __webpack_require__(279);
-	var SignupForm = __webpack_require__(292);
+	var SignupForm = __webpack_require__(297);
 	
 	var SignupParticipant = React.createClass({
 		displayName: 'SignupParticipant',
@@ -36114,13 +36315,13 @@
 	module.exports = SignupParticipant;
 
 /***/ },
-/* 292 */
+/* 297 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var Link = __webpack_require__(168).Link;
-	var ErrorStore = __webpack_require__(288);
-	var UserApiUtil = __webpack_require__(286);
+	var ErrorStore = __webpack_require__(287);
+	var UserApiUtil = __webpack_require__(292);
 	var ErrorActions = __webpack_require__(275);
 	
 	var SignupForm = React.createClass({
@@ -36356,13 +36557,13 @@
 	module.exports = SignupForm;
 
 /***/ },
-/* 293 */
+/* 298 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var Modal = __webpack_require__(229);
 	var ModalConstants = __webpack_require__(279);
-	var SignupForm = __webpack_require__(292);
+	var SignupForm = __webpack_require__(297);
 	
 	var SignupPresenter = React.createClass({
 		displayName: 'SignupPresenter',
@@ -36413,14 +36614,14 @@
 	module.exports = SignupPresenter;
 
 /***/ },
-/* 294 */
+/* 299 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var ClientSurveyActions = __webpack_require__(295);
-	var SurveyStore = __webpack_require__(299);
-	var SideNav = __webpack_require__(300);
-	var QuestionsIndex = __webpack_require__(301);
+	var ClientSurveyActions = __webpack_require__(300);
+	var SurveyStore = __webpack_require__(304);
+	var SideNav = __webpack_require__(305);
+	var QuestionsIndex = __webpack_require__(306);
 	
 	var SurveysIndex = React.createClass({
 	  displayName: 'SurveysIndex',
@@ -36476,64 +36677,28 @@
 	module.exports = SurveysIndex;
 
 /***/ },
-/* 295 */
+/* 300 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(251);
-	var SurveyApiUtil = __webpack_require__(296);
+	var SurveyApiUtil = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../util/survey_api_util\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 	
 	var ClientSurveyActions = {
 	  fetchAllSurveys: function () {
 	    SurveyApiUtil.fetchAllSurveys();
+	  },
+	
+	  createSurvey: function (formData) {
+	    SurveyApiUtil.createSurvey(formData);
 	  }
 	};
 	
 	module.exports = ClientSurveyActions;
 
 /***/ },
-/* 296 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var ServerSurveyActions = __webpack_require__(297);
-	
-	var SurveyApiUtil = {
-	  fetchAllSurveys: function () {
-	    $.ajax({
-	      url: 'api/surveys',
-	      type: 'GET',
-	      dataType: 'json',
-	      success: function (surveys) {
-	        ServerSurveyActions.receiveAllSurveys(surveys);
-	      },
-	      errors: function () {
-	        console.log("Fetching error in SurveyApiUtil#fetchAllSurveys");
-	      }
-	    });
-	  }
-	};
-	
-	module.exports = SurveyApiUtil;
-
-/***/ },
-/* 297 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var AppDispatcher = __webpack_require__(251);
-	var SurveyConstants = __webpack_require__(298);
-	
-	var ServerSurveyActions = {
-	  receiveAllSurveys: function (surveys) {
-	    AppDispatcher.dispatch({
-	      actionType: SurveyConstants.SURVEYS_RECEIVED,
-	      surveys: surveys
-	    });
-	  }
-	};
-	
-	module.exports = ServerSurveyActions;
-
-/***/ },
-/* 298 */
+/* 301 */,
+/* 302 */,
+/* 303 */
 /***/ function(module, exports) {
 
 	var SurveyConstants = {
@@ -36543,12 +36708,12 @@
 	module.exports = SurveyConstants;
 
 /***/ },
-/* 299 */
+/* 304 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(251);
 	var Store = __webpack_require__(255).Store;
-	var SurveyConstants = __webpack_require__(298);
+	var SurveyConstants = __webpack_require__(303);
 	
 	var SurveyStore = new Store(AppDispatcher);
 	
@@ -36579,7 +36744,7 @@
 	module.exports = SurveyStore;
 
 /***/ },
-/* 300 */
+/* 305 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -36621,8 +36786,8 @@
 	            {
 	              isOpen: this.state.modalOpen,
 	              onRequestClose: this.closeModal,
-	              style: ModalConstants.QUESTIONFORM },
-	            React.createElement(QuestionFormGenerator, null)
+	              style: ModalConstants.QUESTION_FORM },
+	            React.createElement(QuestionFormGenerator, { closeThisModal: this.closeModal })
 	          )
 	        ),
 	        React.createElement(
@@ -36643,12 +36808,12 @@
 	module.exports = SideNav;
 
 /***/ },
-/* 301 */
+/* 306 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var ClientQuestionActions = __webpack_require__(302);
-	var QuestionStore = __webpack_require__(306);
+	var ClientQuestionActions = __webpack_require__(282);
+	var QuestionStore = __webpack_require__(286);
 	var Link = __webpack_require__(168).Link;
 	var SessionStore = __webpack_require__(250);
 	
@@ -36700,109 +36865,12 @@
 	module.exports = QuestionsIndex;
 
 /***/ },
-/* 302 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var AppDispatcher = __webpack_require__(251);
-	var QuestionApiUtil = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../util/question_api_util\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
-	
-	var ClientQuestionActions = {
-	  fetchAllQuestions: function () {
-	    QuestionApiUtil.fetchAllQuestions();
-	  },
-	
-	  getQuestionById: function (question_id) {
-	    QuestionApiUtil.getQuestionById(question_id);
-	  },
-	
-	  createQuestions: function (formData) {
-	    QuestionApiUtil.createQuestions(formData);
-	  }
-	};
-	
-	module.exports = ClientQuestionActions;
-
-/***/ },
-/* 303 */,
-/* 304 */,
-/* 305 */
-/***/ function(module, exports) {
-
-	var QuestionConstants = {
-	  QUESTIONS_RECEIVED: "QUESTIONS_RECEIVED",
-	  QUESTION_RECEIVED: "QUESTION_RECEIVED"
-	};
-	
-	module.exports = QuestionConstants;
-
-/***/ },
-/* 306 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var AppDispatcher = __webpack_require__(251);
-	var Store = __webpack_require__(255).Store;
-	var QuestionConstants = __webpack_require__(305);
-	
-	var QuestionStore = new Store(AppDispatcher);
-	
-	var _questions = {};
-	var _currentQuestion = {};
-	
-	var _resetQuestions = function (questions) {
-	  _questions = {};
-	
-	  questions.forEach(function (question) {
-	    _questions[question.id] = question;
-	  });
-	};
-	
-	var _setCurrentQuestion = function (question) {
-	  _currentQuestion[question.id] = question;
-	};
-	
-	QuestionStore.__onDispatch = function (payload) {
-	  switch (payload.actionType) {
-	    case QuestionConstants.QUESTIONS_RECEIVED:
-	      _resetQuestions(payload.questions);
-	      QuestionStore.__emitChange();
-	      break;
-	    case QuestionConstants.QUESTION_RECEIVED:
-	      _setCurrentQuestion(payload.question);
-	      QuestionStore.__emitChange();
-	      break;
-	  }
-	};
-	
-	QuestionStore.all = function () {
-	  var allQuestions = Object.assign({}, _questions);
-	  return allQuestions;
-	};
-	
-	QuestionStore.getQuestionById = function (questionId) {
-	  return _currentQuestion[questionId];
-	};
-	
-	QuestionStore.findQuestionsCountBySurveyId = function (survey_id) {
-	  var count = 0;
-	
-	  Object.keys(_questions).forEach(function (question_id) {
-	    if (_questions[question_id].survey_id === survey_id) {
-	      count++;
-	    }
-	  });
-	
-	  return count;
-	};
-	
-	module.exports = QuestionStore;
-
-/***/ },
 /* 307 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var ClientQuestionActions = __webpack_require__(302);
-	var QuestionStore = __webpack_require__(306);
+	var ClientQuestionActions = __webpack_require__(282);
+	var QuestionStore = __webpack_require__(286);
 	
 	var QuestionIndexItem = React.createClass({
 	  displayName: 'QuestionIndexItem',
@@ -36845,9 +36913,9 @@
 	var React = __webpack_require__(1);
 	var Link = __webpack_require__(168).Link;
 	var SessionStore = __webpack_require__(250);
-	var UserApiUtil = __webpack_require__(286);
+	var UserApiUtil = __webpack_require__(292);
 	var UserEmailPasswordEditForm = __webpack_require__(309);
-	var ErrorStore = __webpack_require__(288);
+	var ErrorStore = __webpack_require__(287);
 	
 	var UserEditForm = React.createClass({
 	  displayName: 'UserEditForm',
@@ -37098,9 +37166,9 @@
 	var Link = __webpack_require__(168).Link;
 	var SessionApiUtil = __webpack_require__(273);
 	var SessionStore = __webpack_require__(250);
-	var UserApiUtil = __webpack_require__(286);
+	var UserApiUtil = __webpack_require__(292);
 	var ErrorActions = __webpack_require__(275);
-	var ErrorStore = __webpack_require__(288);
+	var ErrorStore = __webpack_require__(287);
 	
 	var UserEditForm = React.createClass({
 	  displayName: 'UserEditForm',

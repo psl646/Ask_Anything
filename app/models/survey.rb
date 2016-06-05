@@ -17,12 +17,11 @@ class Survey < ActiveRecord::Base
     dependent: :destroy
   )
 
-  def self.create_surveys (params, current_user)
-    survey_data = params[:survey]
-
+  def self.create_survey(params, current_user)
+    debugger
     Survey.transaction do
-      survey_data[:title] ||= "New Survey"
-      Survey.create(title: survey_data[:title], author: current_user)
+      params[:data][:title] ||= "New Survey"
+      Survey.create(title: params[:data][:title], author: current_user)
 
       Question.create_questions(params, current_user)
     end

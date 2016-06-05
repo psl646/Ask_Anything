@@ -34,7 +34,7 @@ var UserApiUtil = {
         var errors = xhr.responseJSON;
         ErrorActions.setErrors(errors);
       }
-    })
+    });
   },
 
   updateEmailPassword: function (formData) {
@@ -52,7 +52,7 @@ var UserApiUtil = {
         var errors = xhr.responseJSON;
         ErrorActions.setErrors(errors);
       }
-    })
+    });
   },
 
   sendEmail: function (formData) {
@@ -72,7 +72,7 @@ var UserApiUtil = {
         var errors = xhr.responseJSON;
         ErrorActions.setErrors(errors);
       }
-    })
+    });
   }
 };
 

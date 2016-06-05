@@ -34,7 +34,7 @@ var QuestionApiUtil = {
       url: 'api/questions',
       type: 'POST',
       dataType: 'json',
-      data: {questions: formData}
+      data: { data: formData },
       success: function (question) {
         ServerQuestionActions.receiveQuestion(question);
       },

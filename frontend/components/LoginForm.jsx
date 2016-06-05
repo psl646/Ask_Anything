@@ -103,7 +103,11 @@ var LoginForm = React.createClass({
 
   	        <br />
   					<label> Email <small className="login-email">or username</small><br/>
-  						<input className="login-input soft-edges" type="text" value={this.state.emailOrUsername} onChange={this.emailOrUsernameChange} />
+  						<input
+                className="login-input soft-edges"
+                type="text"
+                value={ this.state.emailOrUsername }
+                onChange={ this.emailOrUsernameChange } />
   					</label>
 
   	        <br />
@@ -111,21 +115,33 @@ var LoginForm = React.createClass({
               <small className="lost-password hover-pointer hover-underline" onClick={ this.openModal }>
                 I forgot my password
                 <Modal
-        					isOpen={this.state.modalOpen}
-                  onRequestClose={this.closeModal}
+        					isOpen={ this.state.modalOpen }
+                  onRequestClose={ this.closeModal }
         					style={ ModalConstants.FORGOT_PASSWORD }>
 
         						<ForgotPassword closeThisModal={ this.closeModal } />
 
                 </Modal>
               </small><br/>
-  						<input className="login-input soft-edges" type="password" value={this.state.password} onChange={this.passwordChange} />
+  						<input
+                className="login-input soft-edges"
+                type="password"
+                value={ this.state.password }
+                onChange={ this.passwordChange } />
   					</label>
 
   	        <br />
-  					<input className="signin-button soft-edges hover-pointer" type="submit" value="Sign in with my Ask Anything! account" />
+  					<input
+              className="signin-button soft-edges hover-pointer"
+              type="submit"
+              value="Sign in with my Ask Anything! account" />
 
-            <img className="logo-image logo-login-button" src={window.askAnythingAssets.logo} width="15" height="15" alt="Logo" />
+            <img
+              className="logo-image logo-login-button"
+              src={ window.askAnythingAssets.logo }
+              width="15"
+              height="15"
+              alt="Logo" />
 
             <Link to="signup" className="signup-link">
               Do you need an account? Create one in a few seconds.

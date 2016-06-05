@@ -9,11 +9,29 @@ var SurveyApiUtil = {
       success: function (surveys) {
         ServerSurveyActions.receiveAllSurveys(surveys);
       },
-      errors: function () {
+      error: function () {
         console.log("Fetching error in SurveyApiUtil#fetchAllSurveys");
       }
-    })
+    });
+  },
+
+  createSurvey: function (formData) {
+    $.ajax({
+      url: 'api/surveys',
+      type: 'POST',
+      dataType: 'json',
+      data: { data: formData }
+      success: function (surveys) {
+        ServerSurveyActions.receiveAllSurveys(surveys);
+      },
+      error: function () {
+        console.log("Fetching error in SurveyApiUtil#createSurvey");
+      }
+    });
   }
 };
 
 module.exports = SurveyApiUtil;
+
+
+SurveyApiUtil.createSurvey(formData);

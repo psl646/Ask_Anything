@@ -10,8 +10,8 @@ class Api::QuestionsController < ApplicationController
   end
 
   def create
-    if (Question.create_questions(params, current_user))
-      @question = Question.last
+    if Question.create_questions(params, current_user)
+      @question = current_user.questions.last
       render "api/questions/show"
     else
       @errors = @question.errors.full_messages

@@ -76,9 +76,9 @@ var UserNavBar = React.createClass({
             <Modal
               isOpen={this.state.modalOpen}
               onRequestClose={this.closeModal}
-              style={ ModalConstants.QUESTIONFORM }>
+              style={ ModalConstants.QUESTION_FORM }>
 
-                <QuestionFormGenerator />
+                <QuestionFormGenerator closeThisModal={ this.closeModal } />
 
             </Modal>
           </li>

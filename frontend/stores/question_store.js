@@ -37,6 +37,12 @@ QuestionStore.all = function () {
   return allQuestions;
 };
 
+QuestionStore.getNewQuestion = function () {
+  var keys = Object.keys(_questions);
+  var maxKey = Math.max.apply(null, keys);
+  return _questions[maxKey];
+};
+
 QuestionStore.getQuestionById = function (questionId) {
   return _currentQuestion[questionId];
 };

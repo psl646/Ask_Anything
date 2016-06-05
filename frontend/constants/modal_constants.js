@@ -21,7 +21,7 @@ var ModalConstants = {
     }
   },
 
-  QUESTIONFORM: {
+  QUESTION_FORM: {
     overlay : {
       position        : 'fixed',
       top             : 0,
@@ -33,12 +33,16 @@ var ModalConstants = {
     },
     content : {
       position        : 'fixed',
-      top             : '100px',
-      left            : '100px',
-      right           : '100px',
-      bottom          : '100px',
-      border          : '1px solid #ccc',
-      padding         : '20px',
+      top             : 0,
+      left            : 0,
+      right           : 0,
+      bottom          : 0,
+      width           : '700px',
+      height          : '190px',
+      padding         : 0,
+      margin          : 'auto',
+      border          : 0,
+      borderRadius   : 0,
       zIndex          : 11
     }
   },

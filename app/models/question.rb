@@ -24,28 +24,31 @@ class Question < ActiveRecord::Base
   )
 
   def self.create_questions (params, current_user)
-    questions = params[:questions]
+    debugger
+    questions = params[:data][:questions]
 
     Question.transaction do
       questions.each do |question_data|
-        create_single_question(question_data, current_user)
+        create_single_question(params, question_data, current_user)
       end
     end
   end
 
   private
 
-  def create_single_question(question_data, current_user)
+  def create_single_question(params, question_data, current_user)
     asked_question = question_data[:question] || "[Blank Title]"
+
+    survey = params[:data][:title].nil? ? current_user.surveys.first : current_user.surveys.last
 
     Question.create(
       question: asked_question,
       category: question_data[:category],
-      survey: current_user.surveys.first
+      survey: survey
     )
 
     question_data[:answers].each do |answer_data|
-      Answer.create(answer: answer_data[:answer], question: Question.last)
+      Answer.create(answer: answer_data[:answer], question: current_user.questions.last)
     end
   end
 
