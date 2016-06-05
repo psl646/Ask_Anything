@@ -35,3 +35,10 @@
   top: 50%;
   transform: translateY(-50%);
 }
+
+.logo-login-button {
+  position: relative;
+  float: left;
+  bottom: 35px;
+  left: 30px;
+}

@@ -98,8 +98,11 @@ var LoginForm = React.createClass({
 
   	        <br />
   					<input className="signin-button soft-edges hover-pointer" type="submit" value="Sign in with my Ask Anything! account" />
+
+            <img className="logo-image logo-login-button" src={window.askAnythingAssets.logo} width="15" height="15" alt="Logo" />
+
             <Link to="signup" className="signup-link">
-              "Do you need an account? Create one in a few seconds."
+              Do you need an account? Create one in a few seconds.
             </Link>
   				</form>
   			</div>

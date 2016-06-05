@@ -34819,7 +34819,6 @@
 	  setErrors: function (form, errors) {
 	    AppDispatcher.dispatch({
 	      actionType: ErrorConstants.SET_ERRORS,
-	      form: form,
 	      errors: errors
 	    });
 	  },
@@ -35374,10 +35373,8 @@
 	        SessionActions.receiveCurrentUser(currentUser);
 	      },
 	      error: function (xhr) {
-	        console.log(xhr);
 	        console.log('UserApiUtil#createAccount error');
 	        var errors = xhr.responseJSON;
-	        console.log(errors);
 	        ErrorActions.setErrors("signup", errors);
 	      }
 	    });
@@ -35563,10 +35560,11 @@
 	          ),
 	          React.createElement('br', null),
 	          React.createElement('input', { className: 'signin-button soft-edges hover-pointer', type: 'submit', value: 'Sign in with my Ask Anything! account' }),
+	          React.createElement('img', { className: 'logo-image logo-login-button', src: window.askAnythingAssets.logo, width: '15', height: '15', alt: 'Logo' }),
 	          React.createElement(
 	            Link,
 	            { to: 'signup', className: 'signup-link' },
-	            '"Do you need an account? Create one in a few seconds."'
+	            'Do you need an account? Create one in a few seconds.'
 	          )
 	        )
 	      )

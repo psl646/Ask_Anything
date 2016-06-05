@@ -12,10 +12,8 @@ var UserApiUtil = {
         SessionActions.receiveCurrentUser(currentUser);
       },
       error: function (xhr) {
-        console.log(xhr);
         console.log('UserApiUtil#createAccount error');
         var errors = xhr.responseJSON;
-        console.log(errors);
         ErrorActions.setErrors("signup", errors);
       }
     });

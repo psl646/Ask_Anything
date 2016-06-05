@@ -5,7 +5,6 @@ var ErrorActions = {
   setErrors: function (form, errors) {
     AppDispatcher.dispatch({
       actionType: ErrorConstants.SET_ERRORS,
-      form: form,
       errors: errors
     });
   },
