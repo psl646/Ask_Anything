@@ -1,7 +1,8 @@
 var React = require('react');
+var ReactDOM = require('react-dom');
 var Link = require('react-router').Link;
 var QuestionConstants = require('../constants/question_constants');
-var AnswerInput = require('./AnswersForm');
+var AnswerInput = require('./AnswerInput');
 
 var QuestionForm = React.createClass({
   contextTypes: {
@@ -17,11 +18,14 @@ var QuestionForm = React.createClass({
   },
 
   componentDidMount: function () {
-    this.questionListener = QuestionStore.addListener(this._onChange);
+    console.log(this.props);
+    console.log(this.state);
+    console.log(this.refs);
+    console.log(ReactDOM.findDOMNode(this.refs.nameInput));
   },
 
   componentWillUnmount: function () {
-    this.questionListener.remove();
+
   },
 
   _onChange: function () {
@@ -55,25 +59,26 @@ var QuestionForm = React.createClass({
 
   handleDeleteQuestion: function (e) {
     e.preventDefault();
-
+    console.log("You clicked on delete!");
   },
 
 	render: function () {
     var categories = QuestionConstants.QUESTION_CATEGORIES.map(function(category, idx) {
       return (
-        <li key={ idx }> { category }
-          <input
-            type="radio"
-            name="questionCategory"
-            value={ category }
-            checked={ this.state.category === category }
-            onChange={this.categoryChange}
-            />
+        <li key={ idx }>
+          <label className="category-label">
+            <input
+              type="radio"
+              name="questionCategory"
+              value={ category }
+              checked={ this.state.category === category }
+              onChange={this.categoryChange}
+              />
+              { category }
+            </label>
         </li>
       );
     }.bind(this));
-    console.log("after");
-    console.log(categories);
 
     var myNewAnswers = this.state.answers.map(function(answer, idx){
       return (
@@ -84,34 +89,36 @@ var QuestionForm = React.createClass({
     });
 
     return (
-      <div className="signup-form-container">
-        <div onClick={ this.handleDeleteQuestion }>
+      <div className="single-question-form soft-edges">
+        <button className="delete-question" onClick={ this.handleDeleteQuestion }>
           X
-        </div>
+        </button>
 
         <br />
-        <label> Question: <br/>
+        <label className="text-shift-left"> Question: <br/>
           <input
+            autoFocus
+            className="question-input-field margin-auto"
             type="text"
             value={this.state.question}
             onChange={this.questionChange} />
         </label>
 
         <br />
-
-        <div>How will my audience respond?
-          <ul>
+        <div className="text-shift-left">
+          How will my audience respond?
+        </div>
+        <div className="answer-choice-type group">
+          <ul className="category-container">
             { categories }
           </ul>
 
-          <ul> Your audience can select from these answers:
+          <ul className="answer-container">
+            Your audience can select from these answers: <br />
             { myNewAnswers }
           </ul>
         </div>
 
-
-        <div className="agreement">By proceeding you agree to Ask Anything!</div>
-        <div className="agreement"><Link to="tos" className="link">Terms of Service</Link> and <Link to="privacyPolicy" className="link">Privacy Policy</Link>.</div>
       </div>
 		);
 	}

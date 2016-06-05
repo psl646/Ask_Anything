@@ -6,15 +6,12 @@ var AnswerInput = React.createClass({
   },
 
   componentDidMount: function () {
-    this.questionListener = QuestionStore.addListener(this._onChange);
   },
 
   componentWillUnmount: function () {
-    this.questionListener.remove();
   },
 
   _onChange: function () {
-    this.setState({ answer: "" })
   },
 
   answerChange: function (e) {
@@ -24,13 +21,13 @@ var AnswerInput = React.createClass({
 
 	render: function () {
     return (
-      <li>
+      <div className="single-answer-input">
         <input
           type="text"
           value={this.state.answer}
           onChange={this.answerChange}
           />
-      </li>
+      </div>
 		);
 	}
 });

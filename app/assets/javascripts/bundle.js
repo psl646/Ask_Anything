@@ -56,13 +56,13 @@
 	var Modal = __webpack_require__(229);
 	
 	var App = __webpack_require__(249);
-	var LoginForm = __webpack_require__(298);
-	var SignupPage = __webpack_require__(300);
-	var SurveysIndex = __webpack_require__(304);
-	var QuestionIndexItem = __webpack_require__(308);
-	var UserEditForm = __webpack_require__(309);
-	var UserEmailPasswordEditForm = __webpack_require__(310);
-	var ForgotPasswordSuccess = __webpack_require__(311);
+	var LoginForm = __webpack_require__(299);
+	var SignupPage = __webpack_require__(301);
+	var SurveysIndex = __webpack_require__(305);
+	var QuestionIndexItem = __webpack_require__(309);
+	var UserEditForm = __webpack_require__(310);
+	var UserEmailPasswordEditForm = __webpack_require__(311);
+	var ForgotPasswordSuccess = __webpack_require__(312);
 	
 	var SessionStore = __webpack_require__(250);
 	var SessionApiUtil = __webpack_require__(273);
@@ -27857,8 +27857,8 @@
 	var SessionApiUtil = __webpack_require__(273);
 	var Footer = __webpack_require__(277);
 	var UserNavBar = __webpack_require__(278);
-	var NoUserNavBar = __webpack_require__(293);
-	var RootPageContent = __webpack_require__(294);
+	var NoUserNavBar = __webpack_require__(294);
+	var RootPageContent = __webpack_require__(295);
 	
 	var App = React.createClass({
 	  displayName: 'App',
@@ -34867,9 +34867,16 @@
 	  },
 	
 	  render: function () {
+	    var footerSurvey = "";
+	
+	    console.log(window.location.hash.slice(2, 9));
+	    if (window.location.hash.slice(2, 9).toUpperCase() === "SURVEYS") {
+	      footerSurvey = "footer-survey";
+	    }
+	
 	    return React.createElement(
 	      'div',
-	      { className: 'footer-container' },
+	      { className: "footer-container " + footerSurvey },
 	      React.createElement(
 	        'div',
 	        { className: 'footer-div-container group text-center' },
@@ -35214,27 +35221,41 @@
 	
 	  QUESTION_FORM: {
 	    overlay: {
-	      position: 'fixed',
+	      WebkitTransition: 'background-color 1s',
+	      MozTransition: 'background-color 1s',
+	      OTransition: 'background-color 1s',
+	      transition: 'background-color 1s',
+	      display: 'block',
+	      position: 'absolute',
+	      width: '1340px',
+	      height: '2928px',
 	      top: 0,
 	      left: 0,
 	      right: 0,
 	      bottom: 0,
-	      backgroundColor: 'rgba(18, 18, 15, 0.75)',
-	      zIndex: 10
+	      marginBottom: '-5000px',
+	      paddingBottom: '5000px',
+	      opacity: 0.9,
+	      backgroundColor: '#303233',
+	      overflow: 'hidden',
+	      zIndex: 20
 	    },
+	
 	    content: {
-	      position: 'fixed',
+	      display: 'block',
+	      position: 'absolute',
 	      top: 0,
 	      left: 0,
 	      right: 0,
 	      bottom: 0,
 	      width: '700px',
-	      height: '190px',
+	      height: '100%',
 	      padding: 0,
 	      margin: 'auto',
+	      marginTop: '200px',
 	      border: 0,
 	      borderRadius: 0,
-	      zIndex: 11
+	      zIndex: 21
 	    }
 	  },
 	
@@ -35338,6 +35359,7 @@
 	
 	  getInitialState: function () {
 	    return {
+	      input: "",
 	      title: "",
 	      numberQuestions: 0,
 	      questions: [],
@@ -35393,7 +35415,8 @@
 	    console.log(newQuestion);
 	    this.setState({
 	      questions: this.state.questions.concat(newQuestion),
-	      numberQuestions: this.state.numberQuestions + 1
+	      numberQuestions: this.state.numberQuestions + 1,
+	      input: ""
 	    });
 	  },
 	
@@ -35441,30 +35464,37 @@
 	      React.createElement(
 	        'form',
 	        { onSubmit: this.handleSubmit },
+	        surveyText,
+	        surveyInput,
 	        React.createElement(
-	          'label',
+	          'ul',
 	          null,
-	          addQuestion,
-	          surveyText,
-	          surveyInput,
-	          React.createElement(
-	            'ul',
-	            null,
-	            myNewQuestions
-	          ),
-	          React.createElement('input', {
-	            className: '',
-	            type: 'text',
-	            placeholder: 'What\'s your favorite color? Red, Blue, or Green',
-	            onChange: this.handleQuestionInputChange
-	          })
+	          myNewQuestions
 	        ),
 	        React.createElement(
 	          'div',
-	          { className: 'cancel-forgot hover-underline display-inline hover-pointer', onClick: this.closeMyself },
+	          { className: 'question-form-generator-container soft-edges' },
+	          React.createElement(
+	            'label',
+	            { className: 'add-question' },
+	            addQuestion,
+	            React.createElement('input', {
+	              className: 'question-input-field margin-auto placeholder-text h22',
+	              type: 'text',
+	              value: this.state.input,
+	              placeholder: 'What\'s your favorite color? Red, Blue, or Green',
+	              onChange: this.handleQuestionInputChange
+	            })
+	          )
+	        ),
+	        React.createElement(
+	          'div',
+	          {
+	            className: 'cancel-forgot hover-underline display-inline hover-pointer cancel-question-form',
+	            onClick: this.closeMyself },
 	          'Cancel'
 	        ),
-	        React.createElement('input', { className: 'soft-edges hover-pointer', type: 'submit', value: createText })
+	        React.createElement('input', { className: 'soft-edges hover-pointer question-creation-button', type: 'submit', value: createText })
 	      )
 	    );
 	  }
@@ -35785,9 +35815,10 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var ReactDOM = __webpack_require__(38);
 	var Link = __webpack_require__(168).Link;
 	var QuestionConstants = __webpack_require__(285);
-	var AnswerInput = __webpack_require__(312);
+	var AnswerInput = __webpack_require__(293);
 	
 	var QuestionForm = React.createClass({
 	  displayName: 'QuestionForm',
@@ -35805,12 +35836,13 @@
 	  },
 	
 	  componentDidMount: function () {
-	    this.questionListener = QuestionStore.addListener(this._onChange);
+	    console.log(this.props);
+	    console.log(this.state);
+	    console.log(this.refs);
+	    console.log(ReactDOM.findDOMNode(this.refs.nameInput));
 	  },
 	
-	  componentWillUnmount: function () {
-	    this.questionListener.remove();
-	  },
+	  componentWillUnmount: function () {},
 	
 	  _onChange: function () {},
 	
@@ -35839,6 +35871,7 @@
 	
 	  handleDeleteQuestion: function (e) {
 	    e.preventDefault();
+	    console.log("You clicked on delete!");
 	  },
 	
 	  render: function () {
@@ -35846,19 +35879,20 @@
 	      return React.createElement(
 	        'li',
 	        { key: idx },
-	        ' ',
-	        category,
-	        React.createElement('input', {
-	          type: 'radio',
-	          name: 'questionCategory',
-	          value: category,
-	          checked: this.state.category === category,
-	          onChange: this.categoryChange
-	        })
+	        React.createElement(
+	          'label',
+	          { className: 'category-label' },
+	          React.createElement('input', {
+	            type: 'radio',
+	            name: 'questionCategory',
+	            value: category,
+	            checked: this.state.category === category,
+	            onChange: this.categoryChange
+	          }),
+	          category
+	        )
 	      );
 	    }.bind(this));
-	    console.log("after");
-	    console.log(categories);
 	
 	    var myNewAnswers = this.state.answers.map(function (answer, idx) {
 	      return React.createElement(
@@ -35870,19 +35904,21 @@
 	
 	    return React.createElement(
 	      'div',
-	      { className: 'signup-form-container' },
+	      { className: 'single-question-form soft-edges' },
 	      React.createElement(
-	        'div',
-	        { onClick: this.handleDeleteQuestion },
+	        'button',
+	        { className: 'delete-question', onClick: this.handleDeleteQuestion },
 	        'X'
 	      ),
 	      React.createElement('br', null),
 	      React.createElement(
 	        'label',
-	        null,
+	        { className: 'text-shift-left' },
 	        ' Question: ',
 	        React.createElement('br', null),
 	        React.createElement('input', {
+	          autoFocus: true,
+	          className: 'question-input-field margin-auto',
 	          type: 'text',
 	          value: this.state.question,
 	          onChange: this.questionChange })
@@ -35890,40 +35926,24 @@
 	      React.createElement('br', null),
 	      React.createElement(
 	        'div',
-	        null,
-	        'How will my audience respond?',
+	        { className: 'text-shift-left' },
+	        'How will my audience respond?'
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'answer-choice-type group' },
 	        React.createElement(
 	          'ul',
-	          null,
+	          { className: 'category-container' },
 	          categories
 	        ),
 	        React.createElement(
 	          'ul',
-	          null,
-	          ' Your audience can select from these answers:',
+	          { className: 'answer-container' },
+	          'Your audience can select from these answers: ',
+	          React.createElement('br', null),
 	          myNewAnswers
 	        )
-	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'agreement' },
-	        'By proceeding you agree to Ask Anything!'
-	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'agreement' },
-	        React.createElement(
-	          Link,
-	          { to: 'tos', className: 'link' },
-	          'Terms of Service'
-	        ),
-	        ' and ',
-	        React.createElement(
-	          Link,
-	          { to: 'privacyPolicy', className: 'link' },
-	          'Privacy Policy'
-	        ),
-	        '.'
 	      )
 	    );
 	  }
@@ -35933,6 +35953,45 @@
 
 /***/ },
 /* 293 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	var AnswerInput = React.createClass({
+	  displayName: "AnswerInput",
+	
+	  getInitialState: function () {
+	    return { answer: "" };
+	  },
+	
+	  componentDidMount: function () {},
+	
+	  componentWillUnmount: function () {},
+	
+	  _onChange: function () {},
+	
+	  answerChange: function (e) {
+	    var newAnswer = e.target.value;
+	    this.setState({ answer: newAnswer });
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      "div",
+	      { className: "single-answer-input" },
+	      React.createElement("input", {
+	        type: "text",
+	        value: this.state.answer,
+	        onChange: this.answerChange
+	      })
+	    );
+	  }
+	});
+	
+	module.exports = AnswerInput;
+
+/***/ },
+/* 294 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -36003,12 +36062,12 @@
 	module.exports = NoUserNavBar;
 
 /***/ },
-/* 294 */
+/* 295 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var Link = __webpack_require__(168).Link;
-	var DemoContent = __webpack_require__(295);
+	var DemoContent = __webpack_require__(296);
 	
 	var RootPageContent = React.createClass({
 	  displayName: 'RootPageContent',
@@ -36029,13 +36088,13 @@
 	module.exports = RootPageContent;
 
 /***/ },
-/* 295 */
+/* 296 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var Link = __webpack_require__(168).Link;
-	var GuestUserConstants = __webpack_require__(296);
-	var UserApiUtil = __webpack_require__(297);
+	var GuestUserConstants = __webpack_require__(297);
+	var UserApiUtil = __webpack_require__(298);
 	var SessionStore = __webpack_require__(250);
 	
 	var DemoContent = React.createClass({
@@ -36150,7 +36209,7 @@
 	module.exports = DemoContent;
 
 /***/ },
-/* 296 */
+/* 297 */
 /***/ function(module, exports) {
 
 	var GuestUserConstants = {
@@ -36161,7 +36220,7 @@
 	module.exports = GuestUserConstants;
 
 /***/ },
-/* 297 */
+/* 298 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var SessionActions = __webpack_require__(274);
@@ -36245,7 +36304,7 @@
 	module.exports = UserApiUtil;
 
 /***/ },
-/* 298 */
+/* 299 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -36257,7 +36316,7 @@
 	var Logo = __webpack_require__(280);
 	var Modal = __webpack_require__(229);
 	var ModalConstants = __webpack_require__(279);
-	var ForgotPassword = __webpack_require__(299);
+	var ForgotPassword = __webpack_require__(300);
 	
 	var LoginForm = React.createClass({
 	  displayName: 'LoginForm',
@@ -36435,7 +36494,7 @@
 	module.exports = LoginForm;
 
 /***/ },
-/* 299 */
+/* 300 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -36443,7 +36502,7 @@
 	var SessionStore = __webpack_require__(250);
 	var ErrorStore = __webpack_require__(291);
 	var ErrorActions = __webpack_require__(275);
-	var UserApiUtil = __webpack_require__(297);
+	var UserApiUtil = __webpack_require__(298);
 	
 	var Logo = __webpack_require__(280);
 	
@@ -36593,12 +36652,12 @@
 	module.exports = ForgotPassword;
 
 /***/ },
-/* 300 */
+/* 301 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var SignupParticipant = __webpack_require__(301);
-	var SignupPresenter = __webpack_require__(303);
+	var SignupParticipant = __webpack_require__(302);
+	var SignupPresenter = __webpack_require__(304);
 	var SessionStore = __webpack_require__(250);
 	
 	var SignupPage = React.createClass({
@@ -36652,13 +36711,13 @@
 	module.exports = SignupPage;
 
 /***/ },
-/* 301 */
+/* 302 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var Modal = __webpack_require__(229);
 	var ModalConstants = __webpack_require__(279);
-	var SignupForm = __webpack_require__(302);
+	var SignupForm = __webpack_require__(303);
 	
 	var SignupParticipant = React.createClass({
 		displayName: 'SignupParticipant',
@@ -36709,13 +36768,13 @@
 	module.exports = SignupParticipant;
 
 /***/ },
-/* 302 */
+/* 303 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var Link = __webpack_require__(168).Link;
 	var ErrorStore = __webpack_require__(291);
-	var UserApiUtil = __webpack_require__(297);
+	var UserApiUtil = __webpack_require__(298);
 	var ErrorActions = __webpack_require__(275);
 	
 	var SignupForm = React.createClass({
@@ -36951,13 +37010,13 @@
 	module.exports = SignupForm;
 
 /***/ },
-/* 303 */
+/* 304 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var Modal = __webpack_require__(229);
 	var ModalConstants = __webpack_require__(279);
-	var SignupForm = __webpack_require__(302);
+	var SignupForm = __webpack_require__(303);
 	
 	var SignupPresenter = React.createClass({
 		displayName: 'SignupPresenter',
@@ -37008,14 +37067,14 @@
 	module.exports = SignupPresenter;
 
 /***/ },
-/* 304 */
+/* 305 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var ClientSurveyActions = __webpack_require__(286);
-	var SurveyStore = __webpack_require__(305);
-	var SideNav = __webpack_require__(306);
-	var QuestionsIndex = __webpack_require__(307);
+	var SurveyStore = __webpack_require__(306);
+	var SideNav = __webpack_require__(307);
+	var QuestionsIndex = __webpack_require__(308);
 	
 	var SurveysIndex = React.createClass({
 	  displayName: 'SurveysIndex',
@@ -37071,7 +37130,7 @@
 	module.exports = SurveysIndex;
 
 /***/ },
-/* 305 */
+/* 306 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(251);
@@ -37107,7 +37166,7 @@
 	module.exports = SurveyStore;
 
 /***/ },
-/* 306 */
+/* 307 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -37171,7 +37230,7 @@
 	module.exports = SideNav;
 
 /***/ },
-/* 307 */
+/* 308 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -37228,7 +37287,7 @@
 	module.exports = QuestionsIndex;
 
 /***/ },
-/* 308 */
+/* 309 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -37270,14 +37329,14 @@
 	module.exports = QuestionIndexItem;
 
 /***/ },
-/* 309 */
+/* 310 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var Link = __webpack_require__(168).Link;
 	var SessionStore = __webpack_require__(250);
-	var UserApiUtil = __webpack_require__(297);
-	var UserEmailPasswordEditForm = __webpack_require__(310);
+	var UserApiUtil = __webpack_require__(298);
+	var UserEmailPasswordEditForm = __webpack_require__(311);
 	var ErrorStore = __webpack_require__(291);
 	
 	var UserEditForm = React.createClass({
@@ -37522,14 +37581,14 @@
 	module.exports = UserEditForm;
 
 /***/ },
-/* 310 */
+/* 311 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var Link = __webpack_require__(168).Link;
 	var SessionApiUtil = __webpack_require__(273);
 	var SessionStore = __webpack_require__(250);
-	var UserApiUtil = __webpack_require__(297);
+	var UserApiUtil = __webpack_require__(298);
 	var ErrorActions = __webpack_require__(275);
 	var ErrorStore = __webpack_require__(291);
 	
@@ -37765,7 +37824,7 @@
 	module.exports = UserEditForm;
 
 /***/ },
-/* 311 */
+/* 312 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -37804,78 +37863,6 @@
 	});
 	
 	module.exports = ForgotPasswordSuccess;
-
-/***/ },
-/* 312 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var Link = __webpack_require__(168).Link;
-	var QuestionConstants = __webpack_require__(285);
-	var AnswersForm = __webpack_require__(312);
-	
-	var AnswersForm = React.createClass({
-	  displayName: 'AnswersForm',
-	
-	  contextTypes: {
-	    router: React.PropTypes.object.isRequired
-	  },
-	
-	  getInitialState: function () {
-	    return { answer: "" };
-	  },
-	
-	  componentDidMount: function () {
-	    this.questionListener = QuestionStore.addListener(this._onChange);
-	  },
-	
-	  componentWillUnmount: function () {
-	    this.questionListener.remove();
-	  },
-	
-	  _onChange: function () {},
-	
-	  handleSubmit: function (e) {
-	    e.preventDefault();
-	
-	    var formData = {
-	      answers: this.state.answer
-	    };
-	  },
-	
-	  questionChange: function (e) {
-	    var newQuestion = e.target.value;
-	    this.setState({ question: newQuestion });
-	  },
-	
-	  categoryChange: function (e) {
-	    var newCategory = e.target.value;
-	    this.setState({ category: newCategory });
-	  },
-	
-	  answerChange: function (e) {},
-	
-	  render: function () {
-	
-	    return React.createElement(
-	      'li',
-	      null,
-	      React.createElement('br', null),
-	      React.createElement(
-	        'label',
-	        null,
-	        ' Question: ',
-	        React.createElement('br', null),
-	        React.createElement('input', {
-	          type: 'text',
-	          value: this.state.question,
-	          onChange: this.questionChange })
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = AnswersForm;
 
 /***/ }
 /******/ ]);

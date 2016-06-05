@@ -13,6 +13,7 @@ var QuestionFormGenerator = React.createClass({
 
   getInitialState: function () {
     return ({
+      input: "",
       title: "",
       numberQuestions: 0,
       questions: [],
@@ -68,7 +69,8 @@ var QuestionFormGenerator = React.createClass({
     console.log(newQuestion);
     this.setState({
       questions: this.state.questions.concat( newQuestion ),
-      numberQuestions: this.state.numberQuestions + 1
+      numberQuestions: this.state.numberQuestions + 1,
+      input: ""
     })
   },
 
@@ -110,28 +112,32 @@ var QuestionFormGenerator = React.createClass({
     return (
       <div>
         <form onSubmit={ this.handleSubmit } >
-          <label>
-            { addQuestion }
+          { surveyText }
 
-            { surveyText }
+          { surveyInput }
 
-            { surveyInput }
+          <ul>
+            { myNewQuestions }
+          </ul>
 
-            <ul>
-              { myNewQuestions }
-            </ul>
+          <div className="question-form-generator-container soft-edges">
+            <label className="add-question">{ addQuestion }
+              <input
+                className="question-input-field margin-auto placeholder-text h22"
+                type="text"
+                value={ this.state.input }
+                placeholder="What's your favorite color? Red, Blue, or Green"
+                onChange={ this.handleQuestionInputChange }
+                />
+            </label>
+          </div>
 
-            <input
-              className=""
-              type="text"
-              placeholder="What's your favorite color? Red, Blue, or Green"
-              onChange={ this.handleQuestionInputChange }
-              />
-          </label>
-          <div className="cancel-forgot hover-underline display-inline hover-pointer" onClick={ this.closeMyself }>
+          <div
+            className="cancel-forgot hover-underline display-inline hover-pointer cancel-question-form"
+            onClick={ this.closeMyself }>
             Cancel
           </div>
-          <input className="soft-edges hover-pointer" type="submit" value={ createText } />
+          <input className="soft-edges hover-pointer question-creation-button" type="submit" value={ createText } />
         </form>
       </div>
 		);

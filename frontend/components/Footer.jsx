@@ -7,8 +7,15 @@ var Footer = React.createClass({
   },
 
   render: function () {
+    var footerSurvey = "";
+
+    console.log(window.location.hash.slice(2, 9));
+    if (window.location.hash.slice(2, 9).toUpperCase() === "SURVEYS") {
+      footerSurvey = "footer-survey";
+    }
+
     return (
-      <div className="footer-container">
+      <div className={"footer-container " + footerSurvey }>
         <div className="footer-div-container group text-center">
           <div className="footer-ul-container">
             <ul className="footer-li-container">Services

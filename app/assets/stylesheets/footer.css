@@ -35,3 +35,7 @@
 .footer-li-container > li:hover {
   text-decoration: underline;
 }
+
+.footer-survey {
+  background: #BCBFC3;
+}
