@@ -17,34 +17,14 @@ class Survey < ActiveRecord::Base
     dependent: :destroy
   )
 
-  def self.createSurvey (params, current_user)
+  def self.create_surveys (params, current_user)
     survey_data = params[:survey]
-    questions = params[:questions]
 
-    Question.transaction do
+    Survey.transaction do
       survey_data[:title] ||= "New Survey"
-      create_survey(survey_data, questions, current_user)
+      Survey.create(title: survey_data[:title], author: current_user)
+
+      Question.create_questions(params, current_user)
     end
   end
-
-  private
-
-  def create_survey(survey_data, questions, current_user)
-    Survey.create(title: survey_data[:title], author: current_user)
-
-    questions.each do |question_data|
-      asked_question = question_data[:question] || "[Blank Title]"
-
-      Question.create(
-      question: asked_question,
-      category: question_data[:category],
-      survey: Survey.last
-      )
-
-      question_data[:answers].each do |answer_data|
-        Answer.create(answer: answer_data[:answer], question: Question.last)
-      end
-    end
-  end
-
 end

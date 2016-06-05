@@ -10,11 +10,12 @@ class Api::QuestionsController < ApplicationController
   end
 
   def create
-    if (Question.performTransaction(params, current_user))
+    if (Question.create_questions(params, current_user))
       @question = Question.last
       render "api/questions/show"
     else
-      render @question.errors.full_messages
+      @errors = @question.errors.full_messages
+      render "api/shared/errors", status: 409
     end
   end
 

@@ -23,7 +23,7 @@ class Question < ActiveRecord::Base
     dependent: :destroy
   )
 
-  def self.createQuestion (params, current_user)
+  def self.create_questions (params, current_user)
     questions = params[:questions]
 
     Question.transaction do

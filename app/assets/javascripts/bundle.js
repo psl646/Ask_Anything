@@ -34857,15 +34857,185 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var Link = __webpack_require__(168).Link;
 	
 	var Footer = React.createClass({
-	  displayName: "Footer",
+	  displayName: 'Footer',
+	
+	  contextTypes: {
+	    router: React.PropTypes.object.isRequired
+	  },
 	
 	  render: function () {
 	    return React.createElement(
-	      "div",
-	      { className: "footer-container" },
-	      "Footer here"
+	      'div',
+	      { className: 'footer-container' },
+	      React.createElement(
+	        'div',
+	        { className: 'footer-div-container group text-center' },
+	        React.createElement(
+	          'div',
+	          { className: 'footer-ul-container' },
+	          React.createElement(
+	            'ul',
+	            { className: 'footer-li-container' },
+	            'Services',
+	            React.createElement(
+	              'li',
+	              null,
+	              React.createElement(
+	                Link,
+	                { to: 'education' },
+	                'Education'
+	              )
+	            ),
+	            React.createElement(
+	              'li',
+	              null,
+	              React.createElement(
+	                Link,
+	                { to: 'training' },
+	                'Training'
+	              )
+	            ),
+	            React.createElement(
+	              'li',
+	              null,
+	              React.createElement(
+	                Link,
+	                { to: 'business' },
+	                'Business'
+	              )
+	            ),
+	            React.createElement(
+	              'li',
+	              null,
+	              React.createElement(
+	                Link,
+	                { to: 'events' },
+	                'Events'
+	              )
+	            ),
+	            React.createElement(
+	              'li',
+	              null,
+	              React.createElement(
+	                Link,
+	                { to: 'more' },
+	                'More'
+	              )
+	            )
+	          )
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'footer-ul-container' },
+	          React.createElement(
+	            'ul',
+	            { className: 'footer-li-container' },
+	            'Resources',
+	            React.createElement(
+	              'li',
+	              null,
+	              React.createElement(
+	                Link,
+	                { to: 'features' },
+	                'Features'
+	              )
+	            ),
+	            React.createElement(
+	              'li',
+	              null,
+	              React.createElement(
+	                Link,
+	                { to: 'how_it_works' },
+	                'How it works'
+	              )
+	            ),
+	            React.createElement(
+	              'li',
+	              null,
+	              React.createElement(
+	                Link,
+	                { to: 'faq' },
+	                'FAQ'
+	              )
+	            ),
+	            React.createElement(
+	              'li',
+	              null,
+	              React.createElement(
+	                Link,
+	                { to: 'user_guide' },
+	                'User Guide'
+	              )
+	            ),
+	            React.createElement(
+	              'li',
+	              null,
+	              React.createElement(
+	                Link,
+	                { to: 'use_cases' },
+	                'Use Cases'
+	              )
+	            )
+	          )
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'footer-ul-container' },
+	          React.createElement(
+	            'ul',
+	            { className: 'footer-li-container' },
+	            'Company',
+	            React.createElement(
+	              'li',
+	              null,
+	              React.createElement(
+	                Link,
+	                { to: 'about' },
+	                'About'
+	              )
+	            ),
+	            React.createElement(
+	              'li',
+	              null,
+	              React.createElement(
+	                Link,
+	                { to: 'blog' },
+	                'Blog'
+	              )
+	            ),
+	            React.createElement(
+	              'li',
+	              null,
+	              React.createElement(
+	                Link,
+	                { to: 'other_projects' },
+	                'Other Projects'
+	              )
+	            ),
+	            React.createElement(
+	              'li',
+	              null,
+	              React.createElement(
+	                Link,
+	                { to: 'linkedIn' },
+	                'LinkedIn'
+	              )
+	            ),
+	            React.createElement(
+	              'li',
+	              null,
+	              React.createElement(
+	                Link,
+	                { to: 'github' },
+	                'Github'
+	              )
+	            )
+	          )
+	        )
+	      )
 	    );
 	  }
 	});
@@ -34882,7 +35052,7 @@
 	var SessionStore = __webpack_require__(250);
 	var SessionApiUtil = __webpack_require__(273);
 	var Logo = __webpack_require__(280);
-	var QuestionFormGenerator = __webpack_require__(281);
+	var QuestionFormGenerator = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./QuestionFormGenerator\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 	
 	var UserNavBar = React.createClass({
 	  displayName: 'UserNavBar',
@@ -35144,30 +35314,7 @@
 	module.exports = Logo;
 
 /***/ },
-/* 281 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	
-	var QuestionFormGenerator = React.createClass({
-	  displayName: 'QuestionFormGenerator',
-	
-	  contextTypes: {
-	    router: React.PropTypes.object.isRequired
-	  },
-	
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      null,
-	      'This is the Question Form Generator'
-	    );
-	  }
-	});
-	
-	module.exports = QuestionFormGenerator;
-
-/***/ },
+/* 281 */,
 /* 282 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -36438,7 +36585,7 @@
 	var React = __webpack_require__(1);
 	var Modal = __webpack_require__(229);
 	var ModalConstants = __webpack_require__(279);
-	var QuestionFormGenerator = __webpack_require__(281);
+	var QuestionFormGenerator = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./QuestionFormGenerator\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 	
 	var SideNav = React.createClass({
 	  displayName: 'SideNav',
@@ -36557,7 +36704,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(251);
-	var QuestionApiUtil = __webpack_require__(303);
+	var QuestionApiUtil = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../util/question_api_util\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 	
 	var ClientQuestionActions = {
 	  fetchAllQuestions: function () {
@@ -36566,76 +36713,18 @@
 	
 	  getQuestionById: function (question_id) {
 	    QuestionApiUtil.getQuestionById(question_id);
-	  }
+	  },
 	
+	  createQuestions: function (formData) {
+	    QuestionApiUtil.createQuestions(formData);
+	  }
 	};
 	
 	module.exports = ClientQuestionActions;
 
 /***/ },
-/* 303 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var ServerQuestionActions = __webpack_require__(304);
-	
-	var QuestionApiUtil = {
-	  fetchAllQuestions: function () {
-	    $.ajax({
-	      url: 'api/questions',
-	      type: 'GET',
-	      dataType: 'json',
-	      success: function (questions) {
-	        ServerQuestionActions.receiveAllQuestions(questions);
-	      },
-	      error: function () {
-	        console.log("Fetch error in QuestionApiUtil#fetchAllQuestions");
-	      }
-	    });
-	  },
-	
-	  getQuestionById: function (question_id) {
-	    $.ajax({
-	      url: 'api/questions/' + question_id,
-	      type: 'GET',
-	      dataType: 'json',
-	      success: function (question) {
-	        ServerQuestionActions.receiveQuestion(question);
-	      },
-	      error: function () {
-	        console.log("Fetch error in QuestionApiUtil#getQuestionById");
-	      }
-	    });
-	  }
-	};
-	
-	module.exports = QuestionApiUtil;
-
-/***/ },
-/* 304 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var AppDispatcher = __webpack_require__(251);
-	var QuestionConstants = __webpack_require__(305);
-	
-	var ServerQuestionActions = {
-	  receiveAllQuestions: function (questions) {
-	    AppDispatcher.dispatch({
-	      actionType: QuestionConstants.QUESTIONS_RECEIVED,
-	      questions: questions
-	    });
-	  },
-	
-	  receiveQuestion: function (question) {
-	    AppDispatcher.dispatch({
-	      actionType: QuestionConstants.QUESTION_RECEIVED,
-	      question: question
-	    });
-	  }
-	};
-	
-	module.exports = ServerQuestionActions;
-
-/***/ },
+/* 303 */,
+/* 304 */,
 /* 305 */
 /***/ function(module, exports) {
 

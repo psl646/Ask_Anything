@@ -27,6 +27,23 @@ var QuestionApiUtil = {
         console.log("Fetch error in QuestionApiUtil#getQuestionById");
       }
     })
+  },
+
+  createQuestions: function (formData) {
+    $.ajax({
+      url: 'api/questions',
+      type: 'POST',
+      dataType: 'json',
+      data: {questions: formData}
+      success: function (question) {
+        ServerQuestionActions.receiveQuestion(question);
+      },
+      error: function (xhr) {
+        console.log("POST Error in QuestionApiUtil#createQuestions");
+        var errors = xhr.responseJSON;
+        ErrorActions.setErrors(errors);
+      }
+    })
   }
 };
 

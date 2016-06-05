@@ -8,8 +8,11 @@ var ClientQuestionActions = {
 
   getQuestionById: function(question_id) {
     QuestionApiUtil.getQuestionById(question_id);
-  }
+  },
 
+  createQuestions: function(formData) {
+    QuestionApiUtil.createQuestions(formData);
+  }
 };
 
 module.exports = ClientQuestionActions;
