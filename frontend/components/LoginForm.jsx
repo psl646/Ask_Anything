@@ -3,7 +3,11 @@ var Link = require('react-router').Link;
 var SessionApiUtil = require('./../util/session_api_util');
 var SessionStore = require('./../stores/session_store');
 var ErrorStore = require('./../stores/error_store');
+var ErrorActions = require('../actions/error_actions');
 var Logo = require('./Logo');
+var Modal = require('react-modal');
+var ModalConstants = require('../constants/modal_constants');
+var ForgotPassword = require('./ForgotPassword');
 
 var LoginForm = React.createClass({
   contextTypes: {
@@ -11,7 +15,7 @@ var LoginForm = React.createClass({
   },
 
   getInitialState: function () {
-    return { emailOrUsername: "", password: "", errors: false };
+    return { emailOrUsername: "", password: "", errors: false, modalOpen: false };
   },
 
   componentDidMount: function () {
@@ -30,8 +34,19 @@ var LoginForm = React.createClass({
     }
   },
 
+  closeModal: function(){
+    ErrorActions.clearErrors();
+    this.setState({ modalOpen: false })
+  },
+
+  openModal: function(){
+    this.setState({ modalOpen: true })
+  },
+
   handleErrors: function () {
-    this.setState({ errors: true });
+    if (ErrorStore.getErrors().length > 0) {
+      this.setState({ errors: true });
+    }
   },
 
 	handleSubmit: function (e) {
@@ -52,10 +67,10 @@ var LoginForm = React.createClass({
     var errors = ErrorStore.getErrors();
 
     var messages = errors.map(function (errorMsg, i) {
-      return <li key={ i }>{ errorMsg }</li>;
+      return <li className="error-login" key={ i }>{ errorMsg }</li>;
     });
 
-    return <ul className="error-login">{ messages }</ul>;
+    return messages;
   },
 
 	emailOrUsernameChange: function (e) {
@@ -92,7 +107,18 @@ var LoginForm = React.createClass({
   					</label>
 
   	        <br />
-  					<label> Password <small className="lost-password"><Link to="forgotPassword">I forgot my password</Link></small><br/>
+  					<label> Password
+              <small className="lost-password hover-pointer hover-underline" onClick={ this.openModal }>
+                I forgot my password
+                <Modal
+        					isOpen={this.state.modalOpen}
+                  onRequestClose={this.closeModal}
+        					style={ ModalConstants.FORGOT_PASSWORD }>
+
+        						<ForgotPassword closeThisModal={ this.closeModal } />
+
+                </Modal>
+              </small><br/>
   						<input className="login-input soft-edges" type="password" value={this.state.password} onChange={this.passwordChange} />
   					</label>
 

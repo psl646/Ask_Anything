@@ -16,6 +16,12 @@ var SessionActions = {
     AppDispatcher.dispatch({
       actionType: SessionConstants.LOGOUT
     });
+  },
+
+  userFound: function () {
+    AppDispatcher.dispatch({
+      actionType: SessionConstants.USER_FOUND
+    });
   }
 
 };

@@ -1,6 +1,7 @@
 var SessionConstants = {
 	LOGIN: "LOGIN",
-	LOGOUT: "LOGOUT"
+	LOGOUT: "LOGOUT",
+	USER_FOUND: "USER_FOUND"
 };
 
 module.exports = SessionConstants;

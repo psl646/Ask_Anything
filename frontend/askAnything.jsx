@@ -16,18 +16,16 @@ var SurveysIndex = require('./components/SurveysIndex.jsx');
 var QuestionIndexItem = require('./components/QuestionIndexItem.jsx');
 var UserEditForm = require('./components/UserEditForm.jsx');
 var UserEmailPasswordEditForm = require('./components/UserEmailPasswordEditForm.jsx');
+var ForgotPasswordSuccess = require('./components/ForgotPasswordSuccess.jsx');
 
 
 var SessionStore = require('./stores/session_store.js');
 var SessionApiUtil = require('./util/session_api_util.js');
 
-// test component DELETE later
-var Test = require('./components/test.jsx');
-
-
 var Router = (
   <Router history={ hashHistory }>
     <Route path="/login" component={ LoginForm } onEnter={ _ensureLoggedOut } />
+    <Route path="password_resets" component={ ForgotPasswordSuccess } onEnter={ _ensureLoggedOut }/>
     <Route path="/" component={ App } >
       <Route path="signup" component={ SignupPage } onEnter={ _ensureLoggedOut } />
       <Route path="surveys" component={ SurveysIndex } onEnter={ _ensureLoggedIn }/> // Maybe take out this onEnter hook later to allow non-users to use the site

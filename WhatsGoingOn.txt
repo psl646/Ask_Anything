@@ -19,5 +19,12 @@ refactor signup presenter/participant to signup options
 
 
 =================LINKS GO SOMEWHERE=================
-LoginForm - forgotPassword
 SignupForm - tos, privacyPolicy, moreCountries -->
+
+
+
+
+Poll Everywhere Errors found while doing Capstone:
+1) Signup Participant on Error --> Signup Presenter Error?!
+2) Can edit user password to 1 character.
+3) Modal on Forgot password does not reset errors

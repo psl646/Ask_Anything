@@ -57,22 +57,21 @@
 	
 	var App = __webpack_require__(249);
 	var LoginForm = __webpack_require__(287);
-	var SignupPage = __webpack_require__(289);
-	var SurveysIndex = __webpack_require__(293);
-	var QuestionIndexItem = __webpack_require__(306);
-	var UserEditForm = __webpack_require__(307);
-	var UserEmailPasswordEditForm = __webpack_require__(310);
+	var SignupPage = __webpack_require__(290);
+	var SurveysIndex = __webpack_require__(294);
+	var QuestionIndexItem = __webpack_require__(307);
+	var UserEditForm = __webpack_require__(308);
+	var UserEmailPasswordEditForm = __webpack_require__(309);
+	var ForgotPasswordSuccess = __webpack_require__(310);
 	
 	var SessionStore = __webpack_require__(250);
 	var SessionApiUtil = __webpack_require__(273);
-	
-	// test component DELETE later
-	var Test = __webpack_require__(308);
 	
 	var Router = React.createElement(
 	  Router,
 	  { history: hashHistory },
 	  React.createElement(Route, { path: '/login', component: LoginForm, onEnter: _ensureLoggedOut }),
+	  React.createElement(Route, { path: 'password_resets', component: ForgotPasswordSuccess, onEnter: _ensureLoggedOut }),
 	  React.createElement(
 	    Route,
 	    { path: '/', component: App },
@@ -27939,6 +27938,9 @@
 	      _logout();
 	      SessionStore.__emitChange();
 	      break;
+	    case SessionConstants.USER_FOUND:
+	      SessionStore.__emitChange();
+	      break;
 	  }
 	};
 	
@@ -34721,7 +34723,8 @@
 
 	var SessionConstants = {
 		LOGIN: "LOGIN",
-		LOGOUT: "LOGOUT"
+		LOGOUT: "LOGOUT",
+		USER_FOUND: "USER_FOUND"
 	};
 	
 	module.exports = SessionConstants;
@@ -34801,6 +34804,12 @@
 	  removeCurrentUser: function () {
 	    AppDispatcher.dispatch({
 	      actionType: SessionConstants.LOGOUT
+	    });
+	  },
+	
+	  userFound: function () {
+	    AppDispatcher.dispatch({
+	      actionType: SessionConstants.USER_FOUND
 	    });
 	  }
 	
@@ -35046,11 +35055,37 @@
 	    content: {
 	      position: 'fixed',
 	      top: '100px',
-	      left: '150px',
-	      right: '150px',
+	      left: '100px',
+	      right: '100px',
 	      bottom: '100px',
 	      border: '1px solid #ccc',
 	      padding: '20px',
+	      zIndex: 11
+	    }
+	  },
+	
+	  FORGOT_PASSWORD: {
+	    overlay: {
+	      position: 'fixed',
+	      top: 0,
+	      left: 0,
+	      right: 0,
+	      bottom: 0,
+	      background: 'transparent',
+	      zIndex: 10
+	    },
+	    content: {
+	      position: 'fixed',
+	      top: 0,
+	      left: 0,
+	      right: 0,
+	      bottom: 0,
+	      outline: 'none',
+	      overflow: 'none',
+	      outline: 'none',
+	      padding: 'none',
+	      border: 'none',
+	      margin: 'none',
 	      zIndex: 11
 	    }
 	  }
@@ -35080,16 +35115,22 @@
 	    return window.location.hash.slice(2, 7).toUpperCase() === "LOGIN";
 	  },
 	
+	  isPasswordReset: function () {
+	    return window.location.hash.slice(2, 17).toUpperCase() === "PASSWORD_RESETS";
+	  },
+	
 	  render: function () {
 	    var logoPlacement = "nouser-navbar-logo";
 	
 	    if (this.isLogin()) {
 	      logoPlacement = "login-logo";
-	    }
+	    } else if (this.isPasswordReset()) {
+	      logoPlacement = "password-reset-logo";
+	    };
 	
 	    return React.createElement(
 	      'div',
-	      { className: logoPlacement },
+	      { className: "logo-width " + logoPlacement },
 	      React.createElement('img', { className: 'hover-pointer logo-image', src: window.askAnythingAssets.logo, width: '35', height: '35', alt: 'Logo', onClick: this.handleClick }),
 	      React.createElement(
 	        'h1',
@@ -35414,6 +35455,26 @@
 	        ErrorActions.setErrors(errors);
 	      }
 	    });
+	  },
+	
+	  sendEmail: function (formData) {
+	    $.ajax({
+	      url: '/api/user',
+	      type: 'GET',
+	      dataType: 'json',
+	      data: { user: formData },
+	      success: function () {
+	        window.setTimeout(function () {
+	          console.log("I got in here");
+	          SessionActions.userFound();
+	        }, 0);
+	      },
+	      error: function (xhr) {
+	        console.log("Error in UserApiUtil#sendEmail");
+	        var errors = xhr.responseJSON;
+	        ErrorActions.setErrors(errors);
+	      }
+	    });
 	  }
 	};
 	
@@ -35428,7 +35489,11 @@
 	var SessionApiUtil = __webpack_require__(273);
 	var SessionStore = __webpack_require__(250);
 	var ErrorStore = __webpack_require__(288);
+	var ErrorActions = __webpack_require__(275);
 	var Logo = __webpack_require__(280);
+	var Modal = __webpack_require__(229);
+	var ModalConstants = __webpack_require__(279);
+	var ForgotPassword = __webpack_require__(289);
 	
 	var LoginForm = React.createClass({
 	  displayName: 'LoginForm',
@@ -35438,7 +35503,7 @@
 	  },
 	
 	  getInitialState: function () {
-	    return { emailOrUsername: "", password: "", errors: false };
+	    return { emailOrUsername: "", password: "", errors: false, modalOpen: false };
 	  },
 	
 	  componentDidMount: function () {
@@ -35457,8 +35522,19 @@
 	    }
 	  },
 	
+	  closeModal: function () {
+	    ErrorActions.clearErrors();
+	    this.setState({ modalOpen: false });
+	  },
+	
+	  openModal: function () {
+	    this.setState({ modalOpen: true });
+	  },
+	
 	  handleErrors: function () {
-	    this.setState({ errors: true });
+	    if (ErrorStore.getErrors().length > 0) {
+	      this.setState({ errors: true });
+	    }
 	  },
 	
 	  handleSubmit: function (e) {
@@ -35481,16 +35557,12 @@
 	    var messages = errors.map(function (errorMsg, i) {
 	      return React.createElement(
 	        'li',
-	        { key: i },
+	        { className: 'error-login', key: i },
 	        errorMsg
 	      );
 	    });
 	
-	    return React.createElement(
-	      'ul',
-	      { className: 'error-login' },
-	      messages
-	    );
+	    return messages;
 	  },
 	
 	  emailOrUsernameChange: function (e) {
@@ -35549,14 +35621,18 @@
 	          React.createElement(
 	            'label',
 	            null,
-	            ' Password ',
+	            ' Password',
 	            React.createElement(
 	              'small',
-	              { className: 'lost-password' },
+	              { className: 'lost-password hover-pointer hover-underline', onClick: this.openModal },
+	              'I forgot my password',
 	              React.createElement(
-	                Link,
-	                { to: 'forgotPassword' },
-	                'I forgot my password'
+	                Modal,
+	                {
+	                  isOpen: this.state.modalOpen,
+	                  onRequestClose: this.closeModal,
+	                  style: ModalConstants.FORGOT_PASSWORD },
+	                React.createElement(ForgotPassword, { closeThisModal: this.closeModal })
 	              )
 	            ),
 	            React.createElement('br', null),
@@ -35621,8 +35697,166 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var SignupParticipant = __webpack_require__(290);
-	var SignupPresenter = __webpack_require__(292);
+	var Link = __webpack_require__(168).Link;
+	var SessionStore = __webpack_require__(250);
+	var ErrorStore = __webpack_require__(288);
+	var ErrorActions = __webpack_require__(275);
+	var UserApiUtil = __webpack_require__(286);
+	
+	var Logo = __webpack_require__(280);
+	
+	var ForgotPassword = React.createClass({
+	  displayName: 'ForgotPassword',
+	
+	  contextTypes: {
+	    router: React.PropTypes.object.isRequired
+	  },
+	
+	  getInitialState: function () {
+	    return { email: "", errors: false };
+	  },
+	
+	  componentDidMount: function () {
+	    this.errorListener = ErrorStore.addListener(this.handleErrors);
+	    this.sessionListener = SessionStore.addListener(this.redirectIfValidEmail);
+	  },
+	
+	  componentWillUnmount: function () {
+	    ErrorActions.clearErrors();
+	    this.errorListener.remove();
+	    this.sessionListener.remove();
+	  },
+	
+	  redirectIfValidEmail: function () {
+	    var that = this;
+	
+	    window.setTimeout(function () {
+	      that.closeMyself();
+	    }, 0);
+	    window.setTimeout(function () {
+	      that.context.router.push("password_resets");
+	    }, 0);
+	  },
+	
+	  closeMyself: function () {
+	    this.props.closeThisModal();
+	  },
+	
+	  handleErrors: function () {
+	    this.setState({ errors: true });
+	  },
+	
+	  handleSubmit: function (e) {
+	    e.preventDefault();
+	    var email = this.state.email.toLowerCase();
+	
+	    var formData = {
+	      email: email
+	    };
+	
+	    UserApiUtil.sendEmail(formData);
+	    this.setState({ email: "", errors: false });
+	  },
+	
+	  errorMessages: function () {
+	    var errors = ErrorStore.getErrors();
+	
+	    var messages = errors.map(function (errorMsg, i) {
+	      return React.createElement(
+	        'li',
+	        { key: i },
+	        errorMsg
+	      );
+	    });
+	
+	    return React.createElement(
+	      'ul',
+	      { className: 'error-login' },
+	      messages
+	    );
+	  },
+	
+	  emailChange: function (e) {
+	    var newemail = e.target.value;
+	    this.setState({ email: newemail });
+	  },
+	
+	  handleCancelClick: function () {
+	    this.closeModal();
+	  },
+	
+	  render: function () {
+	    var renderErrors = "";
+	
+	    if (this.state.errors) {
+	      renderErrors = React.createElement(
+	        'div',
+	        null,
+	        this.errorMessages()
+	      );
+	    };
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'app' },
+	      React.createElement(
+	        'div',
+	        { className: 'login-container' },
+	        React.createElement(Logo, null),
+	        React.createElement(
+	          'form',
+	          { className: 'login-component soft-edges', onSubmit: this.handleSubmit },
+	          renderErrors,
+	          React.createElement(
+	            'h1',
+	            { className: 'h1' },
+	            'Log In'
+	          ),
+	          React.createElement('br', null),
+	          React.createElement(
+	            'label',
+	            null,
+	            ' Email ',
+	            React.createElement('br', null),
+	            React.createElement('input', {
+	              className: 'login-input soft-edges',
+	              type: 'text',
+	              value: this.state.email,
+	              onChange: this.emailChange
+	            })
+	          ),
+	          React.createElement('br', null),
+	          React.createElement(
+	            'div',
+	            { className: 'h11-5' },
+	            'It\'s ok, this happens to the best of us. Make sure the email you entered above is correct and we\'ll email you instructions on how to reset your password.'
+	          ),
+	          React.createElement('br', null),
+	          React.createElement('input', {
+	            className: 'signin-button soft-edges hover-pointer',
+	            type: 'submit',
+	            value: 'Send me password reset instructions'
+	          }),
+	          React.createElement(
+	            'div',
+	            { className: 'cancel-forgot hover-underline hover-pointer text-center', onClick: this.closeMyself },
+	            'Cancel'
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = ForgotPassword;
+
+/***/ },
+/* 290 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var SignupParticipant = __webpack_require__(291);
+	var SignupPresenter = __webpack_require__(293);
 	var SessionStore = __webpack_require__(250);
 	
 	var SignupPage = React.createClass({
@@ -35676,13 +35910,13 @@
 	module.exports = SignupPage;
 
 /***/ },
-/* 290 */
+/* 291 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var Modal = __webpack_require__(229);
 	var ModalConstants = __webpack_require__(279);
-	var SignupForm = __webpack_require__(291);
+	var SignupForm = __webpack_require__(292);
 	
 	var SignupParticipant = React.createClass({
 		displayName: 'SignupParticipant',
@@ -35733,7 +35967,7 @@
 	module.exports = SignupParticipant;
 
 /***/ },
-/* 291 */
+/* 292 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -35975,13 +36209,13 @@
 	module.exports = SignupForm;
 
 /***/ },
-/* 292 */
+/* 293 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var Modal = __webpack_require__(229);
 	var ModalConstants = __webpack_require__(279);
-	var SignupForm = __webpack_require__(291);
+	var SignupForm = __webpack_require__(292);
 	
 	var SignupPresenter = React.createClass({
 		displayName: 'SignupPresenter',
@@ -36032,14 +36266,14 @@
 	module.exports = SignupPresenter;
 
 /***/ },
-/* 293 */
+/* 294 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var ClientSurveyActions = __webpack_require__(294);
-	var SurveyStore = __webpack_require__(298);
-	var SideNav = __webpack_require__(299);
-	var QuestionsIndex = __webpack_require__(300);
+	var ClientSurveyActions = __webpack_require__(295);
+	var SurveyStore = __webpack_require__(299);
+	var SideNav = __webpack_require__(300);
+	var QuestionsIndex = __webpack_require__(301);
 	
 	var SurveysIndex = React.createClass({
 	  displayName: 'SurveysIndex',
@@ -36095,11 +36329,11 @@
 	module.exports = SurveysIndex;
 
 /***/ },
-/* 294 */
+/* 295 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(251);
-	var SurveyApiUtil = __webpack_require__(295);
+	var SurveyApiUtil = __webpack_require__(296);
 	
 	var ClientSurveyActions = {
 	  fetchAllSurveys: function () {
@@ -36110,10 +36344,10 @@
 	module.exports = ClientSurveyActions;
 
 /***/ },
-/* 295 */
+/* 296 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var ServerSurveyActions = __webpack_require__(296);
+	var ServerSurveyActions = __webpack_require__(297);
 	
 	var SurveyApiUtil = {
 	  fetchAllSurveys: function () {
@@ -36134,11 +36368,11 @@
 	module.exports = SurveyApiUtil;
 
 /***/ },
-/* 296 */
+/* 297 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(251);
-	var SurveyConstants = __webpack_require__(297);
+	var SurveyConstants = __webpack_require__(298);
 	
 	var ServerSurveyActions = {
 	  receiveAllSurveys: function (surveys) {
@@ -36152,7 +36386,7 @@
 	module.exports = ServerSurveyActions;
 
 /***/ },
-/* 297 */
+/* 298 */
 /***/ function(module, exports) {
 
 	var SurveyConstants = {
@@ -36162,12 +36396,12 @@
 	module.exports = SurveyConstants;
 
 /***/ },
-/* 298 */
+/* 299 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(251);
 	var Store = __webpack_require__(255).Store;
-	var SurveyConstants = __webpack_require__(297);
+	var SurveyConstants = __webpack_require__(298);
 	
 	var SurveyStore = new Store(AppDispatcher);
 	
@@ -36198,7 +36432,7 @@
 	module.exports = SurveyStore;
 
 /***/ },
-/* 299 */
+/* 300 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -36262,12 +36496,12 @@
 	module.exports = SideNav;
 
 /***/ },
-/* 300 */
+/* 301 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var ClientQuestionActions = __webpack_require__(301);
-	var QuestionStore = __webpack_require__(305);
+	var ClientQuestionActions = __webpack_require__(302);
+	var QuestionStore = __webpack_require__(306);
 	var Link = __webpack_require__(168).Link;
 	var SessionStore = __webpack_require__(250);
 	
@@ -36319,11 +36553,11 @@
 	module.exports = QuestionsIndex;
 
 /***/ },
-/* 301 */
+/* 302 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(251);
-	var QuestionApiUtil = __webpack_require__(302);
+	var QuestionApiUtil = __webpack_require__(303);
 	
 	var ClientQuestionActions = {
 	  fetchAllQuestions: function () {
@@ -36339,10 +36573,10 @@
 	module.exports = ClientQuestionActions;
 
 /***/ },
-/* 302 */
+/* 303 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var ServerQuestionActions = __webpack_require__(303);
+	var ServerQuestionActions = __webpack_require__(304);
 	
 	var QuestionApiUtil = {
 	  fetchAllQuestions: function () {
@@ -36377,11 +36611,11 @@
 	module.exports = QuestionApiUtil;
 
 /***/ },
-/* 303 */
+/* 304 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(251);
-	var QuestionConstants = __webpack_require__(304);
+	var QuestionConstants = __webpack_require__(305);
 	
 	var ServerQuestionActions = {
 	  receiveAllQuestions: function (questions) {
@@ -36402,7 +36636,7 @@
 	module.exports = ServerQuestionActions;
 
 /***/ },
-/* 304 */
+/* 305 */
 /***/ function(module, exports) {
 
 	var QuestionConstants = {
@@ -36413,12 +36647,12 @@
 	module.exports = QuestionConstants;
 
 /***/ },
-/* 305 */
+/* 306 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(251);
 	var Store = __webpack_require__(255).Store;
-	var QuestionConstants = __webpack_require__(304);
+	var QuestionConstants = __webpack_require__(305);
 	
 	var QuestionStore = new Store(AppDispatcher);
 	
@@ -36474,12 +36708,12 @@
 	module.exports = QuestionStore;
 
 /***/ },
-/* 306 */
+/* 307 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var ClientQuestionActions = __webpack_require__(301);
-	var QuestionStore = __webpack_require__(305);
+	var ClientQuestionActions = __webpack_require__(302);
+	var QuestionStore = __webpack_require__(306);
 	
 	var QuestionIndexItem = React.createClass({
 	  displayName: 'QuestionIndexItem',
@@ -36516,14 +36750,14 @@
 	module.exports = QuestionIndexItem;
 
 /***/ },
-/* 307 */
+/* 308 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var Link = __webpack_require__(168).Link;
 	var SessionStore = __webpack_require__(250);
 	var UserApiUtil = __webpack_require__(286);
-	var UserEmailPasswordEditForm = __webpack_require__(310);
+	var UserEmailPasswordEditForm = __webpack_require__(309);
 	var ErrorStore = __webpack_require__(288);
 	
 	var UserEditForm = React.createClass({
@@ -36768,65 +37002,7 @@
 	module.exports = UserEditForm;
 
 /***/ },
-/* 308 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// DELETE THIS FILE LATER ONCE FINISHED WITH APP
-	
-	var React = __webpack_require__(1);
-	var Modal = __webpack_require__(229);
-	
-	var Test = React.createClass({
-	  displayName: "Test",
-	
-	  getInitialState: function () {
-	    return { modalOpen: false };
-	  },
-	  closeModal: function () {
-	    this.setState({ modalOpen: false });
-	  },
-	  openModal: function () {
-	    this.setState({ modalOpen: true });
-	  },
-	  render: function () {
-	    return React.createElement(
-	      "div",
-	      null,
-	      React.createElement(
-	        "button",
-	        { onClick: this.openModal },
-	        "Open Me!"
-	      ),
-	      React.createElement(
-	        Modal,
-	        {
-	          isOpen: this.state.modalOpen,
-	          onRequestClose: this.closeModal },
-	        React.createElement(
-	          "h2",
-	          null,
-	          "Im a modal!"
-	        ),
-	        React.createElement(
-	          "p",
-	          null,
-	          "modal modal modal modal modal"
-	        ),
-	        React.createElement(
-	          "p",
-	          null,
-	          "mooooooooodal!"
-	        )
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = Test;
-
-/***/ },
-/* 309 */,
-/* 310 */
+/* 309 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -37067,6 +37243,47 @@
 	});
 	
 	module.exports = UserEditForm;
+
+/***/ },
+/* 310 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var Link = __webpack_require__(168).Link;
+	var Logo = __webpack_require__(280);
+	
+	var ForgotPasswordSuccess = React.createClass({
+	  displayName: 'ForgotPasswordSuccess',
+	
+	  contextTypes: {
+	    router: React.PropTypes.object.isRequired
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'app' },
+	      React.createElement(
+	        'div',
+	        { className: 'password-reset-container' },
+	        React.createElement(Logo, { className: 'logo-password-resets' }),
+	        React.createElement(
+	          'div',
+	          { className: 'password-reset-box text-center soft-edges h14' },
+	          'You will receive an email shortly with a link and instructions to reset your password.',
+	          React.createElement('br', null),
+	          React.createElement(
+	            Link,
+	            { to: '/', className: 'home-link hover-pointer deep-blue h11-5' },
+	            'Return to home'
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = ForgotPasswordSuccess;
 
 /***/ }
 /******/ ]);

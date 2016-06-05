@@ -1,8 +1,11 @@
 /*LOGO*/
 
+.logo-width {
+  width: 200px;
+}
+
 .login-logo {
   display: block;
-  width: 200px;
   margin: 15px auto;
   padding: 20px;
 }
@@ -24,7 +27,6 @@
 .nouser-navbar-logo {
   float: left;
   padding: 20px 0;
-  width: 200px;
   height:35px;
 }
 
@@ -41,4 +43,14 @@
   float: left;
   bottom: 35px;
   left: 30px;
+}
+
+.password-reset-logo {
+  margin: auto;
+  position: relative;
+  top: 110px;
+}
+
+.auto-margin {
+  margin: auto;
 }

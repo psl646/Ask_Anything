@@ -17,6 +17,16 @@ class Api::UsersController < ApplicationController
 		end
 	end
 
+	def show
+		@user = User.find_by_email(params[:user][:email])
+		if @user
+			render "api/users/show"
+		else
+			@errors = ["We could not find a user with that email address."]
+			render "api/shared/errors", status: 404
+		end
+	end
+
 	def update
 		@user = User.find(params[:user][:id])
 
