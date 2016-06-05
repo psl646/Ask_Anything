@@ -64,12 +64,18 @@ var QuestionForm = React.createClass({
 
 	render: function () {
     var categories = QuestionConstants.QUESTION_CATEGORIES.map(function(category, idx) {
+      var isChecked = "";
+
+      if (this.state.category === category) {
+        isChecked = "category-checked"
+      }
+
       return (
-        <li key={ idx }>
+        <li key={ idx } className={ "category-li " + isChecked }>
           <label className="category-label">
             <input
               type="radio"
-              name="questionCategory"
+              name={"questionCategory"+idx}
               value={ category }
               checked={ this.state.category === category }
               onChange={this.categoryChange}
@@ -114,7 +120,9 @@ var QuestionForm = React.createClass({
           </ul>
 
           <ul className="answer-container">
-            Your audience can select from these answers: <br />
+            <div className="answer-text">
+              Your audience can select from these answers:
+            </div>
             { myNewAnswers }
           </ul>
         </div>

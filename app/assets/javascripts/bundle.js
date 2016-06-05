@@ -35883,15 +35883,21 @@
 	
 	  render: function () {
 	    var categories = QuestionConstants.QUESTION_CATEGORIES.map(function (category, idx) {
+	      var isChecked = "";
+	
+	      if (this.state.category === category) {
+	        isChecked = "category-checked";
+	      }
+	
 	      return React.createElement(
 	        'li',
-	        { key: idx },
+	        { key: idx, className: "category-li " + isChecked },
 	        React.createElement(
 	          'label',
 	          { className: 'category-label' },
 	          React.createElement('input', {
 	            type: 'radio',
-	            name: 'questionCategory',
+	            name: "questionCategory" + idx,
 	            value: category,
 	            checked: this.state.category === category,
 	            onChange: this.categoryChange
@@ -35947,8 +35953,11 @@
 	        React.createElement(
 	          'ul',
 	          { className: 'answer-container' },
-	          'Your audience can select from these answers: ',
-	          React.createElement('br', null),
+	          React.createElement(
+	            'div',
+	            { className: 'answer-text' },
+	            'Your audience can select from these answers:'
+	          ),
 	          myNewAnswers
 	        )
 	      )
@@ -35985,10 +35994,12 @@
 	  render: function () {
 	    return React.createElement(
 	      "div",
-	      { className: "single-answer-input" },
+	      { className: "single-answer-container" },
 	      React.createElement("input", {
+	        className: "single-answer-input",
 	        type: "text",
 	        value: this.state.answer,
+	        placeholder: "Text, Image URL, or LaTeX",
 	        onChange: this.answerChange
 	      })
 	    );

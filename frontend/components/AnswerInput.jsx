@@ -21,10 +21,12 @@ var AnswerInput = React.createClass({
 
 	render: function () {
     return (
-      <div className="single-answer-input">
+      <div className="single-answer-container">
         <input
+          className="single-answer-input"
           type="text"
           value={this.state.answer}
+          placeholder="Text, Image URL, or LaTeX"
           onChange={this.answerChange}
           />
       </div>

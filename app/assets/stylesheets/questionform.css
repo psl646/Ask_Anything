@@ -9,14 +9,14 @@
 .question-form-generator-container {
   width: 660px;
   height: 110px;
-  background: rgba(111, 168, 220, 0.658824);
+  background: rgba(111, 168, 221, 0.46);
   margin: 20px 20px 15px 20px;
 }
 
 .single-question-form {
   width: 660px;
   height: 410px;
-  background: rgba(111, 168, 220, 0.658824);
+  background: rgba(111, 168, 221, 0.46);
   margin: 20px;
 }
 
@@ -33,16 +33,16 @@
 
 .category-container > li {
   padding: 10px 0 10px 10px;
-  background-color: #F7FAFD;
   color: #494e59;
-  border-right: 1px solid #E3EBFA;
 }
 
-.category-label {
-  height: 100%;
-  width: 100%;
-  background: white;
+.category-container > li:hover {
   cursor: pointer;
+  background: white;
+}
+
+.category-checked {
+  background: white;
 }
 
 .answer-container {
@@ -55,8 +55,15 @@
 }
 
 .single-answer-input {
-  border: 5px solid red;
-  background: red;
+  position: relative;
+  left: 35px;
+  top: 10px;
+  width: 400px;
+  height: 35px;
+  border: 1px solid #BCBFC3;
+  background: rgb(255, 255, 255);
+  margin-top: 10px;
+
 }
 
 .question-input-field {
@@ -67,10 +74,6 @@
   border: 1px solid #BCBFC3;
   margin: 7px 0 18px 0;
   box-shadow: inset 0px 0px 10px #ddd;
-}
-
-.single-answer-input {
-  border: 5px solid orange;
 }
 
 .placeholder-text {
@@ -123,4 +126,10 @@
   background: black;
   font-weight: bold;
   border-radius: 50%;
+}
+
+.answer-text {
+  position: relative;
+  left: 35px;
+  top: 20px;
 }
