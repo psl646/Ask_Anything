@@ -63,6 +63,7 @@
 	var UserEditForm = __webpack_require__(310);
 	var UserEmailPasswordEditForm = __webpack_require__(311);
 	var ForgotPasswordSuccess = __webpack_require__(312);
+	var NewFeatures = __webpack_require__(313);
 	
 	var SessionStore = __webpack_require__(250);
 	var SessionApiUtil = __webpack_require__(273);
@@ -80,7 +81,8 @@
 	    ' // Maybe take out this onEnter hook later to allow non-users to use the site',
 	    React.createElement(Route, { path: 'questions/:questionId', component: QuestionIndexItem, onEnter: _ensureLoggedIn }),
 	    React.createElement(Route, { path: 'profile/edit', component: UserEditForm, onEnter: _ensureLoggedIn }),
-	    React.createElement(Route, { path: 'profile/edit_password_or_email', component: UserEmailPasswordEditForm, onEnter: _ensureLoggedIn })
+	    React.createElement(Route, { path: 'profile/edit_password_or_email', component: UserEmailPasswordEditForm, onEnter: _ensureLoggedIn }),
+	    React.createElement(Route, { path: 'new_features', component: NewFeatures, onEnter: _ensureLoggedIn })
 	  )
 	);
 	
@@ -35080,8 +35082,9 @@
 	    if (window.location.hash.slice(2, 9).toUpperCase() !== "SURVEYS") {
 	      this.context.router.push("surveys");
 	    }
-	
-	    this.setState({ modalOpen: true });
+	    window.setTimeout(function () {
+	      this.setState({ modalOpen: true });
+	    }.bind(this), 1000);
 	  },
 	
 	  greeting: function () {
@@ -35127,6 +35130,10 @@
 	
 	  handleQuestionsClick: function () {
 	    this.context.router.push("surveys");
+	  },
+	
+	  handleFeaturesClick: function () {
+	    this.context.router.push("new_features");
 	  },
 	
 	  render: function () {
@@ -35181,7 +35188,7 @@
 	        ),
 	        React.createElement(
 	          'li',
-	          { className: 'li-float-loggedin blue-hover' },
+	          { className: 'li-float-loggedin blue-hover', onClick: this.handleFeaturesClick },
 	          '  New Features '
 	        ),
 	        this.greeting()
@@ -37696,6 +37703,10 @@
 	    );
 	  },
 	
+	  handleHintClick: function () {
+	    alert("If you are a guest user, your default password is 'password'. If you are a regular user, try the Forgot Password link on the login page!");
+	  },
+	
 	  render: function () {
 	    var errorText;
 	    var allErrorMessages;
@@ -37763,13 +37774,20 @@
 	        React.createElement(
 	          'label',
 	          { className: 'label' },
-	          'Current Password ',
+	          'Current Password',
 	          React.createElement(
 	            'div',
 	            { className: 'red-inline' },
 	            '*'
 	          ),
-	          ' ',
+	          React.createElement(
+	            'em',
+	            {
+	              className: 'h5 text-shift-left blue-link hover-pointer',
+	              onClick: this.handleHintClick
+	            },
+	            'Need a hint?'
+	          ),
 	          React.createElement('br', null),
 	          React.createElement('input', {
 	            className: "signup-input soft-edges ",
@@ -37863,6 +37881,90 @@
 	});
 	
 	module.exports = ForgotPasswordSuccess;
+
+/***/ },
+/* 313 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	var NewFeatures = React.createClass({
+	  displayName: "NewFeatures",
+	
+	  render: function () {
+	    return React.createElement(
+	      "div",
+	      { className: "features-container h7" },
+	      " Here is a list of features completed",
+	      React.createElement(
+	        "ul",
+	        null,
+	        React.createElement(
+	          "li",
+	          { className: "features-li" },
+	          " User",
+	          React.createElement(
+	            "div",
+	            null,
+	            "Signup: two ways to sign up!"
+	          ),
+	          React.createElement(
+	            "div",
+	            null,
+	            "Login: able to log in with email OR username"
+	          ),
+	          React.createElement(
+	            "div",
+	            null,
+	            "Forgot password is \"functional\"; implement action mailers later?"
+	          ),
+	          React.createElement(
+	            "div",
+	            null,
+	            "Guest user: access this via Main page - Create Questions"
+	          ),
+	          React.createElement(
+	            "div",
+	            null,
+	            "User info can be changed via Settings in the top navigation bar"
+	          )
+	        ),
+	        React.createElement(
+	          "li",
+	          { className: "features-li" },
+	          " Session",
+	          React.createElement(
+	            "div",
+	            null,
+	            "Proper Authentication is in place"
+	          )
+	        ),
+	        React.createElement(
+	          "li",
+	          { className: "features-li" },
+	          " Errors",
+	          React.createElement(
+	            "div",
+	            null,
+	            "Errors customized to be what is on actual site"
+	          )
+	        ),
+	        React.createElement(
+	          "li",
+	          { className: "features-li" },
+	          " Question Creation",
+	          React.createElement(
+	            "div",
+	            null,
+	            "Next..."
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = NewFeatures;
 
 /***/ }
 /******/ ]);

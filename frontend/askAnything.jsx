@@ -17,7 +17,7 @@ var QuestionIndexItem = require('./components/QuestionIndexItem.jsx');
 var UserEditForm = require('./components/UserEditForm.jsx');
 var UserEmailPasswordEditForm = require('./components/UserEmailPasswordEditForm.jsx');
 var ForgotPasswordSuccess = require('./components/ForgotPasswordSuccess.jsx');
-
+var NewFeatures = require('./components/NewFeatures.jsx');
 
 var SessionStore = require('./stores/session_store.js');
 var SessionApiUtil = require('./util/session_api_util.js');
@@ -32,6 +32,7 @@ var Router = (
       <Route path="questions/:questionId" component={ QuestionIndexItem } onEnter={ _ensureLoggedIn }/>
       <Route path="profile/edit" component={ UserEditForm } onEnter={ _ensureLoggedIn }/>
       <Route path="profile/edit_password_or_email" component={ UserEmailPasswordEditForm } onEnter={ _ensureLoggedIn }/>
+      <Route path="new_features" component={ NewFeatures } onEnter={ _ensureLoggedIn }/>
     </Route>
   </Router>
 );

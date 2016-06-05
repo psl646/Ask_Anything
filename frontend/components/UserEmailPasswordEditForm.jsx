@@ -100,6 +100,10 @@ var UserEditForm = React.createClass({
     return <ul>{ messages }</ul>;
   },
 
+  handleHintClick: function () {
+    alert("If you are a guest user, your default password is 'password'. If you are a regular user, try the Forgot Password link on the login page!");
+  },
+
 	render: function () {
     var errorText;
     var allErrorMessages;
@@ -148,7 +152,13 @@ var UserEditForm = React.createClass({
 
           <br />
           <label className="label">
-            Current Password <div className="red-inline">*</div> <br/>
+            Current Password
+            <div className="red-inline">*</div>
+            <em
+              className="h5 text-shift-left blue-link hover-pointer"
+              onClick={ this.handleHintClick }
+              >Need a hint?</em>
+            <br/>
             <input
               className={"signup-input soft-edges "}
               type="password"

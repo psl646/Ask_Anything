@@ -23,8 +23,9 @@ var UserNavBar = React.createClass({
     if (window.location.hash.slice(2, 9).toUpperCase() !== "SURVEYS") {
       this.context.router.push("surveys");
     }
-
-    this.setState({ modalOpen: true })
+    window.setTimeout(function () {
+      this.setState({ modalOpen: true });
+    }.bind(this), 1000);
   },
 
   greeting: function(){
@@ -66,6 +67,9 @@ var UserNavBar = React.createClass({
     this.context.router.push("surveys");
   },
 
+  handleFeaturesClick: function () {
+    this.context.router.push("new_features");
+  },
 
   render: function () {
     return (
@@ -96,7 +100,7 @@ var UserNavBar = React.createClass({
         <ul className="navbar-right-ul hover-pointer">
           <li className="li-float-loggedin blue-hover"> Pricing & Upgrades </li>
           <li className="li-float-loggedin blue-hover"> Help </li>
-          <li className="li-float-loggedin blue-hover">  New Features </li>
+          <li className="li-float-loggedin blue-hover" onClick={ this.handleFeaturesClick }>  New Features </li>
           { this.greeting() }
         </ul>
       </div>
