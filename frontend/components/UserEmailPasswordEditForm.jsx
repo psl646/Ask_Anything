@@ -4,6 +4,7 @@ var SessionApiUtil = require('./../util/session_api_util');
 var SessionStore = require('./../stores/session_store');
 var UserApiUtil = require('./../util/user_api_util');
 var ErrorActions = require('../actions/error_actions')
+var ErrorStore = require('./../stores/error_store');
 
 var UserEditForm = React.createClass({
   contextTypes: {
@@ -12,20 +13,47 @@ var UserEditForm = React.createClass({
 
   getInitialState: function () {
     var user = SessionStore.currentUser();
-    return({ id: user.id, email: user.email, currentPassword: "", password1: "", password2: "" });
+    return({
+      id: user.id,
+      email: user.email,
+      currentPassword: "",
+      password1: "",
+      password2: "",
+      errors: false
+    });
   },
 
   componentDidMount: function () {
     this.sessionListener = SessionStore.addListener(this._onChange);
+    this.errorListener = ErrorStore.addListener(this.handleErrors);
   },
 
   componentWillUnmount: function () {
+    this.errorListener.remove();
     this.sessionListener.remove();
   },
 
   _onChange: function () {
     var user = SessionStore.currentUser();
-    this.setState({ id: user.id, email: user.email, currentPassword: "", password1: "", password2: "" });
+    this.setState({
+      id: user.id,
+      email: user.email,
+      currentPassword: "",
+      password1: "",
+      password2: "",
+      errors: false
+    });
+  },
+
+  handleErrors: function () {
+    var user = SessionStore.currentUser();
+    this.setState({
+      id: user.id,
+      email: user.email,
+      currentPassword: "",
+      password1: "",
+      password2: "",
+      errors: true });
   },
 
   handleCurrentPasswordChange: function (e) {
@@ -53,7 +81,7 @@ var UserEditForm = React.createClass({
 
 		var formData = {
       id: this.state.id,
-      email: this.state.email,
+      email: this.state.email.toLowerCase(),
       currentPassword: this.state.currentPassword,
       password1:  this.state.password1,
       password2: this.state.password2
@@ -62,31 +90,89 @@ var UserEditForm = React.createClass({
     UserApiUtil.updateEmailPassword(formData);
 	},
 
+  errorMessages: function () {
+    var errors = ErrorStore.getErrors();
+
+    var messages = errors.map(function (errorMsg, i) {
+      return <li key={ i }>{ errorMsg }</li>;
+    });
+
+    return <ul>{ messages }</ul>;
+  },
+
 	render: function () {
+    var errorText;
+    var allErrorMessages;
+    var renderErrors = "";
+
+    if (this.state.errors) {
+      var number = ErrorStore.getErrors().length;
+      if (number === 1) {
+        errorText = <div className="error-large error-edit-user-large">
+          { number + " error prohibited this user from being saved" }
+        </div>
+      } else {
+        errorText = <div className="error-large error-edit-user-large">
+          { number + " errors prohibited this user from being saved" }
+        </div>
+      }
+
+
+      allErrorMessages = this.errorMessages();
+      renderErrors = (
+        <ul className="error-edit-email-password soft-edges">
+          { errorText }
+          <div className="error-edit-user-small">There were problems with the following fields:</div>
+          <div>{ allErrorMessages }</div>
+        </ul>
+      );
+    }
+
+
     return (
       <div className="user-edit-container">
         <div className="h7">
           Email and Password
         </div>
-        <form className="user-edit-form" onSubmit={this.handleSubmit}>
+        { renderErrors }
+        <form className="user-edit-form" onSubmit={ this.handleSubmit }>
           <br />
           <label className="label"> Email <br/>
-            <input className={"signup-input soft-edges "} type="text" value={ this.state.email } onChange={ this.handleEmailChange } />
+            <input
+              className={"signup-input soft-edges "}
+              type="text" value={ this.state.email }
+              onChange={ this.handleEmailChange }
+              />
           </label>
 
           <br />
           <label className="label"> Current Password * <br/>
-            <input className={"signup-input soft-edges "} type="password" value={ this.state.currentPassword } onChange={ this.handleCurrentPasswordChange } />
+            <input
+              className={"signup-input soft-edges "}
+              type="password"
+              value={ this.state.currentPassword }
+              onChange={ this.handleCurrentPasswordChange }
+              />
           </label>
 
           <br />
           <label className="label"> New Password <br/>
-            <input className={"signup-input soft-edges "} type="password" value={ this.state.password1 } onChange={ this.handlePassword1Change } />
+            <input
+              className={"signup-input soft-edges "}
+              type="password"
+              value={ this.state.password1 }
+              onChange={ this.handlePassword1Change }
+              />
           </label>
 
           <br />
           <label className="label"> Confirm New Password <br/>
-            <input className={"signup-input soft-edges "} type="password" value={ this.state.password2 } onChange={ this.handlePassword2Change } />
+            <input
+              className={"signup-input soft-edges "}
+              type="password"
+              value={ this.state.password2 }
+              onChange={ this.handlePassword2Change }
+              />
           </label>
 
           <br />

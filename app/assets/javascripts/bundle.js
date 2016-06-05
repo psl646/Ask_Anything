@@ -34745,7 +34745,7 @@
 				error: function (xhr) {
 					console.log("Login error in SessionApiUtil#login");
 					var errors = xhr.responseJSON;
-					ErrorActions.setErrors("login", errors);
+					ErrorActions.setErrors(errors);
 				}
 			});
 		},
@@ -34816,7 +34816,7 @@
 	var ErrorConstants = __webpack_require__(276);
 	
 	var ErrorActions = {
-	  setErrors: function (form, errors) {
+	  setErrors: function (errors) {
 	    AppDispatcher.dispatch({
 	      actionType: ErrorConstants.SET_ERRORS,
 	      errors: errors
@@ -35375,7 +35375,7 @@
 	      error: function (xhr) {
 	        console.log('UserApiUtil#createAccount error');
 	        var errors = xhr.responseJSON;
-	        ErrorActions.setErrors("signup", errors);
+	        ErrorActions.setErrors(errors);
 	      }
 	    });
 	  },
@@ -35390,8 +35390,10 @@
 	        SessionActions.receiveCurrentUser(currentUser);
 	        alert("Your profile was updated");
 	      },
-	      error: function () {
+	      error: function (xhr) {
 	        console.log("Error in UserApiUtil#updateUserName");
+	        var errors = xhr.responseJSON;
+	        ErrorActions.setErrors(errors);
 	      }
 	    });
 	  },
@@ -35406,8 +35408,10 @@
 	        SessionActions.receiveCurrentUser(currentUser);
 	        alert("User information updated!");
 	      },
-	      error: function () {
+	      error: function (xhr) {
 	        console.log("Error in UserApiUtil#updateEmailPassword");
+	        var errors = xhr.responseJSON;
+	        ErrorActions.setErrors(errors);
 	      }
 	    });
 	  }
@@ -35754,7 +35758,6 @@
 	  },
 	
 	  componentWillUnmount: function () {
-	    ErrorActions.clearErrors();
 	    this.errorListener.remove();
 	  },
 	
@@ -36521,6 +36524,7 @@
 	var SessionStore = __webpack_require__(250);
 	var UserApiUtil = __webpack_require__(286);
 	var UserEmailPasswordEditForm = __webpack_require__(310);
+	var ErrorStore = __webpack_require__(288);
 	
 	var UserEditForm = React.createClass({
 	  displayName: 'UserEditForm',
@@ -36531,20 +36535,47 @@
 	
 	  getInitialState: function () {
 	    var user = SessionStore.currentUser();
-	    return { id: user.id, first_name: user.first_name, last_name: user.last_name, email: user.email, username: user.username };
+	    return {
+	      id: user.id,
+	      first_name: user.first_name,
+	      last_name: user.last_name,
+	      email: user.email,
+	      username: user.username,
+	      errors: false
+	    };
 	  },
 	
 	  componentDidMount: function () {
+	    this.errorListener = ErrorStore.addListener(this.handleErrors);
 	    this.sessionListener = SessionStore.addListener(this._onChange);
 	  },
 	
 	  componentWillUnmount: function () {
+	    this.errorListener.remove();
 	    this.sessionListener.remove();
 	  },
 	
 	  _onChange: function () {
 	    var user = SessionStore.currentUser();
-	    this.setState({ id: user.id, first_name: user.first_name, last_name: user.last_name, email: user.email, username: user.username });
+	    this.setState({
+	      id: user.id,
+	      first_name: user.first_name,
+	      last_name: user.last_name,
+	      email: user.email,
+	      username: user.username,
+	      errors: false
+	    });
+	  },
+	
+	  handleErrors: function () {
+	    var user = SessionStore.currentUser();
+	    this.setState({
+	      id: user.id,
+	      first_name: user.first_name,
+	      last_name: user.last_name,
+	      email: user.email,
+	      username: user.username,
+	      errors: true });
 	  },
 	
 	  firstNameChange: function (e) {
@@ -36569,7 +36600,63 @@
 	    UserApiUtil.updateUserName(formData);
 	  },
 	
+	  errorMessages: function () {
+	    var errors = ErrorStore.getErrors();
+	
+	    var messages = errors.map(function (errorMsg, i) {
+	      return React.createElement(
+	        'li',
+	        { key: i },
+	        errorMsg
+	      );
+	    });
+	
+	    return React.createElement(
+	      'ul',
+	      null,
+	      messages
+	    );
+	  },
+	
 	  render: function () {
+	    var errorText;
+	    var allErrorMessages;
+	    var renderErrors = "";
+	
+	    if (this.state.errors) {
+	      var number = ErrorStore.getErrors().length;
+	      if (number === 1) {
+	        errorText = React.createElement(
+	          'div',
+	          { className: 'error-large error-edit-user-large' },
+	          number + " error prohibited this update presenter from being saved"
+	        );
+	      } else {
+	        errorText = React.createElement(
+	          'div',
+	          { className: 'error-large error-edit-user-large' },
+	          number + " errors prohibited this update presenter from being saved"
+	        );
+	      }
+	
+	      allErrorMessages = this.errorMessages();
+	      renderErrors = React.createElement(
+	        'ul',
+	        { className: 'error-edit-email-password soft-edges' },
+	        errorText,
+	        React.createElement(
+	          'div',
+	          { className: 'error-edit-user-small' },
+	          'There were problems with the following fields:'
+	        ),
+	        React.createElement(
+	          'div',
+	          null,
+	          allErrorMessages
+	        )
+	      );
+	    }
+	
 	    return React.createElement(
 	      'div',
 	      { className: 'user-edit-container' },
@@ -36588,8 +36675,14 @@
 	          ' Username ',
 	          React.createElement('br', null),
 	          'AskAny.com/',
-	          React.createElement('input', { className: "signup-input soft-edges ", type: 'text', value: this.state.username, readOnly: true })
+	          React.createElement('input', {
+	            className: "signup-input soft-edges ",
+	            type: 'text',
+	            value: this.state.username,
+	            readOnly: true
+	          })
 	        ),
+	        renderErrors,
 	        React.createElement('br', null),
 	        React.createElement(
 	          'label',
@@ -36621,7 +36714,12 @@
 	          { className: 'label' },
 	          ' First name ',
 	          React.createElement('br', null),
-	          React.createElement('input', { className: "signup-input soft-edges ", type: 'text', value: this.state.first_name, onChange: this.firstNameChange })
+	          React.createElement('input', {
+	            className: "signup-input soft-edges ",
+	            type: 'text',
+	            value: this.state.first_name,
+	            onChange: this.firstNameChange
+	          })
 	        ),
 	        React.createElement('br', null),
 	        React.createElement(
@@ -36629,7 +36727,12 @@
 	          { className: 'label' },
 	          ' Last name ',
 	          React.createElement('br', null),
-	          React.createElement('input', { className: "signup-input soft-edges ", type: 'text', value: this.state.last_name, onChange: this.lastNameChange })
+	          React.createElement('input', {
+	            className: "signup-input soft-edges ",
+	            type: 'text',
+	            value: this.state.last_name,
+	            onChange: this.lastNameChange
+	          })
 	        ),
 	        React.createElement('br', null),
 	        React.createElement('input', {
@@ -36718,6 +36821,7 @@
 	var SessionStore = __webpack_require__(250);
 	var UserApiUtil = __webpack_require__(286);
 	var ErrorActions = __webpack_require__(275);
+	var ErrorStore = __webpack_require__(288);
 	
 	var UserEditForm = React.createClass({
 	  displayName: 'UserEditForm',
@@ -36728,20 +36832,47 @@
 	
 	  getInitialState: function () {
 	    var user = SessionStore.currentUser();
-	    return { id: user.id, email: user.email, currentPassword: "", password1: "", password2: "" };
+	    return {
+	      id: user.id,
+	      email: user.email,
+	      currentPassword: "",
+	      password1: "",
+	      password2: "",
+	      errors: false
+	    };
 	  },
 	
 	  componentDidMount: function () {
 	    this.sessionListener = SessionStore.addListener(this._onChange);
+	    this.errorListener = ErrorStore.addListener(this.handleErrors);
 	  },
 	
 	  componentWillUnmount: function () {
+	    this.errorListener.remove();
 	    this.sessionListener.remove();
 	  },
 	
 	  _onChange: function () {
 	    var user = SessionStore.currentUser();
-	    this.setState({ id: user.id, email: user.email, currentPassword: "", password1: "", password2: "" });
+	    this.setState({
+	      id: user.id,
+	      email: user.email,
+	      currentPassword: "",
+	      password1: "",
+	      password2: "",
+	      errors: false
+	    });
+	  },
+	
+	  handleErrors: function () {
+	    var user = SessionStore.currentUser();
+	    this.setState({
+	      id: user.id,
+	      email: user.email,
+	      currentPassword: "",
+	      password1: "",
+	      password2: "",
+	      errors: true });
 	  },
 	
 	  handleCurrentPasswordChange: function (e) {
@@ -36769,7 +36900,7 @@
 	
 	    var formData = {
 	      id: this.state.id,
-	      email: this.state.email,
+	      email: this.state.email.toLowerCase(),
 	      currentPassword: this.state.currentPassword,
 	      password1: this.state.password1,
 	      password2: this.state.password2
@@ -36778,7 +36909,63 @@
 	    UserApiUtil.updateEmailPassword(formData);
 	  },
 	
+	  errorMessages: function () {
+	    var errors = ErrorStore.getErrors();
+	
+	    var messages = errors.map(function (errorMsg, i) {
+	      return React.createElement(
+	        'li',
+	        { key: i },
+	        errorMsg
+	      );
+	    });
+	
+	    return React.createElement(
+	      'ul',
+	      null,
+	      messages
+	    );
+	  },
+	
 	  render: function () {
+	    var errorText;
+	    var allErrorMessages;
+	    var renderErrors = "";
+	
+	    if (this.state.errors) {
+	      var number = ErrorStore.getErrors().length;
+	      if (number === 1) {
+	        errorText = React.createElement(
+	          'div',
+	          { className: 'error-large error-edit-user-large' },
+	          number + " error prohibited this user from being saved"
+	        );
+	      } else {
+	        errorText = React.createElement(
+	          'div',
+	          { className: 'error-large error-edit-user-large' },
+	          number + " errors prohibited this user from being saved"
+	        );
+	      }
+	
+	      allErrorMessages = this.errorMessages();
+	      renderErrors = React.createElement(
+	        'ul',
+	        { className: 'error-edit-email-password soft-edges' },
+	        errorText,
+	        React.createElement(
+	          'div',
+	          { className: 'error-edit-user-small' },
+	          'There were problems with the following fields:'
+	        ),
+	        React.createElement(
+	          'div',
+	          null,
+	          allErrorMessages
+	        )
+	      );
+	    }
+	
 	    return React.createElement(
 	      'div',
 	      { className: 'user-edit-container' },
@@ -36787,6 +36974,7 @@
 	        { className: 'h7' },
 	        'Email and Password'
 	      ),
+	      renderErrors,
 	      React.createElement(
 	        'form',
 	        { className: 'user-edit-form', onSubmit: this.handleSubmit },
@@ -36796,7 +36984,11 @@
 	          { className: 'label' },
 	          ' Email ',
 	          React.createElement('br', null),
-	          React.createElement('input', { className: "signup-input soft-edges ", type: 'text', value: this.state.email, onChange: this.handleEmailChange })
+	          React.createElement('input', {
+	            className: "signup-input soft-edges ",
+	            type: 'text', value: this.state.email,
+	            onChange: this.handleEmailChange
+	          })
 	        ),
 	        React.createElement('br', null),
 	        React.createElement(
@@ -36804,7 +36996,12 @@
 	          { className: 'label' },
 	          ' Current Password * ',
 	          React.createElement('br', null),
-	          React.createElement('input', { className: "signup-input soft-edges ", type: 'password', value: this.state.currentPassword, onChange: this.handleCurrentPasswordChange })
+	          React.createElement('input', {
+	            className: "signup-input soft-edges ",
+	            type: 'password',
+	            value: this.state.currentPassword,
+	            onChange: this.handleCurrentPasswordChange
+	          })
 	        ),
 	        React.createElement('br', null),
 	        React.createElement(
@@ -36812,7 +37009,12 @@
 	          { className: 'label' },
 	          ' New Password ',
 	          React.createElement('br', null),
-	          React.createElement('input', { className: "signup-input soft-edges ", type: 'password', value: this.state.password1, onChange: this.handlePassword1Change })
+	          React.createElement('input', {
+	            className: "signup-input soft-edges ",
+	            type: 'password',
+	            value: this.state.password1,
+	            onChange: this.handlePassword1Change
+	          })
 	        ),
 	        React.createElement('br', null),
 	        React.createElement(
@@ -36820,7 +37022,12 @@
 	          { className: 'label' },
 	          ' Confirm New Password ',
 	          React.createElement('br', null),
-	          React.createElement('input', { className: "signup-input soft-edges ", type: 'password', value: this.state.password2, onChange: this.handlePassword2Change })
+	          React.createElement('input', {
+	            className: "signup-input soft-edges ",
+	            type: 'password',
+	            value: this.state.password2,
+	            onChange: this.handlePassword2Change
+	          })
 	        ),
 	        React.createElement('br', null),
 	        React.createElement('input', {

@@ -13,6 +13,7 @@ Go back and update CSS for Settings.
 
 EMAIL VERIFICATION: @ .com .net .org. gov .edu .io
 short of action mailers
+Email is invalid
 
 
 =================SIGNUPPAGE==================

@@ -1,8 +1,7 @@
 .user-edit-container {
   font-size: 13px;
-  width: 800px;
-  margin: 30px auto;
-  /*border: 1px solid black;*/
+  min-width: 600px;
+  margin: 30px 280px 30px 190px;
 }
 
 .h7 {
@@ -30,4 +29,20 @@
 
 .hover-text:hover {
   cursor: text;
+}
+
+.error-edit-email-password {
+  background-color: #fa6969;
+  border: 1px solid #ed4545;
+  width: 100%;
+  color: white;
+  padding: 10px;
+}
+
+.error-edit-user-large {
+  padding: 10px 0;
+}
+
+.error-edit-user-small {
+  margin-top: 20px;
 }

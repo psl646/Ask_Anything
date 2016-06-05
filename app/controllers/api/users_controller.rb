@@ -12,24 +12,49 @@ class Api::UsersController < ApplicationController
 			if (!@user.errors[:password].empty?)
 				@errors[-1] = "We need at least a 7 character password to keep your account safe"
 			end
-			
+
 			render "api/shared/errors", status: 422
 		end
 	end
 
 	def update
 		@user = User.find(params[:user][:id])
-		debugger
+
 		if params[:user].keys.include?("first_name")
 			if @user.update(user_params)
 				session[:session_token] = @user.session_token
 				render 'api/users/show'
 			else
-				render json: @user.errors, status: 422
+				@errors = @user.errors.full_messages
+				render "api/shared/errors", status: 422
 			end
 		else
-			debugger
-			if @user.password_is?(params[:user][:currentPassword])
+			@errors = []
+			input = params[:user]
+			email = input[:email]
+
+			if @user.password_is?(input[:currentPassword])
+				if (User.find_by_email(email) && @user[:email] != email)
+					@errors.push("Email has already been taken")
+				end
+
+				if (input[:password1].length < 7)
+					@errors.push("Password is too short (minimum is 7 characters)")
+				end
+
+				if (input[:password1] != input[:password2])
+					@errors.push("Password confirmation does not match password")
+				end
+
+				if @errors.empty?
+					@user[:email] = input[:email]
+					@user[:password_digest] = BCrypt::Password.create(input[:password1])
+					@user.save
+					session[:session_token] = @user.session_token
+					render 'api/users/show'
+				else
+					render "api/shared/errors", status: 422
+				end
 			else
 				@errors = ["Current password incorrect"]
 				render "api/shared/errors", status: 401
