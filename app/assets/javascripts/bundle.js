@@ -61,6 +61,7 @@
 	var SurveysIndex = __webpack_require__(293);
 	var QuestionIndexItem = __webpack_require__(306);
 	var UserEditForm = __webpack_require__(307);
+	var UserEmailPasswordEditForm = __webpack_require__(310);
 	
 	var SessionStore = __webpack_require__(250);
 	var SessionApiUtil = __webpack_require__(273);
@@ -79,7 +80,8 @@
 	    React.createElement(Route, { path: 'surveys', component: SurveysIndex, onEnter: _ensureLoggedIn }),
 	    ' // Maybe take out this onEnter hook later to allow non-users to use the site',
 	    React.createElement(Route, { path: 'questions/:questionId', component: QuestionIndexItem, onEnter: _ensureLoggedIn }),
-	    React.createElement(Route, { path: 'settings', component: UserEditForm, onEnter: _ensureLoggedIn })
+	    React.createElement(Route, { path: 'profile/edit', component: UserEditForm, onEnter: _ensureLoggedIn }),
+	    React.createElement(Route, { path: 'profile/edit_password_or_email', component: UserEmailPasswordEditForm, onEnter: _ensureLoggedIn })
 	  )
 	);
 	
@@ -34898,7 +34900,7 @@
 	  },
 	
 	  greeting: function () {
-	    var username = SessionStore.currentUser().username;
+	    var username = SessionStore.currentUser().username.toUpperCase();
 	    return React.createElement(
 	      'li',
 	      { className: 'li-float-loggedin user-info-container blue-hover' },
@@ -34935,7 +34937,7 @@
 	  },
 	
 	  handleSettingsClicked: function () {
-	    this.context.router.push("settings");
+	    this.context.router.push("profile/edit");
 	  },
 	
 	  handleQuestionsClick: function () {
@@ -35261,7 +35263,7 @@
 	    var first_name = this.generateRandomLetters(5);
 	    var last_name = this.generateRandomLetters(3);
 	    var numbers = this.generateRandomNumbers(6);
-	    var email = first_name + last_name + numbers + "@askAnything.com";
+	    var email = first_name + last_name + numbers + "@askanything.com";
 	    return email;
 	  },
 	
@@ -35372,8 +35374,10 @@
 	        SessionActions.receiveCurrentUser(currentUser);
 	      },
 	      error: function (xhr) {
+	        console.log(xhr);
 	        console.log('UserApiUtil#createAccount error');
 	        var errors = xhr.responseJSON;
+	        console.log(errors);
 	        ErrorActions.setErrors("signup", errors);
 	      }
 	    });
@@ -35391,6 +35395,22 @@
 	      },
 	      error: function () {
 	        console.log("Error in UserApiUtil#updateUserName");
+	      }
+	    });
+	  },
+	
+	  updateEmailPassword: function (formData) {
+	    $.ajax({
+	      url: '/api/user',
+	      type: 'PATCH',
+	      dataType: 'json',
+	      data: { user: formData },
+	      success: function (currentUser) {
+	        SessionActions.receiveCurrentUser(currentUser);
+	        alert("User information updated!");
+	      },
+	      error: function () {
+	        console.log("Error in UserApiUtil#updateEmailPassword");
 	      }
 	    });
 	  }
@@ -35417,11 +35437,11 @@
 	  },
 	
 	  getInitialState: function () {
-	    return { emailOrUsername: "", password: "" };
+	    return { emailOrUsername: "", password: "", errors: false };
 	  },
 	
 	  componentDidMount: function () {
-	    this.errorListener = ErrorStore.addListener(this.forceUpdate.bind(this));
+	    this.errorListener = ErrorStore.addListener(this.handleErrors);
 	    this.sessionListener = SessionStore.addListener(this.redirectIfLoggedIn);
 	  },
 	
@@ -35436,27 +35456,28 @@
 	    }
 	  },
 	
+	  handleErrors: function () {
+	    this.setState({ errors: true });
+	  },
+	
 	  handleSubmit: function (e) {
 	    e.preventDefault();
-	    var uniqueEmailOrUsername = this.state.emailOrUsername.toUpperCase();
+	    var emailOrUsername = this.state.emailOrUsername.toLowerCase();
 	
 	    var formData = {
-	      username: uniqueEmailOrUsername,
-	      unique_email: uniqueEmailOrUsername,
+	      username: emailOrUsername,
+	      email: emailOrUsername,
 	      password: this.state.password
 	    };
 	
-	    this.setState({ emailOrUsername: "", password: "" });
 	    SessionApiUtil.login(formData);
+	    this.setState({ emailOrUsername: "", password: "", errors: false });
 	  },
 	
-	  fieldErrors: function (field) {
-	    var errors = ErrorStore.formErrors("login");
-	    if (!errors[field]) {
-	      return;
-	    }
+	  errorMessages: function () {
+	    var errors = ErrorStore.getErrors();
 	
-	    var messages = errors[field].map(function (errorMsg, i) {
+	    var messages = errors.map(function (errorMsg, i) {
 	      return React.createElement(
 	        'li',
 	        { key: i },
@@ -35482,7 +35503,17 @@
 	  },
 	
 	  render: function () {
-	    var newSignUpString = "Do you need an account? Create one in a few seconds.";
+	    var allErrorMessages = "";
+	    var renderErrors = "";
+	
+	    if (this.state.errors) {
+	      allErrorMessages = this.errorMessages();
+	      renderErrors = React.createElement(
+	        'div',
+	        null,
+	        allErrorMessages
+	      );
+	    }
 	
 	    return React.createElement(
 	      'div',
@@ -35494,7 +35525,7 @@
 	        React.createElement(
 	          'form',
 	          { className: 'login-component soft-edges', onSubmit: this.handleSubmit },
-	          this.fieldErrors("base"),
+	          renderErrors,
 	          React.createElement(
 	            'h1',
 	            { className: 'h1' },
@@ -35511,7 +35542,6 @@
 	              'or username'
 	            ),
 	            React.createElement('br', null),
-	            this.fieldErrors("email"),
 	            React.createElement('input', { className: 'login-input soft-edges', type: 'text', value: this.state.emailOrUsername, onChange: this.emailOrUsernameChange })
 	          ),
 	          React.createElement('br', null),
@@ -35529,7 +35559,6 @@
 	              )
 	            ),
 	            React.createElement('br', null),
-	            this.fieldErrors("password"),
 	            React.createElement('input', { className: 'login-input soft-edges', type: 'password', value: this.state.password, onChange: this.passwordChange })
 	          ),
 	          React.createElement('br', null),
@@ -35537,7 +35566,7 @@
 	          React.createElement(
 	            Link,
 	            { to: 'signup', className: 'signup-link' },
-	            newSignUpString
+	            '"Do you need an account? Create one in a few seconds."'
 	          )
 	        )
 	      )
@@ -35556,39 +35585,28 @@
 	var ErrorConstants = __webpack_require__(276);
 	var ErrorStore = new Store(AppDispatcher);
 	
-	var _errors = {};
-	var _form = "";
+	var _errors = [];
 	
-	ErrorStore.formErrors = function (form) {
-	  if (form !== _form) {
-	    return {};
-	  }
+	var _resetErrors = function (errors) {
+	  _errors = errors;
+	};
 	
-	  var result = {};
-	
-	  var errors;
-	  Object.keys(_errors).forEach(function (field) {
-	    errors = _errors[field];
-	    result[field] = errors.slice();
+	ErrorStore.getErrors = function () {
+	  var result = _errors.map(function (currentError) {
+	    return currentError.error;
 	  });
 	
 	  return result;
 	};
 	
-	ErrorStore.form = function () {
-	  return _form.slice();
-	};
-	
 	ErrorStore.__onDispatch = function (payload) {
 	  switch (payload.actionType) {
 	    case ErrorConstants.SET_ERRORS:
-	      _errors = payload.errors;
-	      _form = payload.form;
+	      _resetErrors(payload.errors);
 	      ErrorStore.__emitChange();
 	      break;
 	    case ErrorConstants.CLEAR_ERRORS:
-	      _errors = {};
-	      _form = "";
+	      _errors = [];
 	      ErrorStore.__emitChange();
 	      break;
 	  }
@@ -35730,11 +35748,11 @@
 	  },
 	
 	  getInitialState: function () {
-	    return { first_name: "", last_name: "", email: "", password: "" };
+	    return { first_name: "", last_name: "", email: "", password: "", errors: false };
 	  },
 	
 	  componentDidMount: function () {
-	    this.errorListener = ErrorStore.addListener(this.forceUpdate.bind(this));
+	    this.errorListener = ErrorStore.addListener(this.handleErrors);
 	  },
 	
 	  componentWillUnmount: function () {
@@ -35769,19 +35787,22 @@
 	    var formData = {
 	      first_name: this.state.first_name,
 	      last_name: this.state.last_name,
-	      email: this.state.email,
+	      email: this.state.email.toLowerCase(),
 	      password: this.state.password
 	    };
 	
 	    UserApiUtil.signup(formData);
+	    this.setState({ errors: false });
 	  },
 	
-	  fieldErrors: function (field) {
-	    var errors = ErrorStore.formErrors("signup");
-	    if (!errors[field]) {
-	      return;
-	    }
-	    var messages = errors[field].map(function (errorMsg, i) {
+	  handleErrors: function () {
+	    this.setState({ errors: true });
+	  },
+	
+	  errorMessages: function () {
+	    var errors = ErrorStore.getErrors();
+	
+	    var messages = errors.map(function (errorMsg, i) {
 	      return React.createElement(
 	        'li',
 	        { key: i, className: 'error-message' },
@@ -35792,30 +35813,7 @@
 	    return messages;
 	  },
 	
-	  errorMessages: function () {
-	    return Object.keys(this.state).map(function (field) {
-	      return this.fieldErrors(field);
-	    }.bind(this));
-	  },
-	
-	  checkForErrors: function () {
-	    var status = false;
-	    var errorMessages = this.errorMessages();
-	
-	    errorMessages.forEach(function (error) {
-	      if (error instanceof Object) {
-	        status = true;
-	      };
-	    });
-	
-	    return status;
-	  },
-	
 	  render: function () {
-	    var that = this;
-	    var errorText = "";
-	    var allErrorMessages = "";
-	    var renderErrors = "";
 	    var topText;
 	    var bottomText;
 	
@@ -35863,7 +35861,12 @@
 	      );
 	    }
 	
-	    if (this.checkForErrors()) {
+	    var that = this;
+	    var errorText = "";
+	    var allErrorMessages = "";
+	    var renderErrors = "";
+	
+	    if (this.state.errors) {
 	      errorText = React.createElement(
 	        'div',
 	        null,
@@ -36517,10 +36520,9 @@
 
 	var React = __webpack_require__(1);
 	var Link = __webpack_require__(168).Link;
-	var SessionApiUtil = __webpack_require__(273);
 	var SessionStore = __webpack_require__(250);
 	var UserApiUtil = __webpack_require__(286);
-	var ErrorActions = __webpack_require__(275);
+	var UserEmailPasswordEditForm = __webpack_require__(310);
 	
 	var UserEditForm = React.createClass({
 	  displayName: 'UserEditForm',
@@ -36588,7 +36590,7 @@
 	          ' Username ',
 	          React.createElement('br', null),
 	          'AskAny.com/',
-	          React.createElement('input', { className: "signup-input soft-edges ", type: 'text', value: this.state.username.toLowerCase(), readOnly: true })
+	          React.createElement('input', { className: "signup-input soft-edges ", type: 'text', value: this.state.username, readOnly: true })
 	        ),
 	        React.createElement('br', null),
 	        React.createElement(
@@ -36597,7 +36599,11 @@
 	          ' Email ',
 	          React.createElement('br', null),
 	          this.state.email,
-	          ' Change'
+	          React.createElement(
+	            Link,
+	            { to: 'profile/edit_password_or_email' },
+	            'Change'
+	          )
 	        ),
 	        React.createElement('br', null),
 	        React.createElement(
@@ -36605,7 +36611,11 @@
 	          { className: 'hover-text label' },
 	          ' Password ',
 	          React.createElement('br', null),
-	          'Change your password'
+	          React.createElement(
+	            Link,
+	            { to: 'profile/edit_password_or_email' },
+	            'Change'
+	          )
 	        ),
 	        React.createElement('br', null),
 	        React.createElement(
@@ -36698,6 +36708,140 @@
 	});
 	
 	module.exports = Test;
+
+/***/ },
+/* 309 */,
+/* 310 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var Link = __webpack_require__(168).Link;
+	var SessionApiUtil = __webpack_require__(273);
+	var SessionStore = __webpack_require__(250);
+	var UserApiUtil = __webpack_require__(286);
+	var ErrorActions = __webpack_require__(275);
+	
+	var UserEditForm = React.createClass({
+	  displayName: 'UserEditForm',
+	
+	  contextTypes: {
+	    router: React.PropTypes.object.isRequired
+	  },
+	
+	  getInitialState: function () {
+	    var user = SessionStore.currentUser();
+	    return { id: user.id, email: user.email, currentPassword: "", password1: "", password2: "" };
+	  },
+	
+	  componentDidMount: function () {
+	    this.sessionListener = SessionStore.addListener(this._onChange);
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.sessionListener.remove();
+	  },
+	
+	  _onChange: function () {
+	    var user = SessionStore.currentUser();
+	    this.setState({ id: user.id, email: user.email, currentPassword: "", password1: "", password2: "" });
+	  },
+	
+	  handleCurrentPasswordChange: function (e) {
+	    var newCurrentPassword = e.target.value;
+	    this.setState({ currentPassword: newCurrentPassword });
+	  },
+	
+	  handlePassword1Change: function (e) {
+	    var newPassword1 = e.target.value;
+	    this.setState({ password1: newPassword1 });
+	  },
+	
+	  handlePassword2Change: function (e) {
+	    var newPassword2 = e.target.value;
+	    this.setState({ password2: newPassword2 });
+	  },
+	
+	  handleEmailChange: function (e) {
+	    var newEmail = e.target.value;
+	    this.setState({ email: newEmail });
+	  },
+	
+	  handleSubmit: function (e) {
+	    e.preventDefault();
+	
+	    var formData = {
+	      id: this.state.id,
+	      email: this.state.email,
+	      currentPassword: this.state.currentPassword,
+	      password1: this.state.password1,
+	      password2: this.state.password2
+	    };
+	
+	    UserApiUtil.updateEmailPassword(formData);
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'user-edit-container' },
+	      React.createElement(
+	        'div',
+	        { className: 'h7' },
+	        'Email and Password'
+	      ),
+	      React.createElement(
+	        'form',
+	        { className: 'user-edit-form', onSubmit: this.handleSubmit },
+	        React.createElement('br', null),
+	        React.createElement(
+	          'label',
+	          { className: 'label' },
+	          ' Email ',
+	          React.createElement('br', null),
+	          React.createElement('input', { className: "signup-input soft-edges ", type: 'text', value: this.state.email, onChange: this.handleEmailChange })
+	        ),
+	        React.createElement('br', null),
+	        React.createElement(
+	          'label',
+	          { className: 'label' },
+	          ' Current Password * ',
+	          React.createElement('br', null),
+	          React.createElement('input', { className: "signup-input soft-edges ", type: 'password', value: this.state.currentPassword, onChange: this.handleCurrentPasswordChange })
+	        ),
+	        React.createElement('br', null),
+	        React.createElement(
+	          'label',
+	          { className: 'label' },
+	          ' New Password ',
+	          React.createElement('br', null),
+	          React.createElement('input', { className: "signup-input soft-edges ", type: 'password', value: this.state.password1, onChange: this.handlePassword1Change })
+	        ),
+	        React.createElement('br', null),
+	        React.createElement(
+	          'label',
+	          { className: 'label' },
+	          ' Confirm New Password ',
+	          React.createElement('br', null),
+	          React.createElement('input', { className: "signup-input soft-edges ", type: 'password', value: this.state.password2, onChange: this.handlePassword2Change })
+	        ),
+	        React.createElement('br', null),
+	        React.createElement('input', {
+	          className: 'edit-button soft-edges hover-pointer',
+	          type: 'submit',
+	          value: 'Update profile'
+	        }),
+	        '  or  ',
+	        React.createElement(
+	          Link,
+	          { to: 'surveys', className: 'cancel-edit' },
+	          'cancel profile changes'
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = UserEditForm;
 
 /***/ }
 /******/ ]);

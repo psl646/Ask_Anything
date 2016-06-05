@@ -31,7 +31,7 @@ var DemoContent = React.createClass({
     var first_name = this.generateRandomLetters(5);
     var last_name = this.generateRandomLetters(3);
     var numbers = this.generateRandomNumbers(6);
-    var email = first_name + last_name + numbers + "@askAnything.com"
+    var email = first_name + last_name + numbers + "@askanything.com"
     return email;
   },
 

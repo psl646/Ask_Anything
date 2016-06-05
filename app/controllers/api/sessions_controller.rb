@@ -3,19 +3,15 @@ class Api::SessionsController < ApplicationController
 	def create
 		@user = User.find_by_credentials(
 			params[:user][:username],
-      params[:user][:unique_email],
+      params[:user][:email],
       params[:user][:password]
     )
     if @user
 			login(@user)
 			render "api/users/show"
 		else
-			render(
-        json: {
-          base: ["We couldn't find a user with that email and password."]
-        },
-        status: 401
-      )
+			@errors = ["We couldn't find a user with that email and password."]
+			render "api/shared/errors", status: 401
 		end
 	end
 
@@ -25,12 +21,8 @@ class Api::SessionsController < ApplicationController
 			logout
 			render "api/users/show"
 		else
-			render(
-        json: {
-          base: ["Nobody signed in"]
-        },
-        status: 404
-      )
+			@errors = ["Nobody signed in"]
+			render "api/shared/errors", status: 404
 		end
 	end
 
@@ -39,7 +31,8 @@ class Api::SessionsController < ApplicationController
 			@user = current_user
 			render "api/users/show"
 		else
-			render json: {}
+			@errors = []
+			render "api/shared/errors"
 		end
 	end
 

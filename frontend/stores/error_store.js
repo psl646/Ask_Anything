@@ -3,39 +3,28 @@ var AppDispatcher = require('../dispatcher/dispatcher');
 var ErrorConstants = require('../constants/error_constants');
 var ErrorStore = new Store(AppDispatcher);
 
-var _errors = {};
-var _form = "";
+var _errors = [];
 
-ErrorStore.formErrors = function (form) {
-  if (form !== _form) {
-    return {};
-  }
+var _resetErrors = function (errors) {
+  _errors = errors;
+};
 
-  var result = {};
-
-  var errors;
-  Object.keys(_errors).forEach(function (field) {
-    errors = _errors[field];
-    result[field] = errors.slice();
+ErrorStore.getErrors = function () {
+  var result = _errors.map(function (currentError) {
+    return currentError.error
   });
 
   return result;
 };
 
-ErrorStore.form = function () {
-  return _form.slice();
-};
-
 ErrorStore.__onDispatch = function (payload) {
   switch (payload.actionType) {
     case ErrorConstants.SET_ERRORS:
-      _errors = payload.errors;
-      _form = payload.form;
+      _resetErrors(payload.errors);
       ErrorStore.__emitChange();
       break;
     case ErrorConstants.CLEAR_ERRORS:
-      _errors = {};
-      _form = "";
+      _errors = [];
       ErrorStore.__emitChange();
       break;
   }

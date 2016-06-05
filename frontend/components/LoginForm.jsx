@@ -11,11 +11,11 @@ var LoginForm = React.createClass({
   },
 
   getInitialState: function () {
-    return { emailOrUsername: "", password: "" };
+    return { emailOrUsername: "", password: "", errors: false };
   },
 
   componentDidMount: function () {
-    this.errorListener = ErrorStore.addListener(this.forceUpdate.bind(this));
+    this.errorListener = ErrorStore.addListener(this.handleErrors);
     this.sessionListener = SessionStore.addListener(this.redirectIfLoggedIn);
   },
 
@@ -30,25 +30,28 @@ var LoginForm = React.createClass({
     }
   },
 
+  handleErrors: function () {
+    this.setState({ errors: true });
+  },
+
 	handleSubmit: function (e) {
 		e.preventDefault();
-    var uniqueEmailOrUsername = (this.state.emailOrUsername).toUpperCase();
+    var emailOrUsername = (this.state.emailOrUsername).toLowerCase();
 
 		var formData = {
-      username: uniqueEmailOrUsername,
-			unique_email: uniqueEmailOrUsername,
+      username: emailOrUsername,
+			email: emailOrUsername,
 			password: this.state.password
 		};
 
-    this.setState({ emailOrUsername: "", password: "" });
     SessionApiUtil.login(formData);
+    this.setState({ emailOrUsername: "", password: "", errors: false });
 	},
 
-  fieldErrors: function (field) {
-    var errors = ErrorStore.formErrors("login");
-    if (!errors[field]) { return; }
+  errorMessages: function () {
+    var errors = ErrorStore.getErrors();
 
-    var messages = errors[field].map(function (errorMsg, i) {
+    var messages = errors.map(function (errorMsg, i) {
       return <li key={ i }>{ errorMsg }</li>;
     });
 
@@ -66,32 +69,38 @@ var LoginForm = React.createClass({
 	},
 
 	render: function () {
-    var newSignUpString = "Do you need an account? Create one in a few seconds."
+    var allErrorMessages = "";
+    var renderErrors = "";
+
+    if (this.state.errors) {
+      allErrorMessages = this.errorMessages();
+      renderErrors = <div>{ allErrorMessages }</div>;
+    }
 
 		return (
       <div className="app">
   			<div className="login-container">
   				<Logo />
   				<form className="login-component soft-edges" onSubmit={this.handleSubmit}>
-  					{ this.fieldErrors("base") }
+  					{ renderErrors }
 
   	        <h1 className="h1">Log In</h1>
 
   	        <br />
   					<label> Email <small className="login-email">or username</small><br/>
-  	          { this.fieldErrors("email") }
   						<input className="login-input soft-edges" type="text" value={this.state.emailOrUsername} onChange={this.emailOrUsernameChange} />
   					</label>
 
   	        <br />
   					<label> Password <small className="lost-password"><Link to="forgotPassword">I forgot my password</Link></small><br/>
-  	          { this.fieldErrors("password") }
   						<input className="login-input soft-edges" type="password" value={this.state.password} onChange={this.passwordChange} />
   					</label>
 
   	        <br />
   					<input className="signin-button soft-edges hover-pointer" type="submit" value="Sign in with my Ask Anything! account" />
-            <Link to="signup" className="signup-link">{newSignUpString}</Link>
+            <Link to="signup" className="signup-link">
+              "Do you need an account? Create one in a few seconds."
+            </Link>
   				</form>
   			</div>
       </div>

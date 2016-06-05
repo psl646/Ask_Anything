@@ -7,38 +7,33 @@ class Api::UsersController < ApplicationController
 			login(@user)
 			render "api/users/show"
 		else
-			user_errors = @user.errors.messages
-			if (user_errors[:first_name])
-				user_errors[:first_name] = ["First name can't be blank"]
-			end
+			@errors = @user.errors.full_messages
 
-			if (user_errors[:last_name])
-				user_errors[:last_name] = ["Last name can't be blank"]
+			if (!@user.errors[:password].empty?)
+				@errors[-1] = "We need at least a 7 character password to keep your account safe"
 			end
-
-			if (user_errors[:email])
-				if (user_errors[:email] == ["can't be blank"])
-					user_errors[:email] = ["Email can't be blank"]
-				elsif (user_errors[:email] = ["has already been taken"])
-					user_errors[:email] = ["Email has already been taken"]
-				end
-			end
-
-			if (user_errors[:password])
-				user_errors[:password] = ["We need at least a 7 character password to keep your account safe"]
-			end
-
-			# @user.errors.full_messages... fix this later to dry up code
-			render json: @user.errors, status: 422
+			
+			render "api/shared/errors", status: 422
 		end
 	end
 
 	def update
 		@user = User.find(params[:user][:id])
-
-		if @user.update(user_params)
-			session[:session_token] = @user.session_token
-			render 'api/users/show'
+		debugger
+		if params[:user].keys.include?("first_name")
+			if @user.update(user_params)
+				session[:session_token] = @user.session_token
+				render 'api/users/show'
+			else
+				render json: @user.errors, status: 422
+			end
+		else
+			debugger
+			if @user.password_is?(params[:user][:currentPassword])
+			else
+				@errors = ["Current password incorrect"]
+				render "api/shared/errors", status: 401
+			end
 		end
 	end
 

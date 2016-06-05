@@ -28,7 +28,7 @@ var UserNavBar = React.createClass({
   },
 
   greeting: function(){
-    var username = SessionStore.currentUser().username;
+    var username = SessionStore.currentUser().username.toUpperCase();
     return (
       <li className="li-float-loggedin user-info-container blue-hover">
         { username }
@@ -59,7 +59,7 @@ var UserNavBar = React.createClass({
   },
 
   handleSettingsClicked: function () {
-    this.context.router.push("settings");
+    this.context.router.push("profile/edit");
   },
 
   handleQuestionsClick: function () {

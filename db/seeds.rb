@@ -10,8 +10,8 @@ User.destroy_all
 Survey.destroy_all
 Question.destroy_all
 
-User.create(first_name: "Peter", last_name: "Lin", email: "Peter.Lin646@gmail.com", password: "password")
-User.create(first_name: "Guest", last_name: "User", email: "GuestUser@guest.com", password: "password")
+User.create(first_name: "Peter", last_name: "Lin", email: "peter.lin646@gmail.com", password: "password")
+User.create(first_name: "Guest", last_name: "User", email: "guestuser@guest.com", password: "password")
 User.create(first_name: "user123", last_name: "user123", email: "user123", password: "user123")
 
 Question.create(question: "This question should be under Ungrouped", category: "MC", survey_id: Survey.last.id)

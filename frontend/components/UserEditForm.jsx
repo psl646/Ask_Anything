@@ -1,9 +1,8 @@
 var React = require('react');
 var Link = require('react-router').Link;
-var SessionApiUtil = require('./../util/session_api_util');
 var SessionStore = require('./../stores/session_store');
 var UserApiUtil = require('./../util/user_api_util');
-var ErrorActions = require('../actions/error_actions')
+var UserEmailPasswordEditForm = require('./UserEmailPasswordEditForm');
 
 var UserEditForm = React.createClass({
   contextTypes: {
@@ -59,17 +58,18 @@ var UserEditForm = React.createClass({
         <form className="user-edit-form" onSubmit={this.handleSubmit}>
           <br />
           <label className="label"> Username <br/>
-            AskAny.com/<input className={"signup-input soft-edges "} type="text" value={ this.state.username.toLowerCase() } readOnly />
+            AskAny.com/<input className={"signup-input soft-edges "} type="text" value={ this.state.username } readOnly />
           </label>
 
           <br />
           <label className="hover-text label"> Email <br/>
-            { this.state.email } Change
+            { this.state.email }
+            <Link to="profile/edit_password_or_email">Change</Link>
           </label>
 
           <br />
           <label className="hover-text label"> Password <br/>
-            Change your password
+            <Link to="profile/edit_password_or_email">Change</Link>
           </label>
 
           <br />

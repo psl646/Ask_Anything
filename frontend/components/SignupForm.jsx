@@ -10,11 +10,11 @@ var SignupForm = React.createClass({
   },
 
   getInitialState: function () {
-    return ({ first_name: "", last_name: "", email: "", password: "" });
+    return ({ first_name: "", last_name: "", email: "", password: "", errors: false });
   },
 
   componentDidMount: function () {
-    this.errorListener = ErrorStore.addListener(this.forceUpdate.bind(this));
+    this.errorListener = ErrorStore.addListener(this.handleErrors);
   },
 
   componentWillUnmount: function () {
@@ -49,72 +49,57 @@ var SignupForm = React.createClass({
 		var formData = {
       first_name: this.state.first_name,
       last_name: this.state.last_name,
-			email: this.state.email,
+			email: this.state.email.toLowerCase(),
 			password: this.state.password
 		};
 
     UserApiUtil.signup(formData);
-
+    this.setState({ errors: false })
 	},
 
-  fieldErrors: function (field) {
-    var errors = ErrorStore.formErrors("signup");
-    if (!errors[field]) { return; }
-    var messages = errors[field].map(function (errorMsg, i) {
+  handleErrors: function () {
+    this.setState({ errors: true });
+  },
+
+  errorMessages: function () {
+    var errors = ErrorStore.getErrors();
+
+    var messages = errors.map(function (errorMsg, i) {
       return <li key={ i } className="error-message">{ errorMsg }</li>;
     });
 
     return messages;
   },
 
-  errorMessages: function () {
-    return Object.keys(this.state).map(function(field){
-      return this.fieldErrors(field);
-    }.bind(this));
-  },
-
-  checkForErrors: function () {
-    var status = false;
-    var errorMessages = this.errorMessages();
-
-    errorMessages.forEach(function(error){
-      if (error instanceof Object) {
-        status = true;
-      };
-    });
-
-    return status;
-  },
-
 	render: function () {
-    var that = this;
-    var errorText = "";
-    var allErrorMessages = "";
-    var renderErrors = "";
     var topText;
     var bottomText;
 
     if (this.props.type === 'participant') {
-       topText = <div className="h4">Participant sign up</div>;
-       bottomText = "";
-    } else {
-      topText = (
-        <div>
-          <div className="h2">Free plan sign up</div>
-          <div className="h3">This is your last stop before youre creating polls.</div>
-        </div>
-      );
-      bottomText = (
-        <div>
-          <div className="label">What country will people be texting us from?</div>
-          <div className="hover-pointer h5"><input className="radio" type="radio" checked readOnly/>United States</div>
-          <Link to="moreCountries" className="link h5">» Show more countries...</Link>
-        </div>
-      );
-    }
+      topText = <div className="h4">Participant sign up</div>;
+        bottomText = "";
+      } else {
+        topText = (
+          <div>
+            <div className="h2">Free plan sign up</div>
+            <div className="h3">This is your last stop before youre creating polls.</div>
+          </div>
+        );
+        bottomText = (
+          <div>
+            <div className="label">What country will people be texting us from?</div>
+            <div className="hover-pointer h5"><input className="radio" type="radio" checked readOnly/>United States</div>
+            <Link to="moreCountries" className="link h5">» Show more countries...</Link>
+          </div>
+        );
+      }
 
+    var that = this;
+    var errorText = "";
+    var allErrorMessages = "";
+    var renderErrors = "";
 
-    if (this.checkForErrors()) {
+    if (this.state.errors) {
       errorText = (
         <div>
           <div className="error-large">Oops! We couldn't create your account.</div>
@@ -129,7 +114,6 @@ var SignupForm = React.createClass({
         </ul>
       );
     }
-
 
     return (
       <div className="signup-form-container">

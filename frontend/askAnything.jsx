@@ -15,6 +15,7 @@ var SignupPage = require('./components/SignupPage.jsx');
 var SurveysIndex = require('./components/SurveysIndex.jsx');
 var QuestionIndexItem = require('./components/QuestionIndexItem.jsx');
 var UserEditForm = require('./components/UserEditForm.jsx');
+var UserEmailPasswordEditForm = require('./components/UserEmailPasswordEditForm.jsx');
 
 
 var SessionStore = require('./stores/session_store.js');
@@ -31,7 +32,8 @@ var Router = (
       <Route path="signup" component={ SignupPage } onEnter={ _ensureLoggedOut } />
       <Route path="surveys" component={ SurveysIndex } onEnter={ _ensureLoggedIn }/> // Maybe take out this onEnter hook later to allow non-users to use the site
       <Route path="questions/:questionId" component={ QuestionIndexItem } onEnter={ _ensureLoggedIn }/>
-      <Route path="settings" component={ UserEditForm } onEnter={ _ensureLoggedIn }/>
+      <Route path="profile/edit" component={ UserEditForm } onEnter={ _ensureLoggedIn }/>
+      <Route path="profile/edit_password_or_email" component={ UserEmailPasswordEditForm } onEnter={ _ensureLoggedIn }/>
     </Route>
   </Router>
 );
