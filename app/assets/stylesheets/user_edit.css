@@ -46,3 +46,18 @@
 .error-edit-user-small {
   margin-top: 20px;
 }
+
+.red-inline{
+  color: red;
+  display: inline;
+}
+
+.blue-link {
+  color: blue;
+
+}
+
+.blue-link:hover {
+  text-decoration: underline;
+  color: red;
+}

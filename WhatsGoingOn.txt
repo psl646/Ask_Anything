@@ -3,17 +3,15 @@ D3JS
 
 
 TODO:
-Work on footer - how to make footer be at the bottom forever???
+Work on footer - how to make footer be at the bottom forever + resize
 Fix Modal styling.  Window re-sizing affects the modal.
 Method missing for placeholder links/routes - "You reached " + xyz
 Have Survey create call Question create
 Have create first poll to "click/open modal"
-Go back and update CSS for Settings.
-
+Go back and FIX CSS for Settings.
 
 EMAIL VERIFICATION: @ .com .net .org. gov .edu .io
-short of action mailers
-Email is invalid
+"Email is invalid" - error message
 
 
 =================SIGNUPPAGE==================

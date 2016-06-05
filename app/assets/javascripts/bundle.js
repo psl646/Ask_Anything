@@ -36537,8 +36537,8 @@
 	    var user = SessionStore.currentUser();
 	    return {
 	      id: user.id,
-	      first_name: user.first_name,
-	      last_name: user.last_name,
+	      first_name: "",
+	      last_name: "",
 	      email: user.email,
 	      username: user.username,
 	      errors: false
@@ -36559,8 +36559,8 @@
 	    var user = SessionStore.currentUser();
 	    this.setState({
 	      id: user.id,
-	      first_name: user.first_name,
-	      last_name: user.last_name,
+	      first_name: "",
+	      last_name: "",
 	      email: user.email,
 	      username: user.username,
 	      errors: false
@@ -36571,8 +36571,8 @@
 	    var user = SessionStore.currentUser();
 	    this.setState({
 	      id: user.id,
-	      first_name: user.first_name,
-	      last_name: user.last_name,
+	      first_name: "",
+	      last_name: "",
 	      email: user.email,
 	      username: user.username,
 	      errors: true });
@@ -36657,6 +36657,7 @@
 	      );
 	    }
 	
+	    // /* THE &nbsp; are temporary. Will come back to restyle this */
 	    return React.createElement(
 	      'div',
 	      { className: 'user-edit-container' },
@@ -36687,32 +36688,39 @@
 	        React.createElement(
 	          'label',
 	          { className: 'hover-text label' },
-	          ' Email ',
-	          React.createElement('br', null),
+	          'Email           ',
 	          this.state.email,
+	          '        ',
 	          React.createElement(
 	            Link,
-	            { to: 'profile/edit_password_or_email' },
+	            { to: 'profile/edit_password_or_email', className: 'blue-link' },
 	            'Change'
-	          )
+	          ),
+	          React.createElement('br', null)
 	        ),
 	        React.createElement('br', null),
 	        React.createElement(
 	          'label',
 	          { className: 'hover-text label' },
-	          ' Password ',
-	          React.createElement('br', null),
+	          'Password  ',
 	          React.createElement(
 	            Link,
-	            { to: 'profile/edit_password_or_email' },
-	            'Change'
-	          )
+	            { to: 'profile/edit_password_or_email', className: 'blue-link' },
+	            'Change your password'
+	          ),
+	          React.createElement('br', null)
 	        ),
 	        React.createElement('br', null),
 	        React.createElement(
 	          'label',
 	          { className: 'label' },
-	          ' First name ',
+	          'First name ',
+	          React.createElement(
+	            'div',
+	            { className: 'red-inline' },
+	            '*'
+	          ),
+	          ' ',
 	          React.createElement('br', null),
 	          React.createElement('input', {
 	            className: "signup-input soft-edges ",
@@ -36725,7 +36733,13 @@
 	        React.createElement(
 	          'label',
 	          { className: 'label' },
-	          ' Last name ',
+	          'Last name ',
+	          React.createElement(
+	            'div',
+	            { className: 'red-inline' },
+	            '*'
+	          ),
+	          ' ',
 	          React.createElement('br', null),
 	          React.createElement('input', {
 	            className: "signup-input soft-edges ",
@@ -36982,7 +36996,7 @@
 	        React.createElement(
 	          'label',
 	          { className: 'label' },
-	          ' Email ',
+	          'Email ',
 	          React.createElement('br', null),
 	          React.createElement('input', {
 	            className: "signup-input soft-edges ",
@@ -36994,7 +37008,13 @@
 	        React.createElement(
 	          'label',
 	          { className: 'label' },
-	          ' Current Password * ',
+	          'Current Password ',
+	          React.createElement(
+	            'div',
+	            { className: 'red-inline' },
+	            '*'
+	          ),
+	          ' ',
 	          React.createElement('br', null),
 	          React.createElement('input', {
 	            className: "signup-input soft-edges ",
@@ -37007,7 +37027,7 @@
 	        React.createElement(
 	          'label',
 	          { className: 'label' },
-	          ' New Password ',
+	          'New Password ',
 	          React.createElement('br', null),
 	          React.createElement('input', {
 	            className: "signup-input soft-edges ",
@@ -37020,7 +37040,7 @@
 	        React.createElement(
 	          'label',
 	          { className: 'label' },
-	          ' Confirm New Password ',
+	          'Confirm New Password ',
 	          React.createElement('br', null),
 	          React.createElement('input', {
 	            className: "signup-input soft-edges ",

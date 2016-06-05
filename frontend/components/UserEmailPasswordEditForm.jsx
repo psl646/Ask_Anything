@@ -137,7 +137,8 @@ var UserEditForm = React.createClass({
         { renderErrors }
         <form className="user-edit-form" onSubmit={ this.handleSubmit }>
           <br />
-          <label className="label"> Email <br/>
+          <label className="label">
+            Email <br/>
             <input
               className={"signup-input soft-edges "}
               type="text" value={ this.state.email }
@@ -146,7 +147,8 @@ var UserEditForm = React.createClass({
           </label>
 
           <br />
-          <label className="label"> Current Password * <br/>
+          <label className="label">
+            Current Password <div className="red-inline">*</div> <br/>
             <input
               className={"signup-input soft-edges "}
               type="password"
@@ -156,7 +158,8 @@ var UserEditForm = React.createClass({
           </label>
 
           <br />
-          <label className="label"> New Password <br/>
+          <label className="label">
+            New Password <br/>
             <input
               className={"signup-input soft-edges "}
               type="password"
@@ -166,7 +169,8 @@ var UserEditForm = React.createClass({
           </label>
 
           <br />
-          <label className="label"> Confirm New Password <br/>
+          <label className="label">
+            Confirm New Password <br/>
             <input
               className={"signup-input soft-edges "}
               type="password"

@@ -14,8 +14,8 @@ var UserEditForm = React.createClass({
     var user = SessionStore.currentUser();
     return({
       id: user.id,
-      first_name: user.first_name,
-      last_name: user.last_name,
+      first_name: "",
+      last_name: "",
       email: user.email,
       username: user.username,
       errors: false
@@ -36,8 +36,8 @@ var UserEditForm = React.createClass({
     var user = SessionStore.currentUser();
     this.setState({
       id: user.id,
-      first_name: user.first_name,
-      last_name: user.last_name,
+      first_name: "",
+      last_name: "",
       email: user.email,
       username: user.username,
       errors: false
@@ -48,8 +48,8 @@ var UserEditForm = React.createClass({
     var user = SessionStore.currentUser();
     this.setState({
       id: user.id,
-      first_name: user.first_name,
-      last_name: user.last_name,
+      first_name: "",
+      last_name: "",
       email: user.email,
       username: user.username,
       errors: true });
@@ -115,6 +115,7 @@ var UserEditForm = React.createClass({
       );
     }
 
+    // /* THE &nbsp; are temporary. Will come back to restyle this */
     return (
       <div className="user-edit-container">
         <div className="h7">
@@ -135,18 +136,24 @@ var UserEditForm = React.createClass({
           { renderErrors }
 
           <br />
-          <label className="hover-text label"> Email <br/>
-            { this.state.email }
-            <Link to="profile/edit_password_or_email">Change</Link>
+          <label className="hover-text label">
+
+            Email  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            { this.state.email } &nbsp; &nbsp; &nbsp; &nbsp;
+            <Link to="profile/edit_password_or_email" className="blue-link">Change</Link>
+            <br />
           </label>
 
           <br />
-          <label className="hover-text label"> Password <br/>
-            <Link to="profile/edit_password_or_email">Change</Link>
+          <label className="hover-text label">
+            Password &nbsp;
+            <Link to="profile/edit_password_or_email" className="blue-link">Change your password</Link>
+            <br />
           </label>
 
           <br />
-          <label className="label"> First name <br/>
+          <label className="label">
+            First name <div className="red-inline">*</div> <br/>
             <input
               className={"signup-input soft-edges "}
               type="text"
@@ -156,7 +163,8 @@ var UserEditForm = React.createClass({
           </label>
 
           <br />
-          <label className="label"> Last name <br/>
+          <label className="label">
+            Last name <div className="red-inline">*</div> <br/>
             <input
               className={"signup-input soft-edges "}
               type="text"
