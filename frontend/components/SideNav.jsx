@@ -16,7 +16,9 @@ var SideNav = React.createClass ({
   },
 
   openModal: function(){
-    this.setState({ modalOpen: true })
+    window.setTimeout(function () {
+      this.setState({ modalOpen: true });
+    }.bind(this), 500);
   },
 
   render: function () {

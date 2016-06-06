@@ -35083,7 +35083,7 @@
 	    }
 	    window.setTimeout(function () {
 	      this.setState({ modalOpen: true });
-	    }.bind(this), 1000);
+	    }.bind(this), 500);
 	  },
 	
 	  greeting: function () {
@@ -35402,21 +35402,18 @@
 	
 	  handleSubmit: function (e) {
 	    e.preventDefault();
-	    console.log(e);
+	    var questionsFormData = [];
 	
-	    console.log(this.state.questions);
+	    // this.state.questions.forEach(function(questionForm) {
+	    //   // questionsFormData.push(questionForm.getMyData());
+	    // }.bind(this));
 	
-	    // var formData = {
-	    //   questions:
-	    // };
+	    // console.log(questionsFormData);
 	
-	    // console.log(formData);
-	    // console.log(this.state.isSurvey);
 	    // if (this.state.isSurvey) {
 	    //   formData.title = this.state.title;
 	    //   ClientSurveyActions.createSurvey(formData);
 	    // } else {
-	    //   "You hit ClientQuestionActions ELSE"
 	    //   ClientQuestionActions.createQuestions(formData);
 	    // }
 	  },
@@ -35425,7 +35422,6 @@
 	    var newQuestionValue = e.target.value;
 	
 	    var newQuestion = React.createElement(QuestionForm, {
-	      form: 'questionform',
 	      key: this.state.numberQuestions,
 	      question: newQuestionValue
 	    });
@@ -35452,7 +35448,6 @@
 	    if (this.state.numberQuestions !== 0) {
 	      addQuestion = "Add a question:";
 	      myNewQuestions = this.state.questions.map(function (currentQuestion, idx) {
-	        console.log(currentQuestion);
 	        return React.createElement(
 	          'li',
 	          { key: idx },
@@ -35535,7 +35530,7 @@
 	      null,
 	      React.createElement(
 	        'form',
-	        { id: 'questionform', onSubmit: this.handleSubmit },
+	        { onSubmit: this.handleSubmit },
 	        surveyText,
 	        surveyInput,
 	        React.createElement(
@@ -35930,10 +35925,8 @@
 	
 	  _onChange: function () {},
 	
-	  handleSubmit: function (e) {
-	    e.preventDefault();
-	
-	    var formData = {
+	  getMyData: function () {
+	    return {
 	      question: this.state.question,
 	      category: this.state.category,
 	      answers: this.state.answers
@@ -36013,6 +36006,7 @@
 	        ' Question: ',
 	        React.createElement('br', null),
 	        React.createElement('input', {
+	          ref: this.state.question,
 	          autoFocus: true,
 	          form: 'questionform',
 	          className: 'question-input-field margin-auto',
@@ -36642,10 +36636,8 @@
 	    var that = this;
 	
 	    window.setTimeout(function () {
-	      that.closeMyself();
-	    }, 0);
-	    window.setTimeout(function () {
 	      that.context.router.push("password_resets");
+	      // that.closeMyself();
 	    }, 0);
 	  },
 	
@@ -37299,7 +37291,9 @@
 	  },
 	
 	  openModal: function () {
-	    this.setState({ modalOpen: true });
+	    window.setTimeout(function () {
+	      this.setState({ modalOpen: true });
+	    }.bind(this), 500);
 	  },
 	
 	  render: function () {

@@ -50,30 +50,28 @@ var QuestionFormGenerator = React.createClass({
 
   handleSubmit: function (e) {
     e.preventDefault();
-    console.log(e);
+    var questionsFormData = [];
 
-    console.log(this.state.questions)
 
-    // var formData = {
-    //   questions:
-    // };
+    // this.state.questions.forEach(function(questionForm) {
+    //   // questionsFormData.push(questionForm.getMyData());
+    // }.bind(this));
 
-    // console.log(formData);
-    // console.log(this.state.isSurvey);
+    // console.log(questionsFormData);
+
     // if (this.state.isSurvey) {
     //   formData.title = this.state.title;
     //   ClientSurveyActions.createSurvey(formData);
     // } else {
-    //   "You hit ClientQuestionActions ELSE"
     //   ClientQuestionActions.createQuestions(formData);
     // }
   },
+
 
   handleQuestionInputChange: function (e) {
     var newQuestionValue = e.target.value;
 
     var newQuestion = <QuestionForm
-      form="questionform"
       key={ this.state.numberQuestions }
       question={ newQuestionValue }
       />
@@ -100,7 +98,6 @@ var QuestionFormGenerator = React.createClass({
     if (this.state.numberQuestions !== 0) {
       addQuestion = "Add a question:"
       myNewQuestions = this.state.questions.map(function(currentQuestion, idx){
-        console.log(currentQuestion);
         return (
           <li key={ idx }>
             { currentQuestion }
@@ -151,7 +148,7 @@ var QuestionFormGenerator = React.createClass({
 
     return (
       <div>
-        <form id="questionform" onSubmit={ this.handleSubmit } >
+        <form onSubmit={ this.handleSubmit } >
           { surveyText }
 
           { surveyInput }

@@ -1,3 +1,14 @@
+TODO TMRW:
+1) Fix the send password glitch...?
+2) Delete Questions from Question form
+3) Grab data to send up to DB for Creation
+4) Delete/Update/ETC with questions
+5) Responses
+6) Style
+
+
+
+
 IDEAS -
 1) set up the form on the render.
 Have a counter and for that many times, add it to the board - seems clunky.
@@ -22,6 +33,8 @@ Method missing for placeholder links/routes - "You reached " + xyz
 Have Survey create call Question create
 Have create first poll to "click/open modal"
 Go back and FIX CSS for Settings to align properly:
+VIDEO
+
                   _________________
   First Name  |  |_________________|
 

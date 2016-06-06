@@ -29,14 +29,12 @@ var QuestionForm = React.createClass({
 
   },
 
-	handleSubmit: function (e) {
-		e.preventDefault();
-
-		var formData = {
+	getMyData: function () {
+		return ({
       question: this.state.question,
       category: this.state.category,
       answers: this.state.answers
-		};
+		});
 	},
 
   questionChange: function (e) {
@@ -102,6 +100,7 @@ var QuestionForm = React.createClass({
         <br />
         <label className="text-shift-left"> Question: <br/>
           <input
+            ref={ this.state.question }
             autoFocus
             form="questionform"
             className="question-input-field margin-auto"

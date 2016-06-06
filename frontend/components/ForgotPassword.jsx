@@ -30,11 +30,9 @@ var ForgotPassword = React.createClass({
   redirectIfValidEmail: function () {
     var that = this;
 
-    window.setTimeout(function() {
-      that.closeMyself();
-    }, 0 );
     window.setTimeout(function () {
-      that.context.router.push("password_resets")
+      that.context.router.push("password_resets");
+      // that.closeMyself();
     }, 0 );
   },
 

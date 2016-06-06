@@ -1,0 +1,7 @@
+var QuestionFormConstants = {
+  ADD_QUESTION_FORM: "ADD_QUESTION_FORM",
+  UPDATE_QUESTION_FORM: "UPDATE_QUESTION_FORM",
+  DELETE_QUESTION_FORM: "DELETE_QUESTION_FORM",
+};
+
+module.exports = QuestionFormConstants;
