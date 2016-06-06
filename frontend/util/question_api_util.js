@@ -1,4 +1,5 @@
 var ServerQuestionActions = require('./../actions/server_question_actions');
+var ErrorActions = require('../actions/error_actions');
 
 var QuestionApiUtil = {
   fetchAllQuestions: function () {
@@ -30,6 +31,7 @@ var QuestionApiUtil = {
   },
 
   createQuestions: function (formData) {
+    console.log(formData);
     $.ajax({
       url: 'api/questions',
       type: 'POST',

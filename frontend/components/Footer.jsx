@@ -9,7 +9,6 @@ var Footer = React.createClass({
   render: function () {
     var footerSurvey = "";
 
-    console.log(window.location.hash.slice(2, 9));
     if (window.location.hash.slice(2, 9).toUpperCase() === "SURVEYS") {
       footerSurvey = "footer-survey";
     }

@@ -18,10 +18,7 @@ var QuestionForm = React.createClass({
   },
 
   componentDidMount: function () {
-    console.log(this.props);
-    console.log(this.state);
-    console.log(this.refs);
-    console.log(ReactDOM.findDOMNode(this.refs.nameInput));
+
   },
 
   componentWillUnmount: function () {
@@ -48,13 +45,12 @@ var QuestionForm = React.createClass({
   },
 
   categoryChange: function (e) {
-    console.log("categoryChange");
     var newCategory = e.target.value;
     this.setState({ category: newCategory});
   },
 
   addAnswersChange: function (e) {
-
+    this.setState({ answers: this.state.answers.concat(<AnswerInput />) })
   },
 
   handleDeleteQuestion: function (e) {
@@ -74,13 +70,16 @@ var QuestionForm = React.createClass({
         <li key={ idx } className={ "category-li " + isChecked }>
           <label className="category-label">
             <input
+              form="questionform"
               type="radio"
               name={"questionCategory"+idx}
               value={ category }
               checked={ this.state.category === category }
               onChange={this.categoryChange}
               />
+            <div className="category-name h12">
               { category }
+            </div>
             </label>
         </li>
       );
@@ -104,6 +103,7 @@ var QuestionForm = React.createClass({
         <label className="text-shift-left"> Question: <br/>
           <input
             autoFocus
+            form="questionform"
             className="question-input-field margin-auto"
             type="text"
             value={this.state.question}
@@ -111,7 +111,7 @@ var QuestionForm = React.createClass({
         </label>
 
         <br />
-        <div className="text-shift-left">
+        <div className="text-shift-left h12">
           How will my audience respond?
         </div>
         <div className="answer-choice-type group">
@@ -120,10 +120,15 @@ var QuestionForm = React.createClass({
           </ul>
 
           <ul className="answer-container">
-            <div className="answer-text">
+            <div className="answer-text h12">
               Your audience can select from these answers:
             </div>
             { myNewAnswers }
+            <div
+              className="hover-pointer h9-5 soft-edges add-answer-button"
+              onClick={ this.addAnswersChange }>
+              Add an answer
+            </div>
           </ul>
         </div>
 

@@ -9,14 +9,14 @@
 .question-form-generator-container {
   width: 660px;
   height: 110px;
-  background: rgba(111, 168, 221, 0.46);
+  background: rgb(227, 235, 250);
   margin: 20px 20px 15px 20px;
 }
 
 .single-question-form {
   width: 660px;
   height: 410px;
-  background: rgba(111, 168, 221, 0.46);
+  background: rgb(227, 235, 250);
   margin: 20px;
 }
 
@@ -45,6 +45,17 @@
   background: white;
 }
 
+.category-name {
+  position: relative;
+  display: inline;
+  left: 6px;
+}
+
+.h12 {
+  font-size: 12px;
+  font-weight: 900;
+}
+
 .answer-container {
   float: right;
   position: relative;
@@ -58,19 +69,19 @@
   position: relative;
   left: 35px;
   top: 10px;
-  width: 400px;
+  width: 393px;
   height: 35px;
+  padding-left: 7px;
   border: 1px solid #BCBFC3;
   background: rgb(255, 255, 255);
-  margin-top: 10px;
-
+  margin-top: 15px;
 }
 
 .question-input-field {
   background-color: #fff;
-  width: 620px;
+  width: 613px;
   height: 45px;
-  padding: 0px 2px, 8px 2px;
+  padding-left: 7px;
   border: 1px solid #BCBFC3;
   margin: 7px 0 18px 0;
   box-shadow: inset 0px 0px 10px #ddd;
@@ -78,6 +89,7 @@
 
 .placeholder-text {
   position: relative;
+  font-weight: normal;
   width: 615px;
   height: 45px;
   top: 2px;
@@ -132,4 +144,89 @@
   position: relative;
   left: 35px;
   top: 20px;
+}
+
+.protip-custom {
+  position: relative;
+  display: block;
+  width: 55px;
+  font-size: 11px;
+  font-weight: 900;
+  float: right;
+  color: rgb(170, 170, 170);
+  right: 15px;
+  top: 25px;
+}
+
+.protip-custom:hover {
+  cursor: pointer;
+  color: rgb(102, 102, 102);
+}
+
+.protip-custom:hover > ul {
+  display: block;
+}
+
+.protip-only {
+  float: left;
+  width: 40px;
+}
+
+.TM-only {
+  float: right;
+  width: 15px;
+  font-size:6px;
+  position: relative;
+  top: 1px;
+  right: 4px;
+}
+
+.protip-popup {
+  display: none;
+  float: right;
+  position: absolute;
+  font-size: 13px;
+  top: 15px;
+  right: 0px;
+  color: white;
+  background: rgb(35, 37, 31);
+  width: 300px;
+  height: 270px;
+  padding: 15px;
+  margin: 5px 0;
+  z-index: 50;
+}
+
+.protip-popup > li {
+  margin: 10px 5px;
+}
+
+.red {
+  color: red;
+}
+
+.blue {
+  color: rgb(44, 101, 161);
+}
+
+.green {
+  color: green;
+}
+
+.text-inline {
+  display: inline;
+}
+
+.add-answer-button {
+  position: relative;
+  top: 15px;
+  left: 35px;
+  width: 70px;
+  padding: 5px;
+  color: #e9eff4;
+  background-color: #203349;
+}
+
+.h9-5 {
+  font-size: 9.5px;
 }

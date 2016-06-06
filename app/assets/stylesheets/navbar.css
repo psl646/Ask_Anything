@@ -48,12 +48,10 @@
   background: rgb(77, 133, 175);
 }
 
-/*Pseudocontent image*/
 .user-info-container {
   width: 106px;
   padding: 18px 15px;
 }
-
 
 .user-info-container:hover > ul {
   display: block;

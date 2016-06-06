@@ -1,9 +1,21 @@
+IDEAS -
+1) set up the form on the render.
+Have a counter and for that many times, add it to the board - seems clunky.
+2) make a form store and constantly ping the server when there is an update... expensive
+
+
+TRIED:
+<form id="">
+modifying the object somehow to have the information
+
+
 Look up
 D3JS
 
 
 TODO:
 How to make modal continually expand???
+How to make modal resize?
 
 Work on footer - how to make footer be at the bottom forever + resize
 Method missing for placeholder links/routes - "You reached " + xyz

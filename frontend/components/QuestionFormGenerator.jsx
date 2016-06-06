@@ -50,23 +50,34 @@ var QuestionFormGenerator = React.createClass({
 
   handleSubmit: function (e) {
     e.preventDefault();
+    console.log(e);
 
-    var formData = {
-      questions: this.state.questions
-    };
+    console.log(this.state.questions)
 
-    if (this.state.isSurvey) {
-      formData.title = this.state.title;
-      ClientSurveyActions.createSurvey(formData);
-    } else {
-      ClientQuestionActions.createQuestions(formData);
-    }
+    // var formData = {
+    //   questions:
+    // };
+
+    // console.log(formData);
+    // console.log(this.state.isSurvey);
+    // if (this.state.isSurvey) {
+    //   formData.title = this.state.title;
+    //   ClientSurveyActions.createSurvey(formData);
+    // } else {
+    //   "You hit ClientQuestionActions ELSE"
+    //   ClientQuestionActions.createQuestions(formData);
+    // }
   },
 
   handleQuestionInputChange: function (e) {
     var newQuestionValue = e.target.value;
-    var newQuestion = <QuestionForm question={ newQuestionValue }/>
-    console.log(newQuestion);
+
+    var newQuestion = <QuestionForm
+      form="questionform"
+      key={ this.state.numberQuestions }
+      question={ newQuestionValue }
+      />
+
     this.setState({
       questions: this.state.questions.concat( newQuestion ),
       numberQuestions: this.state.numberQuestions + 1,
@@ -86,11 +97,10 @@ var QuestionFormGenerator = React.createClass({
     var createText = "Create";
     var surveyInput = "";
 
-    console.log(this.state.questions);
     if (this.state.numberQuestions !== 0) {
-      console.log(this.state.questions);
       addQuestion = "Add a question:"
       myNewQuestions = this.state.questions.map(function(currentQuestion, idx){
+        console.log(currentQuestion);
         return (
           <li key={ idx }>
             { currentQuestion }
@@ -109,9 +119,39 @@ var QuestionFormGenerator = React.createClass({
                     </label>
     };
 
+    var popUpProTip = (
+      <ul className="protip-popup h12 soft-edges">
+        <li className="h14">
+          Want to make a quick Multiple Choice Question?
+        </li>
+
+        <li>
+          Include a question mark or colon, then type your multiple choice answers separated by commas.  Hit RETURN and we'll split stuff out automatically.
+        </li>
+
+        <li>
+          Example:
+          <div>
+            <div>What's your favorite color?</div>
+            <div className="red text-inline">Red</div>, &nbsp;
+            <div className="blue text-inline">Blue</div>, or &nbsp;
+            <div className="green text-inline">Green</div>
+          </div>
+        </li>
+
+        <li className="h14">
+          Importing a bunch of questions?
+        </li>
+
+        <li>
+          Copy & paste a list of questions and we'll create a question for each line.
+        </li>
+      </ul>
+    );
+
     return (
       <div>
-        <form onSubmit={ this.handleSubmit } >
+        <form id="questionform" onSubmit={ this.handleSubmit } >
           { surveyText }
 
           { surveyInput }
@@ -121,7 +161,12 @@ var QuestionFormGenerator = React.createClass({
           </ul>
 
           <div className="question-form-generator-container soft-edges">
-            <label className="add-question">{ addQuestion }
+            <div className="protip-custom">
+              { popUpProTip }
+              <div className="protip-only">ProTip</div>
+              <div className="TM-only">TM</div>
+            </div>
+            <label className="add-question h12">{ addQuestion }
               <input
                 className="question-input-field margin-auto placeholder-text h22"
                 type="text"

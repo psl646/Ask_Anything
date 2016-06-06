@@ -34871,7 +34871,6 @@
 	  render: function () {
 	    var footerSurvey = "";
 	
-	    console.log(window.location.hash.slice(2, 9));
 	    if (window.location.hash.slice(2, 9).toUpperCase() === "SURVEYS") {
 	      footerSurvey = "footer-survey";
 	    }
@@ -35403,23 +35402,34 @@
 	
 	  handleSubmit: function (e) {
 	    e.preventDefault();
+	    console.log(e);
 	
-	    var formData = {
-	      questions: this.state.questions
-	    };
+	    console.log(this.state.questions);
 	
-	    if (this.state.isSurvey) {
-	      formData.title = this.state.title;
-	      ClientSurveyActions.createSurvey(formData);
-	    } else {
-	      ClientQuestionActions.createQuestions(formData);
-	    }
+	    // var formData = {
+	    //   questions:
+	    // };
+	
+	    // console.log(formData);
+	    // console.log(this.state.isSurvey);
+	    // if (this.state.isSurvey) {
+	    //   formData.title = this.state.title;
+	    //   ClientSurveyActions.createSurvey(formData);
+	    // } else {
+	    //   "You hit ClientQuestionActions ELSE"
+	    //   ClientQuestionActions.createQuestions(formData);
+	    // }
 	  },
 	
 	  handleQuestionInputChange: function (e) {
 	    var newQuestionValue = e.target.value;
-	    var newQuestion = React.createElement(QuestionForm, { question: newQuestionValue });
-	    console.log(newQuestion);
+	
+	    var newQuestion = React.createElement(QuestionForm, {
+	      form: 'questionform',
+	      key: this.state.numberQuestions,
+	      question: newQuestionValue
+	    });
+	
 	    this.setState({
 	      questions: this.state.questions.concat(newQuestion),
 	      numberQuestions: this.state.numberQuestions + 1,
@@ -35439,11 +35449,10 @@
 	    var createText = "Create";
 	    var surveyInput = "";
 	
-	    console.log(this.state.questions);
 	    if (this.state.numberQuestions !== 0) {
-	      console.log(this.state.questions);
 	      addQuestion = "Add a question:";
 	      myNewQuestions = this.state.questions.map(function (currentQuestion, idx) {
+	        console.log(currentQuestion);
 	        return React.createElement(
 	          'li',
 	          { key: idx },
@@ -35465,12 +35474,68 @@
 	      );
 	    };
 	
+	    var popUpProTip = React.createElement(
+	      'ul',
+	      { className: 'protip-popup h12 soft-edges' },
+	      React.createElement(
+	        'li',
+	        { className: 'h14' },
+	        'Want to make a quick Multiple Choice Question?'
+	      ),
+	      React.createElement(
+	        'li',
+	        null,
+	        'Include a question mark or colon, then type your multiple choice answers separated by commas.  Hit RETURN and we\'ll split stuff out automatically.'
+	      ),
+	      React.createElement(
+	        'li',
+	        null,
+	        'Example:',
+	        React.createElement(
+	          'div',
+	          null,
+	          React.createElement(
+	            'div',
+	            null,
+	            'What\'s your favorite color?'
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'red text-inline' },
+	            'Red'
+	          ),
+	          ',  ',
+	          React.createElement(
+	            'div',
+	            { className: 'blue text-inline' },
+	            'Blue'
+	          ),
+	          ', or  ',
+	          React.createElement(
+	            'div',
+	            { className: 'green text-inline' },
+	            'Green'
+	          )
+	        )
+	      ),
+	      React.createElement(
+	        'li',
+	        { className: 'h14' },
+	        'Importing a bunch of questions?'
+	      ),
+	      React.createElement(
+	        'li',
+	        null,
+	        'Copy & paste a list of questions and we\'ll create a question for each line.'
+	      )
+	    );
+	
 	    return React.createElement(
 	      'div',
 	      null,
 	      React.createElement(
 	        'form',
-	        { onSubmit: this.handleSubmit },
+	        { id: 'questionform', onSubmit: this.handleSubmit },
 	        surveyText,
 	        surveyInput,
 	        React.createElement(
@@ -35482,8 +35547,23 @@
 	          'div',
 	          { className: 'question-form-generator-container soft-edges' },
 	          React.createElement(
+	            'div',
+	            { className: 'protip-custom' },
+	            popUpProTip,
+	            React.createElement(
+	              'div',
+	              { className: 'protip-only' },
+	              'ProTip'
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'TM-only' },
+	              'TM'
+	            )
+	          ),
+	          React.createElement(
 	            'label',
-	            { className: 'add-question' },
+	            { className: 'add-question h12' },
 	            addQuestion,
 	            React.createElement('input', {
 	              className: 'question-input-field margin-auto placeholder-text h22',
@@ -35537,6 +35617,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var ServerQuestionActions = __webpack_require__(284);
+	var ErrorActions = __webpack_require__(275);
 	
 	var QuestionApiUtil = {
 	  fetchAllQuestions: function () {
@@ -35568,6 +35649,7 @@
 	  },
 	
 	  createQuestions: function (formData) {
+	    console.log(formData);
 	    $.ajax({
 	      url: 'api/questions',
 	      type: 'POST',
@@ -35842,12 +35924,7 @@
 	    };
 	  },
 	
-	  componentDidMount: function () {
-	    console.log(this.props);
-	    console.log(this.state);
-	    console.log(this.refs);
-	    console.log(ReactDOM.findDOMNode(this.refs.nameInput));
-	  },
+	  componentDidMount: function () {},
 	
 	  componentWillUnmount: function () {},
 	
@@ -35869,12 +35946,13 @@
 	  },
 	
 	  categoryChange: function (e) {
-	    console.log("categoryChange");
 	    var newCategory = e.target.value;
 	    this.setState({ category: newCategory });
 	  },
 	
-	  addAnswersChange: function (e) {},
+	  addAnswersChange: function (e) {
+	    this.setState({ answers: this.state.answers.concat(React.createElement(AnswerInput, null)) });
+	  },
 	
 	  handleDeleteQuestion: function (e) {
 	    e.preventDefault();
@@ -35896,13 +35974,18 @@
 	          'label',
 	          { className: 'category-label' },
 	          React.createElement('input', {
+	            form: 'questionform',
 	            type: 'radio',
 	            name: "questionCategory" + idx,
 	            value: category,
 	            checked: this.state.category === category,
 	            onChange: this.categoryChange
 	          }),
-	          category
+	          React.createElement(
+	            'div',
+	            { className: 'category-name h12' },
+	            category
+	          )
 	        )
 	      );
 	    }.bind(this));
@@ -35931,6 +36014,7 @@
 	        React.createElement('br', null),
 	        React.createElement('input', {
 	          autoFocus: true,
+	          form: 'questionform',
 	          className: 'question-input-field margin-auto',
 	          type: 'text',
 	          value: this.state.question,
@@ -35939,7 +36023,7 @@
 	      React.createElement('br', null),
 	      React.createElement(
 	        'div',
-	        { className: 'text-shift-left' },
+	        { className: 'text-shift-left h12' },
 	        'How will my audience respond?'
 	      ),
 	      React.createElement(
@@ -35955,10 +36039,17 @@
 	          { className: 'answer-container' },
 	          React.createElement(
 	            'div',
-	            { className: 'answer-text' },
+	            { className: 'answer-text h12' },
 	            'Your audience can select from these answers:'
 	          ),
-	          myNewAnswers
+	          myNewAnswers,
+	          React.createElement(
+	            'div',
+	            {
+	              className: 'hover-pointer h9-5 soft-edges add-answer-button',
+	              onClick: this.addAnswersChange },
+	            'Add an answer'
+	          )
 	        )
 	      )
 	    );
@@ -35996,7 +36087,8 @@
 	      "div",
 	      { className: "single-answer-container" },
 	      React.createElement("input", {
-	        className: "single-answer-input",
+	        form: "questionform",
+	        className: "single-answer-input h12",
 	        type: "text",
 	        value: this.state.answer,
 	        placeholder: "Text, Image URL, or LaTeX",

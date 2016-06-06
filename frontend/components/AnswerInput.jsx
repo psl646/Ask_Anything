@@ -23,7 +23,8 @@ var AnswerInput = React.createClass({
     return (
       <div className="single-answer-container">
         <input
-          className="single-answer-input"
+          form="questionform"
+          className="single-answer-input h12"
           type="text"
           value={this.state.answer}
           placeholder="Text, Image URL, or LaTeX"
