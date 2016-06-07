@@ -55,11 +55,11 @@ var SurveysIndex = React.createClass ({
     var mySurveys = this.state.surveys;
 
     var surveys = Object.keys(mySurveys).map(function(survey_id){
-      var clicked_survey_li = ""
+      var toggleSurvey = ""
       var caretIcon = "fa fa-caret-down";
 
       if (that.state.clickedSurveys[survey_id]) {
-        clicked_survey_li = "clicked_survey_li";
+        toggleSurvey = "clicked_survey_li";
         caretIcon = "fa fa-caret-right";
       }
 
@@ -75,7 +75,7 @@ var SurveysIndex = React.createClass ({
               { currentSurvey.question_count + " Questions"}
             </div>
           </div>
-          <ul className={"survey-index-items " + clicked_survey_li }>
+          <ul className={ "survey-index-items " + toggleSurvey }>
             <QuestionsIndex survey={ currentSurvey }/>
           </ul>
         </li>

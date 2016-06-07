@@ -251,3 +251,17 @@
   color: #f7f8f9;
   background: #113a5c;
 }
+
+
+/*IMPLEMENT THIS LATER*/
+/*.no-question-forms {
+  display: none;
+  float: left;
+  position: relative;
+  bottom: 20px;
+  width: 300px;
+  padding: 20px 15px;
+  color: white;
+  background: rgb(35, 37, 31);
+  transition: display 2s;
+}*/

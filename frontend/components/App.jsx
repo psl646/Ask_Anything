@@ -29,6 +29,7 @@ var App = React.createClass({
     var navigationBar;
     var rootPageContent;
     var footer = <Footer />;
+    var minHeight= "min-height-700px";
 
     if (SessionStore.isUserLoggedIn()) {
       navigationBar = <UserNavBar />;
@@ -44,10 +45,12 @@ var App = React.createClass({
 
     if (this.pageDoesNotHaveFooter()){
       footer = "";
+      minHeight = "";
     }
 
+
     return (
-      <div className="app">
+      <div className={ "app " + minHeight }>
         { navigationBar }
         { rootPageContent }
         {this.props.children}

@@ -85,7 +85,6 @@ var QuestionFormGenerator = React.createClass({
     }, 0);
     window.setTimeout(function() {
       var question = QuestionStore.getNewQuestion();
-      console.log(question);
       that.context.router.push("questions/" + question.id);
     });
   },
@@ -101,16 +100,16 @@ var QuestionFormGenerator = React.createClass({
       questions: questions
     };
 
+    // if (formData["questions"].length === 0) {
+    //   this.setState({ invalid_submit: 0 })
+    // } else {
     if (this.state.isSurvey) {
       formData["title"] = this.state.title;
       ClientSurveyActions.createSurvey(formData);
     } else {
       ClientQuestionActions.createQuestions(formData);
     }
-
-    // this.setState({ errors: false });
   },
-
 
   handleQuestionInputChange: function (e) {
     var newQuestionValue = e.target.value;
@@ -149,7 +148,6 @@ var QuestionFormGenerator = React.createClass({
         );
       });
     }
-
 
 
     if (this.state.isSurvey) {
@@ -192,6 +190,7 @@ var QuestionFormGenerator = React.createClass({
       </ul>
     );
 
+    // <div className={ "soft-edges no-question-forms" }>Hey Silly! You need to enter a poll in the box above first.</div>
     return (
       <div>
         <form onSubmit={ this.handleSubmit } >

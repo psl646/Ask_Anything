@@ -59,11 +59,11 @@
 	var LoginForm = __webpack_require__(302);
 	var SignupPage = __webpack_require__(304);
 	var SurveysIndex = __webpack_require__(308);
-	var QuestionIndexItem = __webpack_require__(309);
-	var UserEditForm = __webpack_require__(310);
-	var UserEmailPasswordEditForm = __webpack_require__(311);
-	var ForgotPasswordSuccess = __webpack_require__(312);
-	var NewFeatures = __webpack_require__(313);
+	var QuestionIndexItem = __webpack_require__(312);
+	var UserEditForm = __webpack_require__(314);
+	var UserEmailPasswordEditForm = __webpack_require__(315);
+	var ForgotPasswordSuccess = __webpack_require__(316);
+	var NewFeatures = __webpack_require__(317);
 	
 	var SessionStore = __webpack_require__(250);
 	var SessionApiUtil = __webpack_require__(273);
@@ -27886,6 +27886,7 @@
 	    var navigationBar;
 	    var rootPageContent;
 	    var footer = React.createElement(Footer, null);
+	    var minHeight = "min-height-700px";
 	
 	    if (SessionStore.isUserLoggedIn()) {
 	      navigationBar = React.createElement(UserNavBar, null);
@@ -27901,11 +27902,12 @@
 	
 	    if (this.pageDoesNotHaveFooter()) {
 	      footer = "";
+	      minHeight = "";
 	    }
 	
 	    return React.createElement(
 	      'div',
-	      { className: 'app' },
+	      { className: "app " + minHeight },
 	      navigationBar,
 	      rootPageContent,
 	      this.props.children,
@@ -35459,7 +35461,6 @@
 	    }, 0);
 	    window.setTimeout(function () {
 	      var question = QuestionStore.getNewQuestion();
-	      console.log(question);
 	      that.context.router.push("questions/" + question.id);
 	    });
 	  },
@@ -35475,14 +35476,15 @@
 	      questions: questions
 	    };
 	
+	    // if (formData["questions"].length === 0) {
+	    //   this.setState({ invalid_submit: 0 })
+	    // } else {
 	    if (this.state.isSurvey) {
 	      formData["title"] = this.state.title;
 	      ClientSurveyActions.createSurvey(formData);
 	    } else {
 	      ClientQuestionActions.createQuestions(formData);
 	    }
-	
-	    // this.setState({ errors: false });
 	  },
 	
 	  handleQuestionInputChange: function (e) {
@@ -35592,6 +35594,7 @@
 	      )
 	    );
 	
+	    // <div className={ "soft-edges no-question-forms" }>Hey Silly! You need to enter a poll in the box above first.</div>
 	    return React.createElement(
 	      'div',
 	      null,
@@ -37438,9 +37441,9 @@
 
 	var React = __webpack_require__(1);
 	var ClientSurveyActions = __webpack_require__(286);
-	var SurveyStore = __webpack_require__(314);
-	var SideNav = __webpack_require__(315);
-	var QuestionsIndex = __webpack_require__(316);
+	var SurveyStore = __webpack_require__(309);
+	var SideNav = __webpack_require__(310);
+	var QuestionsIndex = __webpack_require__(311);
 	
 	var SurveysIndex = React.createClass({
 	  displayName: 'SurveysIndex',
@@ -37494,11 +37497,11 @@
 	    var mySurveys = this.state.surveys;
 	
 	    var surveys = Object.keys(mySurveys).map(function (survey_id) {
-	      var clicked_survey_li = "";
+	      var toggleSurvey = "";
 	      var caretIcon = "fa fa-caret-down";
 	
 	      if (that.state.clickedSurveys[survey_id]) {
-	        clicked_survey_li = "clicked_survey_li";
+	        toggleSurvey = "clicked_survey_li";
 	        caretIcon = "fa fa-caret-right";
 	      }
 	
@@ -37523,7 +37526,7 @@
 	        ),
 	        React.createElement(
 	          'ul',
-	          { className: "survey-index-items " + clicked_survey_li },
+	          { className: "survey-index-items " + toggleSurvey },
 	          React.createElement(QuestionsIndex, { survey: currentSurvey })
 	        )
 	      );
@@ -37548,10 +37551,185 @@
 /* 309 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var AppDispatcher = __webpack_require__(251);
+	var Store = __webpack_require__(255).Store;
+	var SurveyConstants = __webpack_require__(289);
+	
+	var SurveyStore = new Store(AppDispatcher);
+	
+	var _surveys = {};
+	
+	var _resetSurveys = function (surveys) {
+	  _surveys = {};
+	
+	  surveys.forEach(function (survey) {
+	    _surveys[survey.id] = survey;
+	  });
+	};
+	
+	SurveyStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case SurveyConstants.SURVEYS_RECEIVED:
+	      _resetSurveys(payload.surveys);
+	      SurveyStore.__emitChange();
+	      break;
+	  }
+	};
+	
+	SurveyStore.all = function () {
+	  var allSurveys = Object.assign({}, _surveys);
+	  return allSurveys;
+	};
+	
+	module.exports = SurveyStore;
+
+/***/ },
+/* 310 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var Modal = __webpack_require__(229);
+	var ModalConstants = __webpack_require__(279);
+	var QuestionFormGenerator = __webpack_require__(281);
+	
+	var SideNav = React.createClass({
+	  displayName: 'SideNav',
+	
+	  contextTypes: {
+	    router: React.PropTypes.object.isRequired
+	  },
+	  getInitialState: function () {
+	    return { modalOpen: false };
+	  },
+	
+	  closeModal: function () {
+	    this.setState({ modalOpen: false });
+	  },
+	
+	  openModal: function () {
+	    window.setTimeout(function () {
+	      this.setState({ modalOpen: true });
+	    }.bind(this), 500);
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'sidenav-container' },
+	      React.createElement(
+	        'ul',
+	        { className: 'sidenav-list' },
+	        React.createElement(
+	          'li',
+	          { className: 'question-form-button soft-edges hover-pointer', onClick: this.openModal },
+	          'Create',
+	          React.createElement(
+	            Modal,
+	            {
+	              isOpen: this.state.modalOpen,
+	              onRequestClose: this.closeModal,
+	              style: ModalConstants.QUESTION_FORM },
+	            React.createElement(QuestionFormGenerator, { closeThisModal: this.closeModal })
+	          )
+	        ),
+	        React.createElement(
+	          'li',
+	          { className: 'sidenav-list-li soft-edges hover-pointer' },
+	          'My Polls'
+	        ),
+	        React.createElement(
+	          'li',
+	          { className: 'sidenav-list-li soft-edges hover-pointer blue-color-text' },
+	          'Account Polls'
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = SideNav;
+
+/***/ },
+/* 311 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var React = __webpack_require__(1);
 	var ClientQuestionActions = __webpack_require__(282);
 	var QuestionStore = __webpack_require__(290);
-	var QuestionIndexItemToolbar = __webpack_require__(317);
+	var Link = __webpack_require__(168).Link;
+	var SessionStore = __webpack_require__(250);
+	
+	var QuestionsIndex = React.createClass({
+	  displayName: 'QuestionsIndex',
+	
+	  contextTypes: {
+	    router: React.PropTypes.object.isRequired
+	  },
+	
+	  getInitialState: function () {
+	    return { questions: QuestionStore.all() };
+	  },
+	
+	  componentDidMount: function () {
+	    this.questionListener = QuestionStore.addListener(this._onChange);
+	    ClientQuestionActions.fetchAllQuestions();
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.questionListener.remove();
+	  },
+	
+	  _onChange: function () {
+	    if (window.location.hash.slice(2, 9).toUpperCase() === "SURVEYS") {
+	      this.setState({ questions: QuestionStore.all() });
+	    }
+	  },
+	
+	  goToQuestionShow: function (e) {
+	    e.preventDefault();
+	    // Come back here to do a REGEX thing to grab the question id
+	    var targetString = e.currentTarget.outerHTML;
+	    var url = "questions/" + targetString.split('"')[1];
+	    this.context.router.push(url);
+	  },
+	
+	  render: function () {
+	    var that = this;
+	    var questions = this.state.questions;
+	    var mySurvey = this.props.survey;
+	
+	    var questionsList = Object.keys(questions).map(function (question_id) {
+	      if (questions[question_id].survey_id === parseInt(mySurvey.id)) {
+	        return React.createElement(
+	          'li',
+	          { id: question_id, key: question_id, className: 'h13', onClick: ("li", that.goToQuestionShow) },
+	          React.createElement(
+	            'div',
+	            null,
+	            questions[question_id].question
+	          )
+	        );
+	      }
+	    });
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'question-index-list' },
+	      questionsList
+	    );
+	  }
+	});
+	
+	module.exports = QuestionsIndex;
+
+/***/ },
+/* 312 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ClientQuestionActions = __webpack_require__(282);
+	var QuestionStore = __webpack_require__(290);
+	var QuestionIndexItemToolbar = __webpack_require__(313);
 	
 	var QuestionIndexItem = React.createClass({
 	  displayName: 'QuestionIndexItem',
@@ -37613,14 +37791,46 @@
 	module.exports = QuestionIndexItem;
 
 /***/ },
-/* 310 */
+/* 313 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	var QuestionIndexItemToolbar = React.createClass({
+	  displayName: "QuestionIndexItemToolbar",
+	
+	  contextTypes: {
+	    router: React.PropTypes.object.isRequired
+	  },
+	
+	  getInitialState: function () {
+	    return {};
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      "div",
+	      { className: "questionindexitem-toolbar" },
+	      React.createElement(
+	        "ul",
+	        null,
+	        React.createElement("li", null)
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = QuestionIndexItemToolbar;
+
+/***/ },
+/* 314 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var Link = __webpack_require__(168).Link;
 	var SessionStore = __webpack_require__(250);
 	var UserApiUtil = __webpack_require__(301);
-	var UserEmailPasswordEditForm = __webpack_require__(311);
+	var UserEmailPasswordEditForm = __webpack_require__(315);
 	var ErrorStore = __webpack_require__(291);
 	
 	var UserEditForm = React.createClass({
@@ -37865,7 +38075,7 @@
 	module.exports = UserEditForm;
 
 /***/ },
-/* 311 */
+/* 315 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -38119,7 +38329,7 @@
 	module.exports = UserEditForm;
 
 /***/ },
-/* 312 */
+/* 316 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -38160,7 +38370,7 @@
 	module.exports = ForgotPasswordSuccess;
 
 /***/ },
-/* 313 */
+/* 317 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -38172,7 +38382,7 @@
 	    return React.createElement(
 	      "div",
 	      { className: "features-container h7" },
-	      " Here is a list of features completed",
+	      " Here is a list of completed features",
 	      React.createElement(
 	        "ul",
 	        null,
@@ -38233,7 +38443,7 @@
 	          React.createElement(
 	            "div",
 	            null,
-	            "Questions are functional! Create as many questions at your leisure!"
+	            "Questions are functional! Create as many questions as you want!"
 	          )
 	        ),
 	        React.createElement(
@@ -38252,213 +38462,6 @@
 	});
 	
 	module.exports = NewFeatures;
-
-/***/ },
-/* 314 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var AppDispatcher = __webpack_require__(251);
-	var Store = __webpack_require__(255).Store;
-	var SurveyConstants = __webpack_require__(289);
-	
-	var SurveyStore = new Store(AppDispatcher);
-	
-	var _surveys = {};
-	
-	var _resetSurveys = function (surveys) {
-	  _surveys = {};
-	
-	  surveys.forEach(function (survey) {
-	    _surveys[survey.id] = survey;
-	  });
-	};
-	
-	SurveyStore.__onDispatch = function (payload) {
-	  switch (payload.actionType) {
-	    case SurveyConstants.SURVEYS_RECEIVED:
-	      _resetSurveys(payload.surveys);
-	      SurveyStore.__emitChange();
-	      break;
-	  }
-	};
-	
-	SurveyStore.all = function () {
-	  var allSurveys = Object.assign({}, _surveys);
-	  return allSurveys;
-	};
-	
-	module.exports = SurveyStore;
-
-/***/ },
-/* 315 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var Modal = __webpack_require__(229);
-	var ModalConstants = __webpack_require__(279);
-	var QuestionFormGenerator = __webpack_require__(281);
-	
-	var SideNav = React.createClass({
-	  displayName: 'SideNav',
-	
-	  contextTypes: {
-	    router: React.PropTypes.object.isRequired
-	  },
-	  getInitialState: function () {
-	    return { modalOpen: false };
-	  },
-	
-	  closeModal: function () {
-	    this.setState({ modalOpen: false });
-	  },
-	
-	  openModal: function () {
-	    window.setTimeout(function () {
-	      this.setState({ modalOpen: true });
-	    }.bind(this), 500);
-	  },
-	
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      { className: 'sidenav-container' },
-	      React.createElement(
-	        'ul',
-	        { className: 'sidenav-list' },
-	        React.createElement(
-	          'li',
-	          { className: 'question-form-button soft-edges hover-pointer', onClick: this.openModal },
-	          'Create',
-	          React.createElement(
-	            Modal,
-	            {
-	              isOpen: this.state.modalOpen,
-	              onRequestClose: this.closeModal,
-	              style: ModalConstants.QUESTION_FORM },
-	            React.createElement(QuestionFormGenerator, { closeThisModal: this.closeModal })
-	          )
-	        ),
-	        React.createElement(
-	          'li',
-	          { className: 'sidenav-list-li soft-edges hover-pointer' },
-	          'My Polls'
-	        ),
-	        React.createElement(
-	          'li',
-	          { className: 'sidenav-list-li soft-edges hover-pointer blue-color-text' },
-	          'Account Polls'
-	        )
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = SideNav;
-
-/***/ },
-/* 316 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var ClientQuestionActions = __webpack_require__(282);
-	var QuestionStore = __webpack_require__(290);
-	var Link = __webpack_require__(168).Link;
-	var SessionStore = __webpack_require__(250);
-	
-	var QuestionsIndex = React.createClass({
-	  displayName: 'QuestionsIndex',
-	
-	  contextTypes: {
-	    router: React.PropTypes.object.isRequired
-	  },
-	
-	  getInitialState: function () {
-	    return { questions: QuestionStore.all() };
-	  },
-	
-	  componentDidMount: function () {
-	    this.questionListener = QuestionStore.addListener(this._onChange);
-	    ClientQuestionActions.fetchAllQuestions();
-	  },
-	
-	  componentWillUnmount: function () {
-	    this.questionListener.remove();
-	  },
-	
-	  _onChange: function () {
-	    if (window.location.hash.slice(2, 9).toUpperCase() === "SURVEYS") {
-	      this.setState({ questions: QuestionStore.all() });
-	    }
-	  },
-	
-	  goToQuestionShow: function (e) {
-	    e.preventDefault();
-	    // Come back here to do a REGEX thing to grab the question id
-	    var targetString = e.currentTarget.outerHTML;
-	    var url = "questions/" + targetString.split('"')[1];
-	    this.context.router.push(url);
-	  },
-	
-	  render: function () {
-	    var that = this;
-	    var questions = this.state.questions;
-	    var mySurvey = this.props.survey;
-	
-	    var questionsList = Object.keys(questions).map(function (question_id) {
-	      if (questions[question_id].survey_id === parseInt(mySurvey.id)) {
-	        return React.createElement(
-	          'li',
-	          { id: question_id, key: question_id, className: 'h13', onClick: ("li", that.goToQuestionShow) },
-	          React.createElement(
-	            'div',
-	            null,
-	            questions[question_id].question
-	          )
-	        );
-	      }
-	    });
-	
-	    return React.createElement(
-	      'div',
-	      { className: 'question-index-list' },
-	      questionsList
-	    );
-	  }
-	});
-	
-	module.exports = QuestionsIndex;
-
-/***/ },
-/* 317 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	
-	var QuestionIndexItemToolbar = React.createClass({
-	  displayName: "QuestionIndexItemToolbar",
-	
-	  contextTypes: {
-	    router: React.PropTypes.object.isRequired
-	  },
-	
-	  getInitialState: function () {
-	    return {};
-	  },
-	
-	  render: function () {
-	    return React.createElement(
-	      "div",
-	      { className: "questionindexitem-toolbar" },
-	      React.createElement(
-	        "ul",
-	        null,
-	        React.createElement("li", null)
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = QuestionIndexItemToolbar;
 
 /***/ }
 /******/ ]);

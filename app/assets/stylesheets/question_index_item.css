@@ -10,7 +10,7 @@
   width: calc(100% - 375px);
   min-width: 680px;
 
-  height: 100%;
+  height: calc(100% - 25px);
   min-height: 535px;
   max-height: 800px;
 
@@ -23,7 +23,8 @@
   position: relative;
   right: 0;
   width: 330px;
-  background: #e9eff4;
+  /*background: #e9eff4;*/
+  background: black;
   height: 100%;
 }
 

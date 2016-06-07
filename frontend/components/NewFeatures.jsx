@@ -3,7 +3,7 @@ var React = require('react');
 var NewFeatures = React.createClass({
   render: function () {
     return (
-      <div className="features-container h7"> Here is a list of features completed
+      <div className="features-container h7"> Here is a list of completed features
         <ul>
           <li className="features-li"> User
             <div>
@@ -37,7 +37,7 @@ var NewFeatures = React.createClass({
 
           <li className="features-li"> Question Creation
             <div>
-              Questions are functional! Create as many questions at your leisure!
+              Questions are functional! Create as many questions as you want!
             </div>
           </li>
 
