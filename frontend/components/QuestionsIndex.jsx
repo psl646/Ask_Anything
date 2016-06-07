@@ -19,7 +19,9 @@ var QuestionsIndex = React.createClass ({
   },
 
   _onChange: function () {
-    this.setState({ questions: QuestionStore.all() });
+    if (window.location.hash.slice(2, 9).toUpperCase() === "SURVEYS") {
+      this.setState({ questions: QuestionStore.all() });
+    }
   },
 
   render: function () {

@@ -35233,7 +35233,7 @@
 	      transition: 'background-color 1s',
 	      display: 'block',
 	      position: 'absolute',
-	      width: '1340px',
+	      width: '100%',
 	      height: '2928px',
 	      top: 0,
 	      left: 0,
@@ -35242,7 +35242,7 @@
 	      marginBottom: '-5000px',
 	      paddingBottom: '5000px',
 	      opacity: 0.9,
-	      backgroundColor: '#303233',
+	      backgroundColor: '#161818',
 	      overflow: 'hidden',
 	      zIndex: 20
 	    },
@@ -35259,9 +35259,10 @@
 	      padding: 0,
 	      margin: 'auto',
 	      marginTop: '200px',
+	      opacity: 1,
 	      border: 0,
 	      borderRadius: 0,
-	      zIndex: 21
+	      zIndex: 25
 	    }
 	  },
 	
@@ -35387,9 +35388,15 @@
 	  },
 	
 	  componentWillUnmount: function () {
-	    ErrorActions.clearErrors();
+	    window.setTimeout(function () {
+	      ErrorActions.clearErrors();
+	    }, 0);
+	
 	    // Can possibly revamp this so that we can persist state for un-saved/sent questions
-	    QuestionFormActions.clearQuestionForms();
+	    window.setTimeout(function () {
+	      QuestionFormActions.clearQuestionForms();
+	    }, 0);
+	
 	    this.errorListener.remove();
 	    this.questionListener.remove();
 	    this.questionFormListener.remove();
@@ -35425,7 +35432,9 @@
 	
 	  _questionsCreated: function () {
 	    this.closeMyself();
-	    QuestionFormActions.clearQuestionForms();
+	    window.setTimeout(function () {
+	      QuestionFormActions.clearQuestionForms();
+	    }, 0);
 	    var question = QuestionStore.getNewQuestion();
 	    this.context.router.push("questions/" + question.id);
 	  },
@@ -35434,7 +35443,7 @@
 	    e.preventDefault();
 	
 	    var questions = Object.keys(this.state.questionsFormData).map(function (questionId) {
-	      questions.push(this.state.questionsFormData[questionId]);
+	      return this.state.questionsFormData[questionId];
 	    }.bind(this));
 	
 	    var formData = {
@@ -35442,12 +35451,13 @@
 	    };
 	
 	    if (this.state.isSurvey) {
-	      formData.title = this.state.title;
+	      formData["title"] = this.state.title;
 	      ClientSurveyActions.createSurvey(formData);
 	    } else {
 	      ClientQuestionActions.createQuestions(formData);
 	    }
-	    this.setState({ errors: false });
+	
+	    // this.setState({ errors: false });
 	  },
 	
 	  handleQuestionInputChange: function (e) {
@@ -35608,7 +35618,12 @@
 	            onClick: this.closeMyself },
 	          'Cancel'
 	        ),
-	        React.createElement('input', { className: 'soft-edges hover-pointer question-creation-button', type: 'submit', value: createText })
+	        React.createElement('input', { className: 'soft-edges hover-pointer question-creation-button', type: 'submit', value: createText }),
+	        React.createElement(
+	          'div',
+	          null,
+	          React.createElement('i', { className: 'fa fa-arrow-right small-arrow', 'aria-hidden': 'true' })
+	        )
 	      )
 	    );
 	  }
@@ -35683,6 +35698,8 @@
 	      contentType: 'application/json',
 	      data: JSON.stringify({ data: formData }),
 	      success: function (question) {
+	        console.log("YOU CREATED AN OBJECT");
+	        console.log(question);
 	        ServerQuestionActions.receiveQuestion(question);
 	      },
 	      error: function (xhr) {
@@ -35712,6 +35729,8 @@
 	  },
 	
 	  receiveQuestion: function (question) {
+	    console.log("IN SERVER QUESTION ACTION");
+	    console.log(question);
 	    AppDispatcher.dispatch({
 	      actionType: QuestionConstants.QUESTION_RECEIVED,
 	      question: question
@@ -35844,6 +35863,9 @@
 	
 	var _setCurrentQuestion = function (question) {
 	  _currentQuestion[question.id] = question;
+	  console.log(question);
+	  console.log("Current question set in Store:");
+	  console.log(_currentQuestion[question.id]);
 	};
 	
 	QuestionStore.__onDispatch = function (payload) {
@@ -36026,10 +36048,12 @@
 	    QuestionFormActions.deleteQuestion(this.props.questionId);
 	  },
 	
-	  render: function () {
-	    console.log("QuestionForm Rendering. QuestionForm answers:");
-	    console.log(this.state.answers);
+	  handleDeleteAnswer: function (e) {
+	    e.preventDefault();
+	    console.log("YOU CLICKED THE TRASH CAN");
+	  },
 	
+	  render: function () {
 	    var that = this;
 	
 	    var categories = QuestionConstants.QUESTION_CATEGORIES.map(function (category, idx) {
@@ -36048,12 +36072,12 @@
 	          'label',
 	          { className: 'category-label' },
 	          React.createElement('input', {
-	            readOnly: true,
 	            form: 'questionform',
 	            type: 'radio',
-	            name: "questionCategory" + idx,
+	            name: "questionCategory-" + that.props.questionId,
 	            value: category,
 	            checked: that.state.category === category,
+	            disabled: that.state.category !== category,
 	            onChange: that.categoryChange
 	          }),
 	          React.createElement(
@@ -36069,7 +36093,10 @@
 	      return React.createElement(
 	        'li',
 	        { key: answerId },
-	        that.state.answerFormObjects[answerId]
+	        that.state.answerFormObjects[answerId],
+	        React.createElement('div', { className: 'fa fa-trash-o fa-lg trash-answer',
+	          'aria-hidden': 'true',
+	          onClick: this.handleDeleteAnswer })
 	      );
 	    });
 	
@@ -36169,8 +36196,6 @@
 	  },
 	
 	  render: function () {
-	    console.log("AnswerInput rendering");
-	    console.log("Answer:" + this.state.answer);
 	    return React.createElement(
 	      'div',
 	      { className: 'single-answer-container' },
@@ -37582,7 +37607,9 @@
 	  },
 	
 	  _onChange: function () {
-	    this.setState({ questions: QuestionStore.all() });
+	    if (window.location.hash.slice(2, 9).toUpperCase() === "SURVEYS") {
+	      this.setState({ questions: QuestionStore.all() });
+	    }
 	  },
 	
 	  render: function () {
@@ -38272,6 +38299,16 @@
 	          "li",
 	          { className: "features-li" },
 	          " Question Creation",
+	          React.createElement(
+	            "div",
+	            null,
+	            "Questions are functional! Create as many questions at your leisure!"
+	          )
+	        ),
+	        React.createElement(
+	          "li",
+	          { className: "features-li" },
+	          " Responses",
 	          React.createElement(
 	            "div",
 	            null,

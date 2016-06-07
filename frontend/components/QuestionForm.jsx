@@ -92,10 +92,12 @@ var QuestionForm = React.createClass({
     QuestionFormActions.deleteQuestion(this.props.questionId);
   },
 
-	render: function () {
-    console.log("QuestionForm Rendering. QuestionForm answers:");
-    console.log(this.state.answers);
+  handleDeleteAnswer: function (e) {
+    e.preventDefault();
+    console.log("YOU CLICKED THE TRASH CAN")
+  },
 
+	render: function () {
     var that = this;
 
     var categories = QuestionConstants.QUESTION_CATEGORIES.map(function(category, idx) {
@@ -111,12 +113,12 @@ var QuestionForm = React.createClass({
         <li key={ idx } className={ "category-li " + isChecked }>
           <label className="category-label">
             <input
-              readOnly
               form="questionform"
               type="radio"
-              name={"questionCategory"+idx}
+              name={"questionCategory-" + that.props.questionId}
               value={ category }
               checked={ that.state.category === category }
+              disabled={ that.state.category !== category }
               onChange={that.categoryChange}
               />
             <div className="category-name h12">
@@ -131,6 +133,10 @@ var QuestionForm = React.createClass({
       return (
         <li key={ answerId }>
           { that.state.answerFormObjects[answerId] }
+
+          <div className="fa fa-trash-o fa-lg trash-answer"
+            aria-hidden="true"
+            onClick={ this.handleDeleteAnswer } />
         </li>
       );
     });

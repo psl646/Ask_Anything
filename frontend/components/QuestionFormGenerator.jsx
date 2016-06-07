@@ -35,9 +35,15 @@ var QuestionFormGenerator = React.createClass({
   },
 
   componentWillUnmount: function () {
-    ErrorActions.clearErrors();
+    window.setTimeout(function(){
+      ErrorActions.clearErrors();
+    }, 0);
+
     // Can possibly revamp this so that we can persist state for un-saved/sent questions
-    QuestionFormActions.clearQuestionForms();
+    window.setTimeout(function(){
+      QuestionFormActions.clearQuestionForms();
+    }, 0);
+
     this.errorListener.remove();
     this.questionListener.remove();
     this.questionFormListener.remove();
@@ -73,7 +79,9 @@ var QuestionFormGenerator = React.createClass({
 
   _questionsCreated: function () {
     this.closeMyself();
-    QuestionFormActions.clearQuestionForms();
+    window.setTimeout(function(){
+      QuestionFormActions.clearQuestionForms();
+    }, 0);
     var question = QuestionStore.getNewQuestion();
     this.context.router.push("questions/" + question.id);
   },
@@ -82,20 +90,21 @@ var QuestionFormGenerator = React.createClass({
     e.preventDefault();
 
     var questions = Object.keys(this.state.questionsFormData).map(function(questionId){
-      questions.push(this.state.questionsFormData[questionId]);
+      return this.state.questionsFormData[questionId];
     }.bind(this));
 
     var formData = {
       questions: questions
-    }
+    };
 
     if (this.state.isSurvey) {
-      formData.title = this.state.title;
+      formData["title"] = this.state.title;
       ClientSurveyActions.createSurvey(formData);
     } else {
       ClientQuestionActions.createQuestions(formData);
     }
-    this.setState({ errors: false });
+
+    // this.setState({ errors: false });
   },
 
 
@@ -213,6 +222,9 @@ var QuestionFormGenerator = React.createClass({
             Cancel
           </div>
           <input className="soft-edges hover-pointer question-creation-button" type="submit" value={ createText } />
+          <div>
+            <i className="fa fa-arrow-right small-arrow" aria-hidden="true"></i>
+          </div>
         </form>
       </div>
 		);

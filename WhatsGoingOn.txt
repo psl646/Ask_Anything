@@ -1,23 +1,13 @@
 TODO TMRW:
-1) Fix the send password glitch...?
-2) Delete Questions from Question form
-3) Grab data to send up to DB for Creation
-4) Delete/Update/ETC with questions
-5) Responses
-6) Style
+Fix the send password glitch...?
+Delete/Update/ETC with questions
+Responses
+Modal continuous resize - table- dynamic resizing
+footer fix
+video for home page
+delete answers
+opacity of modal (question form generator)
 
-
-
-
-IDEAS -
-1) set up the form on the render.
-Have a counter and for that many times, add it to the board - seems clunky.
-2) make a form store and constantly ping the server when there is an update... expensive
-
-
-TRIED:
-<form id="">
-modifying the object somehow to have the information
 
 
 Look up

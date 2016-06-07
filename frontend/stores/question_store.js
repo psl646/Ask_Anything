@@ -17,6 +17,9 @@ var _resetQuestions = function(questions) {
 
 var _setCurrentQuestion = function(question) {
   _currentQuestion[question.id] = question;
+  console.log(question);
+  console.log("Current question set in Store:");
+  console.log(_currentQuestion[question.id]);
 };
 
 QuestionStore.__onDispatch = function (payload) {

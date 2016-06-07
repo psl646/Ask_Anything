@@ -11,8 +11,8 @@
  * file per style scope.
  *
  *= require_self
+ *= require font-awesome
  *= require_tree .
-  *= require font-awesome
  */
 
 div, h1, h2, h3, h4, h5, h6, a, input, form, ul,

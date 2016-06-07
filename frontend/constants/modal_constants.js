@@ -29,7 +29,7 @@ var ModalConstants = {
       transition: 'background-color 1s',
       display         : 'block',
       position        : 'absolute',
-      width           : '1340px',
+      width           : '100%',
       height          : '2928px',
       top             : 0,
       left            : 0,
@@ -38,7 +38,7 @@ var ModalConstants = {
       marginBottom    : '-5000px',
       paddingBottom   : '5000px',
       opacity         : 0.9,
-      backgroundColor : '#303233',
+      backgroundColor : '#161818',
       overflow        : 'hidden',
       zIndex          : 20,
     },
@@ -55,9 +55,10 @@ var ModalConstants = {
       padding         : 0,
       margin          : 'auto',
       marginTop       : '200px',
+      opacity         : 1,
       border          : 0,
       borderRadius    : 0,
-      zIndex          : 21
+      zIndex          : 25
     }
   },
 

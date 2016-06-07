@@ -30,13 +30,7 @@ class Question < ActiveRecord::Base
   )
 
   def self.create_questions (params, current_user)
-    debugger
-    questions_hash = params[:data][:questions]
-
-    questions = []
-
-    questions_hash.each { |_, val| questions.push(val) }
-
+    questions = params[:data][:questions]
 
     Question.transaction do
       questions.each do |question_data|

@@ -116,16 +116,16 @@
 
 .cancel-question-form {
   position: relative;
-  left: 563px;
+  left: 550px;
 }
 
 .question-creation-button {
   position: relative;
-  left: 577px;
+  left: 560px;
   font-size: 12.8px;
   color: #f7f8f9;
   background: #113a5c;
-  padding: 5px;
+  padding: 12px 25px 12px 15px;
   margin-right: 0;
 }
 
@@ -229,4 +229,25 @@
 
 .h9-5 {
   font-size: 9.5px;
+}
+
+.trash-answer {
+  position: relative;
+  left: 445px;
+  bottom: 20px;
+}
+
+.trash-answer:hover {
+  color: rgb(21, 25, 110);
+}
+
+.small-arrow {
+  float: right;
+  position: relative;
+  bottom: 25px;
+  right: 30px;
+  font-size: 12px;
+  font-weight: lighter;
+  color: #f7f8f9;
+  background: #113a5c;
 }

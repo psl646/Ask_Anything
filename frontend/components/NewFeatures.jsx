@@ -37,9 +37,16 @@ var NewFeatures = React.createClass({
 
           <li className="features-li"> Question Creation
             <div>
+              Questions are functional! Create as many questions at your leisure!
+            </div>
+          </li>
+
+          <li className="features-li"> Responses
+            <div>
               Next...
             </div>
           </li>
+
 
         </ul>
       </div>

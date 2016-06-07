@@ -38,6 +38,8 @@ var QuestionApiUtil = {
       contentType: 'application/json',
       data: JSON.stringify({ data: formData }),
       success: function (question) {
+        console.log("YOU CREATED AN OBJECT");
+        console.log(question);
         ServerQuestionActions.receiveQuestion(question);
       },
       error: function (xhr) {

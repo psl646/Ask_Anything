@@ -31,8 +31,6 @@ var AnswerInput = React.createClass({
   },
 
 	render: function () {
-    console.log("AnswerInput rendering");
-    console.log("Answer:" + this.state.answer);
     return (
       <div className="single-answer-container">
         <input
