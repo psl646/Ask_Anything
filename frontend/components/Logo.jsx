@@ -18,6 +18,14 @@ var Logo = React.createClass({
     return (window.location.hash.slice(2, 17).toUpperCase() === "PASSWORD_RESETS");
   },
 
+  componentDidMount: function () {
+    console.log("mounting");
+  },
+
+  componentWillUnmount: function () {
+    console.log("unmounting");
+  },
+
   render: function () {
     var logoPlacement = "nouser-navbar-logo";
 

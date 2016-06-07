@@ -11,7 +11,7 @@ var ModalConstants = {
       zIndex					: 10
     },
     content : {
-      position        : 'fixed',
+      position        : 'absolute',
       top             : '75px',
       left            : 0,
       right           : 0,

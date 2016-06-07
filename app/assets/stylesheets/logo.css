@@ -54,3 +54,7 @@
 .auto-margin {
   margin: auto;
 }
+
+.none-logo {
+  display: none;
+}

@@ -1,5 +1,5 @@
 TODO TMRW:
-ANSWERS FOR QUESTION!?!??!
+ERRORS: QUESTIONS MUST HAVE AT LEAST ONE ANSWER
 
 Question show page
 Delete/Update/ETC with questions
@@ -15,7 +15,7 @@ footer fix
 opacity of modal (question form generator)
 Modal continuous resize - table- dynamic resizing for question table
 Sign up pages - modals are weird
-Login Forgot password - glitchy
+Login Forgot password - glitchy - possibly modal mount/unmount
 sizing on settings page
 
 style main page

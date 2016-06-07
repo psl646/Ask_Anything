@@ -13,6 +13,10 @@ var Footer = React.createClass({
       footerSurvey = "footer-survey";
     }
 
+    if (window.location.hash.slice(2, 9).toUpperCase() === "PROFILE") {
+      footerSurvey = "footer-survey";
+    }
+
     return (
       <div className={"footer-container " + footerSurvey }>
         <div className="footer-div-container group text-center">

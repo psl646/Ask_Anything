@@ -1,6 +1,8 @@
 .surveysindex-container {
   position: relative;
   min-width: 1100px;
+  height: calc(100% - 350px);
+  min-height: 700px;
 }
 
 .surveysindex-ul {

@@ -2,8 +2,9 @@
   color: white;
   background: grey;
   width: 800px;
-  height: 600px;
-  margin: auto;
+  height: calc(100% - 300px);
+  min-height: 700px;
+  margin: 20px auto;
   border: 5px solid black;
   text-align: center;
 }

@@ -22,7 +22,6 @@ var _resetQuestionStore = function () {
 var _addAnswerToQuestion = function(questionId, answerId, answer) {
   var question = _questions[questionId];
   question["answers"][answerId] = answer;
-  console.log(answer);
 };
 
 QuestionFormStore.__onDispatch = function (payload) {

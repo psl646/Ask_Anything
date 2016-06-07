@@ -27878,9 +27878,14 @@
 	    return window.location.hash.slice(0, 4).toUpperCase() === "#/?_";
 	  },
 	
+	  pageDoesNotHaveFooter: function () {
+	    return window.location.hash.slice(2, 11).toUpperCase() === "QUESTIONS";
+	  },
+	
 	  render: function () {
 	    var navigationBar;
 	    var rootPageContent;
+	    var footer = React.createElement(Footer, null);
 	
 	    if (SessionStore.isUserLoggedIn()) {
 	      navigationBar = React.createElement(UserNavBar, null);
@@ -27894,13 +27899,17 @@
 	      rootPageContent = "";
 	    }
 	
+	    if (this.pageDoesNotHaveFooter()) {
+	      footer = "";
+	    }
+	
 	    return React.createElement(
 	      'div',
 	      { className: 'app' },
 	      navigationBar,
 	      rootPageContent,
 	      this.props.children,
-	      React.createElement(Footer, null)
+	      footer
 	    );
 	  }
 	});
@@ -34875,6 +34884,10 @@
 	      footerSurvey = "footer-survey";
 	    }
 	
+	    if (window.location.hash.slice(2, 9).toUpperCase() === "PROFILE") {
+	      footerSurvey = "footer-survey";
+	    }
+	
 	    return React.createElement(
 	      'div',
 	      { className: "footer-container " + footerSurvey },
@@ -35215,7 +35228,7 @@
 	      zIndex: 10
 	    },
 	    content: {
-	      position: 'fixed',
+	      position: 'absolute',
 	      top: '75px',
 	      left: 0,
 	      right: 0,
@@ -35319,6 +35332,14 @@
 	
 	  isPasswordReset: function () {
 	    return window.location.hash.slice(2, 17).toUpperCase() === "PASSWORD_RESETS";
+	  },
+	
+	  componentDidMount: function () {
+	    console.log("mounting");
+	  },
+	
+	  componentWillUnmount: function () {
+	    console.log("unmounting");
 	  },
 	
 	  render: function () {
@@ -35859,8 +35880,6 @@
 	  questions.forEach(function (question) {
 	    _questions[question.id] = question;
 	  });
-	  console.log("Question Store questions:");
-	  console.log(_questions);
 	};
 	
 	var _setCurrentQuestion = function (question) {
@@ -36293,7 +36312,6 @@
 	var _addAnswerToQuestion = function (questionId, answerId, answer) {
 	  var question = _questions[questionId];
 	  question["answers"][answerId] = answer;
-	  console.log(answer);
 	};
 	
 	QuestionFormStore.__onDispatch = function (payload) {
@@ -36638,10 +36656,7 @@
 	      dataType: 'json',
 	      data: { user: formData },
 	      success: function () {
-	        window.setTimeout(function () {
-	          console.log("I got in here");
-	          SessionActions.userFound();
-	        }, 0);
+	        SessionActions.userFound();
 	      },
 	      error: function (xhr) {
 	        console.log("Error in UserApiUtil#sendEmail");
@@ -36881,10 +36896,12 @@
 	
 	  redirectIfValidEmail: function () {
 	    var that = this;
-	
 	    window.setTimeout(function () {
-	      that.context.router.push("password_resets");
-	      // that.closeMyself();
+	      window.setTimeout(function () {
+	        that.closeMyself();
+	      }, 0), window.setTimeout(function () {
+	        that.context.router.push("password_resets");
+	      }, 0);
 	    }, 0);
 	  },
 	

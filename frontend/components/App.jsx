@@ -21,9 +21,14 @@ var App = React.createClass({
     return (window.location.hash.slice(0, 4).toUpperCase() === "#/?_");
   },
 
+  pageDoesNotHaveFooter: function (){
+    return (window.location.hash.slice(2, 11).toUpperCase() === "QUESTIONS")
+  },
+
   render: function() {
     var navigationBar;
     var rootPageContent;
+    var footer = <Footer />;
 
     if (SessionStore.isUserLoggedIn()) {
       navigationBar = <UserNavBar />;
@@ -37,12 +42,16 @@ var App = React.createClass({
       rootPageContent = "";
     }
 
+    if (this.pageDoesNotHaveFooter()){
+      footer = "";
+    }
+
     return (
       <div className="app">
         { navigationBar }
         { rootPageContent }
         {this.props.children}
-        <Footer />
+        { footer }
       </div>
     );
   }

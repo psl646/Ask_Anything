@@ -95,8 +95,10 @@ var LoginForm = React.createClass({
 		return (
       <div className="app">
   			<div className="login-container">
-  				<Logo />
-  				<form className="login-component soft-edges" onSubmit={this.handleSubmit}>
+
+          <Logo />
+
+          <form className="login-component soft-edges" onSubmit={this.handleSubmit}>
   					{ renderErrors }
 
   	        <h1 className="h1">Log In</h1>

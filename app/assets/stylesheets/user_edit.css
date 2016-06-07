@@ -1,6 +1,8 @@
 .user-edit-container {
   font-size: 13px;
   min-width: 600px;
+  height: calc(100% - 275px);
+  min-height: 650px;
   margin: 30px 280px 30px 190px;
 }
 

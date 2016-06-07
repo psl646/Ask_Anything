@@ -4,6 +4,8 @@
   top: 20px;
   margin: auto;
   padding: 20px;
+  height: calc(100% - 350px);
+  min-height: 660px;
   border: 2px solid black;
 }
 

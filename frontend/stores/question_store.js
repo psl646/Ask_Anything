@@ -13,8 +13,6 @@ var _resetQuestions = function(questions) {
   questions.forEach(function(question){
     _questions[question.id] = question;
   });
-  console.log("Question Store questions:");
-  console.log(_questions);
 };
 
 var _setCurrentQuestion = function(question) {

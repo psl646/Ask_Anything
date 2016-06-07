@@ -26,6 +26,14 @@ class User < ActiveRecord::Base
 		dependent: :destroy
 	)
 
+	has_many(
+		:responses,
+		class_name: "Responses",
+		foreign_key: :user_id,
+		primary_key: :id,
+		dependent: :destroy
+	)
+
 	def password= (password)
 		self.password_digest = BCrypt::Password.create(password)
 		@password = password

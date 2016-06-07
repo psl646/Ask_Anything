@@ -62,10 +62,7 @@ var UserApiUtil = {
       dataType: 'json',
       data: {user: formData},
       success: function () {
-        window.setTimeout(function() {
-          console.log("I got in here");
-          SessionActions.userFound();
-        }, 0)
+        SessionActions.userFound();
       },
       error: function (xhr) {
         console.log("Error in UserApiUtil#sendEmail");
