@@ -5,6 +5,10 @@ var Link = require('react-router').Link;
 var SessionStore = require('../stores/session_store');
 
 var QuestionsIndex = React.createClass ({
+  contextTypes: {
+    router: React.PropTypes.object.isRequired
+  },
+
   getInitialState: function () {
     return ({ questions: QuestionStore.all() });
   },
@@ -24,21 +28,31 @@ var QuestionsIndex = React.createClass ({
     }
   },
 
+  goToQuestionShow: function (e) {
+    e.preventDefault();
+    // Come back here to do a REGEX thing to grab the question id
+    var targetString = e.currentTarget.outerHTML;
+    var url = "questions/" + targetString.split('"')[1];
+    this.context.router.push(url);
+  },
+
   render: function () {
+    var that = this;
     var questions = this.state.questions;
     var mySurvey = this.props.survey;
+
     var questionsList = Object.keys(questions).map(function (question_id) {
       if (questions[question_id].survey_id === parseInt(mySurvey.id)){
         return (
-          <li key={ question_id }>
-            <Link to={ "questions/" + question_id }>{ questions[question_id].question }</Link>
+          <li id={ question_id } key={ question_id } className="h13" onClick={"li", that.goToQuestionShow }>
+            <div>{ questions[question_id].question }</div>
           </li>
         );
       }
     });
 
     return (
-      <div>
+      <div className="question-index-list">
         { questionsList }
       </div>
     )

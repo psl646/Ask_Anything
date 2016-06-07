@@ -78,12 +78,16 @@ var QuestionFormGenerator = React.createClass({
   },
 
   _questionsCreated: function () {
-    this.closeMyself();
+    var that = this;
+    that.closeMyself();
     window.setTimeout(function(){
       QuestionFormActions.clearQuestionForms();
     }, 0);
-    var question = QuestionStore.getNewQuestion();
-    this.context.router.push("questions/" + question.id);
+    window.setTimeout(function() {
+      var question = QuestionStore.getNewQuestion();
+      console.log(question);
+      that.context.router.push("questions/" + question.id);
+    });
   },
 
   handleSubmit: function (e) {

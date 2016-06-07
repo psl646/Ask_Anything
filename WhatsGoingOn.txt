@@ -1,18 +1,27 @@
 TODO TMRW:
-Fix the send password glitch...?
+Question show page
 Delete/Update/ETC with questions
+delete answers from question form
+
 Responses
-Modal continuous resize - table- dynamic resizing
-footer fix
-video for home page
-delete answers
-opacity of modal (question form generator)
 OMNI AUTH
 
 
+
+
+footer fix
+opacity of modal (question form generator)
+Modal continuous resize - table- dynamic resizing for question table
+Sign up pages - modals are weird
+Login Forgot password - glitchy
+sizing on settings page
+
+style main page
+video for home page
+REGEX for question index url Link in questionsindex
+
 Look up
 D3JS
-
 
 TODO:
 How to make modal continually expand???

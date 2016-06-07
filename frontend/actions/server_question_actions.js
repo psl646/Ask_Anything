@@ -10,8 +10,6 @@ var ServerQuestionActions = {
   },
 
   receiveQuestion: function (question) {
-  console.log("IN SERVER QUESTION ACTION");
-    console.log(question);
     AppDispatcher.dispatch({
       actionType: QuestionConstants.QUESTION_RECEIVED,
       question: question

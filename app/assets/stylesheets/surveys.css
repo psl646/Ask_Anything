@@ -8,12 +8,52 @@
   left: 200px;
   width: calc(100% - 230px);
   margin: 10px;
-  background: blue;
   z-index: -10;
 }
 
 .surveysindex-li {
+  border-top: 2px solid white;
+  border-bottom: 2px solid white;
+}
+
+.surveysindex-li > div {
   background: #c8d8e4;
-  height: 50px;
-  border: 2px solid red;
+  height: 15px;
+  font-weight:bold;
+  padding: 20px 65px;
+  padding-top: 15px;
+  border-bottom: 2px solid white;
+}
+
+.surveysindex-li > div:hover {
+  background: #b6cee0;
+}
+
+.surveysindex-ul >li:first-child {
+  border-bottom: 0px;
+}
+
+.h14 {
+  font-size: 14px;
+}
+
+.question-count {
+  color: rgb(19, 61, 88);
+  float: right;
+  bottom: 15px;
+  position: relative;
+}
+
+.h11 {
+  font-size: 11px;
+}
+
+.clicked_survey_li {
+  display:none;
+}
+
+.caret-icon {
+  float: left;
+  position: relative;
+  right: 40px;
 }

@@ -13,13 +13,12 @@ var _resetQuestions = function(questions) {
   questions.forEach(function(question){
     _questions[question.id] = question;
   });
+  console.log(_questions);
 };
 
 var _setCurrentQuestion = function(question) {
+  _questions[question.id] = question;
   _currentQuestion[question.id] = question;
-  console.log(question);
-  console.log("Current question set in Store:");
-  console.log(_currentQuestion[question.id]);
 };
 
 QuestionStore.__onDispatch = function (payload) {

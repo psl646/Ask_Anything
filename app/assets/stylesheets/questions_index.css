@@ -1,0 +1,23 @@
+.question-index-list >li {
+  color: rgb(55, 127, 201);
+  background: pink;
+  border-top: 2px solid white;
+  height: 15px;
+  overflow: visible;
+  background: #e9eff4;
+  padding: 15px 75px;
+  padding-top: 10px;
+}
+.question-index-list >li:hover {
+  background: #d3dde4;
+}
+
+
+
+.question-index-list >li:first-child {
+  border-top: 0;
+}
+
+.h13 {
+  font-size: 13px;
+}

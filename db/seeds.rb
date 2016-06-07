@@ -15,6 +15,11 @@ User.create(first_name: "Guest", last_name: "User", email: "guestuser@guest.com"
 User.create(first_name: "user123", last_name: "user123", email: "user123", password: "user123")
 
 Question.create(question: "This question should be under Ungrouped", category: "Multiple Choice", survey_id: Survey.last.id)
+Answer.create(answer: "Answer1 for Ungrouped", question: Question.last)
+Answer.create(answer: "Answer2 for Ungrouped", question: Question.last)
 
-Survey.create(title: "New Survey", author_id: User.last.id)
+Survey.create(title: "New Survey", author: User.last)
 Question.create(question: "This question should be under New Survey", category: "Multiple Choice", survey_id: Survey.last.id)
+Answer.create(answer: "Answer1 for New Survey", question: Question.last)
+Answer.create(answer: "Answer2 for New Survey", question: Question.last)
+Answer.create(answer: "Answer3 for New Survey", question: Question.last)
