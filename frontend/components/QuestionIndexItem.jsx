@@ -25,6 +25,7 @@ var QuestionIndexItem = React.createClass ({
     this.setState({ question: question });
   },
   render: function () {
+    console.log(this.state.question);
     var myAnswerObjects;
     var myAnswerArray = [];
 

@@ -35859,6 +35859,7 @@
 	  questions.forEach(function (question) {
 	    _questions[question.id] = question;
 	  });
+	  console.log("Question Store questions:");
 	  console.log(_questions);
 	};
 	
@@ -37559,6 +37560,7 @@
 	    this.setState({ question: question });
 	  },
 	  render: function () {
+	    console.log(this.state.question);
 	    var myAnswerObjects;
 	    var myAnswerArray = [];
 	

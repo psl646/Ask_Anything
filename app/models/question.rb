@@ -51,9 +51,7 @@ class Question < ActiveRecord::Base
     )
 
     question_data[:answers].each do |answer_data|
-      answer_data.each do |_, val|
-        Answer.create(answer: val, question: current_user.questions.last)
-      end
+      Answer.create(answer: answer_data.last, question: current_user.questions.last)
     end
   end
 
