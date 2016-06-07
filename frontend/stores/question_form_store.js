@@ -4,37 +4,69 @@ var QuestionFormConstants = require('../constants/question_form_constants');
 
 var QuestionFormStore = new Store(AppDispatcher);
 
-var _questions = { };
+var _questions = {};
 
 
-var _addQuestion = function (questionFormData) {
-
+var _addQuestionFormData = function (questionId, questionFormData) {
+  _questions[questionId] = questionFormData;
 };
 
-var _updateQuestion = function (questionFormData) {
-
+var _deleteQuestion = function (questionId) {
+  delete _questions[questionId];
 };
 
-var _deleteQuestion = function (questionFormData) {
-
+var _resetQuestionStore = function () {
+  _questions = {};
 };
 
-var _deleteAllQuestions = function (questionFormData) {
+var _addAnswerToQuestion = function(questionId, answerId, answer) {
+  var question = _questions[questionId];
+  question["answers"][answerId] = answer;
+  console.log(answer);
+};
 
+QuestionFormStore.__onDispatch = function (payload) {
+  switch (payload.actionType) {
+    case QuestionFormConstants.UPDATE_QUESTION_FORM:
+      _addQuestionFormData(payload.questionId, payload.questionFormData);
+      QuestionFormStore.__emitChange();
+      break;
+    case QuestionFormConstants.DELETE_QUESTION_FORM:
+      _deleteQuestion(payload.questionId);
+      QuestionFormStore.__emitChange();
+      break;
+    case QuestionFormConstants.CLEAR_QUESTION_FORM:
+      _resetQuestionStore();
+      QuestionFormStore.__emitChange();
+      break;
+    case QuestionFormConstants.ADD_ANSWER_QUESTION_FORM:
+      _addAnswerToQuestion(payload.questionId, payload.answerId, payload.answer);
+      QuestionFormStore.__emitChange();
+      break;
+  }
+};
+
+QuestionFormStore.getQuestionFormById = function (questionId) {
+  return _questions[questionId];
 };
 
 QuestionFormStore.getAllQuestions = function () {
   return Object.assign({}, _questions);
 };
 
-QuestionFormStore.__onDispatch = function (payload) {
-  switch (payload.actionType) {
-    case QuestionFormConstants.ADD_QUESTION_FORM:
-      _resetErrors(payload.errors);
-      QuestionFormStore.__emitChange();
-      break;
+QuestionFormStore.getAllAnswers = function (questionId) {
+  var question = _questions[questionId];
 
+  if (question) {
+    return question["answers"];
+  } else {
+    return {};
   }
 };
+
+QuestionFormStore.getAnswer = function (questionId, answerId) {
+  return _questions[questionId]["answers"][answerId];
+};
+
 
 module.exports = QuestionFormStore;

@@ -5,6 +5,8 @@ var QuestionStore = require('../stores/question_store');
 var ErrorStore = require('../stores/error_store');
 var ErrorActions = require('../actions/error_actions');
 var QuestionForm = require('./QuestionForm');
+var QuestionFormStore = require('../stores/question_form_store');
+var QuestionFormActions = require('../actions/question_form_actions');
 
 var QuestionFormGenerator = React.createClass({
   contextTypes: {
@@ -12,12 +14,15 @@ var QuestionFormGenerator = React.createClass({
   },
 
   getInitialState: function () {
+    var myQuestions = QuestionFormStore.getAllQuestions();
+    var questionsFormData = myQuestions || {};
+
     return ({
       input: "",
       title: "",
-      numberQuestions: 0,
-      questions: [],
-      currentQuestion: "",
+      questionId: 1,
+      questionsFormData: questionsFormData,
+      questionFormObjects: {},
       isSurvey: false,
       errors: false
     });
@@ -26,12 +31,36 @@ var QuestionFormGenerator = React.createClass({
   componentDidMount: function () {
     this.errorListener = ErrorStore.addListener(this._handleErrors);
     this.questionListener = QuestionStore.addListener(this._questionsCreated);
+    this.questionFormListener = QuestionFormStore.addListener(this.updateQuestions)
   },
 
   componentWillUnmount: function () {
     ErrorActions.clearErrors();
+    // Can possibly revamp this so that we can persist state for un-saved/sent questions
+    QuestionFormActions.clearQuestionForms();
     this.errorListener.remove();
     this.questionListener.remove();
+    this.questionFormListener.remove();
+  },
+
+  updateQuestions: function () {
+    var myQuestions = QuestionFormStore.getAllQuestions();
+    var questionsFormData = myQuestions || {};
+
+    var currentQuestionFormDataKeys = Object.keys(questionsFormData);
+
+    var oldQuestionFormObjects = this.state.questionFormObjects;
+
+    Object.keys(oldQuestionFormObjects).forEach(function(questionId){
+      if (!currentQuestionFormDataKeys.includes(questionId)) {
+        delete oldQuestionFormObjects[questionId];
+      }
+    });
+
+    this.setState({
+      questionsFormData: questionsFormData,
+      questionFormObjects: oldQuestionFormObjects
+    });
   },
 
   closeMyself: function () {
@@ -39,48 +68,49 @@ var QuestionFormGenerator = React.createClass({
   },
 
   _handleErrors: function () {
-    this.setState({ questions: [], errors: true });
+    this.setState({ errors: true });
   },
 
   _questionsCreated: function () {
     this.closeMyself();
+    QuestionFormActions.clearQuestionForms();
     var question = QuestionStore.getNewQuestion();
     this.context.router.push("questions/" + question.id);
   },
 
   handleSubmit: function (e) {
     e.preventDefault();
-    var questionsFormData = [];
 
+    var questions = Object.keys(this.state.questionsFormData).map(function(questionId){
+      questions.push(this.state.questionsFormData[questionId]);
+    }.bind(this));
 
-    // this.state.questions.forEach(function(questionForm) {
-    //   // questionsFormData.push(questionForm.getMyData());
-    // }.bind(this));
+    var formData = {
+      questions: questions
+    }
 
-    // console.log(questionsFormData);
-
-    // if (this.state.isSurvey) {
-    //   formData.title = this.state.title;
-    //   ClientSurveyActions.createSurvey(formData);
-    // } else {
-    //   ClientQuestionActions.createQuestions(formData);
-    // }
+    if (this.state.isSurvey) {
+      formData.title = this.state.title;
+      ClientSurveyActions.createSurvey(formData);
+    } else {
+      ClientQuestionActions.createQuestions(formData);
+    }
+    this.setState({ errors: false });
   },
 
 
   handleQuestionInputChange: function (e) {
     var newQuestionValue = e.target.value;
+    var questionId = this.state.questionId;
 
     var newQuestion = <QuestionForm
-      key={ this.state.numberQuestions }
+      questionId={ questionId }
       question={ newQuestionValue }
-      />
+      />;
 
-    this.setState({
-      questions: this.state.questions.concat( newQuestion ),
-      numberQuestions: this.state.numberQuestions + 1,
-      input: ""
-    })
+    this.state.questionFormObjects[questionId]= newQuestion;
+
+    this.setState({ questionId: questionId + 1, input: "" });
   },
 
   handleSurveyTitleChange: function (e) {
@@ -90,21 +120,24 @@ var QuestionFormGenerator = React.createClass({
 
 	render: function () {
     var addQuestion = "Question:";
-    var myNewQuestions = "";
+    var myNewQuestions = [];
     var surveyText = "";
     var createText = "Create";
     var surveyInput = "";
+    var that = this;
 
-    if (this.state.numberQuestions !== 0) {
+    if (that.state.questionId !== 1) {
       addQuestion = "Add a question:"
-      myNewQuestions = this.state.questions.map(function(currentQuestion, idx){
+      myNewQuestions = Object.keys(that.state.questionFormObjects).map(function(questionId){
         return (
-          <li key={ idx }>
-            { currentQuestion }
+          <li key={ questionId }>
+            { that.state.questionFormObjects[questionId] }
           </li>
         );
       });
     }
+
+
 
     if (this.state.isSurvey) {
       surveyText = "Combine multiple questions into a survey. Send the link to participants, and they can answer on a mobile-friendly response page, at their own pace."

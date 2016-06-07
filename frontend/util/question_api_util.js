@@ -31,12 +31,12 @@ var QuestionApiUtil = {
   },
 
   createQuestions: function (formData) {
-    console.log(formData);
     $.ajax({
       url: 'api/questions',
       type: 'POST',
       dataType: 'json',
-      data: { data: formData },
+      contentType: 'application/json',
+      data: JSON.stringify({ data: formData }),
       success: function (question) {
         ServerQuestionActions.receiveQuestion(question);
       },

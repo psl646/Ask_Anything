@@ -31,18 +31,21 @@ class Question < ActiveRecord::Base
 
   def self.create_questions (params, current_user)
     debugger
-    questions = params[:data][:questions]
+    questions_hash = params[:data][:questions]
+
+    questions = []
+
+    questions_hash.each { |_, val| questions.push(val) }
+
 
     Question.transaction do
       questions.each do |question_data|
-        create_single_question(params, question_data, current_user)
+        Question.create_single_question(params, question_data, current_user)
       end
     end
   end
 
-  private
-
-  def create_single_question(params, question_data, current_user)
+  def self.create_single_question(params, question_data, current_user)
     asked_question = question_data[:question] || "[Blank Title]"
 
     survey = params[:data][:title].nil? ? current_user.surveys.first : current_user.surveys.last
@@ -54,7 +57,9 @@ class Question < ActiveRecord::Base
     )
 
     question_data[:answers].each do |answer_data|
-      Answer.create(answer: answer_data[:answer], question: current_user.questions.last)
+      answer_data.each do |_, val|
+        Answer.create(answer: val, question: current_user.questions.last)
+      end
     end
   end
 

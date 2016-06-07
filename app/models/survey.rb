@@ -18,7 +18,6 @@ class Survey < ActiveRecord::Base
   )
 
   def self.create_survey(params, current_user)
-    debugger
     Survey.transaction do
       params[:data][:title] ||= "New Survey"
       Survey.create(title: params[:data][:title], author: current_user)
