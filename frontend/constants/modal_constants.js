@@ -90,26 +90,29 @@ var ModalConstants = {
 
   DELETE_QUESTION: {
     overlay : {
-      position        : 'fixed',
-      top             : 0,
-      left            : 0,
-      right           : 0,
-      bottom          : 0,
-      background      : 'transparent',
-      zIndex          : 10
-    },
+    WebkitTransition: 'background-color 1s',
+    MozTransition   : 'background-color 1s',
+    OTransition     : 'background-color 1s',
+    transition      : 'background-color 1s',
+    position        : 'fixed',
+    top             : 0,
+    left            : 0,
+    right           : 0,
+    bottom          : 0,
+    backgroundColor : 'rgba(15, 15, 15, 0.39)',
+    zIndex          : 10
+  },
     content : {
+      fontSize       : '13px',
       position        : 'fixed',
-      top             : 0,
-      left            : 0,
-      right           : 0,
-      bottom          : 0,
-      outline         : 'none',
-      overflow        : 'none',
-      outline         : 'none',
-      padding         : 'none',
-      border          : 'none',
-      margin          : 'none',
+      width           : '360px',
+      height          : '120px',
+      top             : 'calc(50% - 80px)',
+      left            : 'calc(50% - 200px)',
+      border          : '1px solid #ccc',
+      padding         : '20px',
+      borderRadius    : 0,
+      boxShadow       : '0 3px 15px black',
       zIndex          : 11
     }
   }

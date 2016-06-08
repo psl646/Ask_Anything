@@ -23,7 +23,32 @@
   position: relative;
   right: 0;
   width: 330px;
-  /*background: #e9eff4;*/
-  background: black;
+  background: #e9eff4;
   height: 100%;
+}
+
+
+/*DeleteQuestion component*/
+.delete-question-modal-options-container{
+  float: right;
+
+}
+
+.delete-question-modal-options-container > li {
+  float: left;
+}
+
+.cancel-delete-question {
+  color: #BCBFC3;
+  position: relative;
+  right: 20px;
+  top: 7px;
+}
+
+.confirm-delete-question {
+  color: white;
+  background-color: #d95347;
+  font-size: 12px;
+  font-weight: bolder;
+  padding: 8px 42px;
 }

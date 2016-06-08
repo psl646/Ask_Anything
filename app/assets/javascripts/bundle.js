@@ -60,12 +60,12 @@
 	var SignupPage = __webpack_require__(307);
 	var SurveysIndex = __webpack_require__(311);
 	var QuestionIndexItem = __webpack_require__(315);
-	var QuestionEditForm = __webpack_require__(317);
-	var UserEditForm = __webpack_require__(318);
-	var UserEmailPasswordEditForm = __webpack_require__(319);
-	var ForgotPasswordSuccess = __webpack_require__(320);
-	var NewFeatures = __webpack_require__(321);
-	var ResponseForm = __webpack_require__(322);
+	var QuestionEditForm = __webpack_require__(318);
+	var UserEditForm = __webpack_require__(319);
+	var UserEmailPasswordEditForm = __webpack_require__(320);
+	var ForgotPasswordSuccess = __webpack_require__(321);
+	var NewFeatures = __webpack_require__(322);
+	var ResponseForm = __webpack_require__(323);
 	
 	var SessionStore = __webpack_require__(250);
 	var SessionApiUtil = __webpack_require__(273);
@@ -35304,26 +35304,29 @@
 	
 	  DELETE_QUESTION: {
 	    overlay: {
+	      WebkitTransition: 'background-color 1s',
+	      MozTransition: 'background-color 1s',
+	      OTransition: 'background-color 1s',
+	      transition: 'background-color 1s',
 	      position: 'fixed',
 	      top: 0,
 	      left: 0,
 	      right: 0,
 	      bottom: 0,
-	      background: 'transparent',
+	      backgroundColor: 'rgba(15, 15, 15, 0.39)',
 	      zIndex: 10
 	    },
 	    content: {
+	      fontSize: '13px',
 	      position: 'fixed',
-	      top: 0,
-	      left: 0,
-	      right: 0,
-	      bottom: 0,
-	      outline: 'none',
-	      overflow: 'none',
-	      outline: 'none',
-	      padding: 'none',
-	      border: 'none',
-	      margin: 'none',
+	      width: '360px',
+	      height: '120px',
+	      top: 'calc(50% - 80px)',
+	      left: 'calc(50% - 200px)',
+	      border: '1px solid #ccc',
+	      padding: '20px',
+	      borderRadius: 0,
+	      boxShadow: '0 3px 15px black',
 	      zIndex: 11
 	    }
 	  }
@@ -38108,7 +38111,7 @@
 	var Modal = __webpack_require__(229);
 	var ModalConstants = __webpack_require__(279);
 	var QuestionStore = __webpack_require__(290);
-	var DeleteQuestion = __webpack_require__(323);
+	var DeleteQuestion = __webpack_require__(317);
 	var ClientQuestionActions = __webpack_require__(282);
 	
 	var QuestionIndexItemToolbar = React.createClass({
@@ -38120,15 +38123,11 @@
 	
 	  getInitialState: function () {
 	    var questionId = parseInt(window.location.hash.split("?")[0].split("questions")[1].split("/")[1]);
-	    var myQuestion = QuestionStore.getQuestionById(questionId);
-	    var question = myQuestion || {};
-	
-	    return { questionId: questionId, question: question, modalOpen: false };
+	    return { questionId: questionId, question: {}, modalOpen: false };
 	  },
 	
 	  componentDidMount: function () {
 	    this.questionFormListener = QuestionStore.addListener(this._onChange);
-	    ClientQuestionActions.getQuestionById(this.state.questionId);
 	  },
 	
 	  componentWillUnmount: function () {
@@ -38136,7 +38135,7 @@
 	  },
 	
 	  _onChange: function () {
-	    var myQuestion = ClientQuestionActions.getQuestionById(this.state.questionId);
+	    var myQuestion = QuestionStore.getQuestionById(this.state.questionId);
 	    var question = myQuestion || {};
 	    this.setState({ question: question });
 	  },
@@ -38160,8 +38159,7 @@
 	  },
 	
 	  render: function () {
-	    var questionId = parseInt(window.location.hash.split("?")[0].slice(12).split("/")[0]);
-	
+	    var that = this;
 	    var bottomOptions = "";
 	
 	    var bottomOptions = React.createElement(
@@ -38169,7 +38167,7 @@
 	      { className: 'bottomOptions-question-menu' },
 	      React.createElement(
 	        Link,
-	        { to: "questions/" + questionId + "/edit", className: 'bottomOptions-options' },
+	        { to: "questions/" + that.state.questionId + "/edit", className: 'bottomOptions-options' },
 	        'Edit'
 	      ),
 	      React.createElement(
@@ -38179,21 +38177,22 @@
 	      ),
 	      React.createElement(
 	        Link,
-	        { to: 'surveys', className: 'bottomOptions-options', onClick: this.handleDeleteClick },
+	        { to: 'surveys', className: 'bottomOptions-options', onClick: that.handleDeleteClick },
 	        'Delete',
 	        React.createElement(
 	          Modal,
 	          {
-	            isOpen: this.state.modalOpen,
-	            onRequestClose: this.closeModal,
+	            isOpen: that.state.modalOpen,
+	            onRequestClose: that.closeModal,
 	            style: ModalConstants.DELETE_QUESTION },
-	          React.createElement(DeleteQuestion, { question: this.state.question, closeThisModal: this.closeModal })
+	          React.createElement(DeleteQuestion, { question: that.state.question.question, questionId: that.state.questionId, closeThisModal: that.closeModal })
 	        )
 	      )
 	    );
 	
-	    // DO SOMETHING HERE
-	    if (this.isEditPage()) {};
+	    if (this.isEditPage()) {
+	      var bottomOptions = "";
+	    };
 	
 	    return React.createElement(
 	      'div',
@@ -38226,6 +38225,82 @@
 
 /***/ },
 /* 317 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var Link = __webpack_require__(168).Link;
+	var ClientQuestionActions = __webpack_require__(282);
+	
+	var DeleteQuestion = React.createClass({
+	  displayName: 'DeleteQuestion',
+	
+	  contextTypes: {
+	    router: React.PropTypes.object.isRequired
+	  },
+	
+	  getInitialState: function () {
+	    return { question: this.props.question, questionId: this.props.questionId };
+	  },
+	
+	  componentDidMount: function () {},
+	
+	  componentWillUnmount: function () {},
+	
+	  closeMyself: function () {
+	    this.props.closeThisModal();
+	  },
+	
+	  handleOKClick: function (e) {
+	    e.preventDefault();
+	    this.closeMyself();
+	    window.setTimeout(function () {
+	      this.context.router.push("surveys");
+	      ClientQuestionActions.deleteQuestion(this.state.questionId);
+	    }.bind(this), 0);
+	  },
+	
+	  render: function () {
+	
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'div',
+	        null,
+	        'Delete question'
+	      ),
+	      React.createElement(
+	        'div',
+	        null,
+	        "Are you sure you want to remove the question \"" + this.state.question + "\"?"
+	      ),
+	      React.createElement(
+	        'div',
+	        null,
+	        'If you click OK this question will be gone forever!'
+	      ),
+	      React.createElement(
+	        'ul',
+	        { className: 'delete-question-modal-options-container group' },
+	        React.createElement(
+	          'li',
+	          { className: 'cancel-delete-question hover-underline hover-pointer text-center', onClick: this.closeMyself },
+	          'Cancel'
+	        ),
+	        React.createElement(
+	          'li',
+	          { className: 'confirm-delete-question soft-edges', onClick: this.handleOKClick },
+	          'OK'
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = DeleteQuestion;
+
+/***/ },
+/* 318 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -38333,14 +38408,14 @@
 	module.exports = QuestionEditForm;
 
 /***/ },
-/* 318 */
+/* 319 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var Link = __webpack_require__(168).Link;
 	var SessionStore = __webpack_require__(250);
 	var UserApiUtil = __webpack_require__(301);
-	var UserEmailPasswordEditForm = __webpack_require__(319);
+	var UserEmailPasswordEditForm = __webpack_require__(320);
 	var ErrorStore = __webpack_require__(291);
 	
 	var UserEditForm = React.createClass({
@@ -38585,7 +38660,7 @@
 	module.exports = UserEditForm;
 
 /***/ },
-/* 319 */
+/* 320 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -38839,7 +38914,7 @@
 	module.exports = UserEditForm;
 
 /***/ },
-/* 320 */
+/* 321 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -38880,7 +38955,7 @@
 	module.exports = ForgotPasswordSuccess;
 
 /***/ },
-/* 321 */
+/* 322 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -38984,7 +39059,7 @@
 	module.exports = NewFeatures;
 
 /***/ },
-/* 322 */
+/* 323 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -39086,78 +39161,6 @@
 	});
 	
 	module.exports = ResponseForm;
-
-/***/ },
-/* 323 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var Link = __webpack_require__(168).Link;
-	
-	var DeleteQuestion = React.createClass({
-	  displayName: 'DeleteQuestion',
-	
-	  contextTypes: {
-	    router: React.PropTypes.object.isRequired
-	  },
-	
-	  getInitialState: function () {
-	    return { random: 1 };
-	  },
-	
-	  componentDidMount: function () {},
-	
-	  componentWillUnmount: function () {},
-	
-	  closeMyself: function () {
-	    this.props.closeThisModal();
-	  },
-	
-	  handleOK: function (e) {
-	    e.preventDefault();
-	  },
-	
-	  render: function () {
-	
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
-	        'div',
-	        null,
-	        'Delete question'
-	      ),
-	      React.createElement(
-	        'div',
-	        null,
-	        'Are you sure you want to remove the question "',
-	        this.props.question.question,
-	        '"?'
-	      ),
-	      React.createElement(
-	        'div',
-	        null,
-	        'If you click OK this question will be gone forever!'
-	      ),
-	      React.createElement(
-	        'ul',
-	        null,
-	        React.createElement(
-	          'li',
-	          null,
-	          'Cancel'
-	        ),
-	        React.createElement(
-	          'li',
-	          null,
-	          'OK'
-	        )
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = DeleteQuestion;
 
 /***/ }
 /******/ ]);

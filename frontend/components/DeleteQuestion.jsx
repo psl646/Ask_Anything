@@ -1,5 +1,6 @@
 var React = require('react');
 var Link = require('react-router').Link;
+var ClientQuestionActions = require('../actions/client_question_actions');
 
 var DeleteQuestion = React.createClass({
   contextTypes: {
@@ -7,11 +8,10 @@ var DeleteQuestion = React.createClass({
   },
 
   getInitialState: function () {
-    return { random: 1 };
+    return ({ question: this.props.question, questionId: this.props.questionId });
   },
 
   componentDidMount: function () {
-
   },
 
   componentWillUnmount: function () {
@@ -21,8 +21,13 @@ var DeleteQuestion = React.createClass({
     this.props.closeThisModal();
   },
 
-	handleOK: function (e) {
+	handleOKClick: function (e) {
 		e.preventDefault();
+    this.closeMyself();
+    window.setTimeout(function(){
+      this.context.router.push("surveys");
+      ClientQuestionActions.deleteQuestion(this.state.questionId);
+    }.bind(this), 0);
   },
 
 	render: function () {
@@ -34,17 +39,17 @@ var DeleteQuestion = React.createClass({
         </div>
 
         <div>
-          Are you sure you want to remove the question "{ this.props.question.question }"?
+          { "Are you sure you want to remove the question \"" + this.state.question + "\"?" }
         </div>
 
         <div>
           If you click OK this question will be gone forever!
         </div>
-        <ul>
-          <li>
+        <ul className="delete-question-modal-options-container group">
+          <li className="cancel-delete-question hover-underline hover-pointer text-center" onClick={ this.closeMyself }>
             Cancel
           </li>
-          <li>
+          <li className="confirm-delete-question soft-edges" onClick={ this.handleOKClick }>
             OK
           </li>
         </ul>

@@ -13,15 +13,11 @@ var QuestionIndexItemToolbar = React.createClass ({
 
   getInitialState: function () {
     var questionId = parseInt(window.location.hash.split("?")[0].split("questions")[1].split("/")[1]);
-    var myQuestion = QuestionStore.getQuestionById(questionId);
-    var question = myQuestion || {};
-
-    return ({ questionId: questionId, question: question, modalOpen: false });
+    return ({ questionId: questionId, question: {}, modalOpen: false });
   },
 
   componentDidMount: function () {
     this.questionFormListener = QuestionStore.addListener(this._onChange);
-    ClientQuestionActions.getQuestionById(this.state.questionId);
   },
 
   componentWillUnmount: function () {
@@ -29,7 +25,7 @@ var QuestionIndexItemToolbar = React.createClass ({
   },
 
   _onChange: function () {
-    var myQuestion = ClientQuestionActions.getQuestionById(this.state.questionId);
+    var myQuestion = QuestionStore.getQuestionById(this.state.questionId);
     var question = myQuestion || {};
     this.setState ({ question: question });
   },
@@ -53,30 +49,28 @@ var QuestionIndexItemToolbar = React.createClass ({
   },
 
   render: function () {
-    var questionId = parseInt(window.location.hash.split("?")[0].slice(12).split("/")[0]);
-
+    var that = this;
     var bottomOptions = "";
 
     var bottomOptions = (
       <ul className="bottomOptions-question-menu">
-        <Link to={ "questions/" + questionId + "/edit" } className="bottomOptions-options">Edit</Link>
+        <Link to={ "questions/" + that.state.questionId + "/edit" } className="bottomOptions-options">Edit</Link>
         <Link to="export" className="bottomOptions-options">Export</Link>
-        <Link to="surveys" className="bottomOptions-options" onClick={ this.handleDeleteClick } >Delete
+        <Link to="surveys" className="bottomOptions-options" onClick={ that.handleDeleteClick } >Delete
           <Modal
-            isOpen={ this.state.modalOpen }
-            onRequestClose={ this.closeModal }
+            isOpen={ that.state.modalOpen }
+            onRequestClose={ that.closeModal }
             style={ ModalConstants.DELETE_QUESTION }>
 
-              <DeleteQuestion question={ this.state.question } closeThisModal={ this.closeModal } />
+              <DeleteQuestion question={ that.state.question.question } questionId={ that.state.questionId } closeThisModal={ that.closeModal } />
 
           </Modal>
         </Link>
       </ul>
     )
 
-    // DO SOMETHING HERE
     if (this.isEditPage()) {
-
+      var bottomOptions = "";
     };
 
     return (
