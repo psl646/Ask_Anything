@@ -38049,7 +38049,11 @@
 	    var myQuestion = QuestionStore.getQuestionById(questionId);
 	    var question = myQuestion || {};
 	
-	    return { questionId: questionId, question: question };
+	    return {
+	      questionId: questionId,
+	      question: question,
+	      time: 0
+	    };
 	  },
 	
 	  componentDidMount: function () {
@@ -38067,9 +38071,24 @@
 	    this.setState({ question: question });
 	  },
 	
+	  handleTimerClick: function () {},
+	
+	  timerChange: function () {},
+	
 	  render: function () {
+	    console.log(this.state.question);
 	    var myAnswerObjects;
 	    var myAnswerArray = [];
+	    var question = "";
+	    var username = "";
+	
+	    if (this.state.question.question !== undefined) {
+	      question = this.state.question.question;
+	      username = this.state.question.author.username;
+	      if (question.length > 50) {
+	        question = question.slice(0, 47) + "...";
+	      }
+	    };
 	
 	    if (Object.keys(this.state.question).length !== 0) {
 	      myAnswerObjects = this.state.question["answers"];
@@ -38086,6 +38105,32 @@
 	      );
 	    });
 	
+	    var inactiveQuestionPrompt = React.createElement(
+	      'div',
+	      null,
+	      React.createElement('div', { className: 'fa fa-wifi active-icon-question-index-item', 'aria-hidden': 'true' }),
+	      'What question is active, respond at ',
+	      React.createElement(
+	        'strong',
+	        null,
+	        'Ask--Anything.HerokuApp.com/ ',
+	        username
+	      )
+	    );
+	
+	    var activeQuestionPrompt = React.createElement(
+	      'div',
+	      null,
+	      React.createElement('div', { className: 'fa fa-desktop active-icon-question-index-item', 'aria-hidden': 'true' }),
+	      'Respond at ',
+	      React.createElement(
+	        'strong',
+	        null,
+	        'Ask--Anything.HerokuApp.com/',
+	        username
+	      )
+	    );
+	
 	    return React.createElement(
 	      'div',
 	      { className: 'questionindexitem-container group' },
@@ -38093,8 +38138,52 @@
 	      React.createElement(
 	        'ul',
 	        { className: 'question-graph-container' },
-	        this.state.question.question,
-	        myAnswers
+	        React.createElement(
+	          'div',
+	          { className: 'my-current-question' },
+	          question
+	        ),
+	        inactiveQuestionPrompt,
+	        activeQuestionPrompt,
+	        myAnswers,
+	        React.createElement(
+	          'div',
+	          { className: 'graph-bottom' },
+	          React.createElement(
+	            'ul',
+	            { className: 'question-index-item-timer' },
+	            React.createElement('img', {
+	              className: 'hover-pointer logo-image',
+	              src: window.askAnythingAssets.logo,
+	              width: '25', height: '25', alt: 'Logo'
+	            }),
+	            React.createElement(
+	              'div',
+	              null,
+	              'Ask Anything!'
+	            ),
+	            React.createElement(
+	              'li',
+	              null,
+	              React.createElement(
+	                'div',
+	                null,
+	                React.createElement('input', {
+	                  className: 'soft-edges hover-text',
+	                  type: 'time',
+	                  step: '1',
+	                  max: '99:99',
+	                  onChange: this.timerChange
+	                }),
+	                React.createElement('div', {
+	                  className: 'fa fa-clock-o',
+	                  'aria-hidden': 'true',
+	                  onClick: this.handleTimerClick
+	                })
+	              )
+	            )
+	          )
+	        )
 	      )
 	    );
 	  }
