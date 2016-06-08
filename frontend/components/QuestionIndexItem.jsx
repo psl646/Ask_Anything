@@ -2,6 +2,7 @@ var React = require('react');
 var ClientQuestionActions = require('../actions/client_question_actions');
 var QuestionStore = require('../stores/question_store')
 var QuestionIndexItemToolbar = require('./QuestionIndexItemToolbar');
+var TimeConstants = require('../constants/time_constants');
 
 var QuestionIndexItem = React.createClass ({
   getInitialState: function () {
@@ -12,7 +13,7 @@ var QuestionIndexItem = React.createClass ({
     return ({
       questionId: questionId,
       question: question,
-      time: 0
+      time: "0000"
     });
   },
 
@@ -32,10 +33,21 @@ var QuestionIndexItem = React.createClass ({
   },
 
   handleTimerClick: function () {
-
+    console.log("You clicked the timer!");
   },
 
-  timerChange: function () {
+  timerChange: function (e) {
+    var input = parseInt(e.target.value);
+    var myTime = this.state.time;
+
+    if (TimeConstants.ACCEPTABLE_VALUES.includes(input)){
+      var myTime = myTime.slice(1) + input;
+    }
+
+		this.setState({ time: myTime });
+  },
+
+  convertTime: function () {
 
   },
 
@@ -72,7 +84,7 @@ var QuestionIndexItem = React.createClass ({
     var inactiveQuestionPrompt = (
       <div>
         <div className="fa fa-wifi active-icon-question-index-item"aria-hidden="true" />
-        What question is active, respond at <strong>Ask--Anything.HerokuApp.com/ { username }</strong>
+        What question is active, respond at <strong>Ask--Anything.HerokuApp.com/{ username }</strong>
       </div>
     );
 
@@ -110,9 +122,8 @@ var QuestionIndexItem = React.createClass ({
                 <div>
                   <input
                     className="soft-edges hover-text"
-                    type="time"
-                    step="1"
-                    max="99:99"
+                    type="text"
+                    value={ time }
                     onChange={ this.timerChange }
                     />
 

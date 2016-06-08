@@ -38040,6 +38040,7 @@
 	var ClientQuestionActions = __webpack_require__(282);
 	var QuestionStore = __webpack_require__(290);
 	var QuestionIndexItemToolbar = __webpack_require__(316);
+	var TimeConstants = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../constants/time_constants\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 	
 	var QuestionIndexItem = React.createClass({
 	  displayName: 'QuestionIndexItem',
@@ -38052,7 +38053,7 @@
 	    return {
 	      questionId: questionId,
 	      question: question,
-	      time: 0
+	      time: "0000"
 	    };
 	  },
 	
@@ -38071,9 +38072,22 @@
 	    this.setState({ question: question });
 	  },
 	
-	  handleTimerClick: function () {},
+	  handleTimerClick: function () {
+	    console.log("You clicked the timer!");
+	  },
 	
-	  timerChange: function () {},
+	  timerChange: function (e) {
+	    var input = parseInt(e.target.value);
+	    var myTime = this.state.time;
+	
+	    if (TimeConstants.ACCEPTABLE_VALUES.includes(input)) {
+	      var myTime = myTime.slice(1) + input;
+	    }
+	
+	    this.setState({ time: myTime });
+	  },
+	
+	  convertTime: function () {},
 	
 	  render: function () {
 	    console.log(this.state.question);
@@ -38113,7 +38127,7 @@
 	      React.createElement(
 	        'strong',
 	        null,
-	        'Ask--Anything.HerokuApp.com/ ',
+	        'Ask--Anything.HerokuApp.com/',
 	        username
 	      )
 	    );
@@ -38170,9 +38184,8 @@
 	                null,
 	                React.createElement('input', {
 	                  className: 'soft-edges hover-text',
-	                  type: 'time',
-	                  step: '1',
-	                  max: '99:99',
+	                  type: 'text',
+	                  value: time,
 	                  onChange: this.timerChange
 	                }),
 	                React.createElement('div', {
