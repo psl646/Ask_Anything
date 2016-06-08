@@ -21,3 +21,18 @@
 .h13 {
   font-size: 13px;
 }
+
+
+.edit-question-link {
+  font-size: 11px;
+  float: right;
+  position: relative;
+  right: 155px;
+  bottom: 15px;
+}
+
+.edit-question-link:hover {
+  color: red;
+  cursor: pointer;
+  text-decoration: underline;
+}

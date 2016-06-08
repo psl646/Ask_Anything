@@ -60,6 +60,7 @@
 	var SignupPage = __webpack_require__(304);
 	var SurveysIndex = __webpack_require__(308);
 	var QuestionIndexItem = __webpack_require__(312);
+	var QuestionEditForm = __webpack_require__(322);
 	var UserEditForm = __webpack_require__(314);
 	var UserEmailPasswordEditForm = __webpack_require__(315);
 	var ForgotPasswordSuccess = __webpack_require__(316);
@@ -81,6 +82,7 @@
 	    React.createElement(Route, { path: 'surveys', component: SurveysIndex, onEnter: _ensureLoggedIn }),
 	    ' // Maybe take out this onEnter hook later to allow non-users to use the site',
 	    React.createElement(Route, { path: 'questions/:questionId', component: QuestionIndexItem, onEnter: _ensureLoggedIn }),
+	    React.createElement(Route, { path: 'questions/:questionId/edit', component: QuestionEditForm, onEnter: _ensureLoggedIn }),
 	    React.createElement(Route, { path: 'profile/edit', component: UserEditForm, onEnter: _ensureLoggedIn }),
 	    React.createElement(Route, { path: 'profile/edit_password_or_email', component: UserEmailPasswordEditForm, onEnter: _ensureLoggedIn }),
 	    React.createElement(Route, { path: 'new_features', component: NewFeatures, onEnter: _ensureLoggedIn })
@@ -37756,11 +37758,21 @@
 	    }
 	  },
 	
-	  goToQuestionShow: function (e) {
+	  clickedOnEdit: function (e) {
+	    return e.target.outerHTML.split('"')[1] === "edit-question-link";
+	  },
+	
+	  handleClickOnQuestionItem: function (e) {
 	    e.preventDefault();
+	
 	    // Come back here to do a REGEX thing to grab the question id
 	    var targetString = e.currentTarget.outerHTML;
 	    var url = "questions/" + targetString.split('"')[1];
+	
+	    if (this.clickedOnEdit(e)) {
+	      url = url + "/edit";
+	    }
+	
 	    this.context.router.push(url);
 	  },
 	
@@ -37773,11 +37785,16 @@
 	      if (questions[question_id].survey_id === parseInt(mySurvey.id)) {
 	        return React.createElement(
 	          'li',
-	          { id: question_id, key: question_id, className: 'h13', onClick: ("li", that.goToQuestionShow) },
+	          { id: question_id, key: question_id, className: 'h13', onClick: ("li", that.handleClickOnQuestionItem) },
 	          React.createElement(
 	            'div',
 	            null,
 	            questions[question_id].question
+	          ),
+	          React.createElement(
+	            Link,
+	            { to: "questions/" + question_id + "/edit", className: 'edit-question-link' },
+	            ' Edit '
 	          )
 	        );
 	      }
@@ -38707,6 +38724,97 @@
 	};
 	
 	module.exports = UserStore;
+
+/***/ },
+/* 322 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var Link = __webpack_require__(168).Link;
+	var QuestionConstants = __webpack_require__(285);
+	var AnswerInput = __webpack_require__(293);
+	var QuestionFormStore = __webpack_require__(296);
+	var QuestionFormActions = __webpack_require__(294);
+	
+	var QuestionEditForm = React.createClass({
+	  displayName: 'QuestionEditForm',
+	
+	  contextTypes: {
+	    router: React.PropTypes.object.isRequired
+	  },
+	
+	  getInitialState: function () {
+	    return { question: "you got the question!" };
+	  },
+	
+	  myQuestionFormData: function () {
+	    return {
+	      question: this.state.question,
+	      category: this.state.category,
+	      answers: this.state.answers
+	    };
+	  },
+	
+	  sendQuestionFormData: function () {
+	    var questionFormData = this.myQuestionFormData();
+	    QuestionFormActions.sendQuestionFormData(this.props.questionId, questionFormData);
+	  },
+	
+	  componentDidMount: function () {
+	    this.questionFormListener = QuestionFormStore.addListener(this._onChange);
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.questionFormListener.remove();
+	  },
+	
+	  _onChange: function () {},
+	
+	  questionChange: function (e) {
+	    var newQuestion = e.target.value;
+	    this.state.question = newQuestion;
+	    this.sendQuestionFormData();
+	  },
+	
+	  categoryChange: function (e) {
+	    var newCategory = e.target.value;
+	    this.state.category = newCategory;
+	    this.sendQuestionFormData();
+	  },
+	
+	  addAnswersChange: function (e) {
+	    var newAnswer = React.createElement(AnswerInput, { answerId: this.state.answerId, questionId: this.props.questionId });
+	    var answerId = this.state.answerId;
+	
+	    this.state.answers[answerId] = "";
+	    this.state.answerFormObjects[answerId] = newAnswer;
+	    this.state.answerId = answerId + 1;
+	
+	    this.sendQuestionFormData();
+	  },
+	
+	  handleDeleteQuestion: function (e) {
+	    e.preventDefault();
+	    this.questionFormListener.remove();
+	    QuestionFormActions.deleteQuestion(this.props.questionId);
+	  },
+	
+	  handleDeleteAnswer: function (e) {
+	    e.preventDefault();
+	    var answerId = e.target.outerHTML.slice(9).split('"')[0];
+	    QuestionFormActions.deleteAnswerToQuestion(this.props.questionId, answerId);
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      null,
+	      this.state.question
+	    );
+	  }
+	});
+	
+	module.exports = QuestionEditForm;
 
 /***/ }
 /******/ ]);

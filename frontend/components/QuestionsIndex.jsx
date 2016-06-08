@@ -28,11 +28,21 @@ var QuestionsIndex = React.createClass ({
     }
   },
 
-  goToQuestionShow: function (e) {
+  clickedOnEdit: function (e) {
+    return (e.target.outerHTML.split('"')[1] === "edit-question-link")
+  },
+
+  handleClickOnQuestionItem: function (e) {
     e.preventDefault();
+
     // Come back here to do a REGEX thing to grab the question id
     var targetString = e.currentTarget.outerHTML;
     var url = "questions/" + targetString.split('"')[1];
+
+    if (this.clickedOnEdit(e)){
+      url = url + "/edit";
+    }
+
     this.context.router.push(url);
   },
 
@@ -44,8 +54,9 @@ var QuestionsIndex = React.createClass ({
     var questionsList = Object.keys(questions).map(function (question_id) {
       if (questions[question_id].survey_id === parseInt(mySurvey.id)){
         return (
-          <li id={ question_id } key={ question_id } className="h13" onClick={"li", that.goToQuestionShow }>
+          <li id={ question_id } key={ question_id } className="h13" onClick={"li", that.handleClickOnQuestionItem }>
             <div>{ questions[question_id].question }</div>
+            <Link to={"questions/" + question_id + "/edit"} className="edit-question-link"> Edit </Link>
           </li>
         );
       }
