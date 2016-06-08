@@ -61,6 +61,20 @@ var QuestionApiUtil = {
         console.log("POST Error in QuestionApiUtil#toggleActive");
       }
     })
+  },
+
+  deleteQuestion: function (questionId) {
+    $.ajax({
+      url: 'api/questions/' + questionId,
+      type: 'DELETE',
+      dataType: 'json',
+      success: function (questions) {
+        ServerQuestionActions.receiveAllQuestions(questions);
+      },
+      error: function (xhr) {
+        console.log("POST Error in QuestionApiUtil#toggleActive");
+      }
+    })
   }
 };
 

@@ -35335,13 +35335,9 @@
 	    return window.location.hash.slice(2, 8).toUpperCase() === "SIGNUP" || window.location.hash.slice(0, 4).toUpperCase() === "#/?_";
 	  },
 	
-	  componentDidMount: function () {
-	    console.log("mounting");
-	  },
+	  componentDidMount: function () {},
 	
-	  componentWillUnmount: function () {
-	    console.log("unmounting");
-	  },
+	  componentWillUnmount: function () {},
 	
 	  render: function () {
 	    var logoPlacement = "responseform-logo";
@@ -35684,6 +35680,10 @@
 	
 	  toggleActive: function (questionId) {
 	    QuestionApiUtil.toggleActive(questionId);
+	  },
+	
+	  deleteQuestion: function (questionId) {
+	    QuestionApiUtil.deleteQuestion(questionId);
 	  }
 	};
 	
@@ -35749,6 +35749,20 @@
 	      type: 'PATCH',
 	      dataType: 'json',
 	      data: { toggle: true },
+	      success: function (questions) {
+	        ServerQuestionActions.receiveAllQuestions(questions);
+	      },
+	      error: function (xhr) {
+	        console.log("POST Error in QuestionApiUtil#toggleActive");
+	      }
+	    });
+	  },
+	
+	  deleteQuestion: function (questionId) {
+	    $.ajax({
+	      url: 'api/questions/' + questionId,
+	      type: 'DELETE',
+	      dataType: 'json',
 	      success: function (questions) {
 	        ServerQuestionActions.receiveAllQuestions(questions);
 	      },
@@ -37572,7 +37586,7 @@
 	  clickedSurveyLi: function (e) {
 	    var surveyId = e.currentTarget.innerHTML.slice(9).split('"')[0];
 	
-	    if (!this.clickedActivateToggle(e)) {
+	    if (!this.clickedActivateToggle(e) && !this.clickedDeleteQuestion(e)) {
 	      this.toggleShowSurveyItems(surveyId);
 	    };
 	  },
@@ -37582,6 +37596,16 @@
 	
 	    if (outerHTMLArray.length > 1) {
 	      return outerHTMLArray[1].slice(0, 10) === "fa fa-wifi";
+	    } else {
+	      return false;
+	    };
+	  },
+	
+	  clickedDeleteQuestion: function (e) {
+	    var outerHTMLArray = e.target.outerHTML.split('"');
+	
+	    if (outerHTMLArray.length > 3) {
+	      return outerHTMLArray[3].slice(0, 6) === "delete";
 	    } else {
 	      return false;
 	    };
@@ -37773,6 +37797,7 @@
 	var QuestionStore = __webpack_require__(290);
 	var Link = __webpack_require__(168).Link;
 	var SessionStore = __webpack_require__(250);
+	var ClientSurveyActions = __webpack_require__(286);
 	
 	var QuestionsIndex = React.createClass({
 	  displayName: 'QuestionsIndex',
@@ -37795,16 +37820,19 @@
 	  },
 	
 	  _onChange: function () {
+	    ClientSurveyActions.fetchAllSurveys();
 	    this.setState({ questions: QuestionStore.all() });
 	  },
 	
-	  clickedOnEdit: function (e) {
-	    return e.target.outerHTML.split('"')[1] === "edit-question-link";
+	  clickedOnEdit: function (outerHTMLArray) {
+	    if (outerHTMLArray.length > 1) {
+	      return outerHTMLArray[1].slice(0, 4) === "edit";
+	    } else {
+	      return false;
+	    };
 	  },
 	
-	  clickedOnActive: function (e) {
-	    var outerHTMLArray = e.target.outerHTML.split('"');
-	
+	  clickedOnActive: function (outerHTMLArray) {
 	    if (outerHTMLArray.length > 1) {
 	      return outerHTMLArray[1].slice(0, 10) === "fa fa-wifi";
 	    } else {
@@ -37812,26 +37840,33 @@
 	    };
 	  },
 	
+	  clickedOnDeleteQuestion: function (outerHTMLArray) {
+	    if (outerHTMLArray.length > 3) {
+	      return outerHTMLArray[3].slice(0, 6) === "delete";
+	    } else {
+	      return false;
+	    };
+	  },
+	
 	  handleClickOnQuestionItem: function (e) {
 	    e.preventDefault();
+	    var outerHTMLArray = e.target.outerHTML.split('"');
 	
 	    // Come back here to do a REGEX thing to grab the question id
 	    var targetString = e.currentTarget.outerHTML;
 	    var questionId = targetString.split('"')[1];
 	    var url = "questions/" + questionId;
 	
-	    if (this.clickedOnActive(e)) {
+	    if (this.clickedOnActive(outerHTMLArray)) {
 	      ClientQuestionActions.toggleActive(parseInt(questionId));
+	    } else if (this.clickedOnDeleteQuestion(outerHTMLArray)) {
+	      ClientQuestionActions.deleteQuestion(questionId);
 	    } else {
-	      if (this.clickedOnEdit(e)) {
+	      if (this.clickedOnEdit(outerHTMLArray)) {
 	        url = url + "/edit";
 	      }
 	      this.context.router.push(url);
 	    }
-	  },
-	
-	  deleteIndexQuestion: function (e) {
-	    console.log(e.target);
 	  },
 	
 	  render: function () {
@@ -37853,7 +37888,10 @@
 	
 	        return React.createElement(
 	          'li',
-	          { id: question_id, key: question_id, className: "h13 group show-edit-delete " + activeQuestion, onClick: ("li", that.handleClickOnQuestionItem) },
+	          { id: question_id,
+	            key: question_id,
+	            className: "h13 group show-edit-delete " + activeQuestion,
+	            onClick: ("li", that.handleClickOnQuestionItem) },
 	          React.createElement(
 	            'div',
 	            { className: 'current-question' },
@@ -37867,7 +37905,8 @@
 	              null,
 	              React.createElement(
 	                Link,
-	                { to: "questions/" + question_id + "/edit", className: 'edit-question-link' },
+	                { to: "questions/" + question_id + "/edit",
+	                  className: 'edit-question-link h11' },
 	                ' Edit '
 	              )
 	            ),
@@ -37876,7 +37915,9 @@
 	              null,
 	              React.createElement(
 	                'div',
-	                { id: question_id, className: 'delete-index-question h11', onClick: this.deleteIndexQuestion },
+	                { id: question_id,
+	                  className: 'delete-index-question h11',
+	                  onClick: that.clickedOnDeleteQuestion },
 	                'Delete'
 	              )
 	            )

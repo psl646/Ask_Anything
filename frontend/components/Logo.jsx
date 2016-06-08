@@ -26,11 +26,9 @@ var Logo = React.createClass({
   },
 
   componentDidMount: function () {
-    console.log("mounting");
   },
 
   componentWillUnmount: function () {
-    console.log("unmounting");
   },
 
   render: function () {

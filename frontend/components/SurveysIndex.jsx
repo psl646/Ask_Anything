@@ -39,7 +39,7 @@ var SurveysIndex = React.createClass ({
   clickedSurveyLi: function (e) {
     var surveyId = e.currentTarget.innerHTML.slice(9).split('"')[0];
 
-    if (!this.clickedActivateToggle(e)){
+    if ((!this.clickedActivateToggle(e)) && (!this.clickedDeleteQuestion(e))){
       this.toggleShowSurveyItems(surveyId);
     };
   },
@@ -49,6 +49,16 @@ var SurveysIndex = React.createClass ({
 
     if (outerHTMLArray.length > 1) {
       return (outerHTMLArray[1].slice(0, 10) === "fa fa-wifi");
+    } else {
+      return false;
+    };
+  },
+
+  clickedDeleteQuestion: function (e) {
+    var outerHTMLArray = e.target.outerHTML.split('"');
+
+    if (outerHTMLArray.length > 3) {
+      return (outerHTMLArray[3].slice(0,6) === "delete");
     } else {
       return false;
     };

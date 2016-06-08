@@ -16,6 +16,10 @@ var ClientQuestionActions = {
 
   toggleActive: function(questionId) {
     QuestionApiUtil.toggleActive(questionId);
+  },
+
+  deleteQuestion: function(questionId) {
+    QuestionApiUtil.deleteQuestion(questionId);
   }
 };
 

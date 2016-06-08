@@ -41,7 +41,10 @@ class Api::QuestionsController < ApplicationController
   end
 
   def destroy
-
+    @question = Question.find(params[:id])
+    @question.destroy
+    @questions = current_user.questions
+    render "api/questions/index"
   end
 
   private
