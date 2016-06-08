@@ -31,7 +31,9 @@ class Api::QuestionsController < ApplicationController
     end
 
     if @question.save
-      render "api/questions/show"
+      Question.inactivate_other_questions(@question, current_user)
+      @questions = current_user.questions
+      render "api/questions/index"
     else
       @errors = @question.errors.full_messages
       render "api/shared/errors", status: 409

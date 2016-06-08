@@ -35749,8 +35749,8 @@
 	      type: 'PATCH',
 	      dataType: 'json',
 	      data: { toggle: true },
-	      success: function (question) {
-	        ServerQuestionActions.receiveQuestion(question);
+	      success: function (questions) {
+	        ServerQuestionActions.receiveAllQuestions(questions);
 	      },
 	      error: function (xhr) {
 	        console.log("POST Error in QuestionApiUtil#toggleActive");
@@ -37570,12 +37570,24 @@
 	  },
 	
 	  clickedSurveyLi: function (e) {
-	
-	    console.log(e.target);
-	    console.log(e.currentTarget);
-	    console.log("CLICKED SURVEY LI!!");
-	
 	    var surveyId = e.currentTarget.innerHTML.slice(9).split('"')[0];
+	
+	    if (!this.clickedActivateToggle(e)) {
+	      this.toggleShowSurveyItems(surveyId);
+	    };
+	  },
+	
+	  clickedActivateToggle: function (e) {
+	    var outerHTMLArray = e.target.outerHTML.split('"');
+	
+	    if (outerHTMLArray.length > 1) {
+	      return outerHTMLArray[1].slice(0, 10) === "fa fa-wifi";
+	    } else {
+	      return false;
+	    };
+	  },
+	
+	  toggleShowSurveyItems: function (surveyId) {
 	
 	    var clickedSurveys = this.state.clickedSurveys;
 	
@@ -37777,10 +37789,7 @@
 	  },
 	
 	  _onChange: function () {
-	    console.log("QUESTION STORE DID SOMETHING!");
 	    this.setState({ questions: QuestionStore.all() });
-	    // if (window.location.hash.slice(2, 9).toUpperCase() === "SURVEYS") {
-	    // }
 	  },
 	
 	  clickedOnEdit: function (e) {
@@ -37788,7 +37797,13 @@
 	  },
 	
 	  clickedOnActive: function (e) {
-	    return e.target.outerHTML.split('"')[1].slice(0, 10) === "fa fa-wifi";
+	    var outerHTMLArray = e.target.outerHTML.split('"');
+	
+	    if (outerHTMLArray.length > 1) {
+	      return outerHTMLArray[1].slice(0, 10) === "fa fa-wifi";
+	    } else {
+	      return false;
+	    };
 	  },
 	
 	  handleClickOnQuestionItem: function (e) {
@@ -37810,8 +37825,6 @@
 	  },
 	
 	  render: function () {
-	    console.log(this.state.questions);
-	
 	    var that = this;
 	    var questions = this.state.questions;
 	    var mySurvey = this.props.survey;

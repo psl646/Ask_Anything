@@ -55,4 +55,11 @@ class Question < ActiveRecord::Base
     end
   end
 
+  def self.inactivate_other_questions(current_question, current_user)
+    current_user.questions.each do |question|
+      next if (question[:id] == current_question[:id])
+      question[:active] = false
+      question.save
+    end
+  end
 end

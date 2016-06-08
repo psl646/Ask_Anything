@@ -54,8 +54,8 @@ var QuestionApiUtil = {
       type: 'PATCH',
       dataType: 'json',
       data: {toggle: true},
-      success: function (question) {
-        ServerQuestionActions.receiveQuestion(question);
+      success: function (questions) {
+        ServerQuestionActions.receiveAllQuestions(questions);
       },
       error: function (xhr) {
         console.log("POST Error in QuestionApiUtil#toggleActive");

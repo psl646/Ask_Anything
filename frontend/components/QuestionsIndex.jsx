@@ -23,10 +23,7 @@ var QuestionsIndex = React.createClass ({
   },
 
   _onChange: function () {
-    console.log("QUESTION STORE DID SOMETHING!");
     this.setState({ questions: QuestionStore.all() });
-    // if (window.location.hash.slice(2, 9).toUpperCase() === "SURVEYS") {
-    // }
   },
 
   clickedOnEdit: function (e) {
@@ -34,7 +31,13 @@ var QuestionsIndex = React.createClass ({
   },
 
   clickedOnActive: function (e){
-    return (e.target.outerHTML.split('"')[1].slice(0,10) === "fa fa-wifi")
+    var outerHTMLArray = e.target.outerHTML.split('"')
+
+    if (outerHTMLArray.length > 1) {
+      return (outerHTMLArray[1].slice(0, 10) === "fa fa-wifi");
+    } else {
+      return false;
+    };
   },
 
   handleClickOnQuestionItem: function (e) {
@@ -56,8 +59,6 @@ var QuestionsIndex = React.createClass ({
   },
 
   render: function () {
-    console.log(this.state.questions);
-
     var that = this;
     var questions = this.state.questions;
     var mySurvey = this.props.survey;

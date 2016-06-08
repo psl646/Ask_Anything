@@ -37,12 +37,24 @@ var SurveysIndex = React.createClass ({
   },
 
   clickedSurveyLi: function (e) {
-
-    console.log(e.target);
-    console.log(e.currentTarget);
-    console.log("CLICKED SURVEY LI!!");
-
     var surveyId = e.currentTarget.innerHTML.slice(9).split('"')[0];
+
+    if (!this.clickedActivateToggle(e)){
+      this.toggleShowSurveyItems(surveyId);
+    };
+  },
+
+  clickedActivateToggle: function (e) {
+    var outerHTMLArray = e.target.outerHTML.split('"');
+
+    if (outerHTMLArray.length > 1) {
+      return (outerHTMLArray[1].slice(0, 10) === "fa fa-wifi");
+    } else {
+      return false;
+    };
+  },
+
+  toggleShowSurveyItems: function (surveyId) {
 
     var clickedSurveys = this.state.clickedSurveys;
 
