@@ -12,3 +12,30 @@
   margin: 20px;
   background: red;
 }
+
+.bottomOptions-question-menu {
+  background: rgb(37, 80, 115);
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+.bottomOptions-options {
+  color: white;
+  font-size: 14px;
+  display: block;
+  float: left;
+  width:110px;
+  padding: 12px 0;
+  text-align: center;
+  position: relative;
+  height: 100%;
+}
+
+.bottomOptions-options:hover {
+  background: #203349;
+}
+
+.bottomOptions-options:last-child:hover {
+  color: rgba(238, 148, 135, 1);
+}

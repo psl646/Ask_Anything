@@ -35300,6 +35300,32 @@
 	      margin: 'none',
 	      zIndex: 11
 	    }
+	  },
+	
+	  DELETE_QUESTION: {
+	    overlay: {
+	      position: 'fixed',
+	      top: 0,
+	      left: 0,
+	      right: 0,
+	      bottom: 0,
+	      background: 'transparent',
+	      zIndex: 10
+	    },
+	    content: {
+	      position: 'fixed',
+	      top: 0,
+	      left: 0,
+	      right: 0,
+	      bottom: 0,
+	      outline: 'none',
+	      overflow: 'none',
+	      outline: 'none',
+	      padding: 'none',
+	      border: 'none',
+	      margin: 'none',
+	      zIndex: 11
+	    }
 	  }
 	};
 	
@@ -37971,7 +37997,7 @@
 	              null,
 	              React.createElement(
 	                Link,
-	                { to: "questions/" + question_id + "/edit",
+	                { to: "/questions/" + question_id + "/edit",
 	                  className: 'edit-question-link h11' },
 	                ' Edit '
 	              )
@@ -38016,15 +38042,16 @@
 	  displayName: 'QuestionIndexItem',
 	
 	  getInitialState: function () {
-	    var questionId = parseInt(this.props.params.questionId);
-	    var question = QuestionStore.getQuestionById(questionId) || {};
+	    var questionId = parseInt(window.location.hash.split("?")[0].split("questions")[1].split("/")[1]);
+	    var myQuestion = QuestionStore.getQuestionById(questionId);
+	    var question = myQuestion || {};
 	
-	    return { question: question };
+	    return { questionId: questionId, question: question };
 	  },
 	
 	  componentDidMount: function () {
 	    this.questionListener = QuestionStore.addListener(this._onChange);
-	    ClientQuestionActions.getQuestionById(parseInt(this.props.params.questionId));
+	    ClientQuestionActions.getQuestionById(this.state.questionId);
 	  },
 	
 	  componentWillUnmount: function () {
@@ -38032,10 +38059,11 @@
 	  },
 	
 	  _onChange: function () {
-	    var questionId = parseInt(this.props.params.questionId);
-	    var question = QuestionStore.getQuestionById(questionId) || {};
+	    var myQuestion = QuestionStore.getQuestionById(this.state.questionId);
+	    var question = myQuestion || {};
 	    this.setState({ question: question });
 	  },
+	
 	  render: function () {
 	    var myAnswerObjects;
 	    var myAnswerArray = [];
@@ -38076,16 +38104,49 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var Link = __webpack_require__(168).Link;
+	var Modal = __webpack_require__(229);
+	var ModalConstants = __webpack_require__(279);
+	var QuestionStore = __webpack_require__(290);
+	var DeleteQuestion = __webpack_require__(323);
+	var ClientQuestionActions = __webpack_require__(282);
 	
 	var QuestionIndexItemToolbar = React.createClass({
-	  displayName: "QuestionIndexItemToolbar",
+	  displayName: 'QuestionIndexItemToolbar',
 	
 	  contextTypes: {
 	    router: React.PropTypes.object.isRequired
 	  },
 	
 	  getInitialState: function () {
-	    return {};
+	    var questionId = parseInt(window.location.hash.split("?")[0].split("questions")[1].split("/")[1]);
+	    var myQuestion = QuestionStore.getQuestionById(questionId);
+	    var question = myQuestion || {};
+	
+	    return { questionId: questionId, question: question, modalOpen: false };
+	  },
+	
+	  componentDidMount: function () {
+	    this.questionFormListener = QuestionStore.addListener(this._onChange);
+	    ClientQuestionActions.getQuestionById(this.state.questionId);
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.questionFormListener.remove();
+	  },
+	
+	  _onChange: function () {
+	    var myQuestion = ClientQuestionActions.getQuestionById(this.state.questionId);
+	    var question = myQuestion || {};
+	    this.setState({ question: question });
+	  },
+	
+	  closeModal: function () {
+	    this.setState({ modalOpen: false });
+	  },
+	
+	  openModal: function () {
+	    this.setState({ modalOpen: true });
 	  },
 	
 	  isEditPage: function () {
@@ -38093,33 +38154,70 @@
 	    return path.startsWith("questions") && path.endsWith("edit");
 	  },
 	
+	  handleDeleteClick: function (e) {
+	    e.preventDefault();
+	    this.openModal();
+	  },
+	
 	  render: function () {
+	    var questionId = parseInt(window.location.hash.split("?")[0].slice(12).split("/")[0]);
+	
+	    var bottomOptions = "";
+	
+	    var bottomOptions = React.createElement(
+	      'ul',
+	      { className: 'bottomOptions-question-menu' },
+	      React.createElement(
+	        Link,
+	        { to: "questions/" + questionId + "/edit", className: 'bottomOptions-options' },
+	        'Edit'
+	      ),
+	      React.createElement(
+	        Link,
+	        { to: 'export', className: 'bottomOptions-options' },
+	        'Export'
+	      ),
+	      React.createElement(
+	        Link,
+	        { to: 'surveys', className: 'bottomOptions-options', onClick: this.handleDeleteClick },
+	        'Delete',
+	        React.createElement(
+	          Modal,
+	          {
+	            isOpen: this.state.modalOpen,
+	            onRequestClose: this.closeModal,
+	            style: ModalConstants.DELETE_QUESTION },
+	          React.createElement(DeleteQuestion, { question: this.state.question, closeThisModal: this.closeModal })
+	        )
+	      )
+	    );
+	
 	    // DO SOMETHING HERE
-	    this.isEditPage();
+	    if (this.isEditPage()) {};
 	
 	    return React.createElement(
-	      "div",
-	      { className: "questionindexitem-toolbar" },
+	      'div',
+	      { className: 'questionindexitem-toolbar' },
 	      React.createElement(
-	        "ul",
+	        'ul',
 	        null,
 	        React.createElement(
-	          "li",
+	          'li',
 	          null,
-	          "How people can respond"
+	          'How people can respond'
 	        ),
 	        React.createElement(
-	          "li",
+	          'li',
 	          null,
-	          "Response settings"
+	          'Response settings'
 	        ),
 	        React.createElement(
-	          "li",
+	          'li',
 	          null,
-	          "Schedule lock/unlock times"
+	          'Schedule lock/unlock times'
 	        )
 	      ),
-	      React.createElement("ul", null)
+	      bottomOptions
 	    );
 	  }
 	});
@@ -38148,10 +38246,11 @@
 	  },
 	
 	  getInitialState: function () {
-	    var myQuestion = QuestionStore.getQuestionById(parseInt(this.props.params["questionId"]));
+	    var questionId = parseInt(window.location.hash.split("?")[0].split("questions")[1].split("/")[1]);
+	    var myQuestion = QuestionStore.getQuestionById(questionId);
 	    var question = myQuestion || {};
 	
-	    return { question: question };
+	    return { questionId: questionId, question: question };
 	  },
 	
 	  myQuestionFormData: function () {
@@ -38164,12 +38263,12 @@
 	
 	  sendQuestionFormData: function () {
 	    var questionFormData = this.myQuestionFormData();
-	    QuestionFormActions.sendQuestionFormData(this.props.questionId, questionFormData);
+	    QuestionFormActions.sendQuestionFormData(this.state.questionId, questionFormData);
 	  },
 	
 	  componentDidMount: function () {
 	    this.questionFormListener = QuestionStore.addListener(this._onChange);
-	    ClientQuestionActions.getQuestionById(parseInt(this.props.params["questionId"]));
+	    ClientQuestionActions.getQuestionById(this.state.questionId);
 	  },
 	
 	  componentWillUnmount: function () {
@@ -38177,10 +38276,8 @@
 	  },
 	
 	  _onChange: function () {
-	    var myQuestion = QuestionStore.getQuestionById(this.props.params["questionId"]);
-	    console.log(myQuestion);
+	    var myQuestion = QuestionStore.getQuestionById(this.state.questionId);
 	    var question = myQuestion || {};
-	    console.log(question);
 	    this.setState({ question: question });
 	  },
 	
@@ -38220,7 +38317,6 @@
 	  },
 	
 	  render: function () {
-	    console.log(this.state.question);
 	    return React.createElement(
 	      'div',
 	      { className: 'edit-form-page-container group' },
@@ -38990,6 +39086,78 @@
 	});
 	
 	module.exports = ResponseForm;
+
+/***/ },
+/* 323 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var Link = __webpack_require__(168).Link;
+	
+	var DeleteQuestion = React.createClass({
+	  displayName: 'DeleteQuestion',
+	
+	  contextTypes: {
+	    router: React.PropTypes.object.isRequired
+	  },
+	
+	  getInitialState: function () {
+	    return { random: 1 };
+	  },
+	
+	  componentDidMount: function () {},
+	
+	  componentWillUnmount: function () {},
+	
+	  closeMyself: function () {
+	    this.props.closeThisModal();
+	  },
+	
+	  handleOK: function (e) {
+	    e.preventDefault();
+	  },
+	
+	  render: function () {
+	
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'div',
+	        null,
+	        'Delete question'
+	      ),
+	      React.createElement(
+	        'div',
+	        null,
+	        'Are you sure you want to remove the question "',
+	        this.props.question.question,
+	        '"?'
+	      ),
+	      React.createElement(
+	        'div',
+	        null,
+	        'If you click OK this question will be gone forever!'
+	      ),
+	      React.createElement(
+	        'ul',
+	        null,
+	        React.createElement(
+	          'li',
+	          null,
+	          'Cancel'
+	        ),
+	        React.createElement(
+	          'li',
+	          null,
+	          'OK'
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = DeleteQuestion;
 
 /***/ }
 /******/ ]);

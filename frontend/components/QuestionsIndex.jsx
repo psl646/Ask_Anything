@@ -105,7 +105,7 @@ var QuestionsIndex = React.createClass ({
 
             <ul className="update-delete group">
               <li>
-                <Link to={"questions/" + question_id + "/edit"}
+                <Link to={"/questions/" + question_id + "/edit"}
                   className="edit-question-link h11"> Edit </Link>
               </li>
               <li>

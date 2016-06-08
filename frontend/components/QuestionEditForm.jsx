@@ -14,10 +14,11 @@ var QuestionEditForm = React.createClass({
   },
 
   getInitialState: function () {
-    var myQuestion = QuestionStore.getQuestionById(parseInt(this.props.params["questionId"]));
+    var questionId = parseInt(window.location.hash.split("?")[0].split("questions")[1].split("/")[1]);
+    var myQuestion = QuestionStore.getQuestionById(questionId);
     var question = myQuestion || {};
 
-    return ({ question: question });
+    return ({ questionId: questionId, question: question });
   },
 
   myQuestionFormData: function () {
@@ -30,12 +31,12 @@ var QuestionEditForm = React.createClass({
 
   sendQuestionFormData: function () {
     var questionFormData = this.myQuestionFormData();
-    QuestionFormActions.sendQuestionFormData(this.props.questionId, questionFormData)
+    QuestionFormActions.sendQuestionFormData(this.state.questionId, questionFormData);
   },
 
   componentDidMount: function () {
     this.questionFormListener = QuestionStore.addListener(this._onChange);
-    ClientQuestionActions.getQuestionById(parseInt(this.props.params["questionId"]))
+    ClientQuestionActions.getQuestionById(this.state.questionId);
   },
 
   componentWillUnmount: function () {
@@ -43,10 +44,8 @@ var QuestionEditForm = React.createClass({
   },
 
   _onChange: function () {
-    var myQuestion = QuestionStore.getQuestionById(this.props.params["questionId"]);
-    console.log(myQuestion);
+    var myQuestion = QuestionStore.getQuestionById(this.state.questionId);
     var question = myQuestion || {};
-    console.log(question);
     this.setState ({ question: question });
   },
 
@@ -86,7 +85,6 @@ var QuestionEditForm = React.createClass({
   },
 
 	render: function () {
-    console.log(this.state.question);
     return (
       <div className="edit-form-page-container group">
         <QuestionIndexItemToolbar />

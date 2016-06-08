@@ -5,15 +5,16 @@ var QuestionIndexItemToolbar = require('./QuestionIndexItemToolbar');
 
 var QuestionIndexItem = React.createClass ({
   getInitialState: function () {
-    var questionId = parseInt(this.props.params.questionId);
-    var question = QuestionStore.getQuestionById(questionId) || {};
+    var questionId = parseInt(window.location.hash.split("?")[0].split("questions")[1].split("/")[1]);
+    var myQuestion = QuestionStore.getQuestionById(questionId);
+    var question = myQuestion || {};
 
-    return ({ question: question });
+    return ({ questionId: questionId, question: question });
   },
 
   componentDidMount: function () {
     this.questionListener = QuestionStore.addListener(this._onChange);
-    ClientQuestionActions.getQuestionById(parseInt(this.props.params.questionId));
+    ClientQuestionActions.getQuestionById(this.state.questionId);
   },
 
   componentWillUnmount: function () {
@@ -21,10 +22,11 @@ var QuestionIndexItem = React.createClass ({
   },
 
   _onChange: function () {
-    var questionId = parseInt(this.props.params.questionId);
-    var question = QuestionStore.getQuestionById(questionId) || {};
+    var myQuestion = QuestionStore.getQuestionById(this.state.questionId);
+    var question = myQuestion || {};
     this.setState({ question: question });
   },
+
   render: function () {
     var myAnswerObjects;
     var myAnswerArray = [];

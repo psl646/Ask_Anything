@@ -86,6 +86,32 @@ var ModalConstants = {
       margin          : 'none',
       zIndex          : 11
     }
+  },
+
+  DELETE_QUESTION: {
+    overlay : {
+      position        : 'fixed',
+      top             : 0,
+      left            : 0,
+      right           : 0,
+      bottom          : 0,
+      background      : 'transparent',
+      zIndex          : 10
+    },
+    content : {
+      position        : 'fixed',
+      top             : 0,
+      left            : 0,
+      right           : 0,
+      bottom          : 0,
+      outline         : 'none',
+      overflow        : 'none',
+      outline         : 'none',
+      padding         : 'none',
+      border          : 'none',
+      margin          : 'none',
+      zIndex          : 11
+    }
   }
 }
 
