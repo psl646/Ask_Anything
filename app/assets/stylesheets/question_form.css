@@ -74,7 +74,10 @@
   padding-left: 7px;
   border: 1px solid #BCBFC3;
   background: rgb(255, 255, 255);
-  margin-top: 15px;
+}
+
+.first-answer-container {
+  margin-top: 18px;
 }
 
 .question-input-field {
@@ -239,6 +242,7 @@
 
 .trash-answer:hover {
   color: rgb(21, 25, 110);
+  cursor: pointer;
 }
 
 .small-arrow {

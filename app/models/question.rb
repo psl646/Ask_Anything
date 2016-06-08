@@ -49,6 +49,8 @@ class Question < ActiveRecord::Base
       category: question_data[:category],
       survey: survey
     )
+    
+    debugger
 
     question_data[:answers].each do |answer_data|
       Answer.create(answer: answer_data.last, question: current_user.questions.last)

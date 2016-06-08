@@ -2,6 +2,7 @@ var React = require('react');
 var Link = require('react-router').Link;
 var Logo = require('./Logo');
 var UserApiUtil = require('../util/user_api_util');
+var UserStore = require('../stores/user_store');
 
 var ResponseForm = React.createClass({
   contextTypes: {
@@ -9,29 +10,35 @@ var ResponseForm = React.createClass({
   },
 
   getInitialState: function () {
-    return ({ user: {} });
+    var potentialUser = UserStore.getUser();
+    var user = potentialUser || {};
+    return ({ user: user });
   },
 
   componentWillMount: function () {
+    this.userListener = UserStore.addListener(this._onChange);
     var username = window.location.hash.slice(2).split("?")[0];
     UserApiUtil.findUserByUsername(username);
-
   },
 
   componentWillUnmount: function () {
-
+    this.userListener.remove();
   },
 
   _onChange: function () {
-
+    var potentialUser = UserStore.getUser();
+    var user = potentialUser || {};
+    this.setState({ user: user });
   },
 
 	render: function () {
-    var user = (
-      <div>
-        this.state.user;
-      </div>
-    );
+    var user = "I found the user!";
+    console.log(this.state.user);
+    // var user = (
+    //   <div>
+    //     this.state.user;
+    //   </div>
+    // );
 
     if (Object.keys(this.state.user).length === 0){
       user = (

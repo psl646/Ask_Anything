@@ -29,7 +29,7 @@ var AnswerInput = React.createClass({
     var answer = this.state.answer;
     QuestionFormActions.addAnswerToQuestion(questionId, answerId, answer);
   },
-
+  
 	render: function () {
     return (
       <div className="single-answer-container">

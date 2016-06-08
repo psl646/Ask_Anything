@@ -18,7 +18,12 @@ class Api::UsersController < ApplicationController
 	end
 
 	def show
-		@user = User.find_by_email(params[:user][:email])
+		if params[:username].nil?
+			@user = User.find_by_email(params[:user][:email])
+		else
+			@user = User.find_by_username(params[:username])
+		end
+
 		if @user
 			render "api/users/show"
 		else

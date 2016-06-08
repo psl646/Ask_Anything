@@ -14,7 +14,7 @@ var QuestionForm = React.createClass({
     var myAnswers = QuestionFormStore.getAllAnswers(this.props.questionId);
     var answers = myAnswers || { 1: "", 2: "" };
     // Will need to come back here to make this more robust for other question categories
-
+    
     return ({
       question: this.props.question,
       category: "Multiple Choice",
@@ -55,10 +55,20 @@ var QuestionForm = React.createClass({
     var myAnswers = QuestionFormStore.getAllAnswers(this.props.questionId);
     var answers = myAnswers || { 1: "", 2: "" };
 
+    var currentAnswerKeys = Object.keys(answers);
+    var oldAnswerFormObjects = this.state.answerFormObjects;
+
+    Object.keys(oldAnswerFormObjects).forEach(function(answerKey){
+      if (!currentAnswerKeys.includes(answerKey)) {
+        delete oldAnswerFormObjects[answerKey];
+      }
+    });
+
     this.setState({
       question: question.question,
       category: question.category,
-      answers: question.answers
+      answers: question.answers,
+      answerFormObjects: oldAnswerFormObjects
     });
   },
 
@@ -93,7 +103,8 @@ var QuestionForm = React.createClass({
 
   handleDeleteAnswer: function (e) {
     e.preventDefault();
-    console.log("YOU CLICKED THE TRASH CAN")
+    var answerId = e.target.outerHTML.slice(9).split('"')[0];
+    QuestionFormActions.deleteAnswerToQuestion(this.props.questionId, answerId);
   },
 
 	render: function () {
@@ -128,21 +139,28 @@ var QuestionForm = React.createClass({
       );
     });
 
-    var myNewAnswers = Object.keys(that.state.answerFormObjects).map(function(answerId){
+    var myNewAnswers = Object.keys(that.state.answerFormObjects).map(function(answerId, idx){
+      var firstContainer = "";
+
+      if (idx === 0) {
+        firstContainer = "first-answer-container";
+      }
+
       return (
-        <li key={ answerId }>
+        <li key={ answerId } className={ firstContainer }>
           { that.state.answerFormObjects[answerId] }
 
-          <div className="fa fa-trash-o fa-lg trash-answer"
+          <div id={ answerId }
+            className="fa fa-trash-o fa-lg trash-answer"
             aria-hidden="true"
             onClick={ this.handleDeleteAnswer } />
         </li>
       );
-    });
+    }.bind(this));
 
     return (
       <div className="single-question-form soft-edges">
-        <button className="delete-question" onClick={ this.handleDeleteQuestion }>
+        <button className="delete-question hover-pointer" onClick={ this.handleDeleteQuestion }>
           X
         </button>
 

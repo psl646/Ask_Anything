@@ -24,6 +24,11 @@ var _addAnswerToQuestion = function(questionId, answerId, answer) {
   question["answers"][answerId] = answer;
 };
 
+var _deleteAnswerToQuestion = function(questionId, answerId) {
+  var question = _questions[questionId];
+  delete question["answers"][answerId];
+};
+
 QuestionFormStore.__onDispatch = function (payload) {
   switch (payload.actionType) {
     case QuestionFormConstants.UPDATE_QUESTION_FORM:
@@ -40,6 +45,10 @@ QuestionFormStore.__onDispatch = function (payload) {
       break;
     case QuestionFormConstants.ADD_ANSWER_QUESTION_FORM:
       _addAnswerToQuestion(payload.questionId, payload.answerId, payload.answer);
+      QuestionFormStore.__emitChange();
+      break;
+    case QuestionFormConstants.DELETE_ANSWER_QUESTION_FORM:
+      _deleteAnswerToQuestion(payload.questionId, payload.answerId);
       QuestionFormStore.__emitChange();
       break;
   }
@@ -59,7 +68,8 @@ QuestionFormStore.getAllAnswers = function (questionId) {
   if (question) {
     return question["answers"];
   } else {
-    return {};
+    // This allows the questions to start with two answer input fields.
+    return { 1: "", 2: "" };
   }
 };
 

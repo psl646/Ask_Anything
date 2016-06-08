@@ -36034,10 +36034,20 @@
 	    var myAnswers = QuestionFormStore.getAllAnswers(this.props.questionId);
 	    var answers = myAnswers || { 1: "", 2: "" };
 	
+	    var currentAnswerKeys = Object.keys(answers);
+	    var oldAnswerFormObjects = this.state.answerFormObjects;
+	
+	    Object.keys(oldAnswerFormObjects).forEach(function (answerKey) {
+	      if (!currentAnswerKeys.includes(answerKey)) {
+	        delete oldAnswerFormObjects[answerKey];
+	      }
+	    });
+	
 	    this.setState({
 	      question: question.question,
 	      category: question.category,
-	      answers: question.answers
+	      answers: question.answers,
+	      answerFormObjects: oldAnswerFormObjects
 	    });
 	  },
 	
@@ -36072,7 +36082,8 @@
 	
 	  handleDeleteAnswer: function (e) {
 	    e.preventDefault();
-	    console.log("YOU CLICKED THE TRASH CAN");
+	    var answerId = e.target.outerHTML.slice(9).split('"')[0];
+	    QuestionFormActions.deleteAnswerToQuestion(this.props.questionId, answerId);
 	  },
 	
 	  render: function () {
@@ -36111,23 +36122,30 @@
 	      );
 	    });
 	
-	    var myNewAnswers = Object.keys(that.state.answerFormObjects).map(function (answerId) {
+	    var myNewAnswers = Object.keys(that.state.answerFormObjects).map(function (answerId, idx) {
+	      var firstContainer = "";
+	
+	      if (idx === 0) {
+	        firstContainer = "first-answer-container";
+	      }
+	
 	      return React.createElement(
 	        'li',
-	        { key: answerId },
+	        { key: answerId, className: firstContainer },
 	        that.state.answerFormObjects[answerId],
-	        React.createElement('div', { className: 'fa fa-trash-o fa-lg trash-answer',
+	        React.createElement('div', { id: answerId,
+	          className: 'fa fa-trash-o fa-lg trash-answer',
 	          'aria-hidden': 'true',
 	          onClick: this.handleDeleteAnswer })
 	      );
-	    });
+	    }.bind(this));
 	
 	    return React.createElement(
 	      'div',
 	      { className: 'single-question-form soft-edges' },
 	      React.createElement(
 	        'button',
-	        { className: 'delete-question', onClick: this.handleDeleteQuestion },
+	        { className: 'delete-question hover-pointer', onClick: this.handleDeleteQuestion },
 	        'X'
 	      ),
 	      React.createElement('br', null),
@@ -36270,6 +36288,14 @@
 	      answerId: answerId,
 	      answer: answer
 	    });
+	  },
+	
+	  deleteAnswerToQuestion: function (questionId, answerId) {
+	    AppDispatcher.dispatch({
+	      actionType: QuestionFormConstants.DELETE_ANSWER_QUESTION_FORM,
+	      questionId: questionId,
+	      answerId: answerId
+	    });
 	  }
 	};
 	
@@ -36283,7 +36309,8 @@
 	  UPDATE_QUESTION_FORM: "UPDATE_QUESTION_FORM",
 	  DELETE_QUESTION_FORM: "DELETE_QUESTION_FORM",
 	  CLEAR_QUESTION_FORM: "CLEAR_QUESTION_FORM",
-	  ADD_ANSWER_QUESTION_FORM: "ADD_ANSWER_QUESTION_FORM"
+	  ADD_ANSWER_QUESTION_FORM: "ADD_ANSWER_QUESTION_FORM",
+	  DELETE_ANSWER_QUESTION_FORM: "DELETE_ANSWER_QUESTION_FORM"
 	};
 	
 	module.exports = QuestionFormConstants;
@@ -36317,6 +36344,11 @@
 	  question["answers"][answerId] = answer;
 	};
 	
+	var _deleteAnswerToQuestion = function (questionId, answerId) {
+	  var question = _questions[questionId];
+	  delete question["answers"][answerId];
+	};
+	
 	QuestionFormStore.__onDispatch = function (payload) {
 	  switch (payload.actionType) {
 	    case QuestionFormConstants.UPDATE_QUESTION_FORM:
@@ -36333,6 +36365,10 @@
 	      break;
 	    case QuestionFormConstants.ADD_ANSWER_QUESTION_FORM:
 	      _addAnswerToQuestion(payload.questionId, payload.answerId, payload.answer);
+	      QuestionFormStore.__emitChange();
+	      break;
+	    case QuestionFormConstants.DELETE_ANSWER_QUESTION_FORM:
+	      _deleteAnswerToQuestion(payload.questionId, payload.answerId);
 	      QuestionFormStore.__emitChange();
 	      break;
 	  }
@@ -36352,7 +36388,8 @@
 	  if (question) {
 	    return question["answers"];
 	  } else {
-	    return {};
+	    // This allows the questions to start with two answer input fields.
+	    return { 1: "", 2: "" };
 	  }
 	};
 	
@@ -36657,12 +36694,12 @@
 	    });
 	  },
 	
-	  sendEmail: function (formData) {
+	  findUserByEmail: function (email) {
 	    $.ajax({
 	      url: '/api/user',
 	      type: 'GET',
 	      dataType: 'json',
-	      data: { user: formData },
+	      data: { user: email },
 	      success: function (user) {
 	        UserActions.userFound(user);
 	      },
@@ -36679,9 +36716,8 @@
 	      url: '/api/user',
 	      type: 'GET',
 	      dataType: 'json',
-	      data: { user: username },
+	      data: { username: username },
 	      success: function (user) {
-	        console.log(user);
 	        UserActions.userFound(user);
 	      },
 	      error: function (xhr) {
@@ -36954,7 +36990,7 @@
 	      email: email
 	    };
 	
-	    UserApiUtil.sendEmail(formData);
+	    UserApiUtil.findUserByEmail(formData);
 	    this.setState({ email: "", errors: false });
 	  },
 	
@@ -37790,7 +37826,6 @@
 	    this.setState({ question: question });
 	  },
 	  render: function () {
-	    console.log(this.state.question);
 	    var myAnswerObjects;
 	    var myAnswerArray = [];
 	
@@ -38516,6 +38551,7 @@
 	var Link = __webpack_require__(168).Link;
 	var Logo = __webpack_require__(280);
 	var UserApiUtil = __webpack_require__(301);
+	var UserStore = __webpack_require__(321);
 	
 	var ResponseForm = React.createClass({
 	  displayName: 'ResponseForm',
@@ -38525,24 +38561,35 @@
 	  },
 	
 	  getInitialState: function () {
-	    return { user: {} };
+	    var potentialUser = UserStore.getUser();
+	    var user = potentialUser || {};
+	    return { user: user };
 	  },
 	
 	  componentWillMount: function () {
+	    this.userListener = UserStore.addListener(this._onChange);
 	    var username = window.location.hash.slice(2).split("?")[0];
 	    UserApiUtil.findUserByUsername(username);
 	  },
 	
-	  componentWillUnmount: function () {},
+	  componentWillUnmount: function () {
+	    this.userListener.remove();
+	  },
 	
-	  _onChange: function () {},
+	  _onChange: function () {
+	    var potentialUser = UserStore.getUser();
+	    var user = potentialUser || {};
+	    this.setState({ user: user });
+	  },
 	
 	  render: function () {
-	    var user = React.createElement(
-	      'div',
-	      null,
-	      'this.state.user;'
-	    );
+	    var user = "I found the user!";
+	    console.log(this.state.user);
+	    // var user = (
+	    //   <div>
+	    //     this.state.user;
+	    //   </div>
+	    // );
 	
 	    if (Object.keys(this.state.user).length === 0) {
 	      user = React.createElement(

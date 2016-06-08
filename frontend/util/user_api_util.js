@@ -56,12 +56,12 @@ var UserApiUtil = {
     });
   },
 
-  sendEmail: function (formData) {
+  findUserByEmail: function (email) {
     $.ajax({
       url: '/api/user',
       type: 'GET',
       dataType: 'json',
-      data: {user: formData},
+      data: {user: email},
       success: function (user) {
         UserActions.userFound(user);
       },
@@ -78,9 +78,8 @@ var UserApiUtil = {
       url: '/api/user',
       type: 'GET',
       dataType: 'json',
-      data: {user: username},
+      data: {username: username},
       success: function (user) {
-        console.log(user);
         UserActions.userFound(user);
       },
       error: function (xhr) {

@@ -57,7 +57,7 @@ var ForgotPassword = React.createClass({
 			email: email
 		};
 
-    UserApiUtil.sendEmail(formData);
+    UserApiUtil.findUserByEmail(formData);
     this.setState({ email: "", errors: false });
 	},
 

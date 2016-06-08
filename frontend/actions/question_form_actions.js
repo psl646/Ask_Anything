@@ -30,6 +30,14 @@ var QuestionFormActions = {
       answerId: answerId,
       answer: answer
     });
+  },
+
+  deleteAnswerToQuestion: function(questionId, answerId) {
+    AppDispatcher.dispatch({
+      actionType: QuestionFormConstants.DELETE_ANSWER_QUESTION_FORM,
+      questionId: questionId,
+      answerId: answerId
+    });
   }
 };
 
