@@ -86,10 +86,10 @@ var QuestionEditForm = React.createClass({
 
 	render: function () {
     return (
-      <div className="edit-form-page-container group">
+      <div className="questionindexitem-container group">
         <QuestionIndexItemToolbar />
 
-        <div className="edit-form-container">
+        <div className="question-graph-container">
           { this.state.question["question"] }
         </div>
       </div>

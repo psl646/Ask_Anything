@@ -38521,11 +38521,11 @@
 	  render: function () {
 	    return React.createElement(
 	      'div',
-	      { className: 'edit-form-page-container group' },
+	      { className: 'questionindexitem-container group' },
 	      React.createElement(QuestionIndexItemToolbar, null),
 	      React.createElement(
 	        'div',
-	        { className: 'edit-form-container' },
+	        { className: 'question-graph-container' },
 	        this.state.question["question"]
 	      )
 	    );
