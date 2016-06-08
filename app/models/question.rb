@@ -29,6 +29,12 @@ class Question < ActiveRecord::Base
     dependent: :destroy
   )
 
+  has_many(
+    :responses,
+    through: :answers,
+    source: :responses
+  )
+
   def self.create_questions (params, current_user)
     questions = params[:data][:questions]
 

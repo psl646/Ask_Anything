@@ -45,7 +45,7 @@ QuestionStore.getNewQuestion = function () {
 };
 
 QuestionStore.getQuestionById = function (questionId) {
-  return _currentQuestion[questionId];
+  return _questions[questionId];
 };
 
 QuestionStore.findQuestionsCountBySurveyId = function (survey_id) {

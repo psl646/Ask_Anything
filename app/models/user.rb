@@ -28,7 +28,7 @@ class User < ActiveRecord::Base
 
 	has_many(
 		:responses,
-		class_name: "Responses",
+		class_name: "Response",
 		foreign_key: :user_id,
 		primary_key: :id,
 		dependent: :destroy
@@ -104,5 +104,9 @@ class User < ActiveRecord::Base
 		end
 
 		username_before_numbers
+	end
+
+	def my_active_question
+		self.questions.where(active: true)
 	end
 end

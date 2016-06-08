@@ -14,7 +14,7 @@ var QuestionIndexItemToolbar = React.createClass ({
       <div className="questionindexitem-toolbar">
 
         <ul>
-          <li>         
+          <li>
           </li>
         </ul>
       </div>

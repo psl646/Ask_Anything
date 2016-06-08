@@ -124,7 +124,7 @@ var UserEditForm = React.createClass({
         <form className="user-edit-form" onSubmit={ this.handleSubmit }>
           <br />
           <label className="label"> Username <br/>
-            AskAny.com/
+            ask--anything.herokuapp.com/#/
             <input
               className={"signup-input soft-edges "}
               type="text"

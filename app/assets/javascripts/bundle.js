@@ -35951,7 +35951,7 @@
 	};
 	
 	QuestionStore.getQuestionById = function (questionId) {
-	  return _currentQuestion[questionId];
+	  return _questions[questionId];
 	};
 	
 	QuestionStore.findQuestionsCountBySurveyId = function (survey_id) {
@@ -38196,7 +38196,7 @@
 	          { className: 'label' },
 	          ' Username ',
 	          React.createElement('br', null),
-	          'AskAny.com/',
+	          'ask--anything.herokuapp.com/#/',
 	          React.createElement('input', {
 	            className: "signup-input soft-edges ",
 	            type: 'text',
@@ -38657,7 +38657,7 @@
 	          React.createElement(
 	            "div",
 	            null,
-	            "Questions are functional! Create as many questions as you want!"
+	            "Questions are functional! Create as many questions as you want! Adding & Deleting both Questions/Answers work as expected on the FORM Upon creation, you are redirected to the LAST question you made. Can delete questions on the surveys index page as well as toggle the question you want to set as \"ACTIVE\" This will be the question that people will have access to when they go to: ask--anything.herokuapp/#/:username"
 	          )
 	        ),
 	        React.createElement(
@@ -38860,8 +38860,11 @@
 	var Link = __webpack_require__(168).Link;
 	var QuestionConstants = __webpack_require__(285);
 	var AnswerInput = __webpack_require__(293);
+	var QuestionStore = __webpack_require__(290);
 	var QuestionFormStore = __webpack_require__(296);
 	var QuestionFormActions = __webpack_require__(294);
+	var ClientQuestionActions = __webpack_require__(282);
+	var QuestionIndexItemToolbar = __webpack_require__(313);
 	
 	var QuestionEditForm = React.createClass({
 	  displayName: 'QuestionEditForm',
@@ -38871,7 +38874,10 @@
 	  },
 	
 	  getInitialState: function () {
-	    return { question: "you got the question!" };
+	    var myQuestion = QuestionStore.getQuestionById(parseInt(this.props.params["questionId"]));
+	    var question = myQuestion || {};
+	
+	    return { question: question };
 	  },
 	
 	  myQuestionFormData: function () {
@@ -38888,14 +38894,21 @@
 	  },
 	
 	  componentDidMount: function () {
-	    this.questionFormListener = QuestionFormStore.addListener(this._onChange);
+	    this.questionFormListener = QuestionStore.addListener(this._onChange);
+	    ClientQuestionActions.getQuestionById(parseInt(this.props.params["questionId"]));
 	  },
 	
 	  componentWillUnmount: function () {
 	    this.questionFormListener.remove();
 	  },
 	
-	  _onChange: function () {},
+	  _onChange: function () {
+	    var myQuestion = QuestionStore.getQuestionById(this.props.params["questionId"]);
+	    console.log(myQuestion);
+	    var question = myQuestion || {};
+	    console.log(question);
+	    this.setState({ question: question });
+	  },
 	
 	  questionChange: function (e) {
 	    var newQuestion = e.target.value;
@@ -38933,11 +38946,16 @@
 	  },
 	
 	  render: function () {
-	    console.log(this.props.params);
+	    console.log(this.state.question);
 	    return React.createElement(
 	      'div',
-	      null,
-	      this.state.question
+	      { className: 'edit-form-page-container group' },
+	      React.createElement(QuestionIndexItemToolbar, null),
+	      React.createElement(
+	        'div',
+	        { className: 'edit-form-container' },
+	        this.state.question["question"]
+	      )
 	    );
 	  }
 	});

@@ -1,0 +1,14 @@
+.edit-form-page-container {
+  height: 100%;
+  width: 100%;
+  min-width: 1050px;
+  background: green;
+}
+
+.edit-form-container {
+  float: left;
+  width: calc(100% - 390px);
+  min-width: 680px;
+  margin: 20px;
+  background: red;
+}

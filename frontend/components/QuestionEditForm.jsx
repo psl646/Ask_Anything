@@ -2,8 +2,11 @@ var React = require('react');
 var Link = require('react-router').Link;
 var QuestionConstants = require('../constants/question_constants');
 var AnswerInput = require('./AnswerInput');
+var QuestionStore = require('../stores/question_store');
 var QuestionFormStore = require('../stores/question_form_store');
 var QuestionFormActions = require('../actions/question_form_actions');
+var ClientQuestionActions = require('../actions/client_question_actions');
+var QuestionIndexItemToolbar = require('./QuestionIndexItemToolbar');
 
 var QuestionEditForm = React.createClass({
   contextTypes: {
@@ -11,7 +14,10 @@ var QuestionEditForm = React.createClass({
   },
 
   getInitialState: function () {
-    return ({ question: "you got the question!"})
+    var myQuestion = QuestionStore.getQuestionById(parseInt(this.props.params["questionId"]));
+    var question = myQuestion || {};
+
+    return ({ question: question });
   },
 
   myQuestionFormData: function () {
@@ -28,7 +34,8 @@ var QuestionEditForm = React.createClass({
   },
 
   componentDidMount: function () {
-    this.questionFormListener = QuestionFormStore.addListener(this._onChange);
+    this.questionFormListener = QuestionStore.addListener(this._onChange);
+    ClientQuestionActions.getQuestionById(parseInt(this.props.params["questionId"]))
   },
 
   componentWillUnmount: function () {
@@ -36,7 +43,11 @@ var QuestionEditForm = React.createClass({
   },
 
   _onChange: function () {
-
+    var myQuestion = QuestionStore.getQuestionById(this.props.params["questionId"]);
+    console.log(myQuestion);
+    var question = myQuestion || {};
+    console.log(question);
+    this.setState ({ question: question });
   },
 
   questionChange: function (e) {
@@ -75,11 +86,15 @@ var QuestionEditForm = React.createClass({
   },
 
 	render: function () {
-    console.log(this.props.params);
+    console.log(this.state.question);
     return (
-        <div>
-          { this.state.question }
+      <div className="edit-form-page-container group">
+        <QuestionIndexItemToolbar />
+
+        <div className="edit-form-container">
+          { this.state.question["question"] }
         </div>
+      </div>
     )
 	}
 });
