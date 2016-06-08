@@ -1,10 +1,16 @@
 WHAT?!
-Glitchy screen - see Logo - Forgot password
-Glitchy screen - see Footer - Edit Question
+Glitchy screen - see Logo - Forgot password Click Send (ON SUCCESS)
+Glitchy screen - see Footer - Edit Question Click on Index
+
+
+First thing in the morning: WORK ON UPDATE QUESTION
+
 
 
 TODO TMRW:
 WHAT IS THE PURPOSE OF AN INDEX ROUTE!?
+HOW TO GET THE CORRECT ORDER?! TO MANDATE QUESTIONS HAVE AT LEAST ONE ANSWER
+
 
 ERRORS: QUESTIONS MUST HAVE AT LEAST ONE ANSWER
 

@@ -15,27 +15,61 @@
   font-size: 13px;
 }
 
+.current-question {
+
+}
+
+.update-delete {
+  display: none;
+  float: left;
+  width: 70px;
+  position: relative;
+  left: 600px;
+  bottom: 16px;
+}
+
+.delete-index-question {
+  position: relative;
+  top: 2px;
+  left: 20px;
+}
+
+.update-delete > li {
+  float: left;
+}
+
+.active-icon {
+  float: right;
+  position: relative;
+  bottom: 18px;
+  right: 65px;
+}
+
+/*.delete-index-question {
+  float: right;
+  position: relative;
+  bottom: 15px;
+  right: 85px;
+}*/
+
+.delete-index-question:hover {
+  color: red;
+  cursor: pointer;
+  text-decoration: underline;
+}
 
 .edit-question-link {
   font-size: 11px;
-  float: right;
+  /*float: right;
   position: relative;
   right: 155px;
-  bottom: 15px;
+  bottom: 15px;*/
 }
 
 .edit-question-link:hover {
   color: red;
   cursor: pointer;
   text-decoration: underline;
-}
-
-.active-icon {
-  float: right;
-  position: relative;
-  right: 45px;
-  bottom: 17px;
-  font-size: 22px;
 }
 
 .nonactivated-icon {
@@ -64,4 +98,32 @@
 
 .active-question:hover {
   background: rgb(161, 232, 152);
+}
+
+/*.show-edit-delete {
+  height: 100%;
+  width: calc(100% - 150px);
+}*/
+
+.show-edit-delete > ul {
+  /*display: none;
+  float: right;
+  position: relative;
+  background: black;*/
+}
+
+.update-delete {
+  /*display: none;*/
+}
+
+.show-edit-delete:hover > ul {
+  display: block;
+}
+
+.active-icon {
+  /*float: right;
+  position: relative;
+  right: 17px;
+  bottom: 19px;*/
+  font-size: 22px;
 }

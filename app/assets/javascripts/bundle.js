@@ -37614,6 +37614,12 @@
 	      }
 	
 	      var currentSurvey = mySurveys[survey_id];
+	      var numberQuestions = "Questions";
+	
+	      if (currentSurvey["question_count"] === 1) {
+	        numberQuestions = "Question";
+	      }
+	
 	      return React.createElement(
 	        'li',
 	        { className: 'surveysindex-li hover-pointer', key: survey_id, onClick: ("li", that.clickedSurveyLi) },
@@ -37629,7 +37635,7 @@
 	          React.createElement(
 	            'div',
 	            { className: 'question-count h11' },
-	            currentSurvey.question_count + " Questions"
+	            currentSurvey.question_count + " " + numberQuestions
 	          )
 	        ),
 	        React.createElement(
@@ -37824,6 +37830,10 @@
 	    }
 	  },
 	
+	  deleteIndexQuestion: function (e) {
+	    console.log(e.target);
+	  },
+	
 	  render: function () {
 	    var that = this;
 	    var questions = this.state.questions;
@@ -37843,16 +37853,33 @@
 	
 	        return React.createElement(
 	          'li',
-	          { id: question_id, key: question_id, className: "h13 " + activeQuestion, onClick: ("li", that.handleClickOnQuestionItem) },
+	          { id: question_id, key: question_id, className: "h13 group show-edit-delete " + activeQuestion, onClick: ("li", that.handleClickOnQuestionItem) },
 	          React.createElement(
 	            'div',
-	            null,
+	            { className: 'current-question' },
 	            currentQuestion["question"]
 	          ),
 	          React.createElement(
-	            Link,
-	            { to: "questions/" + question_id + "/edit", className: 'edit-question-link' },
-	            ' Edit '
+	            'ul',
+	            { className: 'update-delete group' },
+	            React.createElement(
+	              'li',
+	              null,
+	              React.createElement(
+	                Link,
+	                { to: "questions/" + question_id + "/edit", className: 'edit-question-link' },
+	                ' Edit '
+	              )
+	            ),
+	            React.createElement(
+	              'li',
+	              null,
+	              React.createElement(
+	                'div',
+	                { id: question_id, className: 'delete-index-question h11', onClick: this.deleteIndexQuestion },
+	                'Delete'
+	              )
+	            )
 	          ),
 	          React.createElement('div', { className: "fa fa-wifi active-icon " + activatedIcon, id: question_id, 'aria-hidden': 'true' })
 	        );

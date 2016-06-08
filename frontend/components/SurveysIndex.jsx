@@ -81,6 +81,12 @@ var SurveysIndex = React.createClass ({
       }
 
       var currentSurvey = mySurveys[survey_id];
+      var numberQuestions = "Questions";
+
+      if (currentSurvey["question_count"] === 1) {
+        numberQuestions = "Question";
+      }
+
       return (
         <li className="surveysindex-li hover-pointer" key={ survey_id } onClick={"li", that.clickedSurveyLi }>
           <div id={ survey_id } className="h14">
@@ -89,7 +95,7 @@ var SurveysIndex = React.createClass ({
               { currentSurvey.title }
             </div>
             <div className="question-count h11">
-              { currentSurvey.question_count + " Questions"}
+              { currentSurvey.question_count + " " + numberQuestions }
             </div>
           </div>
           <ul className={ "survey-index-items " + toggleSurvey }>

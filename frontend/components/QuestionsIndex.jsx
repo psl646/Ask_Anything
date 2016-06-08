@@ -58,6 +58,10 @@ var QuestionsIndex = React.createClass ({
     }
   },
 
+  deleteIndexQuestion: function (e) {
+    console.log(e.target);
+  },
+
   render: function () {
     var that = this;
     var questions = this.state.questions;
@@ -76,9 +80,16 @@ var QuestionsIndex = React.createClass ({
         };
 
         return (
-          <li id={ question_id } key={ question_id } className={ "h13 " + activeQuestion } onClick={"li", that.handleClickOnQuestionItem }>
-            <div>{ currentQuestion["question"] }</div>
-            <Link to={"questions/" + question_id + "/edit"} className="edit-question-link"> Edit </Link>
+          <li id={ question_id } key={ question_id } className={ "h13 group show-edit-delete " + activeQuestion } onClick={"li", that.handleClickOnQuestionItem }>
+            <div className="current-question">{ currentQuestion["question"] }</div>
+            <ul className="update-delete group">
+              <li>
+                <Link to={"questions/" + question_id + "/edit"} className="edit-question-link"> Edit </Link>
+              </li>
+              <li>                
+                <div id={ question_id } className="delete-index-question h11" onClick={ this.deleteIndexQuestion }>Delete</div>
+              </li>
+            </ul>
             <div className={ "fa fa-wifi active-icon " + activatedIcon } id={ question_id } aria-hidden="true" />
           </li>
         );
