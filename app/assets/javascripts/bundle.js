@@ -56,16 +56,16 @@
 	var Modal = __webpack_require__(229);
 	
 	var App = __webpack_require__(249);
-	var LoginForm = __webpack_require__(302);
-	var SignupPage = __webpack_require__(304);
-	var SurveysIndex = __webpack_require__(308);
-	var QuestionIndexItem = __webpack_require__(312);
-	var QuestionEditForm = __webpack_require__(322);
-	var UserEditForm = __webpack_require__(314);
-	var UserEmailPasswordEditForm = __webpack_require__(315);
-	var ForgotPasswordSuccess = __webpack_require__(316);
-	var NewFeatures = __webpack_require__(317);
-	var ResponseForm = __webpack_require__(318);
+	var LoginForm = __webpack_require__(305);
+	var SignupPage = __webpack_require__(307);
+	var SurveysIndex = __webpack_require__(311);
+	var QuestionIndexItem = __webpack_require__(315);
+	var QuestionEditForm = __webpack_require__(317);
+	var UserEditForm = __webpack_require__(318);
+	var UserEmailPasswordEditForm = __webpack_require__(319);
+	var ForgotPasswordSuccess = __webpack_require__(320);
+	var NewFeatures = __webpack_require__(321);
+	var ResponseForm = __webpack_require__(322);
 	
 	var SessionStore = __webpack_require__(250);
 	var SessionApiUtil = __webpack_require__(273);
@@ -36672,7 +36672,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var SessionActions = __webpack_require__(274);
-	var UserActions = __webpack_require__(319);
+	var UserActions = __webpack_require__(302);
 	var ErrorActions = __webpack_require__(275);
 	
 	var UserApiUtil = {
@@ -36770,6 +36770,67 @@
 /* 302 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var UserConstants = __webpack_require__(303);
+	var UserStore = __webpack_require__(304);
+	var AppDispatcher = __webpack_require__(251);
+	
+	var UserActions = {
+	  userFound: function (user) {
+	    AppDispatcher.dispatch({
+	      actionType: UserConstants.USER_FOUND,
+	      user: user
+	    });
+	  }
+	};
+	
+	module.exports = UserActions;
+
+/***/ },
+/* 303 */
+/***/ function(module, exports) {
+
+	var UserConstants = {
+		USER_FOUND: "USER_FOUND"
+	};
+	
+	module.exports = UserConstants;
+
+/***/ },
+/* 304 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(251);
+	var Store = __webpack_require__(255).Store;
+	var UserConstants = __webpack_require__(303);
+	
+	var UserStore = new Store(AppDispatcher);
+	
+	var _user = {};
+	
+	var _foundUser = function (user) {
+	  _user = user;
+	};
+	
+	UserStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case UserConstants.USER_FOUND:
+	      console.log("USER STORE");
+	      _foundUser(payload.user);
+	      UserStore.__emitChange();
+	      break;
+	  }
+	};
+	
+	UserStore.getUser = function () {
+	  return $.extend({}, _user);
+	};
+	
+	module.exports = UserStore;
+
+/***/ },
+/* 305 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var React = __webpack_require__(1);
 	var Link = __webpack_require__(168).Link;
 	var SessionApiUtil = __webpack_require__(273);
@@ -36779,7 +36840,7 @@
 	var Logo = __webpack_require__(280);
 	var Modal = __webpack_require__(229);
 	var ModalConstants = __webpack_require__(279);
-	var ForgotPassword = __webpack_require__(303);
+	var ForgotPassword = __webpack_require__(306);
 	
 	var LoginForm = React.createClass({
 	  displayName: 'LoginForm',
@@ -36961,7 +37022,7 @@
 	module.exports = LoginForm;
 
 /***/ },
-/* 303 */
+/* 306 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -36970,7 +37031,7 @@
 	var ErrorStore = __webpack_require__(291);
 	var ErrorActions = __webpack_require__(275);
 	var UserApiUtil = __webpack_require__(301);
-	var UserStore = __webpack_require__(321);
+	var UserStore = __webpack_require__(304);
 	
 	var Logo = __webpack_require__(280);
 	
@@ -37126,12 +37187,12 @@
 	module.exports = ForgotPassword;
 
 /***/ },
-/* 304 */
+/* 307 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var SignupParticipant = __webpack_require__(305);
-	var SignupPresenter = __webpack_require__(307);
+	var SignupParticipant = __webpack_require__(308);
+	var SignupPresenter = __webpack_require__(310);
 	var SessionStore = __webpack_require__(250);
 	
 	var SignupPage = React.createClass({
@@ -37185,13 +37246,13 @@
 	module.exports = SignupPage;
 
 /***/ },
-/* 305 */
+/* 308 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var Modal = __webpack_require__(229);
 	var ModalConstants = __webpack_require__(279);
-	var SignupForm = __webpack_require__(306);
+	var SignupForm = __webpack_require__(309);
 	
 	var SignupParticipant = React.createClass({
 		displayName: 'SignupParticipant',
@@ -37242,7 +37303,7 @@
 	module.exports = SignupParticipant;
 
 /***/ },
-/* 306 */
+/* 309 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -37484,13 +37545,13 @@
 	module.exports = SignupForm;
 
 /***/ },
-/* 307 */
+/* 310 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var Modal = __webpack_require__(229);
 	var ModalConstants = __webpack_require__(279);
-	var SignupForm = __webpack_require__(306);
+	var SignupForm = __webpack_require__(309);
 	
 	var SignupPresenter = React.createClass({
 		displayName: 'SignupPresenter',
@@ -37541,14 +37602,14 @@
 	module.exports = SignupPresenter;
 
 /***/ },
-/* 308 */
+/* 311 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var ClientSurveyActions = __webpack_require__(286);
-	var SurveyStore = __webpack_require__(309);
-	var SideNav = __webpack_require__(310);
-	var QuestionsIndex = __webpack_require__(311);
+	var SurveyStore = __webpack_require__(312);
+	var SideNav = __webpack_require__(313);
+	var QuestionsIndex = __webpack_require__(314);
 	
 	var SurveysIndex = React.createClass({
 	  displayName: 'SurveysIndex',
@@ -37686,7 +37747,7 @@
 	module.exports = SurveysIndex;
 
 /***/ },
-/* 309 */
+/* 312 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(251);
@@ -37722,7 +37783,7 @@
 	module.exports = SurveyStore;
 
 /***/ },
-/* 310 */
+/* 313 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -37789,7 +37850,7 @@
 	module.exports = SideNav;
 
 /***/ },
-/* 311 */
+/* 314 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -37886,6 +37947,11 @@
 	          activatedIcon = "activated-icon";
 	        };
 	
+	        var displayQuestion = currentQuestion["question"];
+	        if (displayQuestion.length > 47) {
+	          displayQuestion = displayQuestion.slice(0, 47) + "...";
+	        }
+	
 	        return React.createElement(
 	          'li',
 	          { id: question_id,
@@ -37895,7 +37961,7 @@
 	          React.createElement(
 	            'div',
 	            { className: 'current-question' },
-	            currentQuestion["question"]
+	            displayQuestion
 	          ),
 	          React.createElement(
 	            'ul',
@@ -37920,9 +37986,9 @@
 	                  onClick: that.clickedOnDeleteQuestion },
 	                'Delete'
 	              )
-	            )
-	          ),
-	          React.createElement('div', { className: "fa fa-wifi active-icon " + activatedIcon, id: question_id, 'aria-hidden': 'true' })
+	            ),
+	            React.createElement('div', { className: "fa fa-wifi active-icon " + activatedIcon, id: question_id, 'aria-hidden': 'true' })
+	          )
 	        );
 	      }
 	    });
@@ -37938,13 +38004,13 @@
 	module.exports = QuestionsIndex;
 
 /***/ },
-/* 312 */
+/* 315 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var ClientQuestionActions = __webpack_require__(282);
 	var QuestionStore = __webpack_require__(290);
-	var QuestionIndexItemToolbar = __webpack_require__(313);
+	var QuestionIndexItemToolbar = __webpack_require__(316);
 	
 	var QuestionIndexItem = React.createClass({
 	  displayName: 'QuestionIndexItem',
@@ -37952,6 +38018,7 @@
 	  getInitialState: function () {
 	    var questionId = parseInt(this.props.params.questionId);
 	    var question = QuestionStore.getQuestionById(questionId) || {};
+	
 	    return { question: question };
 	  },
 	
@@ -38005,7 +38072,7 @@
 	module.exports = QuestionIndexItem;
 
 /***/ },
-/* 313 */
+/* 316 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -38021,15 +38088,38 @@
 	    return {};
 	  },
 	
+	  isEditPage: function () {
+	    var path = window.location.hash.split("?")[0].slice(2).toLowerCase();
+	    return path.startsWith("questions") && path.endsWith("edit");
+	  },
+	
 	  render: function () {
+	    // DO SOMETHING HERE
+	    this.isEditPage();
+	
 	    return React.createElement(
 	      "div",
 	      { className: "questionindexitem-toolbar" },
 	      React.createElement(
 	        "ul",
 	        null,
-	        React.createElement("li", null)
-	      )
+	        React.createElement(
+	          "li",
+	          null,
+	          "How people can respond"
+	        ),
+	        React.createElement(
+	          "li",
+	          null,
+	          "Response settings"
+	        ),
+	        React.createElement(
+	          "li",
+	          null,
+	          "Schedule lock/unlock times"
+	        )
+	      ),
+	      React.createElement("ul", null)
 	    );
 	  }
 	});
@@ -38037,14 +38127,124 @@
 	module.exports = QuestionIndexItemToolbar;
 
 /***/ },
-/* 314 */
+/* 317 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var Link = __webpack_require__(168).Link;
+	var QuestionConstants = __webpack_require__(285);
+	var AnswerInput = __webpack_require__(293);
+	var QuestionStore = __webpack_require__(290);
+	var QuestionFormStore = __webpack_require__(296);
+	var QuestionFormActions = __webpack_require__(294);
+	var ClientQuestionActions = __webpack_require__(282);
+	var QuestionIndexItemToolbar = __webpack_require__(316);
+	
+	var QuestionEditForm = React.createClass({
+	  displayName: 'QuestionEditForm',
+	
+	  contextTypes: {
+	    router: React.PropTypes.object.isRequired
+	  },
+	
+	  getInitialState: function () {
+	    var myQuestion = QuestionStore.getQuestionById(parseInt(this.props.params["questionId"]));
+	    var question = myQuestion || {};
+	
+	    return { question: question };
+	  },
+	
+	  myQuestionFormData: function () {
+	    return {
+	      question: this.state.question,
+	      category: this.state.category,
+	      answers: this.state.answers
+	    };
+	  },
+	
+	  sendQuestionFormData: function () {
+	    var questionFormData = this.myQuestionFormData();
+	    QuestionFormActions.sendQuestionFormData(this.props.questionId, questionFormData);
+	  },
+	
+	  componentDidMount: function () {
+	    this.questionFormListener = QuestionStore.addListener(this._onChange);
+	    ClientQuestionActions.getQuestionById(parseInt(this.props.params["questionId"]));
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.questionFormListener.remove();
+	  },
+	
+	  _onChange: function () {
+	    var myQuestion = QuestionStore.getQuestionById(this.props.params["questionId"]);
+	    console.log(myQuestion);
+	    var question = myQuestion || {};
+	    console.log(question);
+	    this.setState({ question: question });
+	  },
+	
+	  questionChange: function (e) {
+	    var newQuestion = e.target.value;
+	    this.state.question = newQuestion;
+	    this.sendQuestionFormData();
+	  },
+	
+	  categoryChange: function (e) {
+	    var newCategory = e.target.value;
+	    this.state.category = newCategory;
+	    this.sendQuestionFormData();
+	  },
+	
+	  addAnswersChange: function (e) {
+	    var newAnswer = React.createElement(AnswerInput, { answerId: this.state.answerId, questionId: this.props.questionId });
+	    var answerId = this.state.answerId;
+	
+	    this.state.answers[answerId] = "";
+	    this.state.answerFormObjects[answerId] = newAnswer;
+	    this.state.answerId = answerId + 1;
+	
+	    this.sendQuestionFormData();
+	  },
+	
+	  handleDeleteQuestion: function (e) {
+	    e.preventDefault();
+	    this.questionFormListener.remove();
+	    QuestionFormActions.deleteQuestion(this.props.questionId);
+	  },
+	
+	  handleDeleteAnswer: function (e) {
+	    e.preventDefault();
+	    var answerId = e.target.outerHTML.slice(9).split('"')[0];
+	    QuestionFormActions.deleteAnswerToQuestion(this.props.questionId, answerId);
+	  },
+	
+	  render: function () {
+	    console.log(this.state.question);
+	    return React.createElement(
+	      'div',
+	      { className: 'edit-form-page-container group' },
+	      React.createElement(QuestionIndexItemToolbar, null),
+	      React.createElement(
+	        'div',
+	        { className: 'edit-form-container' },
+	        this.state.question["question"]
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = QuestionEditForm;
+
+/***/ },
+/* 318 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var Link = __webpack_require__(168).Link;
 	var SessionStore = __webpack_require__(250);
 	var UserApiUtil = __webpack_require__(301);
-	var UserEmailPasswordEditForm = __webpack_require__(315);
+	var UserEmailPasswordEditForm = __webpack_require__(319);
 	var ErrorStore = __webpack_require__(291);
 	
 	var UserEditForm = React.createClass({
@@ -38289,7 +38489,7 @@
 	module.exports = UserEditForm;
 
 /***/ },
-/* 315 */
+/* 319 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -38543,7 +38743,7 @@
 	module.exports = UserEditForm;
 
 /***/ },
-/* 316 */
+/* 320 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -38584,7 +38784,7 @@
 	module.exports = ForgotPasswordSuccess;
 
 /***/ },
-/* 317 */
+/* 321 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -38688,14 +38888,14 @@
 	module.exports = NewFeatures;
 
 /***/ },
-/* 318 */
+/* 322 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var Link = __webpack_require__(168).Link;
 	var Logo = __webpack_require__(280);
 	var UserApiUtil = __webpack_require__(301);
-	var UserStore = __webpack_require__(321);
+	var UserStore = __webpack_require__(304);
 	
 	var ResponseForm = React.createClass({
 	  displayName: 'ResponseForm',
@@ -38790,177 +38990,6 @@
 	});
 	
 	module.exports = ResponseForm;
-
-/***/ },
-/* 319 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var UserConstants = __webpack_require__(320);
-	var UserStore = __webpack_require__(321);
-	var AppDispatcher = __webpack_require__(251);
-	
-	var UserActions = {
-	  userFound: function (user) {
-	    AppDispatcher.dispatch({
-	      actionType: UserConstants.USER_FOUND,
-	      user: user
-	    });
-	  }
-	};
-	
-	module.exports = UserActions;
-
-/***/ },
-/* 320 */
-/***/ function(module, exports) {
-
-	var UserConstants = {
-		USER_FOUND: "USER_FOUND"
-	};
-	
-	module.exports = UserConstants;
-
-/***/ },
-/* 321 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var AppDispatcher = __webpack_require__(251);
-	var Store = __webpack_require__(255).Store;
-	var UserConstants = __webpack_require__(320);
-	
-	var UserStore = new Store(AppDispatcher);
-	
-	var _user = {};
-	
-	var _foundUser = function (user) {
-	  _user = user;
-	};
-	
-	UserStore.__onDispatch = function (payload) {
-	  switch (payload.actionType) {
-	    case UserConstants.USER_FOUND:
-	      console.log("USER STORE");
-	      _foundUser(payload.user);
-	      UserStore.__emitChange();
-	      break;
-	  }
-	};
-	
-	UserStore.getUser = function () {
-	  return $.extend({}, _user);
-	};
-	
-	module.exports = UserStore;
-
-/***/ },
-/* 322 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var Link = __webpack_require__(168).Link;
-	var QuestionConstants = __webpack_require__(285);
-	var AnswerInput = __webpack_require__(293);
-	var QuestionStore = __webpack_require__(290);
-	var QuestionFormStore = __webpack_require__(296);
-	var QuestionFormActions = __webpack_require__(294);
-	var ClientQuestionActions = __webpack_require__(282);
-	var QuestionIndexItemToolbar = __webpack_require__(313);
-	
-	var QuestionEditForm = React.createClass({
-	  displayName: 'QuestionEditForm',
-	
-	  contextTypes: {
-	    router: React.PropTypes.object.isRequired
-	  },
-	
-	  getInitialState: function () {
-	    var myQuestion = QuestionStore.getQuestionById(parseInt(this.props.params["questionId"]));
-	    var question = myQuestion || {};
-	
-	    return { question: question };
-	  },
-	
-	  myQuestionFormData: function () {
-	    return {
-	      question: this.state.question,
-	      category: this.state.category,
-	      answers: this.state.answers
-	    };
-	  },
-	
-	  sendQuestionFormData: function () {
-	    var questionFormData = this.myQuestionFormData();
-	    QuestionFormActions.sendQuestionFormData(this.props.questionId, questionFormData);
-	  },
-	
-	  componentDidMount: function () {
-	    this.questionFormListener = QuestionStore.addListener(this._onChange);
-	    ClientQuestionActions.getQuestionById(parseInt(this.props.params["questionId"]));
-	  },
-	
-	  componentWillUnmount: function () {
-	    this.questionFormListener.remove();
-	  },
-	
-	  _onChange: function () {
-	    var myQuestion = QuestionStore.getQuestionById(this.props.params["questionId"]);
-	    console.log(myQuestion);
-	    var question = myQuestion || {};
-	    console.log(question);
-	    this.setState({ question: question });
-	  },
-	
-	  questionChange: function (e) {
-	    var newQuestion = e.target.value;
-	    this.state.question = newQuestion;
-	    this.sendQuestionFormData();
-	  },
-	
-	  categoryChange: function (e) {
-	    var newCategory = e.target.value;
-	    this.state.category = newCategory;
-	    this.sendQuestionFormData();
-	  },
-	
-	  addAnswersChange: function (e) {
-	    var newAnswer = React.createElement(AnswerInput, { answerId: this.state.answerId, questionId: this.props.questionId });
-	    var answerId = this.state.answerId;
-	
-	    this.state.answers[answerId] = "";
-	    this.state.answerFormObjects[answerId] = newAnswer;
-	    this.state.answerId = answerId + 1;
-	
-	    this.sendQuestionFormData();
-	  },
-	
-	  handleDeleteQuestion: function (e) {
-	    e.preventDefault();
-	    this.questionFormListener.remove();
-	    QuestionFormActions.deleteQuestion(this.props.questionId);
-	  },
-	
-	  handleDeleteAnswer: function (e) {
-	    e.preventDefault();
-	    var answerId = e.target.outerHTML.slice(9).split('"')[0];
-	    QuestionFormActions.deleteAnswerToQuestion(this.props.questionId, answerId);
-	  },
-	
-	  render: function () {
-	    console.log(this.state.question);
-	    return React.createElement(
-	      'div',
-	      { className: 'edit-form-page-container group' },
-	      React.createElement(QuestionIndexItemToolbar, null),
-	      React.createElement(
-	        'div',
-	        { className: 'edit-form-container' },
-	        this.state.question["question"]
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = QuestionEditForm;
 
 /***/ }
 /******/ ]);

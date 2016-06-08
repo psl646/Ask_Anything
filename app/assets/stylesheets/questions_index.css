@@ -1,9 +1,9 @@
-.question-index-list >li {
+.question-index-list > li {
   color: rgb(55, 127, 201);
   border-top: 2px solid white;
   height: 15px;
   overflow: visible;
-  padding: 15px 75px;
+  padding: 15px 30px;
   padding-top: 10px;
 }
 
@@ -11,17 +11,29 @@
   border-top: 0;
 }
 
+.show-edit-delete:hover > div.current-question {
+  color: red;
+  text-decoration: underline;
+}
+
 .h13 {
   font-size: 13px;
 }
 
+.current-question {
+  padding-left: 42px;
+}
+
 .update-delete {
-  display: none;
-  float: left;
-  width: 70px;
+  float: right;
+  width: 225px;
   position: relative;
-  left: 600px;
+  right: 0;
   bottom: 16px;
+}
+
+.update-delete > li {
+  display: none;
 }
 
 .delete-index-question {
@@ -37,8 +49,8 @@
 .active-icon {
   float: right;
   position: relative;
-  bottom: 18px;
-  right: 65px;
+  bottom: 3px;
+  right: 110px;
   font-size: 22px;
 }
 
@@ -82,6 +94,6 @@
   background: rgb(161, 232, 152);
 }
 
-.show-edit-delete:hover > ul {
+.show-edit-delete:hover > ul > li {
   display: block;
 }

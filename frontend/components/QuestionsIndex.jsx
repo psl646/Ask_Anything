@@ -90,13 +90,18 @@ var QuestionsIndex = React.createClass ({
           activatedIcon = "activated-icon";
         };
 
+        var displayQuestion = currentQuestion["question"];
+        if (displayQuestion.length > 47) {
+          displayQuestion = displayQuestion.slice(0, 47) + "...";
+        }
+
         return (
           <li id={ question_id }
             key={ question_id }
             className={ "h13 group show-edit-delete " + activeQuestion }
             onClick={"li", that.handleClickOnQuestionItem }>
 
-            <div className="current-question">{ currentQuestion["question"] }</div>
+            <div className="current-question">{ displayQuestion }</div>
 
             <ul className="update-delete group">
               <li>
@@ -108,8 +113,8 @@ var QuestionsIndex = React.createClass ({
                   className="delete-index-question h11"
                   onClick={ that.clickedOnDeleteQuestion }>Delete</div>
               </li>
+              <div className={ "fa fa-wifi active-icon " + activatedIcon } id={ question_id } aria-hidden="true" />
             </ul>
-            <div className={ "fa fa-wifi active-icon " + activatedIcon } id={ question_id } aria-hidden="true" />
           </li>
         );
       }

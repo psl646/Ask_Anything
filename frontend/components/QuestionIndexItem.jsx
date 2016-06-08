@@ -7,6 +7,7 @@ var QuestionIndexItem = React.createClass ({
   getInitialState: function () {
     var questionId = parseInt(this.props.params.questionId);
     var question = QuestionStore.getQuestionById(questionId) || {};
+
     return ({ question: question });
   },
 
