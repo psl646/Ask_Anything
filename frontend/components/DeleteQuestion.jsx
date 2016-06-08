@@ -31,15 +31,20 @@ var DeleteQuestion = React.createClass({
   },
 
 	render: function () {
+    var question = this.state.question;
+
+    if (question.length > 50) {
+      question = question.slice(0, 47) + "...";
+    }
 
     return (
       <div>
-        <div>
+        <div className="h18 bold">
           Delete question
         </div>
 
-        <div>
-          { "Are you sure you want to remove the question \"" + this.state.question + "\"?" }
+        <div className="question-delete-question">
+          { "Are you sure you want to remove the question \"" + question + "\"?" }
         </div>
 
         <div>
@@ -49,7 +54,7 @@ var DeleteQuestion = React.createClass({
           <li className="cancel-delete-question hover-underline hover-pointer text-center" onClick={ this.closeMyself }>
             Cancel
           </li>
-          <li className="confirm-delete-question soft-edges" onClick={ this.handleOKClick }>
+          <li className="confirm-delete-question soft-edges hover-pointer" onClick={ this.handleOKClick }>
             OK
           </li>
         </ul>

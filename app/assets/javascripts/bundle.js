@@ -35320,11 +35320,11 @@
 	      fontSize: '13px',
 	      position: 'fixed',
 	      width: '360px',
-	      height: '120px',
+	      height: '130px',
 	      top: 'calc(50% - 80px)',
 	      left: 'calc(50% - 200px)',
 	      border: '1px solid #ccc',
-	      padding: '20px',
+	      padding: '17px',
 	      borderRadius: 0,
 	      boxShadow: '0 3px 15px black',
 	      zIndex: 11
@@ -37087,7 +37087,7 @@
 	  },
 	
 	  redirectIfValidEmail: function () {
-	    this.setState({ foundUser: true });
+	    // this.setState({ foundUser: true });
 	
 	    var that = this;
 	    window.setTimeout(function () {
@@ -38123,7 +38123,7 @@
 	
 	  getInitialState: function () {
 	    var questionId = parseInt(window.location.hash.split("?")[0].split("questions")[1].split("/")[1]);
-	    return { questionId: questionId, question: {}, modalOpen: false };
+	    return { questionId: questionId, question: {}, modalOpen: false, configure: true, test: false, present: false };
 	  },
 	
 	  componentDidMount: function () {
@@ -38156,6 +38156,23 @@
 	  handleDeleteClick: function (e) {
 	    e.preventDefault();
 	    this.openModal();
+	  },
+	
+	  handleSaveClick: function (e) {
+	    e.preventDefault();
+	    // FORM DATA SEND UP
+	  },
+	
+	  handleConfigureClick: function () {
+	    this.setState({ configure: true, test: false, present: false });
+	  },
+	
+	  handleTestClick: function () {
+	    this.setState({ configure: false, test: true, present: false });
+	  },
+	
+	  handlePresentClick: function () {
+	    this.setState({ configure: false, test: false, present: true });
 	  },
 	
 	  render: function () {
@@ -38191,31 +38208,136 @@
 	    );
 	
 	    if (this.isEditPage()) {
-	      var bottomOptions = "";
+	      var bottomOptions = React.createElement(
+	        'ul',
+	        { className: 'bottomOptions-question-menu' },
+	        React.createElement(
+	          Link,
+	          { to: 'surveys', className: 'bottomOptions-edit-options confirm-question-save', onClick: that.handleSaveClick },
+	          'Save'
+	        ),
+	        React.createElement(
+	          Link,
+	          { to: "questions/" + that.state.questionId, className: 'bottomOptions-edit-options cancel-question-edit' },
+	          'Cancel'
+	        )
+	      );
 	    };
+	
+	    var configureChecked = " configureChecked";
+	    var testChecked = " testChecked";
+	    var presentChecked = " presentChecked";
+	
+	    var configureList = React.createElement(
+	      'ul',
+	      { className: 'configured-list-items' },
+	      React.createElement(
+	        'li',
+	        null,
+	        React.createElement('div', { className: 'fa fa-caret-right' }),
+	        'How people can respond'
+	      ),
+	      React.createElement(
+	        'li',
+	        null,
+	        React.createElement('div', { className: 'fa fa-caret-right' }),
+	        'Response settings'
+	      ),
+	      React.createElement(
+	        'li',
+	        null,
+	        React.createElement('div', { className: 'fa fa-caret-right' }),
+	        'Schedule lock/unlock times'
+	      )
+	    );
+	
+	    var testList = React.createElement(
+	      'ul',
+	      { className: 'test-list-items' },
+	      React.createElement(
+	        'li',
+	        null,
+	        'Web',
+	        React.createElement(
+	          'div',
+	          null,
+	          'The audience can respond to this poll at PollEv.com/peterlin502 as long as the poll is active.'
+	        )
+	      ),
+	      React.createElement(
+	        'li',
+	        null,
+	        'Text message'
+	      )
+	    );
+	
+	    var presentList = React.createElement(
+	      'ul',
+	      { className: 'configured-list-items' },
+	      React.createElement(
+	        'li',
+	        null,
+	        React.createElement('div', { className: 'fa fa-caret-right' }),
+	        'How to present'
+	      ),
+	      React.createElement(
+	        'li',
+	        null,
+	        React.createElement('div', { className: 'fa fa-caret-right' }),
+	        'Share'
+	      )
+	    );
+	
+	    // Fill these out later.
+	
+	    if (this.state.configure) {
+	      testList = "";
+	      testChecked = "";
+	
+	      presentList = "";
+	      presentChecked = "";
+	    } else if (this.state.test) {
+	      configureList = "";
+	      configureChecked = "";
+	
+	      presentList = "";
+	      presentChecked = "";
+	    } else {
+	      configureList = "";
+	      testChecked = "";
+	
+	      testList = "";
+	      testChecked = "";
+	    }
 	
 	    return React.createElement(
 	      'div',
 	      { className: 'questionindexitem-toolbar' },
 	      React.createElement(
 	        'ul',
-	        null,
+	        { className: 'topOptions-question-menu group' },
 	        React.createElement(
 	          'li',
-	          null,
-	          'How people can respond'
+	          { className: "topOptions-options" + configureChecked + testChecked + presentChecked,
+	            onClick: this.handleConfigureClick },
+	          '1. Configure'
 	        ),
 	        React.createElement(
 	          'li',
-	          null,
-	          'Response settings'
+	          { className: "topOptions-options" + testChecked + presentChecked,
+	            onClick: this.handleTestClick },
+	          '2. Test'
 	        ),
 	        React.createElement(
 	          'li',
-	          null,
-	          'Schedule lock/unlock times'
+	          { className: "topOptions-options" + presentChecked,
+	            onClick: this.handlePresentClick },
+	          '3. Present'
 	        )
 	      ),
+	      configureList,
+	      testList,
+	      presentList,
 	      bottomOptions
 	    );
 	  }
@@ -38260,19 +38382,24 @@
 	  },
 	
 	  render: function () {
+	    var question = this.state.question;
+	
+	    if (question.length > 50) {
+	      question = question.slice(0, 47) + "...";
+	    }
 	
 	    return React.createElement(
 	      'div',
 	      null,
 	      React.createElement(
 	        'div',
-	        null,
+	        { className: 'h18 bold' },
 	        'Delete question'
 	      ),
 	      React.createElement(
 	        'div',
-	        null,
-	        "Are you sure you want to remove the question \"" + this.state.question + "\"?"
+	        { className: 'question-delete-question' },
+	        "Are you sure you want to remove the question \"" + question + "\"?"
 	      ),
 	      React.createElement(
 	        'div',
@@ -38289,7 +38416,7 @@
 	        ),
 	        React.createElement(
 	          'li',
-	          { className: 'confirm-delete-question soft-edges', onClick: this.handleOKClick },
+	          { className: 'confirm-delete-question soft-edges hover-pointer', onClick: this.handleOKClick },
 	          'OK'
 	        )
 	      )

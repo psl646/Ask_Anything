@@ -29,7 +29,7 @@ var ForgotPassword = React.createClass({
   },
 
   redirectIfValidEmail: function () {
-    this.setState({ foundUser: true });
+    // this.setState({ foundUser: true });
 
     var that = this;
     window.setTimeout(function () {

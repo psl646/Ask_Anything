@@ -1,5 +1,4 @@
 .questionindexitem-container {
-  background: red;
   height: calc(100% - 55px);
   width: 100%;
   min-width: 1050px;
@@ -12,10 +11,11 @@
 
   height: calc(100% - 25px);
   min-height: 535px;
-  max-height: 800px;
+  max-height: 770px;
 
   margin: 20px;
   background: white;
+  border: 2px solid #ccc;
 }
 
 .questionindexitem-toolbar {
@@ -31,7 +31,9 @@
 /*DeleteQuestion component*/
 .delete-question-modal-options-container{
   float: right;
-
+  position: absolute;
+  bottom: 17px;
+  right: 17px;
 }
 
 .delete-question-modal-options-container > li {
@@ -51,4 +53,56 @@
   font-size: 12px;
   font-weight: bolder;
   padding: 8px 42px;
+}
+
+.h24 {
+  font-size: 24px;
+}
+
+.h18 {
+  font-size: 18px;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.question-delete-question {
+  padding: 10px 0 12px 0;
+}
+
+.configured-list-items {
+  color: #255073;
+}
+
+.configured-list-items > li {
+  padding: 12px;
+  border-bottom: 1px solid white;
+  font-size: 13px;
+  font-weight: bold;
+  background-color: #ccdce8;
+}
+
+.configured-list-items > li:hover {
+  cursor: pointer;
+}
+
+.configured-list-items >li:last-child {
+  border-bottom: 0;
+}
+
+.configured-list-items > li > div {
+  padding-right: 5px;
+}
+
+.configureChecked {
+  background: rgb(69, 150, 226);
+}
+
+.testChecked {
+  background: rgb(69, 150, 226);
+}
+
+.presentChecked {
+  background: rgb(69, 150, 226);
 }

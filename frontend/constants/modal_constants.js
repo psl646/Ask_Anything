@@ -106,11 +106,11 @@ var ModalConstants = {
       fontSize       : '13px',
       position        : 'fixed',
       width           : '360px',
-      height          : '120px',
+      height          : '130px',
       top             : 'calc(50% - 80px)',
       left            : 'calc(50% - 200px)',
       border          : '1px solid #ccc',
-      padding         : '20px',
+      padding         : '17px',
       borderRadius    : 0,
       boxShadow       : '0 3px 15px black',
       zIndex          : 11
