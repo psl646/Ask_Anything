@@ -1,9 +1,10 @@
 var React = require('react');
 var Link = require('react-router').Link;
-var SessionStore = require('./../stores/session_store');
+var UserStore = require('./../stores/session_store');
 var ErrorStore = require('./../stores/error_store');
 var ErrorActions = require('../actions/error_actions');
 var UserApiUtil = require('../util/user_api_util');
+var UserStore = require('../stores/user_store');
 
 var Logo = require('./Logo');
 
@@ -13,34 +14,34 @@ var ForgotPassword = React.createClass({
   },
 
   getInitialState: function () {
-    return { email: "", errors: false };
+    return { email: "", errors: false, foundUser: false };
   },
 
   componentDidMount: function () {
     this.errorListener = ErrorStore.addListener(this.handleErrors);
-    this.sessionListener = SessionStore.addListener(this.redirectIfValidEmail);
+    this.userListener = UserStore.addListener(this.redirectIfValidEmail);
   },
 
   componentWillUnmount: function () {
     ErrorActions.clearErrors();
     this.errorListener.remove();
-    this.sessionListener.remove();
+    this.userListener.remove();
   },
 
   redirectIfValidEmail: function () {
+    this.setState({ foundUser: true });
+
     var that = this;
     window.setTimeout(function () {
-      window.setTimeout(function () {
-        that.closeMyself();
-      }, 0 ),
-      window.setTimeout(function () {
-        that.context.router.push("password_resets");
-      }, 0 )
+      that.closeMyself();
+    }, 0 )
+    window.setTimeout(function () {
+      that.context.router.push("/password_resets");
     }, 0);
-
   },
 
   closeMyself: function () {
+    ErrorActions.clearErrors();
     this.props.closeThisModal();
   },
 
@@ -81,15 +82,21 @@ var ForgotPassword = React.createClass({
 
 	render: function () {
     var renderErrors = "";
-
+    var logo = <Logo />;
     if (this.state.errors) {
       renderErrors = <div>{ this.errorMessages() }</div>;
     };
 
+    if (this.state.foundUser) {
+      logo = "";
+    }
+
     return (
       <div className="app">
   			<div className="login-container">
-  				<Logo />
+
+          { logo }
+
   				<form className="login-component soft-edges" onSubmit={this.handleSubmit}>
             { renderErrors }
   	        <h1 className="h1">Log In</h1>

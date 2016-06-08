@@ -1,0 +1,49 @@
+.responseform-page {
+  background: #203349;
+  height: 915px;
+  width: 100%;
+}
+
+.responseform-menu {
+  height: 50px;
+  background: rgb(17, 20, 22);
+}
+.no-user-message-container {
+  position: relative;
+  top: 90px;
+  width: 300px;
+  padding: 20px 15px;
+  margin: auto;
+  color: #203349;
+  background-color: rgba(255,255,255,0.9);
+}
+
+.no-user-message-ul {
+  list-style: disc;
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: bolder;
+}
+
+.no-user-message-ul > li {
+  font-weight: 400;
+  position: relative;
+  left: 20px;
+  padding-top: 5px;
+  font-size: 12.5px;
+}
+
+.end-of-internet {
+  font-size: 18px;
+  font-weight: bolder;
+  margin-bottom: 10px;
+}
+
+.menu-bars {
+  color: white;
+  font-size: 25px;
+  float: right;
+  position: relative;
+  right: 20px;
+  top: 12px;
+}

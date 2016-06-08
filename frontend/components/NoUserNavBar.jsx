@@ -22,9 +22,9 @@ var NoUserNavBar = React.createClass({
           <Logo />
 
           <ul className="nouser-navbar-left-ul group">
-            <li className="hover-nouser-nav"> Plans & Pricing </li>
-            <li className="hover-nouser-nav"> Take a tour </li>
-            <li className="hover-nouser-nav"> Help & FAQ </li>
+            <Link to="plans_pricing" className="nouser-navbar-left-links hover-nouser-nav"> Plans & Pricing </Link>
+            <Link to="tour" className="nouser-navbar-left-links hover-nouser-nav"> Take a tour </Link>
+            <Link to="faq" className="nouser-navbar-left-links hover-nouser-nav"> Help & FAQ </Link>
           </ul>
 
           <ul className="nouser-navbar-right-ul group">

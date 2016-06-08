@@ -64,6 +64,7 @@
 	var UserEmailPasswordEditForm = __webpack_require__(315);
 	var ForgotPasswordSuccess = __webpack_require__(316);
 	var NewFeatures = __webpack_require__(317);
+	var ResponseForm = __webpack_require__(318);
 	
 	var SessionStore = __webpack_require__(250);
 	var SessionApiUtil = __webpack_require__(273);
@@ -72,7 +73,7 @@
 	  Router,
 	  { history: hashHistory },
 	  React.createElement(Route, { path: '/login', component: LoginForm, onEnter: _ensureLoggedOut }),
-	  React.createElement(Route, { path: 'password_resets', component: ForgotPasswordSuccess, onEnter: _ensureLoggedOut }),
+	  React.createElement(Route, { path: '/password_resets', component: ForgotPasswordSuccess, onEnter: _ensureLoggedOut }),
 	  React.createElement(
 	    Route,
 	    { path: '/', component: App },
@@ -83,7 +84,8 @@
 	    React.createElement(Route, { path: 'profile/edit', component: UserEditForm, onEnter: _ensureLoggedIn }),
 	    React.createElement(Route, { path: 'profile/edit_password_or_email', component: UserEmailPasswordEditForm, onEnter: _ensureLoggedIn }),
 	    React.createElement(Route, { path: 'new_features', component: NewFeatures, onEnter: _ensureLoggedIn })
-	  )
+	  ),
+	  React.createElement(Route, { path: '/:username', component: ResponseForm })
 	);
 	
 	function _ensureLoggedIn(nextState, replace, asyncDoneCallback) {
@@ -27951,9 +27953,6 @@
 	      _logout();
 	      SessionStore.__emitChange();
 	      break;
-	    case SessionConstants.USER_FOUND:
-	      SessionStore.__emitChange();
-	      break;
 	  }
 	};
 	
@@ -34736,8 +34735,7 @@
 
 	var SessionConstants = {
 		LOGIN: "LOGIN",
-		LOGOUT: "LOGOUT",
-		USER_FOUND: "USER_FOUND"
+		LOGOUT: "LOGOUT"
 	};
 	
 	module.exports = SessionConstants;
@@ -34818,14 +34816,7 @@
 	    AppDispatcher.dispatch({
 	      actionType: SessionConstants.LOGOUT
 	    });
-	  },
-	
-	  userFound: function () {
-	    AppDispatcher.dispatch({
-	      actionType: SessionConstants.USER_FOUND
-	    });
 	  }
-	
 	};
 	
 	module.exports = SessionActions;
@@ -35070,6 +35061,8 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var Link = __webpack_require__(168).Link;
+	
 	var Modal = __webpack_require__(229);
 	var ModalConstants = __webpack_require__(279);
 	var SessionStore = __webpack_require__(250);
@@ -35176,13 +35169,13 @@
 	          'Questions'
 	        ),
 	        React.createElement(
-	          'li',
-	          { className: 'li-float-loggedin left-navbar-padding blue-hover' },
+	          Link,
+	          { to: 'participants', className: 'li-float-loggedin left-navbar-padding blue-hover' },
 	          ' Participants '
 	        ),
 	        React.createElement(
-	          'li',
-	          { className: 'li-float-loggedin left-navbar-padding blue-hover' },
+	          Link,
+	          { to: 'reports', className: 'li-float-loggedin left-navbar-padding blue-hover' },
 	          ' Reports '
 	        )
 	      ),
@@ -35191,18 +35184,18 @@
 	        'ul',
 	        { className: 'navbar-right-ul hover-pointer' },
 	        React.createElement(
-	          'li',
-	          { className: 'li-float-loggedin blue-hover' },
+	          Link,
+	          { to: 'plans_pricing', className: 'li-float-loggedin blue-hover' },
 	          ' Pricing & Upgrades '
 	        ),
 	        React.createElement(
-	          'li',
-	          { className: 'li-float-loggedin blue-hover' },
+	          Link,
+	          { to: 'user_guide', className: 'li-float-loggedin blue-hover' },
 	          ' Help '
 	        ),
 	        React.createElement(
-	          'li',
-	          { className: 'li-float-loggedin blue-hover', onClick: this.handleFeaturesClick },
+	          Link,
+	          { to: 'new_features', className: 'li-float-loggedin blue-hover' },
 	          '  New Features '
 	        ),
 	        this.greeting()
@@ -35336,6 +35329,10 @@
 	    return window.location.hash.slice(2, 17).toUpperCase() === "PASSWORD_RESETS";
 	  },
 	
+	  isnoUserNavBar: function () {
+	    return window.location.hash.slice(2, 8).toUpperCase() === "SIGNUP" || window.location.hash.slice(0, 4).toUpperCase() === "#/?_";
+	  },
+	
 	  componentDidMount: function () {
 	    console.log("mounting");
 	  },
@@ -35345,13 +35342,16 @@
 	  },
 	
 	  render: function () {
-	    var logoPlacement = "nouser-navbar-logo";
+	    var logoPlacement = "responseform-logo";
 	
 	    if (this.isLogin()) {
 	      logoPlacement = "login-logo";
 	    } else if (this.isPasswordReset()) {
+	      console.log("PASSWORD RESET");
 	      logoPlacement = "password-reset-logo";
-	    };
+	    } else if (this.isnoUserNavBar()) {
+	      logoPlacement = "nouser-navbar-logo";
+	    }
 	
 	    return React.createElement(
 	      'div',
@@ -35479,6 +35479,7 @@
 	    // if (formData["questions"].length === 0) {
 	    //   this.setState({ invalid_submit: 0 })
 	    // } else {
+	
 	    if (this.state.isSurvey) {
 	      formData["title"] = this.state.title;
 	      ClientSurveyActions.createSurvey(formData);
@@ -35975,7 +35976,6 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var ReactDOM = __webpack_require__(38);
 	var Link = __webpack_require__(168).Link;
 	var QuestionConstants = __webpack_require__(285);
 	var AnswerInput = __webpack_require__(293);
@@ -36397,18 +36397,18 @@
 	          'ul',
 	          { className: 'nouser-navbar-left-ul group' },
 	          React.createElement(
-	            'li',
-	            { className: 'hover-nouser-nav' },
+	            Link,
+	            { to: 'plans_pricing', className: 'nouser-navbar-left-links hover-nouser-nav' },
 	            ' Plans & Pricing '
 	          ),
 	          React.createElement(
-	            'li',
-	            { className: 'hover-nouser-nav' },
+	            Link,
+	            { to: 'tour', className: 'nouser-navbar-left-links hover-nouser-nav' },
 	            ' Take a tour '
 	          ),
 	          React.createElement(
-	            'li',
-	            { className: 'hover-nouser-nav' },
+	            Link,
+	            { to: 'faq', className: 'nouser-navbar-left-links hover-nouser-nav' },
 	            ' Help & FAQ '
 	          )
 	        ),
@@ -36540,6 +36540,10 @@
 	    }
 	  },
 	
+	  watchVideoClick: function () {
+	    this.context.router.push("promo_video");
+	  },
+	
 	  render: function () {
 	
 	    return React.createElement(
@@ -36565,7 +36569,7 @@
 	        ),
 	        React.createElement(
 	          'li',
-	          { className: 'hover-pointer soft-edges watch-video' },
+	          { className: 'hover-pointer soft-edges watch-video', onClick: this.watchVideoClick },
 	          'Watch our 2 min video'
 	        ),
 	        React.createElement(
@@ -36596,6 +36600,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var SessionActions = __webpack_require__(274);
+	var UserActions = __webpack_require__(319);
 	var ErrorActions = __webpack_require__(275);
 	
 	var UserApiUtil = {
@@ -36658,8 +36663,26 @@
 	      type: 'GET',
 	      dataType: 'json',
 	      data: { user: formData },
-	      success: function () {
-	        SessionActions.userFound();
+	      success: function (user) {
+	        UserActions.userFound(user);
+	      },
+	      error: function (xhr) {
+	        console.log("Error in UserApiUtil#sendEmail");
+	        var errors = xhr.responseJSON;
+	        ErrorActions.setErrors(errors);
+	      }
+	    });
+	  },
+	
+	  findUserByUsername: function (username) {
+	    $.ajax({
+	      url: '/api/user',
+	      type: 'GET',
+	      dataType: 'json',
+	      data: { user: username },
+	      success: function (user) {
+	        console.log(user);
+	        UserActions.userFound(user);
 	      },
 	      error: function (xhr) {
 	        console.log("Error in UserApiUtil#sendEmail");
@@ -36715,7 +36738,6 @@
 	  },
 	
 	  closeModal: function () {
-	    ErrorActions.clearErrors();
 	    this.setState({ modalOpen: false });
 	  },
 	
@@ -36770,6 +36792,7 @@
 	  render: function () {
 	    var allErrorMessages = "";
 	    var renderErrors = "";
+	    var logo = React.createElement(Logo, null);
 	
 	    if (this.state.errors) {
 	      allErrorMessages = this.errorMessages();
@@ -36780,13 +36803,17 @@
 	      );
 	    }
 	
+	    if (this.state.modalOpen) {
+	      logo = "";
+	    }
+	
 	    return React.createElement(
 	      'div',
 	      { className: 'app' },
 	      React.createElement(
 	        'div',
 	        { className: 'login-container' },
-	        React.createElement(Logo, null),
+	        logo,
 	        React.createElement(
 	          'form',
 	          { className: 'login-component soft-edges', onSubmit: this.handleSubmit },
@@ -36868,10 +36895,11 @@
 
 	var React = __webpack_require__(1);
 	var Link = __webpack_require__(168).Link;
-	var SessionStore = __webpack_require__(250);
+	var UserStore = __webpack_require__(250);
 	var ErrorStore = __webpack_require__(291);
 	var ErrorActions = __webpack_require__(275);
 	var UserApiUtil = __webpack_require__(301);
+	var UserStore = __webpack_require__(321);
 	
 	var Logo = __webpack_require__(280);
 	
@@ -36883,32 +36911,34 @@
 	  },
 	
 	  getInitialState: function () {
-	    return { email: "", errors: false };
+	    return { email: "", errors: false, foundUser: false };
 	  },
 	
 	  componentDidMount: function () {
 	    this.errorListener = ErrorStore.addListener(this.handleErrors);
-	    this.sessionListener = SessionStore.addListener(this.redirectIfValidEmail);
+	    this.userListener = UserStore.addListener(this.redirectIfValidEmail);
 	  },
 	
 	  componentWillUnmount: function () {
 	    ErrorActions.clearErrors();
 	    this.errorListener.remove();
-	    this.sessionListener.remove();
+	    this.userListener.remove();
 	  },
 	
 	  redirectIfValidEmail: function () {
+	    this.setState({ foundUser: true });
+	
 	    var that = this;
 	    window.setTimeout(function () {
-	      window.setTimeout(function () {
-	        that.closeMyself();
-	      }, 0), window.setTimeout(function () {
-	        that.context.router.push("password_resets");
-	      }, 0);
+	      that.closeMyself();
+	    }, 0);
+	    window.setTimeout(function () {
+	      that.context.router.push("/password_resets");
 	    }, 0);
 	  },
 	
 	  closeMyself: function () {
+	    ErrorActions.clearErrors();
 	    this.props.closeThisModal();
 	  },
 	
@@ -36957,7 +36987,7 @@
 	
 	  render: function () {
 	    var renderErrors = "";
-	
+	    var logo = React.createElement(Logo, null);
 	    if (this.state.errors) {
 	      renderErrors = React.createElement(
 	        'div',
@@ -36966,13 +36996,17 @@
 	      );
 	    };
 	
+	    if (this.state.foundUser) {
+	      logo = "";
+	    }
+	
 	    return React.createElement(
 	      'div',
 	      { className: 'app' },
 	      React.createElement(
 	        'div',
 	        { className: 'login-container' },
-	        React.createElement(Logo, null),
+	        logo,
 	        React.createElement(
 	          'form',
 	          { className: 'login-component soft-edges', onSubmit: this.handleSubmit },
@@ -37588,6 +37622,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var Link = __webpack_require__(168).Link;
 	var Modal = __webpack_require__(229);
 	var ModalConstants = __webpack_require__(279);
 	var QuestionFormGenerator = __webpack_require__(281);
@@ -37633,14 +37668,14 @@
 	          )
 	        ),
 	        React.createElement(
-	          'li',
-	          { className: 'sidenav-list-li soft-edges hover-pointer' },
-	          'My Polls'
+	          Link,
+	          { to: 'surveys', className: 'sidenav-list-link soft-edges hover-pointer' },
+	          'My Questions'
 	        ),
 	        React.createElement(
-	          'li',
-	          { className: 'sidenav-list-li soft-edges hover-pointer blue-color-text' },
-	          'Account Polls'
+	          Link,
+	          { to: 'account_question', className: 'sidenav-list-link soft-edges hover-pointer blue-color-text' },
+	          'Account Questions'
 	        )
 	      )
 	    );
@@ -38350,7 +38385,7 @@
 	      React.createElement(
 	        'div',
 	        { className: 'password-reset-container' },
-	        React.createElement(Logo, { className: 'logo-password-resets' }),
+	        React.createElement(Logo, null),
 	        React.createElement(
 	          'div',
 	          { className: 'password-reset-box text-center soft-edges h14' },
@@ -38449,6 +38484,16 @@
 	        React.createElement(
 	          "li",
 	          { className: "features-li" },
+	          " Links",
+	          React.createElement(
+	            "div",
+	            null,
+	            "ALL LINKS are clickable and go somewhere!"
+	          )
+	        ),
+	        React.createElement(
+	          "li",
+	          { className: "features-li" },
 	          " Responses",
 	          React.createElement(
 	            "div",
@@ -38462,6 +38507,159 @@
 	});
 	
 	module.exports = NewFeatures;
+
+/***/ },
+/* 318 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var Link = __webpack_require__(168).Link;
+	var Logo = __webpack_require__(280);
+	var UserApiUtil = __webpack_require__(301);
+	
+	var ResponseForm = React.createClass({
+	  displayName: 'ResponseForm',
+	
+	  contextTypes: {
+	    router: React.PropTypes.object.isRequired
+	  },
+	
+	  getInitialState: function () {
+	    return { user: {} };
+	  },
+	
+	  componentWillMount: function () {
+	    var username = window.location.hash.slice(2).split("?")[0];
+	    UserApiUtil.findUserByUsername(username);
+	  },
+	
+	  componentWillUnmount: function () {},
+	
+	  _onChange: function () {},
+	
+	  render: function () {
+	    var user = React.createElement(
+	      'div',
+	      null,
+	      'this.state.user;'
+	    );
+	
+	    if (Object.keys(this.state.user).length === 0) {
+	      user = React.createElement(
+	        'div',
+	        null,
+	        React.createElement(Logo, null),
+	        React.createElement(
+	          'div',
+	          { className: 'no-user-message-container soft-edges' },
+	          React.createElement(
+	            'div',
+	            { className: 'end-of-internet' },
+	            'You\'ve reached the end of the Internet'
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'h11-5 404-message' },
+	            'The page you\'re looking for can\'t be found. (404)'
+	          ),
+	          React.createElement(
+	            'ul',
+	            { className: 'no-user-message-ul' },
+	            React.createElement(
+	              'div',
+	              { className: '' },
+	              'Try these:'
+	            ),
+	            React.createElement(
+	              'li',
+	              null,
+	              'Make sure the URL is correct.'
+	            ),
+	            React.createElement(
+	              'li',
+	              null,
+	              'Has this question or presenter been deleted?'
+	            )
+	          )
+	        )
+	      );
+	    }
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'responseform-page' },
+	      React.createElement(
+	        'div',
+	        { className: 'responseform-menu' },
+	        React.createElement('div', { className: 'fa fa-bars menu-bars', 'aria-hidden': 'true' })
+	      ),
+	      user
+	    );
+	  }
+	});
+	
+	module.exports = ResponseForm;
+
+/***/ },
+/* 319 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var UserConstants = __webpack_require__(320);
+	var UserStore = __webpack_require__(321);
+	var AppDispatcher = __webpack_require__(251);
+	
+	var UserActions = {
+	  userFound: function (user) {
+	    AppDispatcher.dispatch({
+	      actionType: UserConstants.USER_FOUND,
+	      user: user
+	    });
+	  }
+	};
+	
+	module.exports = UserActions;
+
+/***/ },
+/* 320 */
+/***/ function(module, exports) {
+
+	var UserConstants = {
+		USER_FOUND: "USER_FOUND"
+	};
+	
+	module.exports = UserConstants;
+
+/***/ },
+/* 321 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(251);
+	var Store = __webpack_require__(255).Store;
+	var UserConstants = __webpack_require__(320);
+	
+	var UserStore = new Store(AppDispatcher);
+	
+	var _user = {};
+	
+	var _foundUser = function (user) {
+	  _user = user;
+	};
+	
+	UserStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case UserConstants.USER_FOUND:
+	      console.log("USER STORE");
+	      _foundUser(payload.user);
+	      UserStore.__emitChange();
+	      break;
+	  }
+	};
+	
+	UserStore.getUser = function () {
+	  return $.extend({}, _user);
+	};
+	
+	module.exports = UserStore;
 
 /***/ }
 /******/ ]);

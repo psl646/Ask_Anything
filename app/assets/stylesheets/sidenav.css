@@ -5,11 +5,6 @@
   margin: 20px;
 }
 
-.sidenav-list-li {
-  margin-top: 15px;
-  background: red;
-}
-
 .question-form-button {
   color: rgb(241, 242, 233);
   background: #d15145;
@@ -20,7 +15,18 @@
 
 }
 
+.sidenav-list-link {
+  display: block;
+  margin-top: 15px;
+  color: #203349;
+  background: #c8d8e4;
+  font-size: 13.5px;
+  font-weight: bold;
+  padding: 5px 10px;
+}
+
 .sidenav-list-li {
+  margin-top: 15px;
   color: #203349;
   background: #c8d8e4;
   font-size: 13.5px;

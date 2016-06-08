@@ -18,14 +18,17 @@ var UserEditForm = require('./components/UserEditForm.jsx');
 var UserEmailPasswordEditForm = require('./components/UserEmailPasswordEditForm.jsx');
 var ForgotPasswordSuccess = require('./components/ForgotPasswordSuccess.jsx');
 var NewFeatures = require('./components/NewFeatures.jsx');
+var ResponseForm = require('./components/ResponseForm.jsx');
 
 var SessionStore = require('./stores/session_store.js');
 var SessionApiUtil = require('./util/session_api_util.js');
 
 var Router = (
   <Router history={ hashHistory }>
+
     <Route path="/login" component={ LoginForm } onEnter={ _ensureLoggedOut } />
-    <Route path="password_resets" component={ ForgotPasswordSuccess } onEnter={ _ensureLoggedOut }/>
+    <Route path="/password_resets" component={ ForgotPasswordSuccess } onEnter={ _ensureLoggedOut }/>
+
     <Route path="/" component={ App } >
       <Route path="signup" component={ SignupPage } onEnter={ _ensureLoggedOut } />
       <Route path="surveys" component={ SurveysIndex } onEnter={ _ensureLoggedIn }/> // Maybe take out this onEnter hook later to allow non-users to use the site
@@ -34,8 +37,11 @@ var Router = (
       <Route path="profile/edit_password_or_email" component={ UserEmailPasswordEditForm } onEnter={ _ensureLoggedIn }/>
       <Route path="new_features" component={ NewFeatures } onEnter={ _ensureLoggedIn }/>
     </Route>
+
+    <Route path="/:username" component={ ResponseForm } />
   </Router>
 );
+
 
 function _ensureLoggedIn(nextState, replace, asyncDoneCallback) {
   if (SessionStore.currentUserHasBeenFetched()) {

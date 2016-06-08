@@ -73,6 +73,10 @@ var DemoContent = React.createClass({
     }
   },
 
+  watchVideoClick: function () {
+    this.context.router.push("promo_video");
+  },
+
   render: function() {
 
     return (
@@ -88,7 +92,7 @@ var DemoContent = React.createClass({
             Create your first question
           </li>
 
-          <li className="hover-pointer soft-edges watch-video">
+          <li className="hover-pointer soft-edges watch-video" onClick={ this.watchVideoClick }>
             Watch our 2 min video
           </li>
 

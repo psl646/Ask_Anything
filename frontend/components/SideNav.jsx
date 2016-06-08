@@ -1,4 +1,5 @@
 var React = require('react');
+var Link = require('react-router').Link;
 var Modal = require('react-modal');
 var ModalConstants = require('../constants/modal_constants');
 var QuestionFormGenerator = require('./QuestionFormGenerator');
@@ -37,13 +38,14 @@ var SideNav = React.createClass ({
             </Modal>
           </li>
 
-          <li className="sidenav-list-li soft-edges hover-pointer">
-            My Polls
-          </li>
+          <Link to="surveys" className="sidenav-list-link soft-edges hover-pointer">
+            My Questions
+          </Link>
 
-          <li className="sidenav-list-li soft-edges hover-pointer blue-color-text">
-            Account Polls
-          </li>
+          <Link to="account_question" className="sidenav-list-link soft-edges hover-pointer blue-color-text">
+            Account Questions
+          </Link>
+
         </ul>
       </div>
     )

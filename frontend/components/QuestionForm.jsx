@@ -1,5 +1,4 @@
 var React = require('react');
-var ReactDOM = require('react-dom');
 var Link = require('react-router').Link;
 var QuestionConstants = require('../constants/question_constants');
 var AnswerInput = require('./AnswerInput');

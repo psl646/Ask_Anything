@@ -11,7 +11,7 @@ var ForgotPasswordSuccess = React.createClass({
     return (
       <div className="app">
   			<div className="password-reset-container">
-          <Logo className="logo-password-resets" />
+          <Logo />
           <div className="password-reset-box text-center soft-edges h14">
             You will receive an email shortly with a link and instructions to reset your password.
             <br />

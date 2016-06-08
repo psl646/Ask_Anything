@@ -1,4 +1,6 @@
 var React = require('react');
+var Link = require('react-router').Link;
+
 var Modal = require('react-modal');
 var ModalConstants = require('../constants/modal_constants');
 var SessionStore = require('./../stores/session_store');
@@ -91,16 +93,16 @@ var UserNavBar = React.createClass({
             Questions
           </li>
 
-          <li className="li-float-loggedin left-navbar-padding blue-hover"> Participants </li>
-          <li className="li-float-loggedin left-navbar-padding blue-hover"> Reports </li>
+          <Link to="participants" className="li-float-loggedin left-navbar-padding blue-hover"> Participants </Link>
+          <Link to="reports" className="li-float-loggedin left-navbar-padding blue-hover"> Reports </Link>
         </ul>
 
         <img className="logo-image user-navbar-logo hover-pointer" onClick={ this.handleImageClick } src={window.askAnythingAssets.logo} width="35" height="35" alt="Logo" />
 
         <ul className="navbar-right-ul hover-pointer">
-          <li className="li-float-loggedin blue-hover"> Pricing & Upgrades </li>
-          <li className="li-float-loggedin blue-hover"> Help </li>
-          <li className="li-float-loggedin blue-hover" onClick={ this.handleFeaturesClick }>  New Features </li>
+          <Link to="plans_pricing" className="li-float-loggedin blue-hover"> Pricing & Upgrades </Link>
+          <Link to="user_guide" className="li-float-loggedin blue-hover"> Help </Link>
+          <Link to="new_features" className="li-float-loggedin blue-hover">  New Features </Link>
           { this.greeting() }
         </ul>
       </div>

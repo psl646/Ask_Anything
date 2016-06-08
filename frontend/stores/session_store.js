@@ -27,9 +27,6 @@ SessionStore.__onDispatch = function (payload) {
     	_logout();
       SessionStore.__emitChange();
       break;
-    case SessionConstants.USER_FOUND:
-      SessionStore.__emitChange();
-      break;
   }
 };
 

@@ -35,7 +35,6 @@ var LoginForm = React.createClass({
   },
 
   closeModal: function(){
-    ErrorActions.clearErrors();
     this.setState({ modalOpen: false })
   },
 
@@ -86,17 +85,22 @@ var LoginForm = React.createClass({
 	render: function () {
     var allErrorMessages = "";
     var renderErrors = "";
+    var logo = <Logo />;
 
     if (this.state.errors) {
       allErrorMessages = this.errorMessages();
       renderErrors = <div>{ allErrorMessages }</div>;
     }
 
+    if (this.state.modalOpen) {
+      logo = "";
+    }
+
 		return (
       <div className="app">
   			<div className="login-container">
 
-          <Logo />
+          { logo }
 
           <form className="login-component soft-edges" onSubmit={this.handleSubmit}>
   					{ renderErrors }

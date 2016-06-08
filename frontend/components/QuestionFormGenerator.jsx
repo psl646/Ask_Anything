@@ -103,6 +103,7 @@ var QuestionFormGenerator = React.createClass({
     // if (formData["questions"].length === 0) {
     //   this.setState({ invalid_submit: 0 })
     // } else {
+    
     if (this.state.isSurvey) {
       formData["title"] = this.state.title;
       ClientSurveyActions.createSurvey(formData);

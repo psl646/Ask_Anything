@@ -22,7 +22,7 @@ var App = React.createClass({
   },
 
   pageDoesNotHaveFooter: function (){
-    return (window.location.hash.slice(2, 11).toUpperCase() === "QUESTIONS")
+    return (window.location.hash.slice(2, 11).toUpperCase() === "QUESTIONS");
   },
 
   render: function() {
@@ -47,7 +47,6 @@ var App = React.createClass({
       footer = "";
       minHeight = "";
     }
-
 
     return (
       <div className={ "app " + minHeight }>

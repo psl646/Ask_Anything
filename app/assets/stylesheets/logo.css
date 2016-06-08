@@ -48,7 +48,8 @@
 .password-reset-logo {
   margin: auto;
   position: relative;
-  top: 110px;
+  top: 95px;
+  right: 10px;
 }
 
 .auto-margin {
@@ -57,4 +58,10 @@
 
 .none-logo {
   display: none;
+}
+
+.responseform-logo {
+  position: relative;
+  margin: auto;
+  top: 50px;
 }

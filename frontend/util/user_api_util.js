@@ -1,4 +1,5 @@
 var SessionActions = require('./../actions/session_actions');
+var UserActions = require('./../actions/user_actions');
 var ErrorActions = require('./../actions/error_actions');
 
 var UserApiUtil = {
@@ -61,8 +62,26 @@ var UserApiUtil = {
       type: 'GET',
       dataType: 'json',
       data: {user: formData},
-      success: function () {
-        SessionActions.userFound();
+      success: function (user) {
+        UserActions.userFound(user);
+      },
+      error: function (xhr) {
+        console.log("Error in UserApiUtil#sendEmail");
+        var errors = xhr.responseJSON;
+        ErrorActions.setErrors(errors);
+      }
+    });
+  },
+
+  findUserByUsername: function (username) {
+    $.ajax({
+      url: '/api/user',
+      type: 'GET',
+      dataType: 'json',
+      data: {user: username},
+      success: function (user) {
+        console.log(user);
+        UserActions.userFound(user);
       },
       error: function (xhr) {
         console.log("Error in UserApiUtil#sendEmail");

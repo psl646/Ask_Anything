@@ -1,4 +1,6 @@
 TODO TMRW:
+WHAT IS THE PURPOSE OF AN INDEX ROUTE!?
+
 ERRORS: QUESTIONS MUST HAVE AT LEAST ONE ANSWER
 
 Question show page
@@ -8,8 +10,6 @@ delete answers from question form
 Responses
 OMNI AUTH
 Signup page error makes modal too large?
-
-
 
 footer fix
 opacity of modal (question form generator)

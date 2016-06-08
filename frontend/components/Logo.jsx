@@ -18,6 +18,13 @@ var Logo = React.createClass({
     return (window.location.hash.slice(2, 17).toUpperCase() === "PASSWORD_RESETS");
   },
 
+  isnoUserNavBar: function () {
+    return (
+      (window.location.hash.slice(2, 8).toUpperCase() === "SIGNUP") ||
+      (window.location.hash.slice(0, 4).toUpperCase() === "#/?_")
+    );
+  },
+
   componentDidMount: function () {
     console.log("mounting");
   },
@@ -27,13 +34,16 @@ var Logo = React.createClass({
   },
 
   render: function () {
-    var logoPlacement = "nouser-navbar-logo";
+    var logoPlacement = "responseform-logo";
 
     if (this.isLogin()) {
       logoPlacement = "login-logo"
     } else if (this.isPasswordReset()) {
+      console.log("PASSWORD RESET");
       logoPlacement = "password-reset-logo"
-    };
+    } else if (this.isnoUserNavBar()){
+      logoPlacement = "nouser-navbar-logo"
+    }
 
     return (
       <div className={ "logo-width " + logoPlacement }>

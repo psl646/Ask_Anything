@@ -41,6 +41,12 @@ var NewFeatures = React.createClass({
             </div>
           </li>
 
+          <li className="features-li"> Links
+            <div>
+              ALL LINKS are clickable and go somewhere!
+            </div>
+          </li>
+
           <li className="features-li"> Responses
             <div>
               Next...
