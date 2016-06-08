@@ -37,6 +37,11 @@ var SurveysIndex = React.createClass ({
   },
 
   clickedSurveyLi: function (e) {
+
+    console.log(e.target);
+    console.log(e.currentTarget);
+    console.log("CLICKED SURVEY LI!!");
+
     var surveyId = e.currentTarget.innerHTML.slice(9).split('"')[0];
 
     var clickedSurveys = this.state.clickedSurveys;

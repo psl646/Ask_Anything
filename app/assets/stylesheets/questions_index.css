@@ -1,18 +1,11 @@
 .question-index-list >li {
   color: rgb(55, 127, 201);
-  background: pink;
   border-top: 2px solid white;
   height: 15px;
   overflow: visible;
-  background: #e9eff4;
   padding: 15px 75px;
   padding-top: 10px;
 }
-.question-index-list >li:hover {
-  background: #d3dde4;
-}
-
-
 
 .question-index-list >li:first-child {
   border-top: 0;
@@ -35,4 +28,40 @@
   color: red;
   cursor: pointer;
   text-decoration: underline;
+}
+
+.active-icon {
+  float: right;
+  position: relative;
+  right: 45px;
+  bottom: 17px;
+  font-size: 22px;
+}
+
+.nonactivated-icon {
+  color: #ccc;
+}
+
+.nonactivated-icon:hover {
+  color: rgb(43, 203, 10);
+}
+
+.activated-icon {
+  color: rgb(43, 203, 10);
+}
+
+.nonactive-question {
+  background: #e9eff4;
+}
+
+.nonactive-question:hover {
+  background: #d3dde4;
+}
+
+.active-question {
+  background: rgb(190, 237, 184);
+}
+
+.active-question:hover {
+  background: rgb(161, 232, 152);
 }

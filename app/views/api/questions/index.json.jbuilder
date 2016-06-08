@@ -3,4 +3,5 @@ json.array! @questions do |current_question|
   json.question current_question.question
   json.category current_question.category
   json.survey_id current_question.survey_id
+  json.active current_question.active
 end

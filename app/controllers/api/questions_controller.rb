@@ -19,8 +19,32 @@ class Api::QuestionsController < ApplicationController
     end
   end
 
+  def update
+    @question = Question.find(params[:id])
+
+    if (!!params[:toggle])
+      if (@question[:active])
+        @question[:active] = false
+      else
+        @question[:active] = true
+      end
+    end
+
+    if @question.save
+      render "api/questions/show"
+    else
+      @errors = @question.errors.full_messages
+      render "api/shared/errors", status: 409
+    end
+  end
+
   def destroy
 
   end
 
+  private
+
+  def question_params
+    # params.require(:question).permit(:)
+  end
 end

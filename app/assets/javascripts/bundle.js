@@ -35680,6 +35680,10 @@
 	
 	  createQuestions: function (formData) {
 	    QuestionApiUtil.createQuestions(formData);
+	  },
+	
+	  toggleActive: function (questionId) {
+	    QuestionApiUtil.toggleActive(questionId);
 	  }
 	};
 	
@@ -35735,6 +35739,21 @@
 	        console.log("POST Error in QuestionApiUtil#createQuestions");
 	        var errors = xhr.responseJSON;
 	        ErrorActions.setErrors(errors);
+	      }
+	    });
+	  },
+	
+	  toggleActive: function (questionId) {
+	    $.ajax({
+	      url: 'api/questions/' + questionId,
+	      type: 'PATCH',
+	      dataType: 'json',
+	      data: { toggle: true },
+	      success: function (question) {
+	        ServerQuestionActions.receiveQuestion(question);
+	      },
+	      error: function (xhr) {
+	        console.log("POST Error in QuestionApiUtil#toggleActive");
 	      }
 	    });
 	  }
@@ -37551,6 +37570,11 @@
 	  },
 	
 	  clickedSurveyLi: function (e) {
+	
+	    console.log(e.target);
+	    console.log(e.currentTarget);
+	    console.log("CLICKED SURVEY LI!!");
+	
 	    var surveyId = e.currentTarget.innerHTML.slice(9).split('"')[0];
 	
 	    var clickedSurveys = this.state.clickedSurveys;
@@ -37753,13 +37777,18 @@
 	  },
 	
 	  _onChange: function () {
-	    if (window.location.hash.slice(2, 9).toUpperCase() === "SURVEYS") {
-	      this.setState({ questions: QuestionStore.all() });
-	    }
+	    console.log("QUESTION STORE DID SOMETHING!");
+	    this.setState({ questions: QuestionStore.all() });
+	    // if (window.location.hash.slice(2, 9).toUpperCase() === "SURVEYS") {
+	    // }
 	  },
 	
 	  clickedOnEdit: function (e) {
 	    return e.target.outerHTML.split('"')[1] === "edit-question-link";
+	  },
+	
+	  clickedOnActive: function (e) {
+	    return e.target.outerHTML.split('"')[1].slice(0, 10) === "fa fa-wifi";
 	  },
 	
 	  handleClickOnQuestionItem: function (e) {
@@ -37767,35 +37796,52 @@
 	
 	    // Come back here to do a REGEX thing to grab the question id
 	    var targetString = e.currentTarget.outerHTML;
-	    var url = "questions/" + targetString.split('"')[1];
+	    var questionId = targetString.split('"')[1];
+	    var url = "questions/" + questionId;
 	
-	    if (this.clickedOnEdit(e)) {
-	      url = url + "/edit";
+	    if (this.clickedOnActive(e)) {
+	      ClientQuestionActions.toggleActive(parseInt(questionId));
+	    } else {
+	      if (this.clickedOnEdit(e)) {
+	        url = url + "/edit";
+	      }
+	      this.context.router.push(url);
 	    }
-	
-	    this.context.router.push(url);
 	  },
 	
 	  render: function () {
+	    console.log(this.state.questions);
+	
 	    var that = this;
 	    var questions = this.state.questions;
 	    var mySurvey = this.props.survey;
 	
 	    var questionsList = Object.keys(questions).map(function (question_id) {
-	      if (questions[question_id].survey_id === parseInt(mySurvey.id)) {
+	      var activeQuestion = "nonactive-question";
+	      var activatedIcon = "nonactivated-icon";
+	
+	      // Sorts questions into their surveys
+	      var currentQuestion = questions[question_id];
+	      if (currentQuestion["survey_id"] === parseInt(mySurvey.id)) {
+	        if (currentQuestion["active"]) {
+	          activeQuestion = "active-question";
+	          activatedIcon = "activated-icon";
+	        };
+	
 	        return React.createElement(
 	          'li',
-	          { id: question_id, key: question_id, className: 'h13', onClick: ("li", that.handleClickOnQuestionItem) },
+	          { id: question_id, key: question_id, className: "h13 " + activeQuestion, onClick: ("li", that.handleClickOnQuestionItem) },
 	          React.createElement(
 	            'div',
 	            null,
-	            questions[question_id].question
+	            currentQuestion["question"]
 	          ),
 	          React.createElement(
 	            Link,
 	            { to: "questions/" + question_id + "/edit", className: 'edit-question-link' },
 	            ' Edit '
-	          )
+	          ),
+	          React.createElement('div', { className: "fa fa-wifi active-icon " + activatedIcon, id: question_id, 'aria-hidden': 'true' })
 	        );
 	      }
 	    });
@@ -38806,6 +38852,7 @@
 	  },
 	
 	  render: function () {
+	    console.log(this.props.params);
 	    return React.createElement(
 	      'div',
 	      null,

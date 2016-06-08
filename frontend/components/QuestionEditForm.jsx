@@ -75,6 +75,7 @@ var QuestionEditForm = React.createClass({
   },
 
 	render: function () {
+    console.log(this.props.params);
     return (
         <div>
           { this.state.question }

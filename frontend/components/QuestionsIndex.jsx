@@ -23,13 +23,18 @@ var QuestionsIndex = React.createClass ({
   },
 
   _onChange: function () {
-    if (window.location.hash.slice(2, 9).toUpperCase() === "SURVEYS") {
-      this.setState({ questions: QuestionStore.all() });
-    }
+    console.log("QUESTION STORE DID SOMETHING!");
+    this.setState({ questions: QuestionStore.all() });
+    // if (window.location.hash.slice(2, 9).toUpperCase() === "SURVEYS") {
+    // }
   },
 
   clickedOnEdit: function (e) {
     return (e.target.outerHTML.split('"')[1] === "edit-question-link")
+  },
+
+  clickedOnActive: function (e){
+    return (e.target.outerHTML.split('"')[1].slice(0,10) === "fa fa-wifi")
   },
 
   handleClickOnQuestionItem: function (e) {
@@ -37,26 +42,43 @@ var QuestionsIndex = React.createClass ({
 
     // Come back here to do a REGEX thing to grab the question id
     var targetString = e.currentTarget.outerHTML;
-    var url = "questions/" + targetString.split('"')[1];
+    var questionId = targetString.split('"')[1];
+    var url = "questions/" + questionId;
 
-    if (this.clickedOnEdit(e)){
-      url = url + "/edit";
+    if (this.clickedOnActive(e)){
+      ClientQuestionActions.toggleActive(parseInt(questionId));
+    } else {
+      if (this.clickedOnEdit(e)){
+        url = url + "/edit";
+      }
+      this.context.router.push(url);
     }
-
-    this.context.router.push(url);
   },
 
   render: function () {
+    console.log(this.state.questions);
+
     var that = this;
     var questions = this.state.questions;
     var mySurvey = this.props.survey;
 
     var questionsList = Object.keys(questions).map(function (question_id) {
-      if (questions[question_id].survey_id === parseInt(mySurvey.id)){
+      var activeQuestion = "nonactive-question";
+      var activatedIcon = "nonactivated-icon";
+
+      // Sorts questions into their surveys
+      var currentQuestion = questions[question_id];
+      if (currentQuestion["survey_id"] === parseInt(mySurvey.id)){
+        if (currentQuestion["active"]) {
+          activeQuestion = "active-question";
+          activatedIcon = "activated-icon";
+        };
+
         return (
-          <li id={ question_id } key={ question_id } className="h13" onClick={"li", that.handleClickOnQuestionItem }>
-            <div>{ questions[question_id].question }</div>
+          <li id={ question_id } key={ question_id } className={ "h13 " + activeQuestion } onClick={"li", that.handleClickOnQuestionItem }>
+            <div>{ currentQuestion["question"] }</div>
             <Link to={"questions/" + question_id + "/edit"} className="edit-question-link"> Edit </Link>
+            <div className={ "fa fa-wifi active-icon " + activatedIcon } id={ question_id } aria-hidden="true" />
           </li>
         );
       }

@@ -12,6 +12,10 @@ var ClientQuestionActions = {
 
   createQuestions: function(formData) {
     QuestionApiUtil.createQuestions(formData);
+  },
+
+  toggleActive: function(questionId) {
+    QuestionApiUtil.toggleActive(questionId);
   }
 };
 
