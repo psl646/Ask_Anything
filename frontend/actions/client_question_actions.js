@@ -6,8 +6,8 @@ var ClientQuestionActions = {
     QuestionApiUtil.fetchAllQuestions();
   },
 
-  getQuestionById: function(question_id) {
-    QuestionApiUtil.getQuestionById(question_id);
+  getQuestionById: function(question_id, location) {
+    QuestionApiUtil.getQuestionById(question_id, location);
   },
 
   createQuestions: function(formData) {

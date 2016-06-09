@@ -35715,8 +35715,8 @@
 	    QuestionApiUtil.fetchAllQuestions();
 	  },
 	
-	  getQuestionById: function (question_id) {
-	    QuestionApiUtil.getQuestionById(question_id);
+	  getQuestionById: function (question_id, location) {
+	    QuestionApiUtil.getQuestionById(question_id, location);
 	  },
 	
 	  createQuestions: function (formData) {
@@ -35756,11 +35756,12 @@
 	    });
 	  },
 	
-	  getQuestionById: function (question_id) {
+	  getQuestionById: function (question_id, location) {
 	    $.ajax({
 	      url: 'api/questions/' + question_id,
 	      type: 'GET',
 	      dataType: 'json',
+	      data: { location },
 	      success: function (question) {
 	        ServerQuestionActions.receiveQuestion(question);
 	      },
@@ -38104,7 +38105,8 @@
 	  componentDidMount: function () {
 	    this.questionListener = QuestionStore.addListener(this._onChange);
 	    this.errorListener = ErrorStore.addListener(this._handleErrors);
-	    ClientQuestionActions.getQuestionById(this.state.questionId);
+	    var location = window.location.hash.slice(0, 11);
+	    ClientQuestionActions.getQuestionById(this.state.questionId, location);
 	  },
 	
 	  componentWillUnmount: function () {
@@ -38702,7 +38704,8 @@
 	
 	  componentDidMount: function () {
 	    this.questionFormListener = QuestionStore.addListener(this._onChange);
-	    ClientQuestionActions.getQuestionById(this.state.questionId);
+	    var location = window.location.hash.slice(0, 11);
+	    ClientQuestionActions.getQuestionById(this.state.questionId, location);
 	  },
 	
 	  componentWillUnmount: function () {
@@ -39429,7 +39432,11 @@
 	var UserActions = __webpack_require__(302);
 	var ClientQuestionActions = __webpack_require__(282);
 	var QuestionStore = __webpack_require__(290);
+	var SessionStore = __webpack_require__(250);
+	var SessionApiUtil = __webpack_require__(273);
+	var ResponseActions = __webpack_require__(325);
 	
+	SessionStore.currentUser;
 	var ResponseForm = React.createClass({
 	  displayName: 'ResponseForm',
 	
@@ -39440,10 +39447,16 @@
 	  getInitialState: function () {
 	    var potentialUser = UserStore.getUser();
 	    var user = potentialUser || {};
-	    return { user: user, question: {} };
+	    return { user: user, question: {}, current_user: {} };
 	  },
 	
 	  componentWillMount: function () {
+	    SessionApiUtil.fetchCurrentUser();
+	
+	    window.setTimeout(function () {
+	      var current_user = SessionStore.currentUser();
+	      this.setState({ current_user: current_user });
+	    }.bind(this), 0);
 	    this.userListener = UserStore.addListener(this._onChange);
 	    this.questionListener = QuestionStore.addListener(this._questionChange);
 	    var username = window.location.hash.slice(2).split("?")[0];
@@ -39457,7 +39470,8 @@
 	
 	  _onChange: function () {
 	    var user = UserStore.getUser();
-	    ClientQuestionActions.getQuestionById(user.active_question_id);
+	    var location = window.location.hash.slice(0, 11);
+	    ClientQuestionActions.getQuestionById(user.active_question_id, location);
 	    this.setState({ user: user });
 	  },
 	
@@ -39466,40 +39480,88 @@
 	    this.setState({ question: question });
 	  },
 	
+	  recordAnswer: function (e) {
+	    var answerId = parseInt(e.currentTarget.outerHTML.split('"')[1]);
+	
+	    var formData = {
+	      answer_id: answerId,
+	      user_id: this.state.current_user.id
+	    };
+	
+	    ResponseActions.recordResponse(formData);
+	  },
+	
 	  render: function () {
+	    var that = this;
+	    console.log(this.state.question);
+	
+	    console.log("User who owns the question:");
+	    console.log(this.state.user);
+	
+	    console.log("Current User:");
+	    console.log(this.state.current_user);
+	
+	    console.log(this.state.current_user["id"] === undefined);
+	
 	    var answers;
 	
 	    var user = React.createElement('div', null);
 	
+	    var vote = "0";
+	
 	    if (this.state.question["answers"] !== undefined) {
 	      var answerArray = this.state.question["answers"];
-	      console.log(answerArray);
-	      console.log(answerArray.length);
 	      answers = answerArray.map(function (answerObject, idx) {
 	        return React.createElement(
 	          'li',
-	          { key: idx },
-	          answerObject["answer"]
+	          {
+	            id: answerObject.id,
+	            key: idx,
+	            className: 'answer-choice-response-form-container group soft-edges hover-pointer',
+	            onClick: ("li", that.recordAnswer)
+	          },
+	          React.createElement(
+	            'div',
+	            { className: 'my-vote-container' },
+	            React.createElement(
+	              'div',
+	              { className: 'my-vote soft-edges ' },
+	              vote
+	            )
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'answer-choice-response-form' },
+	            answerObject["answer"]
+	          )
 	        );
 	      });
 	    }
 	
+	    var voteStatus = "You can respond once";
+	
+	    // this.state.question.responses.users ===  current_user
+	
+	    // if () {
+	    //   voteStatus = "Vote recorded";
+	    // }
+	
 	    var user = React.createElement(
 	      'div',
-	      { className: 'found-user-active-question' },
+	      { className: 'found-user-active-question-container' },
 	      React.createElement(
 	        'div',
-	        null,
+	        { className: 'found-user-active-question' },
 	        this.state.question.question
 	      ),
 	      React.createElement(
 	        'div',
-	        null,
-	        'You can respond once'
+	        { className: 'vote-status-response-form' },
+	        voteStatus
 	      ),
 	      React.createElement(
 	        'ul',
-	        null,
+	        { className: 'answers-list-response-form' },
 	        answers
 	      )
 	    );
@@ -39590,6 +39652,51 @@
 	});
 	
 	module.exports = ResponseForm;
+
+/***/ },
+/* 325 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(251);
+	var ResponseApiUtil = __webpack_require__(326);
+	
+	var ResponseActions = {
+	  recordResponse: function (formData) {
+	    ResponseApiUtil.recordResponse(formData);
+	  }
+	};
+	
+	module.exports = ResponseActions;
+
+/***/ },
+/* 326 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// var ServerResponseActions = require('./../actions/server_response_actions');
+	var ErrorActions = __webpack_require__(275);
+	
+	var ResponseApiUtil = {
+	  recordResponse: function (formData) {
+	    $.ajax({
+	      url: 'api/responses',
+	      type: 'POST',
+	      dataType: 'json',
+	      data: { response: formData },
+	      success: function (response) {
+	
+	        // ServerResponseActions.receiveQuestion(response);
+	      },
+	      error: function (xhr) {
+	        console.log("POST Error in ResponseApiUtil#recordResponse");
+	        var errors = xhr.responseJSON;
+	        ErrorActions.setErrors(errors);
+	      }
+	    });
+	  }
+	
+	};
+	
+	module.exports = ResponseApiUtil;
 
 /***/ }
 /******/ ]);

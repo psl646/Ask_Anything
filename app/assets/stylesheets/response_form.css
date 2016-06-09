@@ -70,3 +70,61 @@
   font-weight: bolder;
   margin-bottom: 5px;
 }
+
+.found-user-active-question-container {
+  min-width: 760px;
+  max-width: 1160px;
+  padding: 20px;
+  margin: auto;
+  color: #d9e7f2;
+  background: #203349;
+}
+
+.found-user-active-question {
+  font-size: 22px;
+  font-weight: bolder;
+}
+
+.answers-list-response-form > li {
+  background: #d9e7f2;
+  color: #203349;
+  margin-bottom: 10px;
+  padding: 20px 20px 20px 0;
+  height: 10%;
+}
+
+.vote-status-response-form {
+  margin: 15px 0;
+}
+
+.answer-choice-response-form-container {
+  position: relative;
+  width: 100%;
+}
+
+.answer-choice-response-form {
+  float: right;
+  width: calc(100% - 75px);
+}
+
+.my-vote-container {
+  float: left;
+  width: 75px;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+.my-vote {
+  position: absolute;
+  width: 35px;
+  top: calc(50% - 18px);
+
+  margin: 0 20px;
+
+  color: #d9e7f2;
+  background: #203349;
+  padding: 10px 0;
+  text-align: center;
+  font-size: 12px;
+}

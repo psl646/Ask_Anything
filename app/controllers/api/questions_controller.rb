@@ -7,11 +7,18 @@ class Api::QuestionsController < ApplicationController
   def show
     @question = Question.find_by_id(params[:id])
 
-    if !@question.nil? && @question.author == current_user
-      render "api/questions/show"
+    if @question
+      if params[:location] != "#/questions"
+        render "api/questions/show"
+      elsif @question.author == current_user
+        render "api/questions/show"
+      else
+        @errors = ["This isn't the question you’re looking for!"]
+        render "api/shared/errors", status: 403
+      end
     else
-      @errors = ["This isn't the question you’re looking for!"]
-      render "api/shared/errors", status: 403
+      @errors = ["This question does not exist!"]
+      render "api/shared/errors", status: 404
     end
   end
 

@@ -3,9 +3,8 @@ Rails.application.routes.draw do
     resource :user, only: [:create, :show, :update]
     resource :session, only: [:create, :destroy, :show]
     resources :surveys, only: [:create, :index, :show, :update, :destroy]
-    resources :questions, only: [:create, :index, :show, :update, :destroy] do
-      resources :answers, only: [:index, :update, :destroy]
-    end
+    resources :questions, only: [:create, :index, :show, :update, :destroy]
+    resources :responses, only: [:create, :update, :destroy]
   end
 
   root "static_pages#root"

@@ -36,7 +36,8 @@ var QuestionEditForm = React.createClass({
 
   componentDidMount: function () {
     this.questionFormListener = QuestionStore.addListener(this._onChange);
-    ClientQuestionActions.getQuestionById(this.state.questionId);
+    var location = window.location.hash.slice(0,11);
+    ClientQuestionActions.getQuestionById(this.state.questionId, location);
   },
 
   componentWillUnmount: function () {

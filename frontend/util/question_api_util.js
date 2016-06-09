@@ -16,11 +16,12 @@ var QuestionApiUtil = {
     })
   },
 
-  getQuestionById: function (question_id) {
+  getQuestionById: function (question_id, location) {
     $.ajax({
       url: 'api/questions/' + question_id,
       type: 'GET',
       dataType: 'json',
+      data: { location },
       success: function (question) {
         ServerQuestionActions.receiveQuestion(question);
       },

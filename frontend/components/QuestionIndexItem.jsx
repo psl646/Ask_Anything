@@ -30,7 +30,8 @@ var QuestionIndexItem = React.createClass ({
   componentDidMount: function () {
     this.questionListener = QuestionStore.addListener(this._onChange);
     this.errorListener = ErrorStore.addListener(this._handleErrors);
-    ClientQuestionActions.getQuestionById(this.state.questionId);
+    var location = window.location.hash.slice(0,11);
+    ClientQuestionActions.getQuestionById(this.state.questionId, location);
   },
 
   componentWillUnmount: function () {
