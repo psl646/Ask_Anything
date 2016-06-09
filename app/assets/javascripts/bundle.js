@@ -38074,6 +38074,10 @@
 	
 	  handleTimerClick: function () {
 	    console.log("You clicked the timer!");
+	    var convertedTime = this.convertTime();
+	    console.log(convertedTime);
+	    this.setState({ time: "0000" });
+	    // this.setState({ time: convertedTime.toString() })
 	  },
 	
 	  timerChange: function (e) {
@@ -38087,10 +38091,17 @@
 	    this.setState({ time: myTime });
 	  },
 	
-	  convertTime: function () {},
+	  convertTime: function () {
+	    var myTime = this.state.time;
+	    var minutes = parseInt(myTime.slice(0, 2));
+	    var seconds = parseInt(myTime.slice(2, 4));
+	
+	    var minutes = minutes * 60;
+	
+	    return minutes + seconds;
+	  },
 	
 	  render: function () {
-	    console.log(this.state.question);
 	    var myAnswerObjects;
 	    var myAnswerArray = [];
 	    var question = "";
