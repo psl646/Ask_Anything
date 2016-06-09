@@ -38040,7 +38040,7 @@
 	var ClientQuestionActions = __webpack_require__(282);
 	var QuestionStore = __webpack_require__(290);
 	var QuestionIndexItemToolbar = __webpack_require__(316);
-	var TimeConstants = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../constants/time_constants\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	var TimeConstants = __webpack_require__(324);
 	
 	var QuestionIndexItem = React.createClass({
 	  displayName: 'QuestionIndexItem',
@@ -39390,6 +39390,16 @@
 	});
 	
 	module.exports = ResponseForm;
+
+/***/ },
+/* 324 */
+/***/ function(module, exports) {
+
+	var TimeConstants = {
+	  ACCEPTABLE_VALUES: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+	};
+	
+	module.exports = TimeConstants;
 
 /***/ }
 /******/ ]);
