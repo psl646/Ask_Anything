@@ -37,7 +37,7 @@ var QuestionIndexItem = React.createClass ({
   },
 
   timerChange: function (e) {
-    var input = parseInt(e.target.value);
+    var input = parseInt((e.target.value).slice(5));
     var myTime = this.state.time;
 
     if (TimeConstants.ACCEPTABLE_VALUES.includes(input)){
@@ -95,6 +95,10 @@ var QuestionIndexItem = React.createClass ({
       </div>
     );
 
+    var myTime = this.state.time;
+    var time = myTime.slice(0,2) + ":" + myTime.slice(2,4);
+
+
     return (
       <div className="questionindexitem-container group">
         <QuestionIndexItemToolbar />
@@ -128,7 +132,7 @@ var QuestionIndexItem = React.createClass ({
                     />
 
                   <div
-                    className="fa fa-clock-o"
+                    className="fa fa-clock-o hover-pointer"
                     aria-hidden="true"
                     onClick={ this.handleTimerClick }
                   />

@@ -60,12 +60,12 @@
 	var SignupPage = __webpack_require__(307);
 	var SurveysIndex = __webpack_require__(311);
 	var QuestionIndexItem = __webpack_require__(315);
-	var QuestionEditForm = __webpack_require__(318);
-	var UserEditForm = __webpack_require__(319);
-	var UserEmailPasswordEditForm = __webpack_require__(320);
-	var ForgotPasswordSuccess = __webpack_require__(321);
-	var NewFeatures = __webpack_require__(322);
-	var ResponseForm = __webpack_require__(323);
+	var QuestionEditForm = __webpack_require__(319);
+	var UserEditForm = __webpack_require__(320);
+	var UserEmailPasswordEditForm = __webpack_require__(321);
+	var ForgotPasswordSuccess = __webpack_require__(322);
+	var NewFeatures = __webpack_require__(323);
+	var ResponseForm = __webpack_require__(324);
 	
 	var SessionStore = __webpack_require__(250);
 	var SessionApiUtil = __webpack_require__(273);
@@ -38040,7 +38040,7 @@
 	var ClientQuestionActions = __webpack_require__(282);
 	var QuestionStore = __webpack_require__(290);
 	var QuestionIndexItemToolbar = __webpack_require__(316);
-	var TimeConstants = __webpack_require__(324);
+	var TimeConstants = __webpack_require__(318);
 	
 	var QuestionIndexItem = React.createClass({
 	  displayName: 'QuestionIndexItem',
@@ -38077,7 +38077,7 @@
 	  },
 	
 	  timerChange: function (e) {
-	    var input = parseInt(e.target.value);
+	    var input = parseInt(e.target.value.slice(5));
 	    var myTime = this.state.time;
 	
 	    if (TimeConstants.ACCEPTABLE_VALUES.includes(input)) {
@@ -38145,6 +38145,9 @@
 	      )
 	    );
 	
+	    var myTime = this.state.time;
+	    var time = myTime.slice(0, 2) + ":" + myTime.slice(2, 4);
+	
 	    return React.createElement(
 	      'div',
 	      { className: 'questionindexitem-container group' },
@@ -38189,7 +38192,7 @@
 	                  onChange: this.timerChange
 	                }),
 	                React.createElement('div', {
-	                  className: 'fa fa-clock-o',
+	                  className: 'fa fa-clock-o hover-pointer',
 	                  'aria-hidden': 'true',
 	                  onClick: this.handleTimerClick
 	                })
@@ -38530,6 +38533,16 @@
 
 /***/ },
 /* 318 */
+/***/ function(module, exports) {
+
+	var TimeConstants = {
+	  ACCEPTABLE_VALUES: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+	};
+	
+	module.exports = TimeConstants;
+
+/***/ },
+/* 319 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -38637,14 +38650,14 @@
 	module.exports = QuestionEditForm;
 
 /***/ },
-/* 319 */
+/* 320 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var Link = __webpack_require__(168).Link;
 	var SessionStore = __webpack_require__(250);
 	var UserApiUtil = __webpack_require__(301);
-	var UserEmailPasswordEditForm = __webpack_require__(320);
+	var UserEmailPasswordEditForm = __webpack_require__(321);
 	var ErrorStore = __webpack_require__(291);
 	
 	var UserEditForm = React.createClass({
@@ -38889,7 +38902,7 @@
 	module.exports = UserEditForm;
 
 /***/ },
-/* 320 */
+/* 321 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -39143,7 +39156,7 @@
 	module.exports = UserEditForm;
 
 /***/ },
-/* 321 */
+/* 322 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -39184,7 +39197,7 @@
 	module.exports = ForgotPasswordSuccess;
 
 /***/ },
-/* 322 */
+/* 323 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -39288,7 +39301,7 @@
 	module.exports = NewFeatures;
 
 /***/ },
-/* 323 */
+/* 324 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -39390,16 +39403,6 @@
 	});
 	
 	module.exports = ResponseForm;
-
-/***/ },
-/* 324 */
-/***/ function(module, exports) {
-
-	var TimeConstants = {
-	  ACCEPTABLE_VALUES: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-	};
-	
-	module.exports = TimeConstants;
 
 /***/ }
 /******/ ]);
