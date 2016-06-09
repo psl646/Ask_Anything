@@ -105,8 +105,4 @@ class User < ActiveRecord::Base
 
 		username_before_numbers
 	end
-
-	def my_active_question
-		self.questions.where(active: true)
-	end
 end

@@ -6,7 +6,13 @@ class Api::QuestionsController < ApplicationController
 
   def show
     @question = Question.find_by_id(params[:id])
-    render "api/questions/show"
+
+    if !@question.nil? && @question.author == current_user
+      render "api/questions/show"
+    else
+      @errors = ["This isn't the question you’re looking for!"]
+      render "api/shared/errors", status: 403
+    end
   end
 
   def create
@@ -25,9 +31,12 @@ class Api::QuestionsController < ApplicationController
     if (!!params[:toggle])
       if (@question[:active])
         @question[:active] = false
+        current_user[:active_question_id] = nil
       else
         @question[:active] = true
+        current_user[:active_question_id] = @question[:id]
       end
+      session[:session_token] = current_user.reset_session_token!
     end
 
     if @question.save

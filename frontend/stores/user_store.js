@@ -11,11 +11,18 @@ var _foundUser = function (user) {
   _user = user;
 };
 
+var _resetUser = function () {
+  _user = {};
+};
+
 UserStore.__onDispatch = function (payload) {
   switch(payload.actionType) {
     case UserConstants.USER_FOUND:
-      console.log("USER STORE");
       _foundUser(payload.user);
+      UserStore.__emitChange();
+      break;
+    case UserConstants.CLEAR_USER:
+      _resetUser();
       UserStore.__emitChange();
       break;
   }

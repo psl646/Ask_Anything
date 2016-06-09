@@ -81,8 +81,8 @@
 	    React.createElement(Route, { path: 'signup', component: SignupPage, onEnter: _ensureLoggedOut }),
 	    React.createElement(Route, { path: 'surveys', component: SurveysIndex, onEnter: _ensureLoggedIn }),
 	    ' // Maybe take out this onEnter hook later to allow non-users to use the site',
-	    React.createElement(Route, { path: 'questions/:questionId', component: QuestionIndexItem, onEnter: _ensureLoggedIn }),
-	    React.createElement(Route, { path: 'questions/:questionId/edit', component: QuestionEditForm, onEnter: _ensureLoggedIn }),
+	    React.createElement(Route, { path: 'questions/:questionId', component: QuestionIndexItem, onEnter: _ensureQuestionOwner }),
+	    React.createElement(Route, { path: 'questions/:questionId/edit', component: QuestionEditForm, onEnter: _ensureQuestionOwner }),
 	    React.createElement(Route, { path: 'profile/edit', component: UserEditForm, onEnter: _ensureLoggedIn }),
 	    React.createElement(Route, { path: 'profile/edit_password_or_email', component: UserEmailPasswordEditForm, onEnter: _ensureLoggedIn }),
 	    React.createElement(Route, { path: 'new_features', component: NewFeatures, onEnter: _ensureLoggedIn })
@@ -91,6 +91,22 @@
 	);
 	
 	function _ensureLoggedIn(nextState, replace, asyncDoneCallback) {
+	  if (SessionStore.currentUserHasBeenFetched()) {
+	    redirectIfNotLoggedIn();
+	  } else {
+	    SessionApiUtil.fetchCurrentUser(redirectIfNotLoggedIn);
+	  }
+	
+	  function redirectIfNotLoggedIn() {
+	    if (!SessionStore.isUserLoggedIn()) {
+	      replace('/login');
+	    }
+	    asyncDoneCallback();
+	  }
+	}
+	
+	// WRITE THIS SO IT DOESN't EVEN DIRECT
+	function _ensureQuestionOwner(nextState, replace, asyncDoneCallback) {
 	  if (SessionStore.currentUserHasBeenFetched()) {
 	    redirectIfNotLoggedIn();
 	  } else {
@@ -35748,8 +35764,10 @@
 	      success: function (question) {
 	        ServerQuestionActions.receiveQuestion(question);
 	      },
-	      error: function () {
+	      error: function (xhr) {
 	        console.log("Fetch error in QuestionApiUtil#getQuestionById");
+	        var errors = xhr.responseJSON;
+	        ErrorActions.setErrors(errors);
 	      }
 	    });
 	  },
@@ -36809,6 +36827,12 @@
 	      actionType: UserConstants.USER_FOUND,
 	      user: user
 	    });
+	  },
+	
+	  clearUser: function () {
+	    AppDispatcher.dispatch({
+	      actionType: UserConstants.CLEAR_USER
+	    });
 	  }
 	};
 	
@@ -36819,7 +36843,8 @@
 /***/ function(module, exports) {
 
 	var UserConstants = {
-		USER_FOUND: "USER_FOUND"
+		USER_FOUND: "USER_FOUND",
+		CLEAR_USER: "CLEAR_USER"
 	};
 	
 	module.exports = UserConstants;
@@ -36840,11 +36865,18 @@
 	  _user = user;
 	};
 	
+	var _resetUser = function () {
+	  _user = {};
+	};
+	
 	UserStore.__onDispatch = function (payload) {
 	  switch (payload.actionType) {
 	    case UserConstants.USER_FOUND:
-	      console.log("USER STORE");
 	      _foundUser(payload.user);
+	      UserStore.__emitChange();
+	      break;
+	    case UserConstants.CLEAR_USER:
+	      _resetUser();
 	      UserStore.__emitChange();
 	      break;
 	  }
@@ -37059,6 +37091,7 @@
 	var UserStore = __webpack_require__(250);
 	var ErrorStore = __webpack_require__(291);
 	var ErrorActions = __webpack_require__(275);
+	var UserActions = __webpack_require__(302);
 	var UserApiUtil = __webpack_require__(301);
 	var UserStore = __webpack_require__(304);
 	
@@ -37081,9 +37114,10 @@
 	  },
 	
 	  componentWillUnmount: function () {
-	    ErrorActions.clearErrors();
 	    this.errorListener.remove();
 	    this.userListener.remove();
+	    ErrorActions.clearErrors();
+	    UserActions.clearUser();
 	  },
 	
 	  redirectIfValidEmail: function () {
@@ -38041,14 +38075,24 @@
 	var QuestionStore = __webpack_require__(290);
 	var QuestionIndexItemToolbar = __webpack_require__(316);
 	var TimeConstants = __webpack_require__(318);
+	var ClientQuestionActions = __webpack_require__(282);
+	var ErrorStore = __webpack_require__(291);
+	var ErrorActions = __webpack_require__(275);
 	
 	var QuestionIndexItem = React.createClass({
 	  displayName: 'QuestionIndexItem',
+	
+	  contextTypes: {
+	    router: React.PropTypes.object.isRequired
+	  },
 	
 	  getInitialState: function () {
 	    var questionId = parseInt(window.location.hash.split("?")[0].split("questions")[1].split("/")[1]);
 	    var myQuestion = QuestionStore.getQuestionById(questionId);
 	    var question = myQuestion || {};
+	
+	    // For Poll Locking, add this to the question table/model
+	    // countDownTime: 0
 	
 	    return {
 	      questionId: questionId,
@@ -38059,11 +38103,21 @@
 	
 	  componentDidMount: function () {
 	    this.questionListener = QuestionStore.addListener(this._onChange);
+	    this.errorListener = ErrorStore.addListener(this._handleErrors);
 	    ClientQuestionActions.getQuestionById(this.state.questionId);
 	  },
 	
 	  componentWillUnmount: function () {
+	    this.errorListener.remove();
 	    this.questionListener.remove();
+	    window.setTimeout(function () {
+	      ErrorActions.clearErrors();
+	    }, 0);
+	  },
+	
+	  _handleErrors: function () {
+	    alert(ErrorStore.getErrors());
+	    this.context.router.push("surveys");
 	  },
 	
 	  _onChange: function () {
@@ -38073,11 +38127,14 @@
 	  },
 	
 	  handleTimerClick: function () {
-	    console.log("You clicked the timer!");
-	    var convertedTime = this.convertTime();
-	    console.log(convertedTime);
-	    this.setState({ time: "0000" });
-	    // this.setState({ time: convertedTime.toString() })
+	    var convertedTime = this.convertTimeToMilliseconds();
+	    // This works, but add in the POLL LOCK functions later
+	
+	    // window.setTimeout(function(){
+	    //   ClientQuestionActions.toggleLock(this.state.questionId)
+	    // }.bind(this), convertedTime);
+	
+	    // this.setState({ time: "0000", countDownTime: convertedTime / 1000 })
 	  },
 	
 	  timerChange: function (e) {
@@ -38091,14 +38148,18 @@
 	    this.setState({ time: myTime });
 	  },
 	
-	  convertTime: function () {
+	  convertTimeToMilliseconds: function () {
 	    var myTime = this.state.time;
 	    var minutes = parseInt(myTime.slice(0, 2));
 	    var seconds = parseInt(myTime.slice(2, 4));
 	
 	    var minutes = minutes * 60;
 	
-	    return minutes + seconds;
+	    return (minutes + seconds) * 1000;
+	  },
+	
+	  handleActiveToggle: function () {
+	    ClientQuestionActions.toggleActive(this.state.questionId);
 	  },
 	
 	  render: function () {
@@ -38156,30 +38217,74 @@
 	      )
 	    );
 	
+	    if (this.state.question.active) {
+	      inactiveQuestionPrompt = "";
+	    } else {
+	      activeQuestionPrompt = "";
+	    }
+	
 	    var myTime = this.state.time;
 	    var time = myTime.slice(0, 2) + ":" + myTime.slice(2, 4);
+	
+	    var countdown = "";
+	
+	    var activeQuestion = "toggle-button-active ";
+	    var inactiveToggle = "toggle-button-inactive ";
+	
+	    if (!this.state.question.active) {
+	      activeQuestion = "";
+	    }
 	
 	    return React.createElement(
 	      'div',
 	      { className: 'questionindexitem-container group' },
 	      React.createElement(QuestionIndexItemToolbar, null),
 	      React.createElement(
-	        'ul',
-	        { className: 'question-graph-container' },
+	        'div',
+	        { className: 'question-graph-container group' },
 	        React.createElement(
 	          'div',
 	          { className: 'my-current-question' },
 	          question
 	        ),
-	        inactiveQuestionPrompt,
-	        activeQuestionPrompt,
-	        myAnswers,
 	        React.createElement(
 	          'div',
-	          { className: 'graph-bottom' },
+	          { className: 'question-prompt' },
+	          inactiveQuestionPrompt,
+	          activeQuestionPrompt
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'answers-graph-container group' },
+	          React.createElement(
+	            'div',
+	            { className: 'answers-graph group' },
+	            React.createElement(
+	              'ul',
+	              { className: 'answers-graph-left' },
+	              myAnswers
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'answers-graph-right' },
+	              'GRAPH HERE'
+	            )
+	          ),
 	          React.createElement(
 	            'ul',
-	            { className: 'question-index-item-timer' },
+	            { className: 'question-toggle-buttons' },
+	            React.createElement('li', {
+	              className: "fa fa-wifi " + activeQuestion + inactiveToggle,
+	              onClick: this.handleActiveToggle
+	            })
+	          )
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'graph-bottom group' },
+	          React.createElement(
+	            'ul',
+	            { className: 'question-index-item-timer group' },
 	            React.createElement('img', {
 	              className: 'hover-pointer logo-image',
 	              src: window.askAnythingAssets.logo,
@@ -38187,28 +38292,29 @@
 	            }),
 	            React.createElement(
 	              'div',
-	              null,
+	              { className: 'graph-bottom-logo-text' },
 	              'Ask Anything!'
 	            ),
 	            React.createElement(
 	              'li',
-	              null,
-	              React.createElement(
-	                'div',
-	                null,
-	                React.createElement('input', {
-	                  className: 'soft-edges hover-text',
-	                  type: 'text',
-	                  value: time,
-	                  onChange: this.timerChange
-	                }),
-	                React.createElement('div', {
-	                  className: 'fa fa-clock-o hover-pointer',
-	                  'aria-hidden': 'true',
-	                  onClick: this.handleTimerClick
-	                })
-	              )
+	              { className: 'question-timer-input group soft-edges' },
+	              React.createElement('input', {
+	                className: 'time-input-field soft-edges hover-text',
+	                type: 'text',
+	                value: time,
+	                onChange: this.timerChange
+	              }),
+	              React.createElement('div', {
+	                className: 'fa fa-clock-o clock-icon hover-pointer',
+	                'aria-hidden': 'true',
+	                onClick: this.handleTimerClick
+	              })
 	            )
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'countdown-time' },
+	            countdown
 	          )
 	        )
 	      )
@@ -39320,6 +39426,9 @@
 	var Logo = __webpack_require__(280);
 	var UserApiUtil = __webpack_require__(301);
 	var UserStore = __webpack_require__(304);
+	var UserActions = __webpack_require__(302);
+	var ClientQuestionActions = __webpack_require__(282);
+	var QuestionStore = __webpack_require__(290);
 	
 	var ResponseForm = React.createClass({
 	  displayName: 'ResponseForm',
@@ -39331,33 +39440,100 @@
 	  getInitialState: function () {
 	    var potentialUser = UserStore.getUser();
 	    var user = potentialUser || {};
-	    return { user: user };
+	    return { user: user, question: {} };
 	  },
 	
 	  componentWillMount: function () {
 	    this.userListener = UserStore.addListener(this._onChange);
+	    this.questionListener = QuestionStore.addListener(this._questionChange);
 	    var username = window.location.hash.slice(2).split("?")[0];
 	    UserApiUtil.findUserByUsername(username);
 	  },
 	
 	  componentWillUnmount: function () {
 	    this.userListener.remove();
+	    UserActions.clearUser();
 	  },
 	
 	  _onChange: function () {
-	    var potentialUser = UserStore.getUser();
-	    var user = potentialUser || {};
+	    var user = UserStore.getUser();
+	    ClientQuestionActions.getQuestionById(user.active_question_id);
 	    this.setState({ user: user });
 	  },
 	
+	  _questionChange: function () {
+	    var question = QuestionStore.getQuestionById(this.state.user.active_question_id);
+	    this.setState({ question: question });
+	  },
+	
 	  render: function () {
-	    var user = "I found the user!";
-	    console.log(this.state.user);
-	    // var user = (
-	    //   <div>
-	    //     this.state.user;
-	    //   </div>
-	    // );
+	    var answers;
+	
+	    var user = React.createElement('div', null);
+	
+	    if (this.state.question["answers"] !== undefined) {
+	      var answerArray = this.state.question["answers"];
+	      console.log(answerArray);
+	      console.log(answerArray.length);
+	      answers = answerArray.map(function (answerObject, idx) {
+	        return React.createElement(
+	          'li',
+	          { key: idx },
+	          answerObject["answer"]
+	        );
+	      });
+	    }
+	
+	    var user = React.createElement(
+	      'div',
+	      { className: 'found-user-active-question' },
+	      React.createElement(
+	        'div',
+	        null,
+	        this.state.question.question
+	      ),
+	      React.createElement(
+	        'div',
+	        null,
+	        'You can respond once'
+	      ),
+	      React.createElement(
+	        'ul',
+	        null,
+	        answers
+	      )
+	    );
+	
+	    if (this.state.user.active_question_id === null) {
+	      var user = React.createElement(
+	        'div',
+	        { className: 'user-found-no-active-question-container' },
+	        React.createElement('img', {
+	          className: 'logo-image',
+	          src: window.askAnythingAssets.logo,
+	          width: '110', height: '110', alt: 'Logo'
+	        }),
+	        React.createElement(
+	          'div',
+	          null,
+	          React.createElement(
+	            'div',
+	            { className: 'welcome-response-form-presentation' },
+	            "Welcome to " + this.state.user.username + "'s presentation"
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'welcome-response-form-text' },
+	            "As soon as " + this.state.user.username + " displays a poll, we'll update this area to give you the voting options."
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'welcome-response-form-text' },
+	            'Easy as pie. Just hang tight, you\'re ready to go.'
+	          )
+	        )
+	      );
+	    }
 	
 	    if (Object.keys(this.state.user).length === 0) {
 	      user = React.createElement(

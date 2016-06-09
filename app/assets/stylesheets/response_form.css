@@ -47,3 +47,26 @@
   right: 20px;
   top: 12px;
 }
+
+.user-found-no-active-question-container {
+  padding: 20px;
+  color: white;
+  position: absolute;
+  width: 750px;
+  height: 180px;
+  top: calc(50% - 100px);
+  left: calc(50% - 375px);
+}
+
+.welcome-response-form-presentation {
+  font-size: 26px;
+  font-weight: bolder;
+  margin-top: 10px;
+  margin-bottom: 25px;
+}
+
+.welcome-response-form-text {
+  font-size: 13px;
+  font-weight: bolder;
+  margin-bottom: 5px;
+}

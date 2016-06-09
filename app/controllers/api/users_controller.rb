@@ -53,7 +53,7 @@ class Api::UsersController < ApplicationController
 					@errors.push("Email has already been taken")
 				end
 
-				if (input[:password1].length < 7)
+				if (input[:password1].length < 7 && input[:password1].length > 1)
 					@errors.push("Password is too short (minimum is 7 characters)")
 				end
 
@@ -64,8 +64,7 @@ class Api::UsersController < ApplicationController
 				if @errors.empty?
 					@user[:email] = input[:email]
 					@user[:password_digest] = BCrypt::Password.create(input[:password1])
-					@user.save
-					session[:session_token] = @user.session_token
+					session[:session_token] = @user.reset_session_token!
 					render 'api/users/show'
 				else
 					render "api/shared/errors", status: 422

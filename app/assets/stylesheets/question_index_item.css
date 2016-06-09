@@ -37,13 +37,138 @@
 }
 
 .graph-bottom {
-  width: calc(100% - 375px);
-  min-width: 670px;
+  positon: relative;
   width: 100%;
+  bottom: 0;
   background: black;
   color: white;
+  height: 35px;
 }
 
+.question-prompt {
+  text-align: center;
+  margin: 5px;
+  font-size: 18px;
+}
+
+.active-icon-question-index-item {
+  position: relative;
+  top: 3px;
+  margin-right: 5px;
+  font-size: 25px;
+}
+
+.answers-graph-container {
+  margin: 20px;
+  background: red;
+  min-height: 400px;
+  height: calc(100% - 167px);
+}
+
+.answers-graph {
+  width: calc(100% - 70px);
+  min-height: 100%;
+  background: blue;
+  float: left;
+  overflow: hidden;
+}
+
+.answers-graph-left {
+  float: left;
+  height: 100%;
+  max-width: 50%;
+  font-size: 100px;
+  background: red;
+}
+
+.answers-graph-right {
+  min-height: 100%;
+  background: green;
+  overflow: hidden;
+}
+
+.question-toggle-buttons {
+  float: right;
+  width: 45px;
+}
+
+.question-toggle-buttons > li {
+  border: 1px solid rgb(77, 137, 198);
+  font-size: 30px;
+  padding: 5px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+}
+
+.question-toggle-buttons > li:hover {
+  background: #d5e3ee;
+}
+
+
+.toggle-button-inactive {
+  color: grey;
+  background: #e9eff4;
+}
+
+.toggle-button-active {
+  color: white;
+  background: rgb(73, 111, 167);
+}
+
+.question-index-item-timer {
+  float: left;
+  width: 170px;
+  padding: 5px;
+}
+
+
+.question-index-item-timer:hover > li {
+  display: block;
+}
+
+.graph-bottom-logo-text {
+  padding: 2px;
+}
+
+.question-timer-input {
+  display: none;
+  position: relative;
+  left: 0;
+  bottom: 60px;
+  background: #6598c4;
+  margin: auto;
+  border: 1px solid rgb(19, 82, 147);
+  width: 150px;
+}
+
+.time-input-field {
+  color: white;
+  text-align: center;
+  background: rgba(4, 5, 15, 0.67);
+  display: block;
+  float: left;
+  position: relative;
+  top: 5px;
+  width: 80px;
+  height: 30px;
+}
+
+.clock-icon {
+  float: right;
+  display: block;
+  width: 30px;
+  padding: 5px;
+  padding-left: 0;
+  margin-right: 5px;
+  font-size: 30px;
+  color: rgb(207, 36, 36);
+}
+
+.countdown-time {
+  float: right;
+  width: calc(100% - 180px);
+  height: inherit;
+}
 /*DeleteQuestion component*/
 .delete-question-modal-options-container{
   float: right;

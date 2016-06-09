@@ -8,6 +8,12 @@ var UserActions = {
       actionType: UserConstants.USER_FOUND,
       user: user
     });
+  },
+
+  clearUser: function () {
+    AppDispatcher.dispatch({
+      actionType: UserConstants.CLEAR_USER
+    });
   }
 };
 

@@ -24,8 +24,10 @@ var QuestionApiUtil = {
       success: function (question) {
         ServerQuestionActions.receiveQuestion(question);
       },
-      error: function () {
+      error: function (xhr) {
         console.log("Fetch error in QuestionApiUtil#getQuestionById");
+        var errors = xhr.responseJSON;
+        ErrorActions.setErrors(errors);
       }
     })
   },

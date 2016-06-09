@@ -3,6 +3,9 @@ var Link = require('react-router').Link;
 var Logo = require('./Logo');
 var UserApiUtil = require('../util/user_api_util');
 var UserStore = require('../stores/user_store');
+var UserActions = require('../actions/user_actions');
+var ClientQuestionActions = require('../actions/client_question_actions');
+var QuestionStore = require('../stores/question_store');
 
 var ResponseForm = React.createClass({
   contextTypes: {
@@ -12,33 +15,89 @@ var ResponseForm = React.createClass({
   getInitialState: function () {
     var potentialUser = UserStore.getUser();
     var user = potentialUser || {};
-    return ({ user: user });
+    return ({ user: user, question: {} });
   },
 
   componentWillMount: function () {
     this.userListener = UserStore.addListener(this._onChange);
+    this.questionListener = QuestionStore.addListener(this._questionChange);
     var username = window.location.hash.slice(2).split("?")[0];
     UserApiUtil.findUserByUsername(username);
   },
 
   componentWillUnmount: function () {
     this.userListener.remove();
+    UserActions.clearUser();
   },
 
   _onChange: function () {
-    var potentialUser = UserStore.getUser();
-    var user = potentialUser || {};
+    var user = UserStore.getUser();
+    ClientQuestionActions.getQuestionById(user.active_question_id);
     this.setState({ user: user });
   },
 
+  _questionChange: function () {
+    var question = QuestionStore.getQuestionById(this.state.user.active_question_id);
+    this.setState({ question: question });
+  },
+
 	render: function () {
-    var user = "I found the user!";
-    console.log(this.state.user);
-    // var user = (
-    //   <div>
-    //     this.state.user;
-    //   </div>
-    // );
+    var answers;
+
+    var user = (
+      <div></div>
+    );
+
+
+    if (this.state.question["answers"] !== undefined) {
+      var answerArray = this.state.question["answers"];
+      console.log(answerArray);
+      console.log(answerArray.length);
+      answers = answerArray.map(function(answerObject, idx){
+        return (
+          <li key={ idx }>
+            { answerObject["answer"] }
+          </li>
+        );
+      });
+    }
+
+    var user = (
+      <div className="found-user-active-question">
+        <div>
+          { this.state.question.question }
+        </div>
+        <div>
+          You can respond once
+        </div>
+        <ul>
+          { answers }
+        </ul>
+      </div>
+    );
+
+    if (this.state.user.active_question_id === null) {
+      var user = (
+        <div className="user-found-no-active-question-container">
+          <img
+            className="logo-image"
+            src={window.askAnythingAssets.logo}
+            width="110" height="110" alt="Logo"
+            />
+          <div>
+            <div className="welcome-response-form-presentation">
+              {"Welcome to " + this.state.user.username + "'s presentation" }
+            </div>
+            <div className="welcome-response-form-text">
+              {"As soon as " + this.state.user.username + " displays a poll, we'll update this area to give you the voting options." }
+            </div>
+            <div className="welcome-response-form-text">
+              Easy as pie. Just hang tight, you're ready to go.
+            </div>
+          </div>
+        </div>
+      );
+    }
 
     if (Object.keys(this.state.user).length === 0){
       user = (
