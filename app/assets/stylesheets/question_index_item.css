@@ -9,7 +9,6 @@
   width: calc(100% - 375px);
   min-width: 670px;
   height: 700px;
-
   margin: 20px;
   background: white;
   border: 2px solid #ccc;
@@ -274,4 +273,3 @@
 .presentChecked {
   background: rgb(69, 150, 226);
 }
- 
