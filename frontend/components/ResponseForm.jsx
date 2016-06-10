@@ -22,21 +22,16 @@ var ResponseForm = React.createClass({
     return ({ user: user, question: {}, current_user: {} });
   },
 
-  componentWillMount: function () {
+  componentDidMount: function () {
+    this.userListener = UserStore.addListener(this._onChange);
+    this.questionListener = QuestionStore.addListener(this._questionChange);
     SessionApiUtil.fetchCurrentUser();
-
     window.setTimeout(function() {
       var current_user = SessionStore.currentUser();
       this.setState({ current_user: current_user });
     }.bind(this), 0);
-
     var username = window.location.hash.slice(2).split("?")[0];
     UserApiUtil.findUserByUsername(username);
-  },
-
-  componentDidMount: function () {
-    this.userListener = UserStore.addListener(this._onChange);
-    this.questionListener = QuestionStore.addListener(this._questionChange);
   },
 
   componentWillUnmount: function () {
@@ -90,6 +85,10 @@ var ResponseForm = React.createClass({
     }
 
     ResponseActions.deleteResponse(responseId);
+  },
+
+  handleMenuClick: function () {
+    this.context.router.push("/");
   },
 
 	render: function () {
@@ -245,7 +244,7 @@ var ResponseForm = React.createClass({
     return (
       <div className="responseform-page">
         <div className="responseform-menu">
-          <div className="fa fa-bars menu-bars" aria-hidden="true"></div>
+          <div className="fa fa-bars menu-bars hover-pointer" aria-hidden="true" onClick={ this.handleMenuClick }></div>
         </div>
         { user }
       </div>

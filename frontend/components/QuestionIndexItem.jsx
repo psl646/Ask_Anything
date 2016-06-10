@@ -1,4 +1,5 @@
 var React = require('react');
+var Link = require('react-router').Link;
 var ClientQuestionActions = require('../actions/client_question_actions');
 var QuestionStore = require('../stores/question_store')
 var QuestionIndexItemToolbar = require('./QuestionIndexItemToolbar');
@@ -186,14 +187,14 @@ var QuestionIndexItem = React.createClass ({
     var inactiveQuestionPrompt = (
       <div>
         <div className="fa fa-wifi active-icon-question-index-item"aria-hidden="true" />
-        What question is active, respond at <strong>Ask--Anything.HerokuApp.com/{ username }</strong>
+        What question is active, respond at <strong>Ask--Anything.HerokuApp.com/#/{ username }</strong>
       </div>
     );
 
     var activeQuestionPrompt = (
       <div>
         <div className="fa fa-desktop active-icon-question-index-item"aria-hidden="true" />
-        Respond at <strong>Ask--Anything.HerokuApp.com/{ username }</strong>
+        Respond at <strong><Link to={ "/" + username } className="hover-pointer">Ask--Anything.HerokuApp.com/#/{ username }</Link></strong>
       </div>
     );
 

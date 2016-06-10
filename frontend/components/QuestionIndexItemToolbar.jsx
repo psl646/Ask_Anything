@@ -174,7 +174,7 @@ var QuestionIndexItemToolbar = React.createClass ({
     var testList = (
       <ul className="test-list-items group">
         <div className="test-list-items-message">
-          { "The audience can respond to this poll at Ask--Anything.HerokuApp.com/" + this.state.user.username + " as long as the poll is active." }
+          { "The audience can respond to this poll at Ask--Anything.HerokuApp.com/#/" + this.state.user.username + " as long as the poll is active." }
         </div>
       </ul>
     );

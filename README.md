@@ -1,140 +1,122 @@
-# Ask Anything
+# Ask Anything!
 
-[Heroku link][heroku] **NB:** This will be a link to your production site after Day 1.
+[Ask Anything! live][heroku] **NB:** This should be a link to your production site
 
-[heroku]: http://ask--anything.herokuapp.com/
+[heroku]: http://www.ask--anything.herokuapp.com/#/
 
-## Minimum Viable Product
+Ask Anything! is a full-stack web application inspired by Poll Everywhere.  It utilizes Ruby on Rails on the backend, a PostgreSQL database, and React.js with a Flux architectural framework on the frontend.  
 
-Ask Anything is a web application inspired by Poll Everywhere that will be build using Ruby on Rails and React.js.  By the end of Week 9, this app will, at a minimum, satisfy the following criteria:
+## Features & Implementation
 
-- [x] New account creation, login, and guest/demo login
-- [X] Smooth, bug-free navigation
-- [X] Adequate seed data to demonstrate the site's features
-- [ ] The minimally necessary features for a Poll Everywhere-inspired site:
-            Survey/Question creation and saving
-            Survey/Question editing
-            Questions organized into ungrouped(single questions)/grouped(surveys)
-            Website-enabled response - via a link/tinyurl
-            Charts/analytics on results
-- [X] Hosting on Heroku
-- [X] CSS styling that is satisfactorily visually appealing and representative of the actual site's look/feel
-- [ ] A production README, replacing this README -- I'll write this later
 
-## Product Goals and Priorities
+### Single-Page App
 
-Ask Anything will allow users to do the following:
+Ask Anything! is a single-page app; all content is delivered on one static page.  The root page listens to a `SessionStore` and renders content based on a call to `SessionStore.currentUser()`.  Sensitive information is kept out of the frontend of the app by making an API call to `SessionsController#show`.
 
-- [X] Create an account (MVP)
-- [x] Log in / Log out, including as a Guest/Demo User (MVP)
-- [x] Create, read, edit, and delete Surveys (MVP)
-- [x] Organize Questions within Surveys (MVP)
-- [ ] Create different types of Questions - multiple choice, T/F, Free Response, etc
+```ruby
+class Api::SessionsController < ApplicationController
+  def show
+    if current_user
+      @user = current_user
+      render "api/users/show"
+    else
+      @errors = []
+      render "api/shared/errors"
+    end
+  end
+ end
+  ```
 
-## Design Docs
-* [View Wireframes][views]
-* [React Components][components]
-* [Flux Cycles][flux-cycles]
-* [API endpoints][api-endpoints]
-* [DB schema][schema]
+### Note Rendering and Editing
 
-[views]: ./docs/views.md
-[components]: ./docs/components.md
-[flux-cycles]: ./docs/flux-cycles.md
-[api-endpoints]: ./docs/api-endpoints.md
-[schema]: ./docs/schema.md
 
-## Implementation Timeline
+  create_table "questions", force: :cascade do |t|
+    t.string   "question",                   null: false
+    t.integer  "survey_id",                  null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.string   "category",                   null: false
+    t.boolean  "active",
 
-### Phase 1: Backend setup and User Authentication (1 day)
 
-**Objective:** Functioning rails project with Authentication
+  On the database side, the questions are stored in one table in the database, which contains columns for `id`, `question`, `category`, `survey_id`, and `active`.  Upon login, an API call is made to the database which joins the user table and the the question table through `survey_id`.  These questions are held in the `QuestionStore` until the user's session is destroyed.  
 
-- [X] create new project
-- [X] create `User` model
-- [X] authentication
-- [X] user signup/signin pages
-- [X] user logout
-- [X] seed the database with a guest user
+  Questions are rendered in two different components: the `QuestionsIndex` component, which show the question and links to the `QuestionIndexItem` component show page.  In the component's show page, we can see the current status of the `question` as well as any responses that have been registered.  This page has links to Update and Delete the question as well as other features suh as toggling a question to active - making it available for other users to register their response.  The `SurveysIndex` renders all of the `QuestionsIndex`s that belongs to it as subcomponents.  The UI of the taken directly from Poll Everywhere for a professional, clean look:  
 
-### Phase 2: Survey Model, API, Flux Architecture, basic APIUtil, router (2 days)
+![image of Poll Everywhere]
 
-**Objective:** Surveys can be created, read, edited and destroyed through
-the UI.
+### Surveys
 
-- [X] create `Survey` model
-- [X] set up validations
-- [x] require user login before using Update after a survey is created
-- [X] seed the database with a small amount of test data
-- [x] CRUD API for surveys (`SurveysController`)
-- [X] jBuilder views for surveys
-- [X] setup Webpack & Flux scaffold
-- [X] setup `APIUtil` to interact with the API
-- [X] test out API interaction in the console.
-- [x] setup the flux loop with skeleton files
-- [x] setup React Router for browser/hash history
-- implement each survey component, building out the flux loop as needed.
-  - [x] `SurveysIndex`
-  - [x] `SurveyIndexItem/QuestionsIndex`
-  - [x] `QuestionForm`
+Implementing Surveys started with a survey table in the database.  The `Survey` table contains four columns: `id`, `title`, `ungrouped`, and `author_id`.  Additionally, a `survey_id` column was added to the `Question` table.  
 
-### Phase 3: Start Styling (1 day)
+The React component structure for surveys mirrored that of questions: the `SurveyIndex` component renders a list of `QuestionIndexItems`s as subcomponents. The front-end store, `SurveyStore` contains the data necessary for quick retrieval.  
 
-**Objective:** Existing pages (sigup/signin/UI) will look good.
+`SurveyIndex` render method:
 
-- [x] position elements on the page
-- [X] add basic colors & styles
-- [X] put in modals
-- [X] follow Poll Everywhere's style - see wireframes
+```javascript
+render: function () {
+  var that = this;
+  var mySurveys = this.state.surveys;
 
-### Phase 4: Question Model (1 day)
+  var surveys = Object.keys(mySurveys).map(function(survey_id){
+    var toggleSurvey = ""
+    var caretIcon = "fa fa-caret-down";
 
-**Objective:** Questions belong to Surveys, and can be viewed by survey.
+    if (that.state.clickedSurveys[survey_id]) {
+      toggleSurvey = "clicked_survey_li";
+      caretIcon = "fa fa-caret-right";
+    }
 
-- [x] create `Question` model
-- build out API, Flux loop, and components for:
-  - [ ] Question CRUD
-  - [ ] adding questions to survey
-  - [ ] moving questions to a different survey
-  - [X] viewing questions by survey
-- Use CSS to style new views
+    var currentSurvey = mySurveys[survey_id];
+    var numberQuestions = "Questions";
 
-Phase 4 adds organization to the Questions. Questions belong to a Survey, which has its own `Index` view.
+    if (currentSurvey["question_count"] === 1) {
+      numberQuestions = "Question";
+    }
 
-### Phase 5: Responses (2 days)
+    return (
+      <li className="surveysindex-li hover-pointer" key={ survey_id } onClick={"li", that.clickedSurveyLi }>
+        <div id={ survey_id } className="h14">
+          <div className={ "caret-icon " + caretIcon } />
+          <div>
+            { currentSurvey.title }
+          </div>
+          <div className="question-count h11">
+            { currentSurvey.question_count + " " + numberQuestions }
+          </div>
+        </div>
+        <ul className={ "survey-index-items " + toggleSurvey }>
+          <QuestionsIndex survey={ currentSurvey }/>
+        </ul>
+      </li>
+    );
+  });
 
-**Objective:** Questions can have multiple responses.
+  return (
+    <div className="surveysindex-container group">
+      <SideNav />
+      <ul className="surveysindex-ul">
+        { surveys }
+      </ul>
+    </div>
+  );
+}
+```
 
-- [ ] create `Response` model and join table
-- build out API, Flux loop, and components for:
-  - [ ] fetching responses for survey/question
-  - [ ] adding responses to questions
-  - [ ] creating responses while adding to surveys
+### Answers
 
-### Phase 6: Allow Complex Styling in Surveys/Questions (1 day)
+As with surveys, answers are stored in the database through an `Answer` table.  The `Answer` table contains the columns `id`, `answer`, and `question_id`.  The `Answer` table also acts as a join table for the `Question` table and `Response` table, which contains three columns: `id`, `answer_id`, and `user_id`.  
 
-**objective:** Enable complex styling of questions.
+Answers are maintained on the frontend in the `QuestionFormStore`.  Because creating, editing, and destroying answers can potentially affect `Question` objects, the `QuestionsIndex` and the `QuestionIndexItem` both listen to the `QuestionFormStore`.
 
-- Use CSS to set of the webpage presentation.
+## Future Directions for the Project
 
-### Phase 7: Styling Cleanup and Seeding (1 day)
+In addition to the features already implemented, I plan to continue work on this project.  The next steps for Ask Anything! are outlined below.
 
-**objective:** Make the site feel more cohesive and awesome.
+### Search
 
-- [ ] Get feedback on my UI from others
-- [ ] Refactor HTML classes & CSS rules
-- [X] Add modals, transitions, and other styling flourishes.
+Searching questions is a standard feature of Poll Everywhere. This search will look go through survey titles and questions.
 
-### Bonus Features (TBD)
-- [ ] Search through questions
-- [ ] Set lockout time on questions
-- [ ] Changelogs for Surveys
-- [ ] SMS
+### SMS Answer/Real-time update
 
-[phase-one]: ./docs/phases/phase1.md
-[phase-two]: ./docs/phases/phase2.md
-[phase-three]: ./docs/phases/phase3.md
-[phase-four]: ./docs/phases/phase4.md
-[phase-five]: ./docs/phases/phase5.md
-[phase-six]: ./docs/phases/phase6.md
-[phase-seven]: ./docs/phases/phase7.md
+Although this is less essential functionality, I also plan to implement SMS Answer/Real-time update for responding to Ask Anything! questions.  To do this, I will use Pusher to implement web sockets so that responses to questions register seamlessly.

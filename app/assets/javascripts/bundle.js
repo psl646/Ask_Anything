@@ -38137,6 +38137,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var Link = __webpack_require__(168).Link;
 	var ClientQuestionActions = __webpack_require__(282);
 	var QuestionStore = __webpack_require__(290);
 	var QuestionIndexItemToolbar = __webpack_require__(316);
@@ -38330,7 +38331,7 @@
 	      React.createElement(
 	        'strong',
 	        null,
-	        'Ask--Anything.HerokuApp.com/',
+	        'Ask--Anything.HerokuApp.com/#/',
 	        username
 	      )
 	    );
@@ -38343,8 +38344,12 @@
 	      React.createElement(
 	        'strong',
 	        null,
-	        'Ask--Anything.HerokuApp.com/',
-	        username
+	        React.createElement(
+	          Link,
+	          { to: "/" + username, className: 'hover-pointer' },
+	          'Ask--Anything.HerokuApp.com/#/',
+	          username
+	        )
 	      )
 	    );
 	
@@ -38680,7 +38685,7 @@
 	      React.createElement(
 	        'div',
 	        { className: 'test-list-items-message' },
-	        "The audience can respond to this poll at Ask--Anything.HerokuApp.com/" + this.state.user.username + " as long as the poll is active."
+	        "The audience can respond to this poll at Ask--Anything.HerokuApp.com/#/" + this.state.user.username + " as long as the poll is active."
 	      )
 	    );
 	
@@ -39743,21 +39748,16 @@
 	    return { user: user, question: {}, current_user: {} };
 	  },
 	
-	  componentWillMount: function () {
+	  componentDidMount: function () {
+	    this.userListener = UserStore.addListener(this._onChange);
+	    this.questionListener = QuestionStore.addListener(this._questionChange);
 	    SessionApiUtil.fetchCurrentUser();
-	
 	    window.setTimeout(function () {
 	      var current_user = SessionStore.currentUser();
 	      this.setState({ current_user: current_user });
 	    }.bind(this), 0);
-	
 	    var username = window.location.hash.slice(2).split("?")[0];
 	    UserApiUtil.findUserByUsername(username);
-	  },
-	
-	  componentDidMount: function () {
-	    this.userListener = UserStore.addListener(this._onChange);
-	    this.questionListener = QuestionStore.addListener(this._questionChange);
 	  },
 	
 	  componentWillUnmount: function () {
@@ -39811,6 +39811,10 @@
 	    }
 	
 	    ResponseActions.deleteResponse(responseId);
+	  },
+	
+	  handleMenuClick: function () {
+	    this.context.router.push("/");
 	  },
 	
 	  render: function () {
@@ -39996,7 +40000,7 @@
 	      React.createElement(
 	        'div',
 	        { className: 'responseform-menu' },
-	        React.createElement('div', { className: 'fa fa-bars menu-bars', 'aria-hidden': 'true' })
+	        React.createElement('div', { className: 'fa fa-bars menu-bars hover-pointer', 'aria-hidden': 'true', onClick: this.handleMenuClick })
 	      ),
 	      user
 	    );
