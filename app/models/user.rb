@@ -8,7 +8,7 @@ class User < ActiveRecord::Base
 	validates :email, :session_token, uniqueness: true
 	validates :password, length: {minimum: 7}, allow_nil: :true
 
-	after_initialize :ensure_session_token, :ensure_initial_survey, :ensure_username
+	before_validation :ensure_session_token, :ensure_initial_survey, :ensure_username
 	before_validation :ensure_session_token_uniqueness
 
 	has_many(

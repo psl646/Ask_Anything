@@ -1,4 +1,9 @@
-WHAT?!
+when you run rake assets:precompile, you are creating the public/assets folder and populating it.
+when you then make changes to your app, you need to delete the assets folder it created, and also run: rake assets:clean
+then you can try regular push to heroku, and if it fails, run rake assets:precompile locally again and do the same thing again
+
+
+ WHAT?!
 
 First thing in the morning: WORK ON UPDATE QUESTION
 WORKING ON TIME
