@@ -167,7 +167,7 @@ var QuestionIndexItem = React.createClass ({
     var myHeight = {
       height: height + "px",
       position: "relative",
-      top: height/2 + "px"
+      top: (height/2) + "px"
     };
 
     var myAnswers = myAnswerArray.map(function(currentAnswer, idx){
