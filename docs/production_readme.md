@@ -43,36 +43,73 @@ class Api::SessionsController < ApplicationController
 
   On the database side, the questions are stored in one table in the database, which contains columns for `id`, `question`, `category`, `survey_id`, and `active`.  Upon login, an API call is made to the database which joins the user table and the the question table through `survey_id`.  These questions are held in the `QuestionStore` until the user's session is destroyed.  
 
-  Questions are rendered in two different components: the `QuestionsIndex` component, which show the question and links to the `QuestionIndexItem` component show page.  In the component's show page, we can see the current status of the `question` as well as any responses that have been registered.  This page has links to Update and Delete the question as well as other features suh as toggling a question to active - making it available for people to register their response.  The `NoteIndex` renders all of the `CondensedNote`s as subcomponents, as well as one `ExpandedNote` component, which renders based on `NoteStore.selectedNote()`. The UI of the `NoteIndex` is taken directly from Poll Everywhere for a professional, clean look:  
+  Questions are rendered in two different components: the `QuestionsIndex` component, which show the question and links to the `QuestionIndexItem` component show page.  In the component's show page, we can see the current status of the `question` as well as any responses that have been registered.  This page has links to Update and Delete the question as well as other features suh as toggling a question to active - making it available for other users to register their response.  The `SurveysIndex` renders all of the `QuestionsIndex`s that belongs to it as subcomponents.  The UI of the taken directly from Poll Everywhere for a professional, clean look:  
 
-![image of notebook index](https://github.com/appacademy/sample-project-proposal/blob/master/docs/noteIndex.png)
+![image of Poll Everywhere]
 
-Note editing is implemented using the Quill.js library, allowing for a Word-processor-like user experience.
+### Surveys
 
-### Notebooks
+Implementing Surveys started with a survey table in the database.  The `Survey` table contains four columns: `id`, `title`, `ungrouped`, and `author_id`.  Additionally, a `survey_id` column was added to the `Question` table.  
 
-Implementing Notebooks started with a notebook table in the database.  The `Notebook` table contains two columns: `title` and `id`.  Additionally, a `notebook_id` column was added to the `Note` table.  
+The React component structure for surveys mirrored that of questions: the `SurveyIndex` component renders a list of `QuestionIndexItems`s as subcomponents. The front-end store, `SurveyStore` contains the data necessary for quick retrieval.  
 
-The React component structure for notebooks mirrored that of questions: the `NotebookIndex` component renders a list of `CondensedNotebook`s as subcomponents, along with one `ExpandedNotebook`, kept track of by `NotebookStore.selectedNotebook()`.  
-
-`NotebookIndex` render method:
+`SurveyIndex` render method:
 
 ```javascript
 render: function () {
-  return ({this.state.notebooks.map(function (notebook) {
-    return <CondensedNotebook notebook={notebook} />
-  }
-  <ExpandedNotebook notebook={this.state.selectedNotebook} />)
+  var that = this;
+  var mySurveys = this.state.surveys;
+
+  var surveys = Object.keys(mySurveys).map(function(survey_id){
+    var toggleSurvey = ""
+    var caretIcon = "fa fa-caret-down";
+
+    if (that.state.clickedSurveys[survey_id]) {
+      toggleSurvey = "clicked_survey_li";
+      caretIcon = "fa fa-caret-right";
+    }
+
+    var currentSurvey = mySurveys[survey_id];
+    var numberQuestions = "Questions";
+
+    if (currentSurvey["question_count"] === 1) {
+      numberQuestions = "Question";
+    }
+
+    return (
+      <li className="surveysindex-li hover-pointer" key={ survey_id } onClick={"li", that.clickedSurveyLi }>
+        <div id={ survey_id } className="h14">
+          <div className={ "caret-icon " + caretIcon } />
+          <div>
+            { currentSurvey.title }
+          </div>
+          <div className="question-count h11">
+            { currentSurvey.question_count + " " + numberQuestions }
+          </div>
+        </div>
+        <ul className={ "survey-index-items " + toggleSurvey }>
+          <QuestionsIndex survey={ currentSurvey }/>
+        </ul>
+      </li>
+    );
+  });
+
+  return (
+    <div className="surveysindex-container group">
+      <SideNav />
+      <ul className="surveysindex-ul">
+        { surveys }
+      </ul>
+    </div>
+  );
 }
 ```
 
-### Tags
+### Answers
 
-As with notebooks, tags are stored in the database through a `tag` table and a join table.  The `tag` table contains the columns `id` and `tag_name`.  The `tagged_questions` table is the associated join table, which contains three columns: `id`, `tag_id`, and `note_id`.  
+As with surveys, answers are stored in the database through an `Answer` table.  The `Answer` table contains the columns `id`, `answer`, and `question_id`.  The `Answer` table also acts as a join table for the `Question` table and `Response` table, which contains three columns: `id`, `answer_id`, and `user_id`.  
 
-Tags are maintained on the frontend in the `TagStore`.  Because creating, editing, and destroying questions can potentially affect `Tag` objects, the `NoteIndex` and the `NotebookIndex` both listen to the `TagStore`.  It was not necessary to create a `Tag` component, as tags are simply rendered as part of the individual `Note` components.  
-
-![tag screenshot](https://github.com/appacademy/sample-project-proposal/blob/master/docs/tagScreenshot.png)
+Answers are maintained on the frontend in the `QuestionFormStore`.  Because creating, editing, and destroying answers can potentially affect `Question` objects, the `QuestionsIndex` and the `QuestionIndexItem` both listen to the `QuestionFormStore`.
 
 ## Future Directions for the Project
 
@@ -80,8 +117,8 @@ In addition to the features already implemented, I plan to continue work on this
 
 ### Search
 
-Searching questions is a standard feature of Poll Everywhere.  I plan to utilize the Fuse.js library to create a fuzzy search of questions and notebooks.  This search will look go through tags, note titles, notebook titles, and note content.  
+Searching questions is a standard feature of Poll Everywhere. This search will look go through survey titles and questions.
 
-### Direct Messaging
+### SMS Answer/Real-time update
 
-Although this is less essential functionality, I also plan to implement messaging between Ask Anything! users.  To do this, I will use WebRTC so that notifications of messages happens seamlessly.  
+Although this is less essential functionality, I also plan to implement SMS Answer/Real-time update for responding to Ask Anything! questions.  To do this, I will use Pusher to implement web sockets so that responses to questions register seamlessly.

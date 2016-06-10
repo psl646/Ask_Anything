@@ -125,7 +125,7 @@ var SurveysIndex = React.createClass ({
           { surveys }
         </ul>
       </div>
-    )
+    );
   }
 });
 
