@@ -10,6 +10,7 @@ var _resetErrors = function (errors) {
 };
 
 ErrorStore.getErrors = function () {
+  console.log(_errors);
   var result = _errors.map(function (currentError) {
     return currentError.error
   });

@@ -1,10 +1,18 @@
 class Api::SessionsController < ApplicationController
 	def create
-		@user = User.find_or_create_from_auth_hash(auth_hash) || User.find_by_credentials(
-			params[:user][:username],
-      params[:user][:email],
-      params[:user][:password]
-    )
+		if auth_hash
+			@user = User.find_or_create_from_auth_hash(auth_hash)
+			login(@user)
+			redirect_to "/"
+			return
+		else
+			@user = User.find_by_credentials(
+				params[:user][:username],
+	      params[:user][:email],
+	      params[:user][:password]
+	    )
+		end
+
     if @user
 			login(@user)
 			render "api/users/show"
