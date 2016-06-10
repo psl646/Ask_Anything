@@ -38132,9 +38132,6 @@
 	    var myQuestion = QuestionStore.getQuestionById(questionId);
 	    var question = myQuestion || {};
 	
-	    // For Poll Locking, add this to the question table/model
-	    // countDownTime: 0
-	
 	    return {
 	      questionId: questionId,
 	      question: question,
@@ -38167,13 +38164,6 @@
 	
 	  handleTimerClick: function () {
 	    var convertedTime = this.convertTimeToMilliseconds();
-	    // This works, but add in the POLL LOCK functions later
-	
-	    // window.setTimeout(function(){
-	    //   ClientQuestionActions.toggleLock(this.state.questionId)
-	    // }.bind(this), convertedTime);
-	
-	    // this.setState({ time: "0000", countDownTime: convertedTime / 1000 })
 	  },
 	
 	  timerChange: function (e) {
@@ -38240,8 +38230,8 @@
 	      });
 	
 	      height = 500 / myAnswerArray.length;
-	
 	      myResponseObjects = that.state.question["responses"];
+	
 	      if (myResponseObjects) {
 	        myResponseObjects.forEach(function (responseObj) {
 	          myGraphAnswerObject[responseObj["answer_id"]] += 1;
@@ -38481,6 +38471,7 @@
 	  getInitialState: function () {
 	    var user = SessionStore.currentUser();
 	    var questionId = parseInt(window.location.hash.split("?")[0].split("questions")[1].split("/")[1]);
+	
 	    return {
 	      user: user,
 	      questionId: questionId,
@@ -38520,6 +38511,7 @@
 	
 	  _handleQuestionFormChange: function () {
 	    var myQuestion = QuestionFormStore.getQuestionFormById(this.state.questionId);
+	
 	    if (myQuestion !== undefined) {
 	      this.setState({
 	        newQuestion: myQuestion.question,
@@ -38628,7 +38620,7 @@
 	          'Cancel'
 	        )
 	      );
-	    };
+	    }
 	
 	    var configureChecked = " configureChecked";
 	    var testChecked = " testChecked";
@@ -38683,8 +38675,6 @@
 	        'Share'
 	      )
 	    );
-	
-	    // Fill these out later.
 	
 	    if (this.state.configure) {
 	      testList = "";

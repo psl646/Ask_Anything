@@ -17,8 +17,6 @@ var QuestionIndexItem = React.createClass ({
     var myQuestion = QuestionStore.getQuestionById(questionId);
     var question = myQuestion || {};
 
-    // For Poll Locking, add this to the question table/model
-    // countDownTime: 0
 
     return ({
       questionId: questionId,
@@ -33,7 +31,7 @@ var QuestionIndexItem = React.createClass ({
     var location = window.location.hash.slice(0,11);
     ClientQuestionActions.getQuestionById(this.state.questionId, location);
   },
-  
+
   componentWillUnmount: function () {
     this.errorListener.remove();
     this.questionListener.remove();
@@ -52,13 +50,7 @@ var QuestionIndexItem = React.createClass ({
 
   handleTimerClick: function () {
     var convertedTime = this.convertTimeToMilliseconds();
-    // This works, but add in the POLL LOCK functions later
 
-    // window.setTimeout(function(){
-    //   ClientQuestionActions.toggleLock(this.state.questionId)
-    // }.bind(this), convertedTime);
-
-    // this.setState({ time: "0000", countDownTime: convertedTime / 1000 })
   },
 
   timerChange: function (e) {
@@ -110,7 +102,7 @@ var QuestionIndexItem = React.createClass ({
       }
     }
 
-    var myGraphAnswerObject = {}
+    var myGraphAnswerObject = {};
 
     var height;
 
@@ -124,9 +116,9 @@ var QuestionIndexItem = React.createClass ({
         return answer["answer"];
       });
 
-      height = 500 / myAnswerArray.length;
-
+      height = (500 / myAnswerArray.length);
       myResponseObjects = that.state.question["responses"];
+
       if (myResponseObjects) {
         myResponseObjects.forEach(function(responseObj){
           myGraphAnswerObject[responseObj["answer_id"]] += 1;
@@ -187,7 +179,7 @@ var QuestionIndexItem = React.createClass ({
         <li key={ idx } style={ myHeight } className="answer-item-single">
           { currentAnswer }
         </li>
-      )
+      );
     });
 
 
@@ -294,7 +286,7 @@ var QuestionIndexItem = React.createClass ({
           </div>
         </div>
       </div>
-    )
+    );
   }
 });
 

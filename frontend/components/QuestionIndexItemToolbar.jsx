@@ -18,6 +18,7 @@ var QuestionIndexItemToolbar = React.createClass ({
   getInitialState: function () {
     var user = SessionStore.currentUser();
     var questionId = parseInt(window.location.hash.split("?")[0].split("questions")[1].split("/")[1]);
+
     return ({
       user: user,
       questionId: questionId,
@@ -57,6 +58,7 @@ var QuestionIndexItemToolbar = React.createClass ({
 
   _handleQuestionFormChange: function () {
     var myQuestion = QuestionFormStore.getQuestionFormById(this.state.questionId);
+
     if (myQuestion !== undefined) {
       this.setState ({
         newQuestion: myQuestion.question,
@@ -94,14 +96,14 @@ var QuestionIndexItemToolbar = React.createClass ({
       category: this.state.newCategory,
       answers: this.state.newAnswers,
       oldAnswers: this.state.oldAnswers
-    }
+    };
 
     ClientQuestionActions.updateQuestion(formData);
 
     window.setTimeout(function () {
       var errors = ErrorStore.getErrors();
       if (errors.length === 0) {
-        this.context.router.push("questions/" + this.state.questionId)
+        this.context.router.push("questions/" + this.state.questionId);
       }
     }.bind(this), 1000);
   },
@@ -137,7 +139,7 @@ var QuestionIndexItemToolbar = React.createClass ({
           </Modal>
         </Link>
       </ul>
-    )
+    );
 
     if (this.isEditPage()) {
       var bottomOptions = (
@@ -146,7 +148,7 @@ var QuestionIndexItemToolbar = React.createClass ({
           <Link to={ "questions/" + that.state.questionId } className="bottomOptions-edit-options cancel-question-edit">Cancel</Link>
         </ul>
       );
-    };
+    }
 
     var configureChecked = " configureChecked";
     var testChecked = " testChecked";
@@ -190,7 +192,7 @@ var QuestionIndexItemToolbar = React.createClass ({
       </ul>
     );
 
-    // Fill these out later.
+
 
     if (this.state.configure) {
       testList = "";
