@@ -100,6 +100,7 @@ var DemoContent = React.createClass({
             Takes 30 seconds. No signup required
           </div>
         </ul>
+        <a href="auth/twitter">Twitter Login</a>
       </div>
     );
   }

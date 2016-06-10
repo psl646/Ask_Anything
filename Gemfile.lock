@@ -58,6 +58,8 @@ GEM
     debug_inspector (0.0.2)
     erubis (2.7.0)
     execjs (2.7.0)
+    figaro (1.1.1)
+      thor (~> 0.14)
     font-awesome-rails (4.6.3.0)
       railties (>= 3.2, < 5.1)
     globalid (0.3.6)
@@ -170,10 +172,10 @@ DEPENDENCIES
   binding_of_caller
   byebug
   coffee-rails (~> 4.1.0)
+  figaro
   font-awesome-rails
   jbuilder (~> 2.0)
   jquery-rails
-  omniauth (~> 1.0)
   omniauth-twitter
   pg (~> 0.15)
   rails (= 4.2.5)
