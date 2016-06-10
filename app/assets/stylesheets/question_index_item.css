@@ -8,10 +8,6 @@
   float: left;
   width: calc(100% - 375px);
   min-width: 670px;
-
-  /*height: calc(100% - 25px);*/
-  /*min-height: 535px;*/
-  /*max-height: 770px;*/
   height: 700px;
 
   margin: 20px;
@@ -38,7 +34,7 @@
 }
 
 .graph-bottom {
-  positon: relative;
+  position: relative;
   width: 100%;
   bottom: 0;
   background: black;
@@ -199,7 +195,8 @@
   width: calc(100% - 180px);
   height: inherit;
 }
-/*DeleteQuestion component*/
+
+
 .delete-question-modal-options-container{
   float: right;
   position: absolute;

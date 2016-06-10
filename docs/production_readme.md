@@ -1,5 +1,3 @@
-# DO THIS LATER???
-
 # Ask Anything!
 
 [Ask Anything! live][heroku] **NB:** This should be a link to your production site

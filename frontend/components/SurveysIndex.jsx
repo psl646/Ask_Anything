@@ -64,7 +64,7 @@ var SurveysIndex = React.createClass ({
       return (outerHTMLArray[3].slice(0,6) === "delete");
     } else {
       return false;
-    };
+    }
   },
 
   toggleShowSurveyItems: function (surveyId) {
