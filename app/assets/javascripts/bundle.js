@@ -36060,12 +36060,10 @@
 	  switch (payload.actionType) {
 	    case ErrorConstants.SET_ERRORS:
 	      _resetErrors(payload.errors);
-	      console.log("set errors is emitting");
 	      ErrorStore.__emitChange();
 	      break;
 	    case ErrorConstants.CLEAR_ERRORS:
 	      _errors = [];
-	      console.log("clear errors is emitting");
 	      ErrorStore.__emitChange();
 	      break;
 	  }
@@ -36258,7 +36256,7 @@
 	        React.createElement('br', null),
 	        React.createElement('input', {
 	          autoFocus: true,
-	          className: 'edit-question-answer-input',
+	          className: 'question-input-field',
 	          type: 'text',
 	          value: this.state.question,
 	          onChange: this.questionChange })

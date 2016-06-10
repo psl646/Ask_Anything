@@ -168,7 +168,7 @@ var QuestionForm = React.createClass({
         <label className="text-shift-left"> Question: <br/>
           <input
             autoFocus
-            className="edit-question-answer-input"
+            className="question-input-field"
             type="text"
             value={this.state.question}
             onChange={this.questionChange} />
