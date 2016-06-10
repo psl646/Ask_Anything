@@ -21,7 +21,7 @@
 .surveysindex-li > div {
   background: #c8d8e4;
   height: 15px;
-  font-weight:bold;
+  font-weight: bold;
   padding: 20px 65px;
   padding-top: 15px;
   border-bottom: 2px solid white;
@@ -51,11 +51,11 @@
 }
 
 .clicked_survey_li {
-  display:none;
+  display: none;
 }
 
 .caret-icon {
   float: left;
   position: relative;
   right: 40px;
-} 
+}

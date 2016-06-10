@@ -42,7 +42,7 @@ var ModalConstants = {
       opacity         : 0.9,
       backgroundColor : '#161818',
       overflow        : 'hidden',
-      zIndex          : 20,
+      zIndex          : 20
     },
 
     content : {
