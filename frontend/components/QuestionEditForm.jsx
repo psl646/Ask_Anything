@@ -183,7 +183,7 @@ var QuestionEditForm = React.createClass({
           </div>
         </div>
       </div>
-    )
+    );
 	}
 });
 

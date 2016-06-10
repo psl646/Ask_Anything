@@ -52,7 +52,8 @@ var UserEditForm = React.createClass({
       last_name: "",
       email: user.email,
       username: user.username,
-      errors: true });
+      errors: true
+    });
   },
 
   firstNameChange: function (e) {

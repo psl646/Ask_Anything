@@ -12,7 +12,6 @@ var QuestionFormGenerator = React.createClass({
   contextTypes: {
     router: React.PropTypes.object.isRequired
   },
-
   getInitialState: function () {
     var myQuestions = QuestionFormStore.getAllQuestions();
     var questionsFormData = myQuestions || {};
