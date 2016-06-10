@@ -59,3 +59,16 @@
     position: relative;
     top: 40px;
 }
+
+.delete-answer-edit-form {
+  float: right;
+  width: 35px;
+  padding: 5px 0;
+  background: rgb(38, 48, 108);
+  color: white;
+  position: relative;
+  top: 15px;
+  right: 60px;
+  text-align: center;
+  border-radius: 50%;
+}

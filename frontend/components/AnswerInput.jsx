@@ -63,7 +63,7 @@ var AnswerInput = React.createClass({
             onChange={this.answerChange}
             />
           <div id={ this.props.answerId }
-              className="delete-answer-edit-form hover-pointer"
+              className="soft-edges delete-answer-edit-form hover-pointer"
               onClick={"li", this.deleteAnswer }>
               X
             </div>

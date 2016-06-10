@@ -89,7 +89,7 @@ var DemoContent = React.createClass({
         </div>
         <ul className="demo-options">
           <li className="hover-pointer soft-edges create-question-button" onClick={ this.handleCreateFirstQuestionClick }>
-            Create your first question
+            GUEST LOGIN
           </li>
 
           <li className="hover-pointer soft-edges watch-video" onClick={ this.watchVideoClick }>

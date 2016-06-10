@@ -35262,7 +35262,7 @@
 	      display: 'block',
 	      position: 'absolute',
 	      width: '100%',
-	      height: '2928px',
+	      height: '3000px',
 	      top: 0,
 	      left: 0,
 	      right: 0,
@@ -36197,25 +36197,27 @@
 	      }
 	
 	      // currently set to readOnly as I am just working on Multiple Choice
+	      // disabled={ that.state.category !== category }
+	      // FIX HOVER POINTER
 	
 	      return React.createElement(
 	        'li',
-	        { key: idx, className: "category-li " + isChecked },
+	        { key: idx, className: "hover-pointer category-li " + isChecked },
 	        React.createElement(
 	          'label',
-	          { className: 'category-label' },
+	          { className: 'hover-pointer category-label' },
 	          React.createElement('input', {
+	            className: 'hover-pointer',
 	            form: 'questionform',
 	            type: 'radio',
 	            name: "questionCategory-" + that.props.questionId,
 	            value: category,
 	            checked: that.state.category === category,
-	            disabled: that.state.category !== category,
 	            onChange: that.categoryChange
 	          }),
 	          React.createElement(
 	            'div',
-	            { className: 'category-name h12' },
+	            { className: 'hover-pointer category-name h12' },
 	            category
 	          )
 	        )
@@ -36369,7 +36371,7 @@
 	        React.createElement(
 	          'div',
 	          { id: this.props.answerId,
-	            className: 'delete-answer-edit-form hover-pointer',
+	            className: 'soft-edges delete-answer-edit-form hover-pointer',
 	            onClick: ("li", this.deleteAnswer) },
 	          'X'
 	        )
@@ -36741,7 +36743,7 @@
 	        React.createElement(
 	          'li',
 	          { className: 'hover-pointer soft-edges create-question-button', onClick: this.handleCreateFirstQuestionClick },
-	          'Create your first question'
+	          'GUEST LOGIN'
 	        ),
 	        React.createElement(
 	          'li',
@@ -39006,7 +39008,7 @@
 	          React.createElement(
 	            'div',
 	            { id: answerId,
-	              className: 'delete-answer-edit-form hover-pointer',
+	              className: 'soft-edges delete-answer-edit-form hover-pointer',
 	              onClick: ("li", that.deleteAnswer) },
 	            'X'
 	          )

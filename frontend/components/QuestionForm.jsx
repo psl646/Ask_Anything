@@ -118,20 +118,22 @@ var QuestionForm = React.createClass({
       }
 
       // currently set to readOnly as I am just working on Multiple Choice
-
+      // disabled={ that.state.category !== category }
+      // FIX HOVER POINTER
+      
       return (
-        <li key={ idx } className={ "category-li " + isChecked }>
-          <label className="category-label">
+        <li key={ idx } className={ "hover-pointer category-li " + isChecked }>
+          <label className="hover-pointer category-label">
             <input
+              className="hover-pointer"
               form="questionform"
               type="radio"
               name={"questionCategory-" + that.props.questionId}
               value={ category }
               checked={ that.state.category === category }
-              disabled={ that.state.category !== category }
               onChange={that.categoryChange}
               />
-            <div className="category-name h12">
+            <div className="hover-pointer category-name h12">
               { category }
             </div>
             </label>

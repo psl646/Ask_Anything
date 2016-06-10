@@ -150,7 +150,7 @@ var QuestionEditForm = React.createClass({
               onChange={ that.answerChange }
               />
             <div id={ answerId }
-              className="delete-answer-edit-form hover-pointer"
+              className="soft-edges delete-answer-edit-form hover-pointer"
               onClick={"li", that.deleteAnswer }>
               X
             </div>

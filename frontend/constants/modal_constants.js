@@ -32,7 +32,7 @@ var ModalConstants = {
       display         : 'block',
       position        : 'absolute',
       width           : '100%',
-      height          : '2928px',
+      height          : '3000px',
       top             : 0,
       left            : 0,
       right           : 0,
