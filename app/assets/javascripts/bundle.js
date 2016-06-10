@@ -35762,7 +35762,7 @@
 	      url: 'api/questions/' + question_id,
 	      type: 'GET',
 	      dataType: 'json',
-	      data: { location },
+	      data: { location: location },
 	      success: function (question) {
 	        ServerQuestionActions.receiveQuestion(question);
 	      },
