@@ -34,7 +34,7 @@ var ResponseForm = React.createClass({
     UserApiUtil.findUserByUsername(username);
   },
 
-  componentDidMount: function (){
+  componentDidMount: function () {
     this.userListener = UserStore.addListener(this._onChange);
     this.questionListener = QuestionStore.addListener(this._questionChange);
   },
@@ -102,7 +102,7 @@ var ResponseForm = React.createClass({
     );
 
     var clearResponseButton = "";
-    var voteStatus = "You can respond once"
+    var voteStatus = "You can respond once";
     var answerChoiceResponse = "answer-choice-response-form";
     var myVote = "my-vote";
     var hoverPointer = "non-voted-lis";
@@ -145,11 +145,13 @@ var ResponseForm = React.createClass({
       }
 
       var answerArray = this.state.question["answers"];
+
       answers = answerArray.map(function(answerObject, idx){
         var vote = "0";
         if (answerObject.id === myAnswerId) {
           vote = "1";
         }
+
         return (
           <li
             id={ answerObject.id }
@@ -157,19 +159,21 @@ var ResponseForm = React.createClass({
             className={ "answer-choice-response-form-container group soft-edges " + hoverPointer }
             onClick={"li", that.recordAnswer }
             >
+
             <div className="my-vote-container">
               <div className={ myVote + " soft-edges " }>
                 { vote }
               </div>
             </div>
+
             <div className={ answerChoiceResponse }>
               { answerObject["answer"] }
             </div>
+
           </li>
         );
       });
     }
-
 
     var user = (
       <div className="found-user-active-question-container">
@@ -201,7 +205,7 @@ var ResponseForm = React.createClass({
               {"Welcome to " + this.state.user.username + "'s presentation" }
             </div>
             <div className="welcome-response-form-text">
-              {"As soon as " + this.state.user.username + " displays a poll, we'll update this area to give you the voting options." }
+              {"As soon as " + this.state.user.username + " displays a question, we'll update this area to give you the voting options." }
             </div>
             <div className="welcome-response-form-text">
               Easy as pie. Just hang tight, you're ready to go.
@@ -235,7 +239,7 @@ var ResponseForm = React.createClass({
             </ul>
           </div>
         </div>
-      )
+      );
     }
 
     return (

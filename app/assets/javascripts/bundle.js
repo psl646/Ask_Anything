@@ -39834,11 +39834,13 @@
 	      }
 	
 	      var answerArray = this.state.question["answers"];
+	
 	      answers = answerArray.map(function (answerObject, idx) {
 	        var vote = "0";
 	        if (answerObject.id === myAnswerId) {
 	          vote = "1";
 	        }
+	
 	        return React.createElement(
 	          'li',
 	          {
@@ -39906,7 +39908,7 @@
 	          React.createElement(
 	            'div',
 	            { className: 'welcome-response-form-text' },
-	            "As soon as " + this.state.user.username + " displays a poll, we'll update this area to give you the voting options."
+	            "As soon as " + this.state.user.username + " displays a question, we'll update this area to give you the voting options."
 	          ),
 	          React.createElement(
 	            'div',
