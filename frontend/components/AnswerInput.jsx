@@ -4,10 +4,14 @@ var QuestionFormStore = require('../stores/question_form_store');
 
 var AnswerInput = React.createClass({
   getInitialState: function () {
-    return ({ answer: "" });
+    var answer = this.props.answer || "";
+    return ({ answer: answer });
   },
 
   componentDidMount: function () {
+    window.setTimeout(function () {
+      this.sendAnswerToStore();
+    }.bind(this), 0);
   },
 
   componentWillUnmount: function () {
@@ -29,17 +33,38 @@ var AnswerInput = React.createClass({
     var answer = this.state.answer;
     QuestionFormActions.addAnswerToQuestion(questionId, answerId, answer);
   },
-  
+
 	render: function () {
-    return (
-      <div className="single-answer-container">
+    var answerContainer = "single-answer-container";
+
+    var answerInput = (
+      <input
+        className="single-answer-input h12"
+        type="text"
+        value={this.state.answer}
+        placeholder="Text, Image URL, or LaTeX"
+        onChange={this.answerChange}
+        />
+    );
+
+    if (window.location.hash.slice(2, 11).toUpperCase() === "QUESTIONS") {
+      answerInput = (
         <input
-          className="single-answer-input h12"
+          className="edit-question-answer-input"
+          autoFocus
           type="text"
-          value={this.state.answer}
-          placeholder="Text, Image URL, or LaTeX"
+          value={ this.state.answer}
+          placeholder="Type text or upload an image to use as choice"
           onChange={this.answerChange}
           />
+      );
+
+      answerContainer = "edit-question-answer-input-container";
+    }
+
+    return (
+      <div className={ answerContainer }>
+        { answerInput }
       </div>
 		);
 	}

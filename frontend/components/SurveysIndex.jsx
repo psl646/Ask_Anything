@@ -3,7 +3,7 @@ var ClientSurveyActions = require('../actions/client_survey_actions');
 var SurveyStore = require('../stores/survey_store');
 var SideNav = require('./SideNav');
 var QuestionsIndex = require('./QuestionsIndex');
-
+var ErrorActions = require('../actions/error_actions');
 
 var SurveysIndex = React.createClass ({
 
@@ -28,6 +28,9 @@ var SurveysIndex = React.createClass ({
   },
 
   componentDidMount: function () {
+    window.setTimeout(function () {
+      ErrorActions.clearErrors();
+    }, 0 );
     this.surveyListener = SurveyStore.addListener(this._onChange);
     ClientSurveyActions.fetchAllSurveys();
   },

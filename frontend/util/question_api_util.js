@@ -78,6 +78,21 @@ var QuestionApiUtil = {
         console.log("POST Error in QuestionApiUtil#toggleActive");
       }
     })
+  },
+
+  updateQuestion: function (formData) {
+    $.ajax({
+      url: 'api/questions/' + formData.questionId,
+      type: 'PATCH',
+      dataType: 'json',
+      data: { question: formData },
+      success: function (question) {
+        ServerQuestionActions.receiveQuestion(question);
+      },
+      error: function (xhr) {
+        console.log("POST Error in QuestionApiUtil#updateQuestion");
+      }
+    })
   }
 };
 

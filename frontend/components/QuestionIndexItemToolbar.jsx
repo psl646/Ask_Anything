@@ -5,6 +5,10 @@ var ModalConstants = require('../constants/modal_constants');
 var QuestionStore = require('../stores/question_store');
 var DeleteQuestion = require('./DeleteQuestion');
 var ClientQuestionActions = require('../actions/client_question_actions');
+var SessionStore = require('../stores/session_store');
+var QuestionFormStore = require('../stores/question_form_store');
+var QuestionFormActions = require('../actions/question_form_actions');
+var ErrorStore = require('../stores/error_store');
 
 var QuestionIndexItemToolbar = React.createClass ({
   contextTypes: {
@@ -12,22 +16,55 @@ var QuestionIndexItemToolbar = React.createClass ({
   },
 
   getInitialState: function () {
+    var user = SessionStore.currentUser();
     var questionId = parseInt(window.location.hash.split("?")[0].split("questions")[1].split("/")[1]);
-    return ({ questionId: questionId, question: {}, modalOpen: false, configure: true, test: false, present: false });
+    return ({
+      user: user,
+      questionId: questionId,
+      question: {},
+      modalOpen: false,
+      configure: true,
+      test: false,
+      present: false,
+      newQuestion: "",
+      newCategory: "",
+      newAnswers: {},
+      oldAnswers: {}
+    });
   },
 
   componentDidMount: function () {
-    this.questionFormListener = QuestionStore.addListener(this._onChange);
+    this.questionStoreListener = QuestionStore.addListener(this._onChange);
+    this.questionFormListener = QuestionFormStore.addListener(this._handleQuestionFormChange);
+    this.errorListener = ErrorStore.addListener(this._errorChange);
   },
 
   componentWillUnmount: function () {
+    this.questionStoreListener.remove();
     this.questionFormListener.remove();
+    this.errorListener.remove();
   },
 
   _onChange: function () {
     var myQuestion = QuestionStore.getQuestionById(this.state.questionId);
     var question = myQuestion || {};
     this.setState ({ question: question });
+  },
+
+  _errorChange: function () {
+    alert("An error occured while trying to update, try again.");
+  },
+
+  _handleQuestionFormChange: function () {
+    var myQuestion = QuestionFormStore.getQuestionFormById(this.state.questionId);
+    if (myQuestion !== undefined) {
+      this.setState ({
+        newQuestion: myQuestion.question,
+        newCategory: myQuestion.category,
+        newAnswers: myQuestion.answers,
+        oldAnswers: myQuestion.oldAnswers
+      });
+    }
   },
 
   closeModal: function(){
@@ -50,7 +87,23 @@ var QuestionIndexItemToolbar = React.createClass ({
 
   handleSaveClick: function (e) {
     e.preventDefault();
-    // FORM DATA SEND UP
+
+    var formData = {
+      questionId: this.state.questionId,
+      question: this.state.newQuestion,
+      category: this.state.newCategory,
+      answers: this.state.newAnswers,
+      oldAnswers: this.state.oldAnswers
+    }
+
+    ClientQuestionActions.updateQuestion(formData);
+
+    window.setTimeout(function () {
+      var errors = ErrorStore.getErrors();
+      if (errors.length === 0) {
+        this.context.router.push("questions/" + this.state.questionId)
+      }
+    }.bind(this), 1000);
   },
 
   handleConfigureClick: function () {
@@ -117,16 +170,10 @@ var QuestionIndexItemToolbar = React.createClass ({
     );
 
     var testList = (
-      <ul className="test-list-items">
-        <li>
-          Web
-          <div>
-            The audience can respond to this poll at PollEv.com/peterlin502 as long as the poll is active.
-          </div>
-        </li>
-        <li>
-          Text message
-        </li>
+      <ul className="test-list-items group">
+        <div className="test-list-items-message">
+          { "The audience can respond to this poll at Ask--Anything.HerokuApp.com/" + this.state.user.username + " as long as the poll is active." }
+        </div>
       </ul>
     );
 

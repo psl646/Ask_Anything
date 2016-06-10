@@ -1,5 +1,6 @@
 // var ServerResponseActions = require('./../actions/server_response_actions');
 var ErrorActions = require('../actions/error_actions');
+var ServerQuestionActions = require('../actions/server_question_actions');
 
 var ResponseApiUtil = {
   recordResponse: function (formData) {
@@ -8,9 +9,8 @@ var ResponseApiUtil = {
       type: 'POST',
       dataType: 'json',
       data: ({ response: formData }),
-      success: function (response) {
-
-        // ServerResponseActions.receiveQuestion(response);
+      success: function (question) {
+        ServerQuestionActions.receiveQuestion(question);
       },
       error: function (xhr) {
         console.log("POST Error in ResponseApiUtil#recordResponse");
@@ -20,7 +20,21 @@ var ResponseApiUtil = {
     })
   },
 
-
+  deleteResponse: function (responseId) {
+    $.ajax({
+      url: 'api/responses/' + responseId,
+      type: 'DELETE',
+      dataType: 'json',
+      success: function (question) {
+        ServerQuestionActions.receiveQuestion(question);
+      },
+      error: function (xhr) {
+        console.log("POST Error in ResponseApiUtil#recordResponse");
+        var errors = xhr.responseJSON;
+        ErrorActions.setErrors(errors);
+      }
+    })
+  }
 };
 
 module.exports = ResponseApiUtil;

@@ -6,4 +6,5 @@ json.array! @questions do |current_question|
   json.active current_question.active
   json.answers current_question.answers
   json.author current_question.author
+  json.responses current_question.responses
 end

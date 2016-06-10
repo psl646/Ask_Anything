@@ -37,7 +37,6 @@ var Logo = React.createClass({
     if (this.isLogin()) {
       logoPlacement = "login-logo"
     } else if (this.isPasswordReset()) {
-      console.log("PASSWORD RESET");
       logoPlacement = "password-reset-logo"
     } else if (this.isnoUserNavBar()){
       logoPlacement = "nouser-navbar-logo"

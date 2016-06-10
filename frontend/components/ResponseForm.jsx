@@ -9,8 +9,8 @@ var QuestionStore = require('../stores/question_store');
 var SessionStore = require('../stores/session_store');
 var SessionApiUtil = require('../util/session_api_util');
 var ResponseActions = require('../actions/response_actions');
+var ErrorActions = require('../actions/error_actions');
 
-SessionStore.currentUser
 var ResponseForm = React.createClass({
   contextTypes: {
     router: React.PropTypes.object.isRequired
@@ -29,13 +29,19 @@ var ResponseForm = React.createClass({
       var current_user = SessionStore.currentUser();
       this.setState({ current_user: current_user });
     }.bind(this), 0);
-    this.userListener = UserStore.addListener(this._onChange);
-    this.questionListener = QuestionStore.addListener(this._questionChange);
+
     var username = window.location.hash.slice(2).split("?")[0];
     UserApiUtil.findUserByUsername(username);
   },
 
+  componentDidMount: function (){
+    this.userListener = UserStore.addListener(this._onChange);
+    this.questionListener = QuestionStore.addListener(this._questionChange);
+  },
+
   componentWillUnmount: function () {
+    this.questionListener.remove();
+    ErrorActions.clearErrors();
     this.userListener.remove();
     UserActions.clearUser();
   },
@@ -48,8 +54,9 @@ var ResponseForm = React.createClass({
   },
 
   _questionChange: function () {
-    var question = QuestionStore.getQuestionById(this.state.user.active_question_id);
-    this.setState({ question: question });
+    var user = UserStore.getUser();
+    var question = QuestionStore.getQuestionById(user.active_question_id);
+    this.setState({ question: question, user: user });
   },
 
   recordAnswer: function (e) {
@@ -63,17 +70,30 @@ var ResponseForm = React.createClass({
     ResponseActions.recordResponse(formData);
   },
 
+  deleteResponse: function (e) {
+    var responsesArray = this.state.question["responses"];
+    var responseId;
+
+    for (var i = 0; i < responsesArray.length; i++) {
+      var current_user_id = this.state.current_user.id;
+      var current_response_user_id = responsesArray[i]["user_id"];
+
+      if (current_user_id) {
+        if (current_user_id === current_response_user_id) {
+          responseId = responsesArray[i]["id"];
+        }
+      } else {
+        if (current_response_user_id === null) {
+          responseId = responsesArray[i]["id"];
+        }
+      }
+    }
+
+    ResponseActions.deleteResponse(responseId);
+  },
+
 	render: function () {
     var that = this;
-    console.log(this.state.question);
-
-    console.log("User who owns the question:");
-    console.log(this.state.user);
-
-    console.log("Current User:");
-    console.log(this.state.current_user);
-
-    console.log(this.state.current_user["id"] === undefined);
 
     var answers;
 
@@ -81,24 +101,68 @@ var ResponseForm = React.createClass({
       <div></div>
     );
 
-    var vote = "0";
+    var clearResponseButton = "";
+    var voteStatus = "You can respond once"
+    var answerChoiceResponse = "answer-choice-response-form";
+    var myVote = "my-vote";
+    var hoverPointer = "non-voted-lis";
 
     if (this.state.question["answers"] !== undefined) {
+      var responsesArray = this.state.question["responses"];
+      var current_user_id = this.state.current_user["id"];
+      var myAnswerId;
+
+      if (current_user_id){
+        for (var i = 0; i < responsesArray.length; i++) {
+          if (responsesArray[i]["user_id"] === current_user_id) {
+            myAnswerId = parseInt(responsesArray[i]["answer_id"]);
+            hoverPointer = "voted-lis";
+            voteStatus = "Vote recorded";
+            myVote = "my-vote-recorded";
+            answerChoiceResponse = "answer-choice-response-form-voted";
+            clearResponseButton = (
+              <div className="clear-my-response soft-edges hover-pointer" onClick={ that.deleteResponse }>
+                Clear Response
+              </div>
+            );
+          }
+        }
+      } else {
+        for (var i = 0; i < responsesArray.length; i++) {
+          if (responsesArray[i]["user_id"] === null) {
+            myAnswerId = parseInt(responsesArray[i]["answer_id"]);
+            hoverPointer = "voted-lis";
+            voteStatus = "Vote recorded";
+            myVote = "my-vote-recorded";
+            answerChoiceResponse = "answer-choice-response-form-voted";
+            clearResponseButton = (
+              <div className="clear-my-response soft-edges hover-pointer" onClick={ that.deleteResponse }>
+                Clear Response
+              </div>
+            );
+          }
+        }
+      }
+
       var answerArray = this.state.question["answers"];
       answers = answerArray.map(function(answerObject, idx){
+        var vote = "0";
+        if (answerObject.id === myAnswerId) {
+          vote = "1";
+        }
         return (
           <li
             id={ answerObject.id }
             key={ idx }
-            className="answer-choice-response-form-container group soft-edges hover-pointer"
+            className={ "answer-choice-response-form-container group soft-edges " + hoverPointer }
             onClick={"li", that.recordAnswer }
             >
             <div className="my-vote-container">
-              <div className="my-vote soft-edges ">
+              <div className={ myVote + " soft-edges " }>
                 { vote }
               </div>
             </div>
-            <div className="answer-choice-response-form">
+            <div className={ answerChoiceResponse }>
               { answerObject["answer"] }
             </div>
           </li>
@@ -106,13 +170,6 @@ var ResponseForm = React.createClass({
       });
     }
 
-    var voteStatus = "You can respond once"
-
-    // this.state.question.responses.users ===  current_user
-
-    // if () {
-    //   voteStatus = "Vote recorded";
-    // }
 
     var user = (
       <div className="found-user-active-question-container">
@@ -127,6 +184,7 @@ var ResponseForm = React.createClass({
         <ul className="answers-list-response-form">
           { answers }
         </ul>
+        { clearResponseButton }
       </div>
     );
 

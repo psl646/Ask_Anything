@@ -9,9 +9,10 @@
   width: calc(100% - 375px);
   min-width: 670px;
 
-  height: calc(100% - 25px);
-  min-height: 535px;
-  max-height: 770px;
+  /*height: calc(100% - 25px);*/
+  /*min-height: 535px;*/
+  /*max-height: 770px;*/
+  height: 700px;
 
   margin: 20px;
   background: white;
@@ -60,7 +61,6 @@
 
 .answers-graph-container {
   margin: 20px;
-  background: red;
   min-height: 400px;
   height: calc(100% - 167px);
 }
@@ -68,7 +68,6 @@
 .answers-graph {
   width: calc(100% - 70px);
   min-height: 100%;
-  background: blue;
   float: left;
   overflow: hidden;
 }
@@ -77,14 +76,45 @@
   float: left;
   height: 100%;
   max-width: 50%;
-  font-size: 100px;
-  background: red;
+  font-size: 20px;
+}
+
+.zero-percent {
+  float: left;
+  position: relative;
+  left: 70px;
+  font-size: 20px;
+  z-index: 100;
+}
+
+.fifty-percent {
+  float: left;
+  position: relative;
+  font-size: 20px;
+  left: 48%;
+}
+
+.hundred-percent {
+  float: right;
+  position: relative;
+  font-size: 20px;
+}
+
+.percentage-graph {
+  position: relative;
+  top: 45%;
+  left: 5px;
+}
+
+.answers-graph-left > li {
+  display: block;
 }
 
 .answers-graph-right {
-  min-height: 100%;
-  background: green;
+  height: 500px;
   overflow: hidden;
+  border-left: 5px solid rgb(31, 100, 255);
+  border-bottom: 5px solid rgb(31, 100, 255);
 }
 
 .question-toggle-buttons {

@@ -68,4 +68,32 @@ class Question < ActiveRecord::Base
       question.save
     end
   end
+
+  def self.updateQuestion(current_question, params, current_user)
+    question = params[:question]
+    Question.transaction do
+      old_answers = current_question.answers
+      current_answers = question[:oldAnswers]
+      
+      old_answers.each do |old_answer|
+        if !current_answers.keys.include?(old_answer[:id].to_s)
+          old_answer.destroy
+        else
+          old_answer[:answer] = current_answers[old_answer[:id].to_s]
+          old_answer.save
+        end
+      end
+
+      if question[:answers]
+        question[:answers].each do |answer_data|
+          Answer.create(answer: answer_data.last, question: current_question)
+        end
+      end
+      current_question[:question] = question[:question]
+      current_question[:category] = question[:category]
+      current_question.save
+    end
+
+    true
+  end
 end

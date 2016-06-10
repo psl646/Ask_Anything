@@ -1,22 +1,24 @@
 var ModalConstants = {
   SIGNUP: {
     overlay : {
-      position        : 'absolute',
+      position        : 'relative',
       height          : '100%',
       top             : 0,
       left            : 0,
       right           : 0,
       bottom          : 0,
       backgroundColor : 'transparent',
-      zIndex					: 10
+      zIndex					: 10,
+      border          : 0
     },
     content : {
-      position        : 'absolute',
+      position        : 'relative',
       top             : '75px',
       left            : 0,
       right           : 0,
       bottom          : 0,
       backgroundColor : 'white',
+      border          : 0,
       zIndex					: 11
     }
   },

@@ -14,6 +14,10 @@ var ClientQuestionActions = {
     QuestionApiUtil.createQuestions(formData);
   },
 
+  updateQuestion: function (formData) {
+    QuestionApiUtil.updateQuestion(formData);
+  },
+
   toggleActive: function(questionId) {
     QuestionApiUtil.toggleActive(questionId);
   },

@@ -33,13 +33,10 @@ var QuestionIndexItem = React.createClass ({
     var location = window.location.hash.slice(0,11);
     ClientQuestionActions.getQuestionById(this.state.questionId, location);
   },
-
+  
   componentWillUnmount: function () {
     this.errorListener.remove();
     this.questionListener.remove();
-    window.setTimeout(function() {
-      ErrorActions.clearErrors();
-    }, 0);
   },
 
   _handleErrors: function () {
@@ -90,33 +87,109 @@ var QuestionIndexItem = React.createClass ({
   },
 
   render: function () {
+    var that = this;
     var myAnswerObjects;
     var myAnswerArray = [];
     var question = "";
     var username = "";
 
-    if (this.state.question.question !== undefined){
-      question = this.state.question.question;
-      username = this.state.question.author.username;
+    if (that.state.question.question !== undefined){
+      question = that.state.question.question;
+      username = that.state.question.author.username;
       if (question.length > 50) {
         question = question.slice(0, 47) + "...";
       }
     };
 
-    if (Object.keys(this.state.question).length !== 0) {
-      myAnswerObjects = this.state.question["answers"];
-      myAnswerArray = myAnswerObjects.map(function(answer){
-        return answer["answer"];
-      });
+    var numResponses = 0;
+
+    if (Object.keys(that.state.question).length !== 0) {
+      if (that.state.question["responses"]) {
+        var myResponseObjects = that.state.question["responses"];
+        numResponses = myResponseObjects.length;
+      }
     }
 
+    var myGraphAnswerObject = {}
+
+    var height;
+
+    if (Object.keys(that.state.question).length !== 0) {
+
+      myAnswerObjects = that.state.question["answers"];
+      myAnswerArray = myAnswerObjects.map(function(answer){
+        var answerId = answer["id"];
+        myGraphAnswerObject[answerId] = 0;
+
+        return answer["answer"];
+      });
+
+      height = 500 / myAnswerArray.length;
+
+      myResponseObjects = that.state.question["responses"];
+      if (myResponseObjects) {
+        myResponseObjects.forEach(function(responseObj){
+          myGraphAnswerObject[responseObj["answer_id"]] += 1;
+        });
+      }
+    }
+
+    var myGraph = "";
+    var graphKeys = Object.keys(myGraphAnswerObject);
+
+    if (graphKeys !== 0) {
+      if (that.state.question["responses"]) {
+        if (that.state.question["responses"].length !== 0){
+          myGraph = graphKeys.map(function(answerId){
+
+            var width = (100/numResponses) * myGraphAnswerObject[answerId];
+
+            var graphStyle = {
+              height: height + "px",
+              width: width + "%",
+              background: "rgb(60, 116, 158)",
+              color: "white",
+              fontSize: "20px"
+            };
+
+            if (width.toString().length > 5) {
+              width = width.toString().slice(0, 5) + "%";
+            } else if (numResponses === 0) {
+              width = "";
+            } else {
+              width = width + "%"
+            }
+
+            return (
+              <li key= { answerId } style={ graphStyle }>
+                <div className="percentage-graph">
+                  { width }
+                </div>
+              </li>
+            );
+          });
+        }
+      }
+    }
+
+    var myHeight = {
+      height: height + "px",
+      position: "relative",
+      top: height/2 + "px"
+    };
+
     var myAnswers = myAnswerArray.map(function(currentAnswer, idx){
+      if (currentAnswer.length > 50) {
+        currentAnswer = currentAnswer.slice(0, 47) + "...";
+      }
+
       return (
-        <li key={ idx }>
+        <li key={ idx } style={ myHeight } className="answer-item-single">
           { currentAnswer }
         </li>
       )
     });
+
 
     var inactiveQuestionPrompt = (
       <div>
@@ -132,13 +205,13 @@ var QuestionIndexItem = React.createClass ({
       </div>
     );
 
-    if (this.state.question.active) {
+    if (that.state.question.active) {
       inactiveQuestionPrompt = "";
     } else {
       activeQuestionPrompt = "";
     }
 
-    var myTime = this.state.time;
+    var myTime = that.state.time;
     var time = myTime.slice(0,2) + ":" + myTime.slice(2,4);
 
     var countdown = "";
@@ -146,10 +219,9 @@ var QuestionIndexItem = React.createClass ({
     var activeQuestion = "toggle-button-active ";
     var inactiveToggle = "toggle-button-inactive ";
 
-    if (!this.state.question.active) {
+    if (!that.state.question.active) {
       activeQuestion = "";
     }
-
 
     return (
       <div className="questionindexitem-container group">
@@ -169,13 +241,22 @@ var QuestionIndexItem = React.createClass ({
               <ul className="answers-graph-left">
                 { myAnswers }
               </ul>
-              <div className="answers-graph-right">
-                GRAPH HERE
+              <ul className="answers-graph-right">
+                { myGraph }
+              </ul>
+              <div className="zero-percent">
+                0%
+              </div>
+              <div className="fifty-percent">
+                50%
+              </div>
+              <div className="hundred-percent">
+                100%
               </div>
             </div>
             <ul className="question-toggle-buttons">
               <li
-                className={ "fa fa-wifi " + activeQuestion + inactiveToggle }
+                className={ "fa fa-wifi hover-pointer " + activeQuestion + inactiveToggle }
                 onClick={ this.handleActiveToggle }
                 />
 

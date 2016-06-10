@@ -35,6 +35,12 @@ var QuestionFormGenerator = React.createClass({
   },
 
   componentWillUnmount: function () {
+    this.errorListener.remove();
+    this.questionListener.remove();
+    this.questionFormListener.remove();
+
+
+    // CAN I GET RID OF THESE TIMEOUTS now that I moved the listeners on top? TRY LATER
     window.setTimeout(function(){
       ErrorActions.clearErrors();
     }, 0);
@@ -44,9 +50,6 @@ var QuestionFormGenerator = React.createClass({
       QuestionFormActions.clearQuestionForms();
     }, 0);
 
-    this.errorListener.remove();
-    this.questionListener.remove();
-    this.questionFormListener.remove();
   },
 
   updateQuestions: function () {
@@ -100,10 +103,6 @@ var QuestionFormGenerator = React.createClass({
       questions: questions
     };
 
-    // if (formData["questions"].length === 0) {
-    //   this.setState({ invalid_submit: 0 })
-    // } else {
-    
     if (this.state.isSurvey) {
       formData["title"] = this.state.title;
       ClientSurveyActions.createSurvey(formData);

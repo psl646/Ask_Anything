@@ -35231,22 +35231,24 @@
 	var ModalConstants = {
 	  SIGNUP: {
 	    overlay: {
-	      position: 'absolute',
+	      position: 'relative',
 	      height: '100%',
 	      top: 0,
 	      left: 0,
 	      right: 0,
 	      bottom: 0,
 	      backgroundColor: 'transparent',
-	      zIndex: 10
+	      zIndex: 10,
+	      border: 0
 	    },
 	    content: {
-	      position: 'absolute',
+	      position: 'relative',
 	      top: '75px',
 	      left: 0,
 	      right: 0,
 	      bottom: 0,
 	      backgroundColor: 'white',
+	      border: 0,
 	      zIndex: 11
 	    }
 	  },
@@ -35390,7 +35392,6 @@
 	    if (this.isLogin()) {
 	      logoPlacement = "login-logo";
 	    } else if (this.isPasswordReset()) {
-	      console.log("PASSWORD RESET");
 	      logoPlacement = "password-reset-logo";
 	    } else if (this.isnoUserNavBar()) {
 	      logoPlacement = "nouser-navbar-logo";
@@ -35454,6 +35455,11 @@
 	  },
 	
 	  componentWillUnmount: function () {
+	    this.errorListener.remove();
+	    this.questionListener.remove();
+	    this.questionFormListener.remove();
+	
+	    // CAN I GET RID OF THESE TIMEOUTS now that I moved the listeners on top? TRY LATER
 	    window.setTimeout(function () {
 	      ErrorActions.clearErrors();
 	    }, 0);
@@ -35462,10 +35468,6 @@
 	    window.setTimeout(function () {
 	      QuestionFormActions.clearQuestionForms();
 	    }, 0);
-	
-	    this.errorListener.remove();
-	    this.questionListener.remove();
-	    this.questionFormListener.remove();
 	  },
 	
 	  updateQuestions: function () {
@@ -35518,10 +35520,6 @@
 	    var formData = {
 	      questions: questions
 	    };
-	
-	    // if (formData["questions"].length === 0) {
-	    //   this.setState({ invalid_submit: 0 })
-	    // } else {
 	
 	    if (this.state.isSurvey) {
 	      formData["title"] = this.state.title;
@@ -35723,6 +35721,10 @@
 	    QuestionApiUtil.createQuestions(formData);
 	  },
 	
+	  updateQuestion: function (formData) {
+	    QuestionApiUtil.updateQuestion(formData);
+	  },
+	
 	  toggleActive: function (questionId) {
 	    QuestionApiUtil.toggleActive(questionId);
 	  },
@@ -35816,6 +35818,21 @@
 	      },
 	      error: function (xhr) {
 	        console.log("POST Error in QuestionApiUtil#toggleActive");
+	      }
+	    });
+	  },
+	
+	  updateQuestion: function (formData) {
+	    $.ajax({
+	      url: 'api/questions/' + formData.questionId,
+	      type: 'PATCH',
+	      dataType: 'json',
+	      data: { question: formData },
+	      success: function (question) {
+	        ServerQuestionActions.receiveQuestion(question);
+	      },
+	      error: function (xhr) {
+	        console.log("POST Error in QuestionApiUtil#updateQuestion");
 	      }
 	    });
 	  }
@@ -36043,10 +36060,12 @@
 	  switch (payload.actionType) {
 	    case ErrorConstants.SET_ERRORS:
 	      _resetErrors(payload.errors);
+	      console.log("set errors is emitting");
 	      ErrorStore.__emitChange();
 	      break;
 	    case ErrorConstants.CLEAR_ERRORS:
 	      _errors = [];
+	      console.log("clear errors is emitting");
 	      ErrorStore.__emitChange();
 	      break;
 	  }
@@ -36239,8 +36258,7 @@
 	        React.createElement('br', null),
 	        React.createElement('input', {
 	          autoFocus: true,
-	          form: 'questionform',
-	          className: 'question-input-field margin-auto',
+	          className: 'edit-question-answer-input',
 	          type: 'text',
 	          value: this.state.question,
 	          onChange: this.questionChange })
@@ -36295,10 +36313,15 @@
 	  displayName: 'AnswerInput',
 	
 	  getInitialState: function () {
-	    return { answer: "" };
+	    var answer = this.props.answer || "";
+	    return { answer: answer };
 	  },
 	
-	  componentDidMount: function () {},
+	  componentDidMount: function () {
+	    window.setTimeout(function () {
+	      this.sendAnswerToStore();
+	    }.bind(this), 0);
+	  },
 	
 	  componentWillUnmount: function () {},
 	
@@ -36319,16 +36342,33 @@
 	  },
 	
 	  render: function () {
-	    return React.createElement(
-	      'div',
-	      { className: 'single-answer-container' },
-	      React.createElement('input', {
-	        className: 'single-answer-input h12',
+	    var answerContainer = "single-answer-container";
+	
+	    var answerInput = React.createElement('input', {
+	      className: 'single-answer-input h12',
+	      type: 'text',
+	      value: this.state.answer,
+	      placeholder: 'Text, Image URL, or LaTeX',
+	      onChange: this.answerChange
+	    });
+	
+	    if (window.location.hash.slice(2, 11).toUpperCase() === "QUESTIONS") {
+	      answerInput = React.createElement('input', {
+	        className: 'edit-question-answer-input',
+	        autoFocus: true,
 	        type: 'text',
 	        value: this.state.answer,
-	        placeholder: 'Text, Image URL, or LaTeX',
+	        placeholder: 'Type text or upload an image to use as choice',
 	        onChange: this.answerChange
-	      })
+	      });
+	
+	      answerContainer = "edit-question-answer-input-container";
+	    }
+	
+	    return React.createElement(
+	      'div',
+	      { className: answerContainer },
+	      answerInput
 	    );
 	  }
 	});
@@ -36788,8 +36828,6 @@
 	      },
 	      error: function (xhr) {
 	        console.log("Error in UserApiUtil#sendEmail");
-	        var errors = xhr.responseJSON;
-	        ErrorActions.setErrors(errors);
 	      }
 	    });
 	  },
@@ -36804,7 +36842,7 @@
 	        UserActions.userFound(user);
 	      },
 	      error: function (xhr) {
-	        console.log("Error in UserApiUtil#sendEmail");
+	        console.log("Error in UserApiUtil#findUserByUsername");
 	        var errors = xhr.responseJSON;
 	        ErrorActions.setErrors(errors);
 	      }
@@ -37674,6 +37712,7 @@
 	var SurveyStore = __webpack_require__(312);
 	var SideNav = __webpack_require__(313);
 	var QuestionsIndex = __webpack_require__(314);
+	var ErrorActions = __webpack_require__(275);
 	
 	var SurveysIndex = React.createClass({
 	  displayName: 'SurveysIndex',
@@ -37700,6 +37739,9 @@
 	  },
 	
 	  componentDidMount: function () {
+	    window.setTimeout(function () {
+	      ErrorActions.clearErrors();
+	    }, 0);
 	    this.surveyListener = SurveyStore.addListener(this._onChange);
 	    ClientSurveyActions.fetchAllSurveys();
 	  },
@@ -38112,9 +38154,6 @@
 	  componentWillUnmount: function () {
 	    this.errorListener.remove();
 	    this.questionListener.remove();
-	    window.setTimeout(function () {
-	      ErrorActions.clearErrors();
-	    }, 0);
 	  },
 	
 	  _handleErrors: function () {
@@ -38165,30 +38204,107 @@
 	  },
 	
 	  render: function () {
+	    var that = this;
 	    var myAnswerObjects;
 	    var myAnswerArray = [];
 	    var question = "";
 	    var username = "";
 	
-	    if (this.state.question.question !== undefined) {
-	      question = this.state.question.question;
-	      username = this.state.question.author.username;
+	    if (that.state.question.question !== undefined) {
+	      question = that.state.question.question;
+	      username = that.state.question.author.username;
 	      if (question.length > 50) {
 	        question = question.slice(0, 47) + "...";
 	      }
 	    };
 	
-	    if (Object.keys(this.state.question).length !== 0) {
-	      myAnswerObjects = this.state.question["answers"];
-	      myAnswerArray = myAnswerObjects.map(function (answer) {
-	        return answer["answer"];
-	      });
+	    var numResponses = 0;
+	
+	    if (Object.keys(that.state.question).length !== 0) {
+	      if (that.state.question["responses"]) {
+	        var myResponseObjects = that.state.question["responses"];
+	        numResponses = myResponseObjects.length;
+	      }
 	    }
 	
+	    var myGraphAnswerObject = {};
+	
+	    var height;
+	
+	    if (Object.keys(that.state.question).length !== 0) {
+	
+	      myAnswerObjects = that.state.question["answers"];
+	      myAnswerArray = myAnswerObjects.map(function (answer) {
+	        var answerId = answer["id"];
+	        myGraphAnswerObject[answerId] = 0;
+	
+	        return answer["answer"];
+	      });
+	
+	      height = 500 / myAnswerArray.length;
+	
+	      myResponseObjects = that.state.question["responses"];
+	      if (myResponseObjects) {
+	        myResponseObjects.forEach(function (responseObj) {
+	          myGraphAnswerObject[responseObj["answer_id"]] += 1;
+	        });
+	      }
+	    }
+	
+	    var myGraph = "";
+	    var graphKeys = Object.keys(myGraphAnswerObject);
+	
+	    if (graphKeys !== 0) {
+	      if (that.state.question["responses"]) {
+	        if (that.state.question["responses"].length !== 0) {
+	          myGraph = graphKeys.map(function (answerId) {
+	
+	            var width = 100 / numResponses * myGraphAnswerObject[answerId];
+	
+	            var graphStyle = {
+	              height: height + "px",
+	              width: width + "%",
+	              background: "rgb(60, 116, 158)",
+	              color: "white",
+	              fontSize: "20px"
+	            };
+	
+	            if (width.toString().length > 5) {
+	              width = width.toString().slice(0, 5) + "%";
+	            } else if (numResponses === 0) {
+	              width = "";
+	            } else {
+	              width = width + "%";
+	            }
+	
+	            return React.createElement(
+	              'li',
+	              { key: answerId, style: graphStyle },
+	              React.createElement(
+	                'div',
+	                { className: 'percentage-graph' },
+	                width
+	              )
+	            );
+	          });
+	        }
+	      }
+	    }
+	
+	    var myHeight = {
+	      height: height + "px",
+	      position: "relative",
+	      top: height / 2 + "px"
+	    };
+	
 	    var myAnswers = myAnswerArray.map(function (currentAnswer, idx) {
+	      if (currentAnswer.length > 50) {
+	        currentAnswer = currentAnswer.slice(0, 47) + "...";
+	      }
+	
 	      return React.createElement(
 	        'li',
-	        { key: idx },
+	        { key: idx, style: myHeight, className: 'answer-item-single' },
 	        currentAnswer
 	      );
 	    });
@@ -38219,13 +38335,13 @@
 	      )
 	    );
 	
-	    if (this.state.question.active) {
+	    if (that.state.question.active) {
 	      inactiveQuestionPrompt = "";
 	    } else {
 	      activeQuestionPrompt = "";
 	    }
 	
-	    var myTime = this.state.time;
+	    var myTime = that.state.time;
 	    var time = myTime.slice(0, 2) + ":" + myTime.slice(2, 4);
 	
 	    var countdown = "";
@@ -38233,7 +38349,7 @@
 	    var activeQuestion = "toggle-button-active ";
 	    var inactiveToggle = "toggle-button-inactive ";
 	
-	    if (!this.state.question.active) {
+	    if (!that.state.question.active) {
 	      activeQuestion = "";
 	    }
 	
@@ -38267,16 +38383,31 @@
 	              myAnswers
 	            ),
 	            React.createElement(
-	              'div',
+	              'ul',
 	              { className: 'answers-graph-right' },
-	              'GRAPH HERE'
+	              myGraph
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'zero-percent' },
+	              '0%'
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'fifty-percent' },
+	              '50%'
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'hundred-percent' },
+	              '100%'
 	            )
 	          ),
 	          React.createElement(
 	            'ul',
 	            { className: 'question-toggle-buttons' },
 	            React.createElement('li', {
-	              className: "fa fa-wifi " + activeQuestion + inactiveToggle,
+	              className: "fa fa-wifi hover-pointer " + activeQuestion + inactiveToggle,
 	              onClick: this.handleActiveToggle
 	            })
 	          )
@@ -38337,6 +38468,10 @@
 	var QuestionStore = __webpack_require__(290);
 	var DeleteQuestion = __webpack_require__(317);
 	var ClientQuestionActions = __webpack_require__(282);
+	var SessionStore = __webpack_require__(250);
+	var QuestionFormStore = __webpack_require__(296);
+	var QuestionFormActions = __webpack_require__(294);
+	var ErrorStore = __webpack_require__(291);
 	
 	var QuestionIndexItemToolbar = React.createClass({
 	  displayName: 'QuestionIndexItemToolbar',
@@ -38346,22 +38481,55 @@
 	  },
 	
 	  getInitialState: function () {
+	    var user = SessionStore.currentUser();
 	    var questionId = parseInt(window.location.hash.split("?")[0].split("questions")[1].split("/")[1]);
-	    return { questionId: questionId, question: {}, modalOpen: false, configure: true, test: false, present: false };
+	    return {
+	      user: user,
+	      questionId: questionId,
+	      question: {},
+	      modalOpen: false,
+	      configure: true,
+	      test: false,
+	      present: false,
+	      newQuestion: "",
+	      newCategory: "",
+	      newAnswers: {},
+	      oldAnswers: {}
+	    };
 	  },
 	
 	  componentDidMount: function () {
-	    this.questionFormListener = QuestionStore.addListener(this._onChange);
+	    this.questionStoreListener = QuestionStore.addListener(this._onChange);
+	    this.questionFormListener = QuestionFormStore.addListener(this._handleQuestionFormChange);
+	    this.errorListener = ErrorStore.addListener(this._errorChange);
 	  },
 	
 	  componentWillUnmount: function () {
+	    this.questionStoreListener.remove();
 	    this.questionFormListener.remove();
+	    this.errorListener.remove();
 	  },
 	
 	  _onChange: function () {
 	    var myQuestion = QuestionStore.getQuestionById(this.state.questionId);
 	    var question = myQuestion || {};
 	    this.setState({ question: question });
+	  },
+	
+	  _errorChange: function () {
+	    alert("An error occured while trying to update, try again.");
+	  },
+	
+	  _handleQuestionFormChange: function () {
+	    var myQuestion = QuestionFormStore.getQuestionFormById(this.state.questionId);
+	    if (myQuestion !== undefined) {
+	      this.setState({
+	        newQuestion: myQuestion.question,
+	        newCategory: myQuestion.category,
+	        newAnswers: myQuestion.answers,
+	        oldAnswers: myQuestion.oldAnswers
+	      });
+	    }
 	  },
 	
 	  closeModal: function () {
@@ -38384,7 +38552,23 @@
 	
 	  handleSaveClick: function (e) {
 	    e.preventDefault();
-	    // FORM DATA SEND UP
+	
+	    var formData = {
+	      questionId: this.state.questionId,
+	      question: this.state.newQuestion,
+	      category: this.state.newCategory,
+	      answers: this.state.newAnswers,
+	      oldAnswers: this.state.oldAnswers
+	    };
+	
+	    ClientQuestionActions.updateQuestion(formData);
+	
+	    window.setTimeout(function () {
+	      var errors = ErrorStore.getErrors();
+	      if (errors.length === 0) {
+	        this.context.router.push("questions/" + this.state.questionId);
+	      }
+	    }.bind(this), 1000);
 	  },
 	
 	  handleConfigureClick: function () {
@@ -38477,21 +38661,11 @@
 	
 	    var testList = React.createElement(
 	      'ul',
-	      { className: 'test-list-items' },
+	      { className: 'test-list-items group' },
 	      React.createElement(
-	        'li',
-	        null,
-	        'Web',
-	        React.createElement(
-	          'div',
-	          null,
-	          'The audience can respond to this poll at PollEv.com/peterlin502 as long as the poll is active.'
-	        )
-	      ),
-	      React.createElement(
-	        'li',
-	        null,
-	        'Text message'
+	        'div',
+	        { className: 'test-list-items-message' },
+	        "The audience can respond to this poll at Ask--Anything.HerokuApp.com/" + this.state.user.username + " as long as the poll is active."
 	      )
 	    );
 	
@@ -38683,77 +38857,146 @@
 	
 	  getInitialState: function () {
 	    var questionId = parseInt(window.location.hash.split("?")[0].split("questions")[1].split("/")[1]);
-	    var myQuestion = QuestionStore.getQuestionById(questionId);
-	    var question = myQuestion || {};
 	
-	    return { questionId: questionId, question: question };
+	    return {
+	      input: "",
+	      questionId: questionId,
+	      newQuestion: "",
+	      newCategory: "",
+	      oldAnswers: {},
+	      answers: {},
+	      answerId: 1,
+	      answerFormObjects: {}
+	    };
 	  },
 	
 	  myQuestionFormData: function () {
 	    return {
-	      question: this.state.question,
-	      category: this.state.category,
+	      question: this.state.newQuestion,
+	      category: this.state.newCategory,
+	      oldAnswers: this.state.oldAnswers,
 	      answers: this.state.answers
 	    };
 	  },
 	
 	  sendQuestionFormData: function () {
 	    var questionFormData = this.myQuestionFormData();
-	    QuestionFormActions.sendQuestionFormData(this.state.questionId, questionFormData);
+	    window.setTimeout(function () {
+	      QuestionFormActions.sendQuestionFormData(this.state.questionId, questionFormData);
+	    }.bind(this), 0);
 	  },
 	
 	  componentDidMount: function () {
 	    this.questionFormListener = QuestionStore.addListener(this._onChange);
+	    this.QuestionFormStore = QuestionFormStore.addListener(this._formStoreChange);
 	    var location = window.location.hash.slice(0, 11);
 	    ClientQuestionActions.getQuestionById(this.state.questionId, location);
 	  },
 	
 	  componentWillUnmount: function () {
 	    this.questionFormListener.remove();
+	    this.QuestionFormStore.remove();
+	    QuestionFormActions.clearQuestionForms();
 	  },
 	
 	  _onChange: function () {
 	    var myQuestion = QuestionStore.getQuestionById(this.state.questionId);
 	    var question = myQuestion || {};
-	    this.setState({ question: question });
+	    var oldAnswers = {};
+	
+	    question["answers"].forEach(function (answerObj) {
+	      oldAnswers[answerObj.id] = answerObj.answer;
+	    });
+	
+	    this.state.newQuestion = question.question;
+	    this.state.newCategory = question.category;
+	    this.state.oldAnswers = oldAnswers;
+	
+	    this.sendQuestionFormData();
+	  },
+	
+	  _formStoreChange: function () {
+	    var myQuestion = QuestionFormStore.getQuestionFormById(this.state.questionId);
+	
+	    var myAnswers = QuestionFormStore.getAllAnswers(this.state.questionId);
+	
+	    var currentAnswerKeys = Object.keys(myAnswers);
+	    var oldAnswerFormObjects = this.state.answerFormObjects;
+	
+	    Object.keys(oldAnswerFormObjects).forEach(function (answerKey) {
+	      if (!currentAnswerKeys.includes(answerKey)) {
+	        delete oldAnswerFormObjects[answerKey];
+	      }
+	    });
+	
+	    this.setState({
+	      newQuestion: myQuestion.question,
+	      newCategory: myQuestion.category,
+	      oldAnswers: myQuestion.oldAnswers,
+	      answers: myQuestion.answers,
+	      answerFormObjects: oldAnswerFormObjects
+	    });
 	  },
 	
 	  questionChange: function (e) {
 	    var newQuestion = e.target.value;
-	    this.state.question = newQuestion;
+	    this.state.newQuestion = newQuestion;
 	    this.sendQuestionFormData();
 	  },
 	
-	  categoryChange: function (e) {
-	    var newCategory = e.target.value;
-	    this.state.category = newCategory;
-	    this.sendQuestionFormData();
+	  answerChange: function (e) {
+	    var outerHTMLAnswer = e.target.outerHTML.split('"');
+	    if (outerHTMLAnswer.includes("old")) {
+	      this.state.oldAnswers[outerHTMLAnswer[7]] = e.target.value;
+	      this.sendQuestionFormData();
+	    };
 	  },
 	
-	  addAnswersChange: function (e) {
-	    var newAnswer = React.createElement(AnswerInput, { answerId: this.state.answerId, questionId: this.props.questionId });
+	  createNewAnswer: function (e) {
+	    var newAnswerValue = e.target.value;
 	    var answerId = this.state.answerId;
 	
-	    this.state.answers[answerId] = "";
+	    var newAnswer = React.createElement(AnswerInput, {
+	      questionId: this.state.questionId,
+	      answerId: this.state.answerId,
+	      answer: newAnswerValue
+	    });
+	
 	    this.state.answerFormObjects[answerId] = newAnswer;
-	    this.state.answerId = answerId + 1;
-	
-	    this.sendQuestionFormData();
-	  },
-	
-	  handleDeleteQuestion: function (e) {
-	    e.preventDefault();
-	    this.questionFormListener.remove();
-	    QuestionFormActions.deleteQuestion(this.props.questionId);
-	  },
-	
-	  handleDeleteAnswer: function (e) {
-	    e.preventDefault();
-	    var answerId = e.target.outerHTML.slice(9).split('"')[0];
-	    QuestionFormActions.deleteAnswerToQuestion(this.props.questionId, answerId);
+	    this.setState({ answerId: answerId + 1, input: "" });
 	  },
 	
 	  render: function () {
+	    var that = this;
+	
+	    var myOldAnswers;
+	
+	    var oldAnswerKeys = Object.keys(that.state.oldAnswers);
+	    if (oldAnswerKeys.length !== 0) {
+	      myOldAnswers = oldAnswerKeys.map(function (answerId) {
+	        return React.createElement(
+	          'li',
+	          { key: answerId, className: 'edit-question-answer-input-container' },
+	          React.createElement('input', {
+	            className: 'edit-question-answer-input',
+	            name: 'old',
+	            id: answerId,
+	            type: 'string',
+	            value: that.state.oldAnswers[answerId],
+	            onChange: that.answerChange
+	          })
+	        );
+	      });
+	    }
+	
+	    var myNewAnswers = Object.keys(that.state.answerFormObjects).map(function (answerId, idx) {
+	      return React.createElement(
+	        'li',
+	        { key: answerId },
+	        that.state.answerFormObjects[answerId]
+	      );
+	    });
+	
 	    return React.createElement(
 	      'div',
 	      { className: 'questionindexitem-container group' },
@@ -38761,7 +39004,29 @@
 	      React.createElement(
 	        'div',
 	        { className: 'question-graph-container' },
-	        this.state.question["question"]
+	        React.createElement('input', {
+	          className: 'question-edit-question',
+	          type: 'string',
+	          value: this.state.newQuestion,
+	          onChange: this.questionChange
+	        }),
+	        React.createElement(
+	          'ul',
+	          null,
+	          myOldAnswers,
+	          myNewAnswers
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'edit-question-add-answer-field' },
+	          React.createElement('input', {
+	            className: 'edit-question-answer-input',
+	            type: 'string',
+	            value: this.state.input,
+	            placeholder: 'Type or upload an image to use as choice',
+	            onChange: this.createNewAnswer
+	          })
+	        )
 	      )
 	    );
 	  }
@@ -39435,8 +39700,8 @@
 	var SessionStore = __webpack_require__(250);
 	var SessionApiUtil = __webpack_require__(273);
 	var ResponseActions = __webpack_require__(325);
+	var ErrorActions = __webpack_require__(275);
 	
-	SessionStore.currentUser;
 	var ResponseForm = React.createClass({
 	  displayName: 'ResponseForm',
 	
@@ -39457,13 +39722,19 @@
 	      var current_user = SessionStore.currentUser();
 	      this.setState({ current_user: current_user });
 	    }.bind(this), 0);
-	    this.userListener = UserStore.addListener(this._onChange);
-	    this.questionListener = QuestionStore.addListener(this._questionChange);
+	
 	    var username = window.location.hash.slice(2).split("?")[0];
 	    UserApiUtil.findUserByUsername(username);
 	  },
 	
+	  componentDidMount: function () {
+	    this.userListener = UserStore.addListener(this._onChange);
+	    this.questionListener = QuestionStore.addListener(this._questionChange);
+	  },
+	
 	  componentWillUnmount: function () {
+	    this.questionListener.remove();
+	    ErrorActions.clearErrors();
 	    this.userListener.remove();
 	    UserActions.clearUser();
 	  },
@@ -39476,8 +39747,9 @@
 	  },
 	
 	  _questionChange: function () {
-	    var question = QuestionStore.getQuestionById(this.state.user.active_question_id);
-	    this.setState({ question: question });
+	    var user = UserStore.getUser();
+	    var question = QuestionStore.getQuestionById(user.active_question_id);
+	    this.setState({ question: question, user: user });
 	  },
 	
 	  recordAnswer: function (e) {
@@ -39491,33 +39763,90 @@
 	    ResponseActions.recordResponse(formData);
 	  },
 	
+	  deleteResponse: function (e) {
+	    var responsesArray = this.state.question["responses"];
+	    var responseId;
+	
+	    for (var i = 0; i < responsesArray.length; i++) {
+	      var current_user_id = this.state.current_user.id;
+	      var current_response_user_id = responsesArray[i]["user_id"];
+	
+	      if (current_user_id) {
+	        if (current_user_id === current_response_user_id) {
+	          responseId = responsesArray[i]["id"];
+	        }
+	      } else {
+	        if (current_response_user_id === null) {
+	          responseId = responsesArray[i]["id"];
+	        }
+	      }
+	    }
+	
+	    ResponseActions.deleteResponse(responseId);
+	  },
+	
 	  render: function () {
 	    var that = this;
-	    console.log(this.state.question);
-	
-	    console.log("User who owns the question:");
-	    console.log(this.state.user);
-	
-	    console.log("Current User:");
-	    console.log(this.state.current_user);
-	
-	    console.log(this.state.current_user["id"] === undefined);
 	
 	    var answers;
 	
 	    var user = React.createElement('div', null);
 	
-	    var vote = "0";
+	    var clearResponseButton = "";
+	    var voteStatus = "You can respond once";
+	    var answerChoiceResponse = "answer-choice-response-form";
+	    var myVote = "my-vote";
+	    var hoverPointer = "non-voted-lis";
 	
 	    if (this.state.question["answers"] !== undefined) {
+	      var responsesArray = this.state.question["responses"];
+	      var current_user_id = this.state.current_user["id"];
+	      var myAnswerId;
+	
+	      if (current_user_id) {
+	        for (var i = 0; i < responsesArray.length; i++) {
+	          if (responsesArray[i]["user_id"] === current_user_id) {
+	            myAnswerId = parseInt(responsesArray[i]["answer_id"]);
+	            hoverPointer = "voted-lis";
+	            voteStatus = "Vote recorded";
+	            myVote = "my-vote-recorded";
+	            answerChoiceResponse = "answer-choice-response-form-voted";
+	            clearResponseButton = React.createElement(
+	              'div',
+	              { className: 'clear-my-response soft-edges hover-pointer', onClick: that.deleteResponse },
+	              'Clear Response'
+	            );
+	          }
+	        }
+	      } else {
+	        for (var i = 0; i < responsesArray.length; i++) {
+	          if (responsesArray[i]["user_id"] === null) {
+	            myAnswerId = parseInt(responsesArray[i]["answer_id"]);
+	            hoverPointer = "voted-lis";
+	            voteStatus = "Vote recorded";
+	            myVote = "my-vote-recorded";
+	            answerChoiceResponse = "answer-choice-response-form-voted";
+	            clearResponseButton = React.createElement(
+	              'div',
+	              { className: 'clear-my-response soft-edges hover-pointer', onClick: that.deleteResponse },
+	              'Clear Response'
+	            );
+	          }
+	        }
+	      }
+	
 	      var answerArray = this.state.question["answers"];
 	      answers = answerArray.map(function (answerObject, idx) {
+	        var vote = "0";
+	        if (answerObject.id === myAnswerId) {
+	          vote = "1";
+	        }
 	        return React.createElement(
 	          'li',
 	          {
 	            id: answerObject.id,
 	            key: idx,
-	            className: 'answer-choice-response-form-container group soft-edges hover-pointer',
+	            className: "answer-choice-response-form-container group soft-edges " + hoverPointer,
 	            onClick: ("li", that.recordAnswer)
 	          },
 	          React.createElement(
@@ -39525,26 +39854,18 @@
 	            { className: 'my-vote-container' },
 	            React.createElement(
 	              'div',
-	              { className: 'my-vote soft-edges ' },
+	              { className: myVote + " soft-edges " },
 	              vote
 	            )
 	          ),
 	          React.createElement(
 	            'div',
-	            { className: 'answer-choice-response-form' },
+	            { className: answerChoiceResponse },
 	            answerObject["answer"]
 	          )
 	        );
 	      });
 	    }
-	
-	    var voteStatus = "You can respond once";
-	
-	    // this.state.question.responses.users ===  current_user
-	
-	    // if () {
-	    //   voteStatus = "Vote recorded";
-	    // }
 	
 	    var user = React.createElement(
 	      'div',
@@ -39563,7 +39884,8 @@
 	        'ul',
 	        { className: 'answers-list-response-form' },
 	        answers
-	      )
+	      ),
+	      clearResponseButton
 	    );
 	
 	    if (this.state.user.active_question_id === null) {
@@ -39663,6 +39985,10 @@
 	var ResponseActions = {
 	  recordResponse: function (formData) {
 	    ResponseApiUtil.recordResponse(formData);
+	  },
+	
+	  deleteResponse: function (responseId) {
+	    ResponseApiUtil.deleteResponse(responseId);
 	  }
 	};
 	
@@ -39674,6 +40000,7 @@
 
 	// var ServerResponseActions = require('./../actions/server_response_actions');
 	var ErrorActions = __webpack_require__(275);
+	var ServerQuestionActions = __webpack_require__(284);
 	
 	var ResponseApiUtil = {
 	  recordResponse: function (formData) {
@@ -39682,9 +40009,24 @@
 	      type: 'POST',
 	      dataType: 'json',
 	      data: { response: formData },
-	      success: function (response) {
+	      success: function (question) {
+	        ServerQuestionActions.receiveQuestion(question);
+	      },
+	      error: function (xhr) {
+	        console.log("POST Error in ResponseApiUtil#recordResponse");
+	        var errors = xhr.responseJSON;
+	        ErrorActions.setErrors(errors);
+	      }
+	    });
+	  },
 	
-	        // ServerResponseActions.receiveQuestion(response);
+	  deleteResponse: function (responseId) {
+	    $.ajax({
+	      url: 'api/responses/' + responseId,
+	      type: 'DELETE',
+	      dataType: 'json',
+	      success: function (question) {
+	        ServerQuestionActions.receiveQuestion(question);
 	      },
 	      error: function (xhr) {
 	        console.log("POST Error in ResponseApiUtil#recordResponse");
@@ -39693,7 +40035,6 @@
 	      }
 	    });
 	  }
-	
 	};
 	
 	module.exports = ResponseApiUtil;

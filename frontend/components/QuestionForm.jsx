@@ -14,7 +14,7 @@ var QuestionForm = React.createClass({
     var myAnswers = QuestionFormStore.getAllAnswers(this.props.questionId);
     var answers = myAnswers || { 1: "", 2: "" };
     // Will need to come back here to make this more robust for other question categories
-    
+
     return ({
       question: this.props.question,
       category: "Multiple Choice",
@@ -168,8 +168,7 @@ var QuestionForm = React.createClass({
         <label className="text-shift-left"> Question: <br/>
           <input
             autoFocus
-            form="questionform"
-            className="question-input-field margin-auto"
+            className="edit-question-answer-input"
             type="text"
             value={this.state.question}
             onChange={this.questionChange} />

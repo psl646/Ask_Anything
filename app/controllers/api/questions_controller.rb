@@ -34,7 +34,6 @@ class Api::QuestionsController < ApplicationController
 
   def update
     @question = Question.find(params[:id])
-
     if (!!params[:toggle])
       if (@question[:active])
         @question[:active] = false
@@ -44,12 +43,17 @@ class Api::QuestionsController < ApplicationController
         current_user[:active_question_id] = @question[:id]
       end
       session[:session_token] = current_user.reset_session_token!
-    end
 
-    if @question.save
-      Question.inactivate_other_questions(@question, current_user)
-      @questions = current_user.questions
-      render "api/questions/index"
+      if @question.save
+        Question.inactivate_other_questions(@question, current_user)
+        @questions = current_user.questions
+        render "api/questions/index"
+      else
+        @errors = @question.errors.full_messages
+        render "api/shared/errors", status: 409
+      end
+    elsif Question.updateQuestion(@question, params, current_user)
+      render "api/questions/show"
     else
       @errors = @question.errors.full_messages
       render "api/shared/errors", status: 409
