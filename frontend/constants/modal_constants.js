@@ -105,7 +105,7 @@ var ModalConstants = {
     zIndex          : 10
   },
     content : {
-      fontSize       : '13px',
+      fontSize        : '13px',
       position        : 'fixed',
       width           : '360px',
       height          : '130px',

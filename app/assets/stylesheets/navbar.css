@@ -89,7 +89,6 @@
   color: rgba(179, 188, 194, 0.75);
 }
 
-/*NOUSER NAV SPECIFIC*/
 .nouser-nav-main-container {
   color: rgb(246, 246, 246);
   background: #203349;
@@ -137,4 +136,4 @@
   background: rgb(45, 89, 126);
   padding: 10px;
   margin: 19px 35px 19px 0;
-}
+} 
