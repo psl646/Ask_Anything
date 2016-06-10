@@ -115,15 +115,14 @@ var QuestionEditForm = React.createClass({
     var answerId = this.state.answerId;
 
     var newAnswer = <AnswerInput
-      questionId={ this.state.questionId }
-      answerId={ this.state.answerId }
-      answer={ newAnswerValue }
-      />;
+        questionId={ this.state.questionId }
+        answerId={ this.state.answerId }
+        answer={ newAnswerValue }
+        />;
 
     this.state.answerFormObjects[answerId] = newAnswer;
     this.setState({ answerId: answerId + 1, input: "" });
   },
-
 
 
 	render: function () {

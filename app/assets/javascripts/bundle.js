@@ -39649,11 +39649,11 @@
 	        React.createElement(
 	          "li",
 	          { className: "features-li" },
-	          " Question Creation",
+	          " Question CRUD",
 	          React.createElement(
 	            "div",
 	            null,
-	            "Questions are functional! Create as many questions as you want! Adding & Deleting both Questions/Answers work as expected on the FORM Upon creation, you are redirected to the LAST question you made. Can delete questions on the surveys index page as well as toggle the question you want to set as \"ACTIVE\" This will be the question that people will have access to when they go to: ask--anything.herokuapp/#/:username"
+	            "Questions are functional! Create as many questions as you want!"
 	          )
 	        ),
 	        React.createElement(
@@ -39673,7 +39673,7 @@
 	          React.createElement(
 	            "div",
 	            null,
-	            "Next..."
+	            "Completed!"
 	          )
 	        )
 	      )

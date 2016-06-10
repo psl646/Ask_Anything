@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  root "static_pages#root"
+
   namespace :api, defaults: {format: :json} do
     resource :user, only: [:create, :show, :update]
     resource :session, only: [:create, :destroy, :show]
@@ -7,5 +9,6 @@ Rails.application.routes.draw do
     resources :responses, only: [:create, :update, :destroy]
   end
 
-  root "static_pages#root"
+  get '/auth/:provider/callback', to: 'sessions#create'
+
 end
