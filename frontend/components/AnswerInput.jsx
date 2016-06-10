@@ -34,6 +34,10 @@ var AnswerInput = React.createClass({
     QuestionFormActions.addAnswerToQuestion(questionId, answerId, answer);
   },
 
+  deleteAnswer: function (e) {
+    QuestionFormActions.deleteAnswerToQuestion(this.props.questionId, this.props.answerId)
+  },
+
 	render: function () {
     var answerContainer = "single-answer-container";
 
@@ -49,14 +53,21 @@ var AnswerInput = React.createClass({
 
     if (window.location.hash.slice(2, 11).toUpperCase() === "QUESTIONS") {
       answerInput = (
-        <input
-          className="edit-question-answer-input"
-          autoFocus
-          type="text"
-          value={ this.state.answer}
-          placeholder="Type text or upload an image to use as choice"
-          onChange={this.answerChange}
-          />
+        <li>
+          <input
+            className="edit-question-answer-input"
+            autoFocus
+            type="text"
+            value={ this.state.answer }
+            placeholder="Type text or upload an image to use as choice"
+            onChange={this.answerChange}
+            />
+          <div id={ this.props.answerId }
+              className="delete-answer-edit-form hover-pointer"
+              onClick={"li", this.deleteAnswer }>
+              X
+            </div>
+        </li>
       );
 
       answerContainer = "edit-question-answer-input-container";

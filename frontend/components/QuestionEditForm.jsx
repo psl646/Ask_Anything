@@ -74,9 +74,11 @@ var QuestionEditForm = React.createClass({
   },
 
   _formStoreChange: function () {
+    console.log("FORM STORE CHANGED!");
     var myQuestion = QuestionFormStore.getQuestionFormById(this.state.questionId);
-
+    console.log(myQuestion);
     var myAnswers = QuestionFormStore.getAllAnswers(this.state.questionId);
+    console.log(myAnswers);
 
     var currentAnswerKeys = Object.keys(myAnswers);
     var oldAnswerFormObjects = this.state.answerFormObjects;
@@ -124,6 +126,10 @@ var QuestionEditForm = React.createClass({
     this.setState({ answerId: answerId + 1, input: "" });
   },
 
+  deleteAnswer: function (e) {
+    var answerId = parseInt(e.target.outerHTML.split('"')[1]);
+    QuestionFormActions.deleteAnswerToQuestion(this.state.questionId, answerId)
+  },
 
 	render: function () {
     var that = this;
@@ -143,6 +149,11 @@ var QuestionEditForm = React.createClass({
               value={ that.state.oldAnswers[answerId] }
               onChange={ that.answerChange }
               />
+            <div id={ answerId }
+              className="delete-answer-edit-form hover-pointer"
+              onClick={"li", that.deleteAnswer }>
+              X
+            </div>
           </li>
         );
       });

@@ -25,8 +25,15 @@ var _addAnswerToQuestion = function(questionId, answerId, answer) {
 };
 
 var _deleteAnswerToQuestion = function(questionId, answerId) {
+  // COME BACK HERE TO FIX THIS CODE
   var question = _questions[questionId];
-  delete question["answers"][answerId];
+  if (question["oldAnswers"] === undefined)
+    delete question["answers"][answerId];
+  else if (!!question["oldAnswers"][answerId])
+    delete question["oldAnswers"][answerId]
+  else {
+    delete question["answers"][answerId];
+  }
 };
 
 QuestionFormStore.__onDispatch = function (payload) {

@@ -36339,6 +36339,10 @@
 	    QuestionFormActions.addAnswerToQuestion(questionId, answerId, answer);
 	  },
 	
+	  deleteAnswer: function (e) {
+	    QuestionFormActions.deleteAnswerToQuestion(this.props.questionId, this.props.answerId);
+	  },
+	
 	  render: function () {
 	    var answerContainer = "single-answer-container";
 	
@@ -36351,14 +36355,25 @@
 	    });
 	
 	    if (window.location.hash.slice(2, 11).toUpperCase() === "QUESTIONS") {
-	      answerInput = React.createElement('input', {
-	        className: 'edit-question-answer-input',
-	        autoFocus: true,
-	        type: 'text',
-	        value: this.state.answer,
-	        placeholder: 'Type text or upload an image to use as choice',
-	        onChange: this.answerChange
-	      });
+	      answerInput = React.createElement(
+	        'li',
+	        null,
+	        React.createElement('input', {
+	          className: 'edit-question-answer-input',
+	          autoFocus: true,
+	          type: 'text',
+	          value: this.state.answer,
+	          placeholder: 'Type text or upload an image to use as choice',
+	          onChange: this.answerChange
+	        }),
+	        React.createElement(
+	          'div',
+	          { id: this.props.answerId,
+	            className: 'delete-answer-edit-form hover-pointer',
+	            onClick: ("li", this.deleteAnswer) },
+	          'X'
+	        )
+	      );
 	
 	      answerContainer = "edit-question-answer-input-container";
 	    }
@@ -36466,8 +36481,11 @@
 	};
 	
 	var _deleteAnswerToQuestion = function (questionId, answerId) {
+	  // COME BACK HERE TO FIX THIS CODE
 	  var question = _questions[questionId];
-	  delete question["answers"][answerId];
+	  if (question["oldAnswers"] === undefined) delete question["answers"][answerId];else if (!!question["oldAnswers"][answerId]) delete question["oldAnswers"][answerId];else {
+	    delete question["answers"][answerId];
+	  }
 	};
 	
 	QuestionFormStore.__onDispatch = function (payload) {
@@ -36738,7 +36756,7 @@
 	      ),
 	      React.createElement(
 	        'a',
-	        { href: 'auth/twitter' },
+	        { href: 'auth/twitter', className: 'soft-edges hover-pointer twitter-login' },
 	        'Twitter Login'
 	      )
 	    );
@@ -38563,7 +38581,7 @@
 	      if (errors.length === 0) {
 	        this.context.router.push("questions/" + this.state.questionId);
 	      }
-	    }.bind(this), 1000);
+	    }.bind(this), 0);
 	  },
 	
 	  handleConfigureClick: function () {
@@ -38909,9 +38927,11 @@
 	  },
 	
 	  _formStoreChange: function () {
+	    console.log("FORM STORE CHANGED!");
 	    var myQuestion = QuestionFormStore.getQuestionFormById(this.state.questionId);
-	
+	    console.log(myQuestion);
 	    var myAnswers = QuestionFormStore.getAllAnswers(this.state.questionId);
+	    console.log(myAnswers);
 	
 	    var currentAnswerKeys = Object.keys(myAnswers);
 	    var oldAnswerFormObjects = this.state.answerFormObjects;
@@ -38959,6 +38979,11 @@
 	    this.setState({ answerId: answerId + 1, input: "" });
 	  },
 	
+	  deleteAnswer: function (e) {
+	    var answerId = parseInt(e.target.outerHTML.split('"')[1]);
+	    QuestionFormActions.deleteAnswerToQuestion(this.state.questionId, answerId);
+	  },
+	
 	  render: function () {
 	    var that = this;
 	
@@ -38977,7 +39002,14 @@
 	            type: 'string',
 	            value: that.state.oldAnswers[answerId],
 	            onChange: that.answerChange
-	          })
+	          }),
+	          React.createElement(
+	            'div',
+	            { id: answerId,
+	              className: 'delete-answer-edit-form hover-pointer',
+	              onClick: ("li", that.deleteAnswer) },
+	            'X'
+	          )
 	        );
 	      });
 	    }

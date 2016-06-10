@@ -105,7 +105,7 @@ var QuestionIndexItemToolbar = React.createClass ({
       if (errors.length === 0) {
         this.context.router.push("questions/" + this.state.questionId);
       }
-    }.bind(this), 1000);
+    }.bind(this), 0);
   },
 
   handleConfigureClick: function () {

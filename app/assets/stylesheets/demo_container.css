@@ -49,4 +49,13 @@
   position: absolute;
   top: 50px;
   left: 77px;
-} 
+}
+
+.twitter-login {
+    width: 200px;
+    padding: 20px;
+    background: blue;
+    color: white;
+    position: relative;
+    top: 40px;
+}
