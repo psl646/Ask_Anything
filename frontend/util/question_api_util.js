@@ -21,7 +21,7 @@ var QuestionApiUtil = {
       url: 'api/questions/' + question_id,
       type: 'GET',
       dataType: 'json',
-      data: { location: location },
+      data: { location : location },
       success: function (question) {
         ServerQuestionActions.receiveQuestion(question);
       },

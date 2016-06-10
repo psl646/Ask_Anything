@@ -8,7 +8,7 @@ class User < ActiveRecord::Base
 	validates :email, :session_token, uniqueness: true
 	validates :password, length: {minimum: 7}, allow_nil: :true
 
-	before_validation :ensure_session_token, :ensure_initial_survey, :ensure_username
+	after_initialize :ensure_session_token, :ensure_initial_survey, :ensure_username
 	before_validation :ensure_session_token_uniqueness
 
 	has_many(
@@ -61,12 +61,11 @@ class User < ActiveRecord::Base
     user = User.find_by(twitter_uid: auth_hash[:uid])
 
     if user.nil?
-			debugger
       user = User.create!(
         twitter_uid: auth_hash[:uid],
         first_name: auth_hash[:info][:name].split(" ")[0],
         last_name: auth_hash[:info][:name].split(" ")[-1],
-				email: auth_hash[:info][:email],
+				email: auth_hash[:info][:nickname],
 				password: SecureRandom.base64
       )
     end
@@ -104,7 +103,8 @@ class User < ActiveRecord::Base
 			# and the same first 3 chars (last_name); the 1001 user will cause the below
 			# condition User.find_by(username: username).nil? to ALWAYS be false
 			# IE PETERLIN000 to PETERLIN999 users will exist
-			until (User.find_by(username: username).nil?) && (username.length == 11)
+			user = User.find_by(username: username)
+			until (user.nil?) && (username.length == 11)
 				username = ""
 				username.concat(self[:first_name].downcase[0,5])
 				username.concat(self[:last_name].downcase[0,3])
