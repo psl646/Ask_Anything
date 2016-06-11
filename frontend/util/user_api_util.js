@@ -66,7 +66,9 @@ var UserApiUtil = {
         UserActions.userFound(user);
       },
       error: function (xhr) {
-        console.log("Error in UserApiUtil#sendEmail");
+        console.log("Error in UserApiUtil#findUserByEmail");
+        var errors = xhr.responseJSON;
+        ErrorActions.setErrors(errors);
       }
     });
   },

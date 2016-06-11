@@ -36850,7 +36850,9 @@
 	        UserActions.userFound(user);
 	      },
 	      error: function (xhr) {
-	        console.log("Error in UserApiUtil#sendEmail");
+	        console.log("Error in UserApiUtil#findUserByEmail");
+	        var errors = xhr.responseJSON;
+	        ErrorActions.setErrors(errors);
 	      }
 	    });
 	  },
@@ -37183,8 +37185,6 @@
 	  },
 	
 	  redirectIfValidEmail: function () {
-	    // this.setState({ foundUser: true });
-	
 	    var that = this;
 	    window.setTimeout(function () {
 	      that.closeMyself();
@@ -37217,7 +37217,7 @@
 	
 	  errorMessages: function () {
 	    var errors = ErrorStore.getErrors();
-	
+	    console.log(errors);
 	    var messages = errors.map(function (errorMsg, i) {
 	      return React.createElement(
 	        'li',
@@ -37245,6 +37245,7 @@
 	  render: function () {
 	    var renderErrors = "";
 	    var logo = React.createElement(Logo, null);
+	
 	    if (this.state.errors) {
 	      renderErrors = React.createElement(
 	        'div',
@@ -38001,7 +38002,7 @@
 	  },
 	
 	  componentDidMount: function () {
-	    this.questionListener = QuestionStore.addListener(this._onChange);
+	    this.questionListener = QuestionStore.addListener(this.questionStoreChange);
 	    ClientQuestionActions.fetchAllQuestions();
 	  },
 	
@@ -38009,8 +38010,7 @@
 	    this.questionListener.remove();
 	  },
 	
-	  _onChange: function () {
-	    ClientSurveyActions.fetchAllSurveys();
+	  questionStoreChange: function () {
 	    this.setState({ questions: QuestionStore.all() });
 	  },
 	
@@ -38046,6 +38046,10 @@
 	    var targetString = e.currentTarget.outerHTML;
 	    var questionId = targetString.split('"')[1];
 	    var url = "questions/" + questionId;
+	
+	    if (outerHTMLArray.length <= 1) {
+	      return false;
+	    }
 	
 	    if (this.clickedOnActive(outerHTMLArray)) {
 	      ClientQuestionActions.toggleActive(parseInt(questionId));

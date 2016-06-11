@@ -31,8 +31,6 @@ var ForgotPassword = React.createClass({
   },
 
   redirectIfValidEmail: function () {
-    // this.setState({ foundUser: true });
-
     var that = this;
     window.setTimeout(function () {
       that.closeMyself();
@@ -65,7 +63,7 @@ var ForgotPassword = React.createClass({
 
   errorMessages: function () {
     var errors = ErrorStore.getErrors();
-
+    console.log(errors);
     var messages = errors.map(function (errorMsg, i) {
       return <li key={ i }>{ errorMsg }</li>;
     });
@@ -85,6 +83,7 @@ var ForgotPassword = React.createClass({
 	render: function () {
     var renderErrors = "";
     var logo = <Logo />;
+    
     if (this.state.errors) {
       renderErrors = <div>{ this.errorMessages() }</div>;
     };

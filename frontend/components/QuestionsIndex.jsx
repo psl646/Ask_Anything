@@ -15,7 +15,7 @@ var QuestionsIndex = React.createClass ({
   },
 
   componentDidMount: function () {
-    this.questionListener = QuestionStore.addListener(this._onChange);
+    this.questionListener = QuestionStore.addListener(this.questionStoreChange);
     ClientQuestionActions.fetchAllQuestions();
   },
 
@@ -23,8 +23,7 @@ var QuestionsIndex = React.createClass ({
     this.questionListener.remove();
   },
 
-  _onChange: function () {
-    ClientSurveyActions.fetchAllSurveys();
+  questionStoreChange: function () {
     this.setState({ questions: QuestionStore.all() });
   },
 
@@ -60,6 +59,10 @@ var QuestionsIndex = React.createClass ({
     var targetString = e.currentTarget.outerHTML;
     var questionId = targetString.split('"')[1];
     var url = "questions/" + questionId;
+
+    if (outerHTMLArray.length <= 1){
+      return false
+    }
 
     if (this.clickedOnActive(outerHTMLArray)){
       ClientQuestionActions.toggleActive(parseInt(questionId));
