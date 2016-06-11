@@ -234,18 +234,9 @@ var QuestionIndexItem = React.createClass ({
               <ul className="answers-graph-left">
                 { myAnswers }
               </ul>
-              <ul className="answers-graph-right">
+              <ul className="answers-graph-right group">
                 { myGraph }
               </ul>
-              <div className="zero-percent">
-                0%
-              </div>
-              <div className="fifty-percent">
-                50%
-              </div>
-              <div className="hundred-percent">
-                100%
-              </div>
             </div>
             <ul className="question-toggle-buttons">
               <li

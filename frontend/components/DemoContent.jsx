@@ -80,30 +80,31 @@ var DemoContent = React.createClass({
   render: function() {
 
     return (
-      <div className="demo-container">
+      <div className="demo-container group">
         <img className="democontentgif" src={window.askAnythingAssets.askanythingvid} alt="Backdrop" />
-
-        <div className="forefront-content">            
-          <div className="h6 demo-header">
+        <div className="forefront-content">
+          <div className="header-size">
             Live Audience Participation
           </div>
           <div className="demo-description">
             Ask Anything! lets you engage your audience or class in real time
           </div>
-          <ul className="demo-options">
+          <ul className="main-page-login-options group">
             <li className="hover-pointer soft-edges create-question-button" onClick={ this.handleCreateFirstQuestionClick }>
-              Create your first question (GUEST LOGIN)
+              Create your first question as a Guest
             </li>
 
-            <li className="hover-pointer soft-edges watch-video" onClick={ this.watchVideoClick }>
-              Watch our 2 min video
+            <li>
+              <a href="auth/twitter" className="soft-edges hover-pointer twitter-login">Twitter Login</a>
             </li>
 
-            <div className="h5 thirty-seconds">
+            <div className="thirty-seconds">
               Takes 30 seconds. No signup required
             </div>
           </ul>
-          <a href="auth/twitter" className="soft-edges hover-pointer twitter-login">Twitter Login</a>
+        </div>
+        <div className="demo-page-graph">
+          <img className="dinosaur-image" src={window.askAnythingAssets.examplequestion} alt="Dinosaur Question" />
         </div>
       </div>
     );

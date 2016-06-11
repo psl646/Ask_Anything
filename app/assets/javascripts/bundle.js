@@ -36726,14 +36726,14 @@
 	
 	    return React.createElement(
 	      'div',
-	      { className: 'demo-container' },
+	      { className: 'demo-container group' },
 	      React.createElement('img', { className: 'democontentgif', src: window.askAnythingAssets.askanythingvid, alt: 'Backdrop' }),
 	      React.createElement(
 	        'div',
 	        { className: 'forefront-content' },
 	        React.createElement(
 	          'div',
-	          { className: 'h6 demo-header' },
+	          { className: 'header-size' },
 	          'Live Audience Participation'
 	        ),
 	        React.createElement(
@@ -36743,28 +36743,32 @@
 	        ),
 	        React.createElement(
 	          'ul',
-	          { className: 'demo-options' },
+	          { className: 'main-page-login-options group' },
 	          React.createElement(
 	            'li',
 	            { className: 'hover-pointer soft-edges create-question-button', onClick: this.handleCreateFirstQuestionClick },
-	            'Create your first question (GUEST LOGIN)'
+	            'Create your first question as a Guest'
 	          ),
 	          React.createElement(
 	            'li',
-	            { className: 'hover-pointer soft-edges watch-video', onClick: this.watchVideoClick },
-	            'Watch our 2 min video'
+	            null,
+	            React.createElement(
+	              'a',
+	              { href: 'auth/twitter', className: 'soft-edges hover-pointer twitter-login' },
+	              'Twitter Login'
+	            )
 	          ),
 	          React.createElement(
 	            'div',
-	            { className: 'h5 thirty-seconds' },
+	            { className: 'thirty-seconds' },
 	            'Takes 30 seconds. No signup required'
 	          )
-	        ),
-	        React.createElement(
-	          'a',
-	          { href: 'auth/twitter', className: 'soft-edges hover-pointer twitter-login' },
-	          'Twitter Login'
 	        )
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'demo-page-graph' },
+	        React.createElement('img', { className: 'dinosaur-image', src: window.askAnythingAssets.examplequestion, alt: 'Dinosaur Question' })
 	      )
 	    );
 	  }
@@ -38411,23 +38415,8 @@
 	            ),
 	            React.createElement(
 	              'ul',
-	              { className: 'answers-graph-right' },
+	              { className: 'answers-graph-right group' },
 	              myGraph
-	            ),
-	            React.createElement(
-	              'div',
-	              { className: 'zero-percent' },
-	              '0%'
-	            ),
-	            React.createElement(
-	              'div',
-	              { className: 'fifty-percent' },
-	              '50%'
-	            ),
-	            React.createElement(
-	              'div',
-	              { className: 'hundred-percent' },
-	              '100%'
 	            )
 	          ),
 	          React.createElement(

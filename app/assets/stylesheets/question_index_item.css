@@ -74,27 +74,6 @@
   font-size: 20px;
 }
 
-.zero-percent {
-  float: left;
-  position: relative;
-  left: 70px;
-  font-size: 20px;
-  z-index: 100;
-}
-
-.fifty-percent {
-  float: left;
-  position: relative;
-  font-size: 20px;
-  left: 48%;
-}
-
-.hundred-percent {
-  float: right;
-  position: relative;
-  font-size: 20px;
-}
-
 .percentage-graph {
   position: relative;
   top: 45%;
