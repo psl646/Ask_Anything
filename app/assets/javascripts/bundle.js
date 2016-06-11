@@ -36727,39 +36727,44 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'demo-container' },
+	      React.createElement('img', { className: 'democontentgif', src: window.askAnythingAssets.askanythingvid, alt: 'Backdrop' }),
 	      React.createElement(
 	        'div',
-	        { className: 'h6 demo-header' },
-	        'Live Audience Participation'
-	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'demo-description' },
-	        'Ask Anything! lets you engage your audience or class in real time'
-	      ),
-	      React.createElement(
-	        'ul',
-	        { className: 'demo-options' },
+	        { className: 'forefront-content' },
 	        React.createElement(
-	          'li',
-	          { className: 'hover-pointer soft-edges create-question-button', onClick: this.handleCreateFirstQuestionClick },
-	          'GUEST LOGIN'
-	        ),
-	        React.createElement(
-	          'li',
-	          { className: 'hover-pointer soft-edges watch-video', onClick: this.watchVideoClick },
-	          'Watch our 2 min video'
+	          'div',
+	          { className: 'h6 demo-header' },
+	          'Live Audience Participation'
 	        ),
 	        React.createElement(
 	          'div',
-	          { className: 'h5 thirty-seconds' },
-	          'Takes 30 seconds. No signup required'
+	          { className: 'demo-description' },
+	          'Ask Anything! lets you engage your audience or class in real time'
+	        ),
+	        React.createElement(
+	          'ul',
+	          { className: 'demo-options' },
+	          React.createElement(
+	            'li',
+	            { className: 'hover-pointer soft-edges create-question-button', onClick: this.handleCreateFirstQuestionClick },
+	            'Create your first question (GUEST LOGIN)'
+	          ),
+	          React.createElement(
+	            'li',
+	            { className: 'hover-pointer soft-edges watch-video', onClick: this.watchVideoClick },
+	            'Watch our 2 min video'
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'h5 thirty-seconds' },
+	            'Takes 30 seconds. No signup required'
+	          )
+	        ),
+	        React.createElement(
+	          'a',
+	          { href: 'auth/twitter', className: 'soft-edges hover-pointer twitter-login' },
+	          'Twitter Login'
 	        )
-	      ),
-	      React.createElement(
-	        'a',
-	        { href: 'auth/twitter', className: 'soft-edges hover-pointer twitter-login' },
-	        'Twitter Login'
 	      )
 	    );
 	  }

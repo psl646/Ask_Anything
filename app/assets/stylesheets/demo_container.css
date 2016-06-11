@@ -1,12 +1,27 @@
+.democontentgif {
+  z-index: -9999;
+  opacity: 0.7;
+  position: relative;
+  width: 100%;
+  left: 0;
+  right: 0;
+  bottom: 115px;
+}
+
 .demo-container {
   color: white;
-  background: grey;
-  width: 800px;
+  width: 100%;
   height: calc(100% - 300px);
   min-height: 700px;
-  margin: 20px auto;
-  border: 5px solid black;
   text-align: center;
+}
+
+.forefront-content {
+  position: relative;
+  float: left;
+  bottom: 500px;
+  z-index: 9999;
+  background: purple;
 }
 
 .demo-options {
@@ -36,6 +51,7 @@
 }
 
 .demo-header {
+  position: relative;
   margin-top: 55px;
 }
 
@@ -46,7 +62,7 @@
 }
 
 .thirty-seconds {
-  position: absolute;
+  position: relative;
   top: 50px;
   left: 77px;
 }

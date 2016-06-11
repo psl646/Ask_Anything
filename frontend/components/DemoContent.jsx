@@ -81,26 +81,30 @@ var DemoContent = React.createClass({
 
     return (
       <div className="demo-container">
-        <div className="h6 demo-header">
-          Live Audience Participation
-        </div>
-        <div className="demo-description">
-          Ask Anything! lets you engage your audience or class in real time
-        </div>
-        <ul className="demo-options">
-          <li className="hover-pointer soft-edges create-question-button" onClick={ this.handleCreateFirstQuestionClick }>
-            GUEST LOGIN
-          </li>
+        <img className="democontentgif" src={window.askAnythingAssets.askanythingvid} alt="Backdrop" />
 
-          <li className="hover-pointer soft-edges watch-video" onClick={ this.watchVideoClick }>
-            Watch our 2 min video
-          </li>
-
-          <div className="h5 thirty-seconds">
-            Takes 30 seconds. No signup required
+        <div className="forefront-content">            
+          <div className="h6 demo-header">
+            Live Audience Participation
           </div>
-        </ul>
-        <a href="auth/twitter" className="soft-edges hover-pointer twitter-login">Twitter Login</a>
+          <div className="demo-description">
+            Ask Anything! lets you engage your audience or class in real time
+          </div>
+          <ul className="demo-options">
+            <li className="hover-pointer soft-edges create-question-button" onClick={ this.handleCreateFirstQuestionClick }>
+              Create your first question (GUEST LOGIN)
+            </li>
+
+            <li className="hover-pointer soft-edges watch-video" onClick={ this.watchVideoClick }>
+              Watch our 2 min video
+            </li>
+
+            <div className="h5 thirty-seconds">
+              Takes 30 seconds. No signup required
+            </div>
+          </ul>
+          <a href="auth/twitter" className="soft-edges hover-pointer twitter-login">Twitter Login</a>
+        </div>
       </div>
     );
   }
