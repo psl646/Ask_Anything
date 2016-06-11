@@ -36730,7 +36730,7 @@
 	      React.createElement('img', { className: 'democontentgif', src: window.askAnythingAssets.askanythingvid, alt: 'Backdrop' }),
 	      React.createElement(
 	        'div',
-	        { className: 'forefront-content' },
+	        { className: 'forefront-content group' },
 	        React.createElement(
 	          'div',
 	          { className: 'header-size' },

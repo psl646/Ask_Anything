@@ -82,7 +82,7 @@ var DemoContent = React.createClass({
     return (
       <div className="demo-container group">
         <img className="democontentgif" src={window.askAnythingAssets.askanythingvid} alt="Backdrop" />
-        <div className="forefront-content">
+        <div className="forefront-content group">
           <div className="header-size">
             Live Audience Participation
           </div>

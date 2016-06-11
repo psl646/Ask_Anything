@@ -1,6 +1,7 @@
 .responseform-page {
   background: #203349;
-  height: 915px;
+  height: 100%;
+  min-height: 970px;
   width: 100%;
 }
 
@@ -175,4 +176,4 @@
   background: #255073;
   color: #f2f2f2;
   font-size: 14px;
-} 
+}

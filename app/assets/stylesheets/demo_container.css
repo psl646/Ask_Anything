@@ -3,6 +3,7 @@
   z-index: -9999;
   position: relative;
   width: 100%;
+  min-width: 1200px;
   max-height: 700px;
   bottom: 100px;
 }
@@ -10,6 +11,7 @@
 .demo-container {
   color: rgb(219, 217, 221);
   width: 100%;
+  min-width: 1200px;
   text-align: center;
 }
 
