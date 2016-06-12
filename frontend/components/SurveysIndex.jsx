@@ -1,6 +1,7 @@
 var React = require('react');
 var ClientSurveyActions = require('../actions/client_survey_actions');
 var SurveyStore = require('../stores/survey_store');
+var QuestionStore = require('../stores/question_store');
 var SideNav = require('./SideNav');
 var QuestionsIndex = require('./QuestionsIndex');
 var ErrorActions = require('../actions/error_actions');
@@ -13,7 +14,7 @@ var SurveysIndex = React.createClass ({
     return ({ surveys: surveys, clickedSurveys: {} });
   },
 
-  _onChange: function () {
+  setSurveys: function () {
     var potentialSurveys = SurveyStore.all();
     var surveys = potentialSurveys || {};
     var clickedSurveys = this.state.clickedSurveys;
@@ -27,16 +28,30 @@ var SurveysIndex = React.createClass ({
     this.setState({ surveys: surveys, clickedSurveys: clickedSurveys });
   },
 
+  _questionChange: function () {
+    ClientSurveyActions.fetchAllSurveys();
+
+    window.setTimeout(function() {
+      if (window.location.hash.slice(2,9).toLowerCase() === "surveys") {
+        this.setSurveys();
+      }
+    }.bind(this), 300);
+  },
+
   componentDidMount: function () {
     window.setTimeout(function () {
       ErrorActions.clearErrors();
     }, 0 );
-    this.surveyListener = SurveyStore.addListener(this._onChange);
+    this.questionListener = QuestionStore.addListener(this._questionChange);
     ClientSurveyActions.fetchAllSurveys();
+
+    window.setTimeout(function() {
+      this.setSurveys();
+    }.bind(this), 200);
   },
 
   componentWillUnmount: function () {
-    this.surveyListener.remove();
+    this.questionListener.remove();
   },
 
   clickedSurveyLi: function (e) {
@@ -83,7 +98,6 @@ var SurveysIndex = React.createClass ({
   render: function () {
     var that = this;
     var mySurveys = this.state.surveys;
-
     var surveys = Object.keys(mySurveys).map(function(survey_id){
       var toggleSurvey = ""
       var caretIcon = "fa fa-caret-down";

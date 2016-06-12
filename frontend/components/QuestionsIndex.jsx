@@ -54,8 +54,7 @@ var QuestionsIndex = React.createClass ({
   handleClickOnQuestionItem: function (e) {
     e.preventDefault();
     var outerHTMLArray = e.target.outerHTML.split('"');
-
-    // Come back here to do a REGEX thing to grab the question id
+    
     var targetString = e.currentTarget.outerHTML;
     var questionId = targetString.split('"')[1];
     var url = "questions/" + questionId;

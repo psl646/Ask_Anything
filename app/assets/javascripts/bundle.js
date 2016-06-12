@@ -37743,6 +37743,7 @@
 	var React = __webpack_require__(1);
 	var ClientSurveyActions = __webpack_require__(286);
 	var SurveyStore = __webpack_require__(312);
+	var QuestionStore = __webpack_require__(290);
 	var SideNav = __webpack_require__(313);
 	var QuestionsIndex = __webpack_require__(314);
 	var ErrorActions = __webpack_require__(275);
@@ -37757,7 +37758,7 @@
 	    return { surveys: surveys, clickedSurveys: {} };
 	  },
 	
-	  _onChange: function () {
+	  setSurveys: function () {
 	    var potentialSurveys = SurveyStore.all();
 	    var surveys = potentialSurveys || {};
 	    var clickedSurveys = this.state.clickedSurveys;
@@ -37771,16 +37772,30 @@
 	    this.setState({ surveys: surveys, clickedSurveys: clickedSurveys });
 	  },
 	
+	  _questionChange: function () {
+	    ClientSurveyActions.fetchAllSurveys();
+	
+	    window.setTimeout(function () {
+	      if (window.location.hash.slice(2, 9).toLowerCase() === "surveys") {
+	        this.setSurveys();
+	      }
+	    }.bind(this), 300);
+	  },
+	
 	  componentDidMount: function () {
 	    window.setTimeout(function () {
 	      ErrorActions.clearErrors();
 	    }, 0);
-	    this.surveyListener = SurveyStore.addListener(this._onChange);
+	    this.questionListener = QuestionStore.addListener(this._questionChange);
 	    ClientSurveyActions.fetchAllSurveys();
+	
+	    window.setTimeout(function () {
+	      this.setSurveys();
+	    }.bind(this), 200);
 	  },
 	
 	  componentWillUnmount: function () {
-	    this.surveyListener.remove();
+	    this.questionListener.remove();
 	  },
 	
 	  clickedSurveyLi: function (e) {
@@ -37827,7 +37842,6 @@
 	  render: function () {
 	    var that = this;
 	    var mySurveys = this.state.surveys;
-	
 	    var surveys = Object.keys(mySurveys).map(function (survey_id) {
 	      var toggleSurvey = "";
 	      var caretIcon = "fa fa-caret-down";
@@ -38051,7 +38065,6 @@
 	    e.preventDefault();
 	    var outerHTMLArray = e.target.outerHTML.split('"');
 	
-	    // Come back here to do a REGEX thing to grab the question id
 	    var targetString = e.currentTarget.outerHTML;
 	    var questionId = targetString.split('"')[1];
 	    var url = "questions/" + questionId;
