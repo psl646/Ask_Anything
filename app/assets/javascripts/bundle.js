@@ -35752,7 +35752,7 @@
 	      success: function (questions) {
 	        ServerQuestionActions.receiveAllQuestions(questions);
 	      },
-	      error: function () {
+	      error: function (error) {
 	        console.log("Fetch error in QuestionApiUtil#fetchAllQuestions");
 	      }
 	    });
@@ -37808,18 +37808,33 @@
 	  },
 	
 	  componentDidMount: function () {
+	    var that = this;
+	
 	    window.setTimeout(function () {
 	      ErrorActions.clearErrors();
 	    }, 0);
-	    this.questionListener = QuestionStore.addListener(this._questionChange);
+	    that.questionListener = QuestionStore.addListener(that._questionChange);
 	    ClientSurveyActions.fetchAllSurveys();
 	
 	    window.setTimeout(function () {
-	      this.setSurveys();
-	    }.bind(this), 500);
+	      that.setSurveys();
+	    }, 500);
+	
+	    that.pusher = new Pusher('d7b6b378f3d562f7fd37', {
+	      encrypted: true
+	    });
+	
+	    var channel = that.pusher.subscribe('survey_changed');
+	    channel.bind('response_recorded', function (data) {
+	      ClientSurveyActions.fetchAllSurveys();
+	      window.setTimeout(function () {
+	        that.setSurveys();
+	      }, 500);
+	    });
 	  },
 	
 	  componentWillUnmount: function () {
+	    this.pusher.unsubscribe('survey_changed');
 	    this.questionListener.remove();
 	    ServerSurveyActions.clearSurveys();
 	  },
@@ -39831,14 +39846,14 @@
 	      encrypted: true
 	    });
 	
-	    var channel = this.pusher.subscribe('user_updated');
-	    channel.bind('question_active', function (data) {
+	    var channel = this.pusher.subscribe('question_updated');
+	    channel.bind('question_changed', function (data) {
 	      UserApiUtil.findUserByUsername(username);
 	    });
 	  },
 	
 	  componentWillUnmount: function () {
-	    this.pusher.unsubscribe('user_updated');
+	    this.pusher.unsubscribe('question_updated');
 	    this.questionListener.remove();
 	    ErrorActions.clearErrors();
 	    this.userListener.remove();

@@ -1,7 +1,12 @@
 class Api::QuestionsController < ApplicationController
   def index
-    @questions = current_user.questions
-    render "api/questions/index"
+    if current_user
+      @questions = current_user.questions
+      render "api/questions/index"
+    else
+      @errors = ["These aren't the questions you’re looking for!"]
+      render "api/shared/errors", status: 403
+    end
   end
 
   def show
@@ -47,14 +52,14 @@ class Api::QuestionsController < ApplicationController
       if @question.save
         Question.inactivate_other_questions(@question, current_user)
         @questions = current_user.questions
-        Pusher.trigger('user_updated', 'question_active', {})
+        Pusher.trigger('question_updated', 'question_changed', {})
         render "api/questions/index"
       else
         @errors = @question.errors.full_messages
         render "api/shared/errors", status: 409
       end
     elsif Question.updateQuestion(@question, params, current_user)
-      Pusher.trigger('user_updated', 'question_active', {})
+      Pusher.trigger('question_updated', 'question_changed', {})
       render "api/questions/show"
     else
       @errors = @question.errors.full_messages
@@ -66,7 +71,7 @@ class Api::QuestionsController < ApplicationController
     @question = Question.find(params[:id])
     @question.destroy
     @questions = current_user.questions
-    Pusher.trigger('user_updated', 'question_active', {})
+    Pusher.trigger('question_updated', 'question_changed', {})
     render "api/questions/index"
   end
 

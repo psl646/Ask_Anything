@@ -10,7 +10,7 @@ var QuestionApiUtil = {
       success: function (questions) {
         ServerQuestionActions.receiveAllQuestions(questions);
       },
-      error: function () {
+      error: function (error) {
 			  console.log("Fetch error in QuestionApiUtil#fetchAllQuestions");
 			}
     })

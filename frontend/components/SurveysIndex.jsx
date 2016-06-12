@@ -38,18 +38,33 @@ var SurveysIndex = React.createClass ({
   },
 
   componentDidMount: function () {
+    var that = this;
+
     window.setTimeout(function () {
       ErrorActions.clearErrors();
     }, 0 );
-    this.questionListener = QuestionStore.addListener(this._questionChange);
+    that.questionListener = QuestionStore.addListener(that._questionChange);
     ClientSurveyActions.fetchAllSurveys();
 
     window.setTimeout(function() {
-      this.setSurveys();
-    }.bind(this), 500);
+      that.setSurveys();
+    }, 500);
+
+    that.pusher = new Pusher('d7b6b378f3d562f7fd37', {
+      encrypted: true
+    });
+
+    var channel = that.pusher.subscribe('survey_changed');
+    channel.bind('response_recorded', function(data) {
+      ClientSurveyActions.fetchAllSurveys();
+      window.setTimeout(function() {
+        that.setSurveys();
+      }, 500);
+    });
   },
 
   componentWillUnmount: function () {
+    this.pusher.unsubscribe('survey_changed');
     this.questionListener.remove();
     ServerSurveyActions.clearSurveys();
   },

@@ -13,10 +13,12 @@ class Api::ResponsesController < ApplicationController
       if response.empty?
         Response.create(answer_id: answer_id, user_id: user_id)
         Pusher.trigger('question_' + @question.id.to_s, 'response_recorded', {})
+        Pusher.trigger('survey_changed', 'response_recorded', {})
       end
     elsif !session[:anonymous]
       Response.create(answer_id: answer_id)
       Pusher.trigger('question_' + @question.id.to_s, 'response_recorded', {})
+      Pusher.trigger('survey_changed', 'response_recorded', {})
       session[:anonymous] = true
     end
     render "api/questions/show"
@@ -32,6 +34,7 @@ class Api::ResponsesController < ApplicationController
     @question = response.question
     response.destroy
     Pusher.trigger('question_' + @question.id.to_s, 'response_recorded', {})
+    Pusher.trigger('survey_changed', 'response_recorded', {})
     render "api/questions/show"
   end
 

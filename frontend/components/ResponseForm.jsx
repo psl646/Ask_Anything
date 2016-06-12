@@ -37,14 +37,14 @@ var ResponseForm = React.createClass({
       encrypted: true
     });
 
-    var channel = this.pusher.subscribe('user_updated');
-    channel.bind('question_active', function(data) {
+    var channel = this.pusher.subscribe('question_updated');
+    channel.bind('question_changed', function(data) {
       UserApiUtil.findUserByUsername(username);
     });
   },
 
   componentWillUnmount: function () {
-    this.pusher.unsubscribe('user_updated');
+    this.pusher.unsubscribe('question_updated');
     this.questionListener.remove();
     ErrorActions.clearErrors();
     this.userListener.remove();
