@@ -5,6 +5,7 @@ var QuestionStore = require('../stores/question_store');
 var SideNav = require('./SideNav');
 var QuestionsIndex = require('./QuestionsIndex');
 var ErrorActions = require('../actions/error_actions');
+var ServerSurveyActions = require('../actions/server_survey_actions');
 
 var SurveysIndex = React.createClass ({
 
@@ -33,7 +34,7 @@ var SurveysIndex = React.createClass ({
       if (window.location.hash.slice(2,9).toLowerCase() === "surveys") {
         this.setSurveys();
       }
-    }.bind(this), 300);
+    }.bind(this), 250);
   },
 
   componentDidMount: function () {
@@ -45,11 +46,12 @@ var SurveysIndex = React.createClass ({
 
     window.setTimeout(function() {
       this.setSurveys();
-    }.bind(this), 200);
+    }.bind(this), 250);
   },
 
   componentWillUnmount: function () {
     this.questionListener.remove();
+    ServerSurveyActions.clearSurveys();
   },
 
   clickedSurveyLi: function (e) {

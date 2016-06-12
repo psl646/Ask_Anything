@@ -20,6 +20,9 @@ SurveyStore.__onDispatch = function (payload) {
       _resetSurveys(payload.surveys);
       SurveyStore.__emitChange();
       break;
+    case SurveyConstants.CLEAR_SURVEYS:
+      _surveys = {};
+      break;
   }
 };
 

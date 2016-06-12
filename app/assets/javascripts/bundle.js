@@ -35949,6 +35949,12 @@
 	      actionType: SurveyConstants.SURVEYS_RECEIVED,
 	      surveys: surveys
 	    });
+	  },
+	
+	  clearSurveys: function () {
+	    AppDispatcher.dispatch({
+	      actionType: SurveyConstants.CLEAR_SURVEYS
+	    });
 	  }
 	};
 	
@@ -35959,7 +35965,8 @@
 /***/ function(module, exports) {
 
 	var SurveyConstants = {
-	  SURVEYS_RECEIVED: "SURVEYS_RECEIVED"
+	  SURVEYS_RECEIVED: "SURVEYS_RECEIVED",
+	  CLEAR_SURVEYS: "CLEAR_SURVEYS"
 	};
 	
 	module.exports = SurveyConstants;
@@ -37747,6 +37754,7 @@
 	var SideNav = __webpack_require__(313);
 	var QuestionsIndex = __webpack_require__(314);
 	var ErrorActions = __webpack_require__(275);
+	var ServerSurveyActions = __webpack_require__(288);
 	
 	var SurveysIndex = React.createClass({
 	  displayName: 'SurveysIndex',
@@ -37777,7 +37785,7 @@
 	      if (window.location.hash.slice(2, 9).toLowerCase() === "surveys") {
 	        this.setSurveys();
 	      }
-	    }.bind(this), 300);
+	    }.bind(this), 250);
 	  },
 	
 	  componentDidMount: function () {
@@ -37789,11 +37797,12 @@
 	
 	    window.setTimeout(function () {
 	      this.setSurveys();
-	    }.bind(this), 200);
+	    }.bind(this), 250);
 	  },
 	
 	  componentWillUnmount: function () {
 	    this.questionListener.remove();
+	    ServerSurveyActions.clearSurveys();
 	  },
 	
 	  clickedSurveyLi: function (e) {
@@ -37927,6 +37936,9 @@
 	    case SurveyConstants.SURVEYS_RECEIVED:
 	      _resetSurveys(payload.surveys);
 	      SurveyStore.__emitChange();
+	      break;
+	    case SurveyConstants.CLEAR_SURVEYS:
+	      _surveys = {};
 	      break;
 	  }
 	};

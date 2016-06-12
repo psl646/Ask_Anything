@@ -7,6 +7,12 @@ var ServerSurveyActions = {
       actionType: SurveyConstants.SURVEYS_RECEIVED,
       surveys: surveys
     });
+  },
+
+  clearSurveys: function () {
+    AppDispatcher.dispatch({
+      actionType: SurveyConstants.CLEAR_SURVEYS
+    });
   }
 };
 
