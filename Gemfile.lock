@@ -182,6 +182,7 @@ DEPENDENCIES
   font-awesome-rails
   jbuilder (~> 2.0)
   jquery-rails
+  omniauth
   omniauth-twitter
   pg (~> 0.15)
   pusher
