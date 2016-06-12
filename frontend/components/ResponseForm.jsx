@@ -37,16 +37,14 @@ var ResponseForm = React.createClass({
       encrypted: true
     });
 
-    window.setTimeout(function(){
-      console.log(this.state.user);
-      var channel = this.pusher.subscribe('question_' + this.state.user.active_question_id);
-      channel.bind('question_active', function(data) {
-        UserApiUtil.findUserByUsername(username);
-      });
-    }.bind(this), 500);
+    var channel = this.pusher.subscribe('user_updated');
+    channel.bind('question_active', function(data) {
+      UserApiUtil.findUserByUsername(username);
+    });
   },
 
   componentWillUnmount: function () {
+    this.pusher.unsubscribe('user_updated');
     this.questionListener.remove();
     ErrorActions.clearErrors();
     this.userListener.remove();
@@ -55,10 +53,11 @@ var ResponseForm = React.createClass({
 
   _onChange: function () {
     var user = UserStore.getUser();
-
     var location = window.location.hash.slice(0,11);
     ClientQuestionActions.getQuestionById(user.active_question_id, location);
+
     this.setState({ user: user });
+
   },
 
   _questionChange: function () {
