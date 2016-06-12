@@ -1,5 +1,5 @@
 var React = require('react');
-var Link = require('react-router').Link;
+// var Link = require('react-router').Link;
 var UserStore = require('./../stores/session_store');
 var ErrorStore = require('./../stores/error_store');
 var ErrorActions = require('../actions/error_actions');
@@ -83,7 +83,7 @@ var ForgotPassword = React.createClass({
 	render: function () {
     var renderErrors = "";
     var logo = <Logo />;
-    
+
     if (this.state.errors) {
       renderErrors = <div>{ this.errorMessages() }</div>;
     };

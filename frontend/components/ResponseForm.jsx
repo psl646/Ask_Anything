@@ -1,5 +1,5 @@
 var React = require('react');
-var Link = require('react-router').Link;
+// var Link = require('react-router').Link;
 var Logo = require('./Logo');
 var UserApiUtil = require('../util/user_api_util');
 var UserStore = require('../stores/user_store');

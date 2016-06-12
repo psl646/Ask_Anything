@@ -93,7 +93,6 @@ var SignupForm = React.createClass({
         );
       }
 
-    var that = this;
     var errorText = "";
     var allErrorMessages = "";
     var renderErrors = "";

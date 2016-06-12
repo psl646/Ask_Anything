@@ -7,7 +7,7 @@ var DeleteQuestion = require('./DeleteQuestion');
 var ClientQuestionActions = require('../actions/client_question_actions');
 var SessionStore = require('../stores/session_store');
 var QuestionFormStore = require('../stores/question_form_store');
-var QuestionFormActions = require('../actions/question_form_actions');
+// var QuestionFormActions = require('../actions/question_form_actions');
 var ErrorStore = require('../stores/error_store');
 
 var QuestionIndexItemToolbar = React.createClass ({

@@ -62,7 +62,7 @@ var QuestionIndexItem = React.createClass ({
   },
 
   handleTimerClick: function () {
-    var convertedTime = this.convertTimeToMilliseconds();
+    // var convertedTime = this.convertTimeToMilliseconds();
 
   },
 
