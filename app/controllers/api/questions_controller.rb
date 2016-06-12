@@ -70,8 +70,8 @@ class Api::QuestionsController < ApplicationController
   def destroy
     @question = Question.find(params[:id])
     @question.destroy
-    @questions = current_user.questions
     Pusher.trigger('question_updated', 'question_changed', {})
+    @questions = current_user.questions
     render "api/questions/index"
   end
 

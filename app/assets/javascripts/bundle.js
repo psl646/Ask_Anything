@@ -37820,21 +37820,21 @@
 	      that.setSurveys();
 	    }, 500);
 	
-	    that.pusher = new Pusher('d7b6b378f3d562f7fd37', {
-	      encrypted: true
-	    });
-	
-	    var channel = that.pusher.subscribe('survey_changed');
-	    channel.bind('response_recorded', function (data) {
-	      ClientSurveyActions.fetchAllSurveys();
-	      window.setTimeout(function () {
-	        that.setSurveys();
-	      }, 500);
-	    });
+	    // that.pusher = new Pusher('d7b6b378f3d562f7fd37', {
+	    //   encrypted: true
+	    // });
+	    //
+	    // var channel = that.pusher.subscribe('survey_changed');
+	    // channel.bind('response_recorded', function(data) {
+	    //   ClientSurveyActions.fetchAllSurveys();
+	    //   window.setTimeout(function() {
+	    //     that.setSurveys();
+	    //   }, 500);
+	    // });
 	  },
 	
 	  componentWillUnmount: function () {
-	    this.pusher.unsubscribe('survey_changed');
+	    // this.pusher.unsubscribe('survey_changed');
 	    this.questionListener.remove();
 	    ServerSurveyActions.clearSurveys();
 	  },
@@ -39848,6 +39848,7 @@
 	
 	    var channel = this.pusher.subscribe('question_updated');
 	    channel.bind('question_changed', function (data) {
+	      console.log("QUESTION CHANGED!");
 	      UserApiUtil.findUserByUsername(username);
 	    });
 	  },

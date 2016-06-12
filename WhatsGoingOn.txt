@@ -5,8 +5,9 @@ then you can try regular push to heroku, and if it fails, run rake assets:precom
 
  WHAT?!
 
-First thing in the morning: WORK ON UPDATE QUESTION
-WORKING ON TIME
+- update survey index page when responses are registered
+- when question is deleted, response form updates according to delete that question
+WORKING ON clock
 
 WRITE: redirect if they try to go to a question
 
@@ -16,12 +17,6 @@ HOW TO GET THE CORRECT ORDER?! TO MANDATE QUESTIONS HAVE AT LEAST ONE ANSWER
 
 ERRORS: QUESTIONS MUST HAVE AT LEAST ONE ANSWER
 
-Question show page
-Delete/Update/ETC with questions
-delete answers from question form
-
-Responses
-OMNI AUTH
 Signup page error makes modal too large?
 
 footer fix
