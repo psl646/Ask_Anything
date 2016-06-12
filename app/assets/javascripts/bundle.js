@@ -38207,6 +38207,7 @@
 /* 315 */
 /***/ function(module, exports, __webpack_require__) {
 
+	/* globals Pusher */
 	var React = __webpack_require__(1);
 	var Link = __webpack_require__(168).Link;
 	var ClientQuestionActions = __webpack_require__(282);
@@ -38240,7 +38241,20 @@
 	    this.questionListener = QuestionStore.addListener(this._onChange);
 	    this.errorListener = ErrorStore.addListener(this._handleErrors);
 	    var location = window.location.hash.slice(0, 11);
+	    console.log(location);
 	    ClientQuestionActions.getQuestionById(this.state.questionId, location);
+	
+	    var pusher = new Pusher('d7b6b378f3d562f7fd37', {
+	      encrypted: true
+	    });
+	
+	    var channel = pusher.subscribe('question_' + this.state.questionId);
+	    channel.bind('response_recorded', function (data) {
+	      console.log("PUSHER SAW SOMETHING!");
+	      console.log(this.state.questionId);
+	      console.log(location);
+	      ClientQuestionActions.getQuestionById(this.state.questionId, location);
+	    }.bind(this));
 	  },
 	
 	  componentWillUnmount: function () {

@@ -1,3 +1,4 @@
+/* globals Pusher */
 var React = require('react');
 var Link = require('react-router').Link;
 var ClientQuestionActions = require('../actions/client_question_actions');
@@ -30,7 +31,20 @@ var QuestionIndexItem = React.createClass ({
     this.questionListener = QuestionStore.addListener(this._onChange);
     this.errorListener = ErrorStore.addListener(this._handleErrors);
     var location = window.location.hash.slice(0,11);
+    console.log(location);
     ClientQuestionActions.getQuestionById(this.state.questionId, location);
+
+    var pusher = new Pusher('d7b6b378f3d562f7fd37', {
+      encrypted: true
+    });
+
+    var channel = pusher.subscribe('question_' + this.state.questionId);
+    channel.bind('response_recorded', function(data) {
+      console.log("PUSHER SAW SOMETHING!");
+      console.log(this.state.questionId);
+      console.log(location);
+      ClientQuestionActions.getQuestionById(this.state.questionId, location);
+    }.bind(this));
   },
 
   componentWillUnmount: function () {
