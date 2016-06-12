@@ -47,7 +47,7 @@ class Api::QuestionsController < ApplicationController
         @question[:active] = true
         current_user[:active_question_id] = @question[:id]
       end
-      session[:session_token] = current_user.reset_session_token!
+      # session[:session_token] = current_user.reset_session_token!
 
       if @question.save
         Question.inactivate_other_questions(@question, current_user)
