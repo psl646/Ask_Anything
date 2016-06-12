@@ -37804,7 +37804,7 @@
 	      if (window.location.hash.slice(2, 9).toLowerCase() === "surveys") {
 	        this.setSurveys();
 	      }
-	    }.bind(this), 250);
+	    }.bind(this), 500);
 	  },
 	
 	  componentDidMount: function () {
@@ -37816,7 +37816,7 @@
 	
 	    window.setTimeout(function () {
 	      this.setSurveys();
-	    }.bind(this), 250);
+	    }.bind(this), 500);
 	  },
 	
 	  componentWillUnmount: function () {
@@ -38244,15 +38244,12 @@
 	    console.log(location);
 	    ClientQuestionActions.getQuestionById(this.state.questionId, location);
 	
-	    var pusher = new Pusher('d7b6b378f3d562f7fd37', {
+	    this.pusher = new Pusher('d7b6b378f3d562f7fd37', {
 	      encrypted: true
 	    });
 	
-	    var channel = pusher.subscribe('question_' + this.state.questionId);
+	    var channel = this.pusher.subscribe('question_' + this.state.questionId);
 	    channel.bind('response_recorded', function (data) {
-	      console.log("PUSHER SAW SOMETHING!");
-	      console.log(this.state.questionId);
-	      console.log(location);
 	      ClientQuestionActions.getQuestionById(this.state.questionId, location);
 	    }.bind(this));
 	  },
@@ -38260,6 +38257,7 @@
 	  componentWillUnmount: function () {
 	    this.errorListener.remove();
 	    this.questionListener.remove();
+	    this.pusher.unsubscribe('question_' + this.state.questionId);
 	  },
 	
 	  _handleErrors: function () {
@@ -39828,6 +39826,18 @@
 	    }.bind(this), 0);
 	    var username = window.location.hash.slice(2).split("?")[0];
 	    UserApiUtil.findUserByUsername(username);
+	
+	    this.pusher = new Pusher('d7b6b378f3d562f7fd37', {
+	      encrypted: true
+	    });
+	
+	    window.setTimeout(function () {
+	      console.log(this.state.user);
+	      var channel = this.pusher.subscribe('question_' + this.state.user.active_question_id);
+	      channel.bind('question_active', function (data) {
+	        UserApiUtil.findUserByUsername(username);
+	      });
+	    }.bind(this), 500);
 	  },
 	
 	  componentWillUnmount: function () {
@@ -39839,6 +39849,7 @@
 	
 	  _onChange: function () {
 	    var user = UserStore.getUser();
+	
 	    var location = window.location.hash.slice(0, 11);
 	    ClientQuestionActions.getQuestionById(user.active_question_id, location);
 	    this.setState({ user: user });

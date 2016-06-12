@@ -34,7 +34,7 @@ var SurveysIndex = React.createClass ({
       if (window.location.hash.slice(2,9).toLowerCase() === "surveys") {
         this.setSurveys();
       }
-    }.bind(this), 250);
+    }.bind(this), 500);
   },
 
   componentDidMount: function () {
@@ -46,7 +46,7 @@ var SurveysIndex = React.createClass ({
 
     window.setTimeout(function() {
       this.setSurveys();
-    }.bind(this), 250);
+    }.bind(this), 500);
   },
 
   componentWillUnmount: function () {

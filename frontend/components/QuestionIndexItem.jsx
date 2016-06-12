@@ -34,15 +34,12 @@ var QuestionIndexItem = React.createClass ({
     console.log(location);
     ClientQuestionActions.getQuestionById(this.state.questionId, location);
 
-    var pusher = new Pusher('d7b6b378f3d562f7fd37', {
+    this.pusher = new Pusher('d7b6b378f3d562f7fd37', {
       encrypted: true
     });
 
-    var channel = pusher.subscribe('question_' + this.state.questionId);
+    var channel = this.pusher.subscribe('question_' + this.state.questionId);
     channel.bind('response_recorded', function(data) {
-      console.log("PUSHER SAW SOMETHING!");
-      console.log(this.state.questionId);
-      console.log(location);
       ClientQuestionActions.getQuestionById(this.state.questionId, location);
     }.bind(this));
   },
@@ -50,6 +47,7 @@ var QuestionIndexItem = React.createClass ({
   componentWillUnmount: function () {
     this.errorListener.remove();
     this.questionListener.remove();
+    this.pusher.unsubscribe('question_' + this.state.questionId);
   },
 
   _handleErrors: function () {

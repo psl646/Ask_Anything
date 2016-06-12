@@ -47,6 +47,7 @@ class Api::QuestionsController < ApplicationController
       if @question.save
         Question.inactivate_other_questions(@question, current_user)
         @questions = current_user.questions
+        Pusher.trigger('question_' + @question.id.to_s, 'question_active', {})
         render "api/questions/index"
       else
         @errors = @question.errors.full_messages
