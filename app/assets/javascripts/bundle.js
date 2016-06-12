@@ -35262,13 +35262,9 @@
 	      display: 'block',
 	      position: 'absolute',
 	      width: '100%',
-	      height: '3000px',
 	      top: 0,
 	      left: 0,
 	      right: 0,
-	      bottom: 0,
-	      marginBottom: '-5000px',
-	      paddingBottom: '5000px',
 	      opacity: 0.9,
 	      backgroundColor: '#161818',
 	      overflow: 'hidden',
@@ -35281,9 +35277,7 @@
 	      top: 0,
 	      left: 0,
 	      right: 0,
-	      bottom: 0,
 	      width: '700px',
-	      height: '100%',
 	      padding: 0,
 	      margin: 'auto',
 	      marginTop: '200px',
@@ -35547,6 +35541,12 @@
 	    this.setState({ title: newSurveyTitle });
 	  },
 	
+	  checkKeyPressed: function (e) {
+	    if (e.keyCode === 13) {
+	      e.preventDefault();
+	    }
+	  },
+	
 	  render: function () {
 	    var addQuestion = "Question:";
 	    var myNewQuestions = [];
@@ -35590,7 +35590,7 @@
 	      React.createElement(
 	        'li',
 	        null,
-	        'Include a question mark or colon, then type your multiple choice answers separated by commas.  Hit RETURN and we\'ll split stuff out automatically.'
+	        'Include a question mark, then type your multiple choice answers separated by commas.  Hit RETURN and we\'ll split stuff out automatically.'
 	      ),
 	      React.createElement(
 	        'li',
@@ -35676,6 +35676,7 @@
 	              type: 'text',
 	              value: this.state.input,
 	              placeholder: 'What\'s your favorite color? Red, Blue, or Green',
+	              onKeyDown: this.checkKeyPressed,
 	              onChange: this.handleQuestionInputChange
 	            })
 	          )
@@ -36193,6 +36194,23 @@
 	    QuestionFormActions.deleteAnswerToQuestion(this.props.questionId, answerId);
 	  },
 	
+	  checkKeyPressed: function (e) {
+	    if (e.keyCode === 13) {
+	      e.preventDefault();
+	      var questionInput = this.state.question.split("?");
+	      var question = questionInput[0];
+	      var answers = questionInput[1];
+	      var splitAnswers = answers.split(",");
+	
+	      var myAnswers = [];
+	      splitAnswers.forEach(function (answer) {
+	        myAnswers.push(answer.replace(/^\s+|\s+$/g, ""));
+	      });
+	
+	      console.log(myAnswers);
+	    }
+	  },
+	
 	  render: function () {
 	    var that = this;
 	
@@ -36268,6 +36286,7 @@
 	          className: 'question-input-field',
 	          type: 'text',
 	          value: this.state.question,
+	          onKeyDown: this.checkKeyPressed,
 	          onChange: this.questionChange })
 	      ),
 	      React.createElement('br', null),
@@ -38118,7 +38137,7 @@
 	        };
 	
 	        var displayQuestion = currentQuestion["question"];
-	        if (displayQuestion.length > 47) {
+	        if (displayQuestion.length > 50) {
 	          displayQuestion = displayQuestion.slice(0, 47) + "...";
 	        }
 	
@@ -38279,8 +38298,8 @@
 	    if (that.state.question.question !== undefined) {
 	      question = that.state.question.question;
 	      username = that.state.question.author.username;
-	      if (question.length > 50) {
-	        question = question.slice(0, 47) + "...";
+	      if (question.length > 30) {
+	        question = question.slice(0, 27) + "...";
 	      }
 	    };
 	
@@ -38364,8 +38383,8 @@
 	    };
 	
 	    var myAnswers = myAnswerArray.map(function (currentAnswer, idx) {
-	      if (currentAnswer.length > 50) {
-	        currentAnswer = currentAnswer.slice(0, 47) + "...";
+	      if (currentAnswer.length > 17) {
+	        currentAnswer = currentAnswer.slice(0, 14) + "...";
 	      }
 	
 	      return React.createElement(

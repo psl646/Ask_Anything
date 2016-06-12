@@ -89,8 +89,8 @@ var QuestionIndexItem = React.createClass ({
     if (that.state.question.question !== undefined){
       question = that.state.question.question;
       username = that.state.question.author.username;
-      if (question.length > 50) {
-        question = question.slice(0, 47) + "...";
+      if (question.length > 30) {
+        question = question.slice(0, 27) + "...";
       }
     };
 
@@ -172,8 +172,8 @@ var QuestionIndexItem = React.createClass ({
     };
 
     var myAnswers = myAnswerArray.map(function(currentAnswer, idx){
-      if (currentAnswer.length > 50) {
-        currentAnswer = currentAnswer.slice(0, 47) + "...";
+      if (currentAnswer.length > 17) {
+        currentAnswer = currentAnswer.slice(0, 14) + "...";
       }
 
       return (

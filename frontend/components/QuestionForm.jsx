@@ -107,6 +107,23 @@ var QuestionForm = React.createClass({
     QuestionFormActions.deleteAnswerToQuestion(this.props.questionId, answerId);
   },
 
+  checkKeyPressed: function (e) {
+    if (e.keyCode === 13) {
+      e.preventDefault();
+      var questionInput = this.state.question.split("?");
+      var question = questionInput[0];
+      var answers = questionInput[1];
+      var splitAnswers = answers.split(",");
+      
+      var myAnswers = [];
+      splitAnswers.forEach(function(answer){
+        myAnswers.push(answer.replace(/^\s+|\s+$/g, ""));
+      })
+
+      console.log(myAnswers);
+    }
+  },
+
 	render: function () {
     var that = this;
 
@@ -120,7 +137,7 @@ var QuestionForm = React.createClass({
       // currently set to readOnly as I am just working on Multiple Choice
       // disabled={ that.state.category !== category }
       // FIX HOVER POINTER
-      
+
       return (
         <li key={ idx } className={ "hover-pointer category-li " + isChecked }>
           <label className="hover-pointer category-label">
@@ -173,6 +190,7 @@ var QuestionForm = React.createClass({
             className="question-input-field"
             type="text"
             value={this.state.question}
+            onKeyDown={this.checkKeyPressed}
             onChange={this.questionChange} />
         </label>
 

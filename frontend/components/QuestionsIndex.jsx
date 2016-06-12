@@ -93,7 +93,7 @@ var QuestionsIndex = React.createClass ({
         };
 
         var displayQuestion = currentQuestion["question"];
-        if (displayQuestion.length > 47) {
+        if (displayQuestion.length > 50) {
           displayQuestion = displayQuestion.slice(0, 47) + "...";
         }
 

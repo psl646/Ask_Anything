@@ -80,6 +80,7 @@
   margin: auto;
   color: #d9e7f2;
   background: #203349;
+  word-wrap: break-word;
 }
 
 .found-user-active-question {

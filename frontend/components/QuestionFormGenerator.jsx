@@ -129,6 +129,12 @@ var QuestionFormGenerator = React.createClass({
     this.setState({ title: newSurveyTitle });
   },
 
+  checkKeyPressed: function (e) {
+    if (e.keyCode === 13) {
+      e.preventDefault();
+    }
+  },
+
 	render: function () {
     var addQuestion = "Question:";
     var myNewQuestions = [];
@@ -166,7 +172,7 @@ var QuestionFormGenerator = React.createClass({
         </li>
 
         <li>
-          Include a question mark or colon, then type your multiple choice answers separated by commas.  Hit RETURN and we'll split stuff out automatically.
+          Include a question mark, then type your multiple choice answers separated by commas.  Hit RETURN and we'll split stuff out automatically.
         </li>
 
         <li>
@@ -213,6 +219,7 @@ var QuestionFormGenerator = React.createClass({
                 type="text"
                 value={ this.state.input }
                 placeholder="What's your favorite color? Red, Blue, or Green"
+                onKeyDown={ this.checkKeyPressed }
                 onChange={ this.handleQuestionInputChange }
                 />
             </label>
