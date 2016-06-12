@@ -1,5 +1,5 @@
 var UserConstants = require('../constants/user_constants');
-var UserStore = require('../stores/user_store');
+// var UserStore = require('../stores/user_store');
 var AppDispatcher = require('../dispatcher/dispatcher');
 
 var UserActions = {

@@ -2,8 +2,8 @@ var React = require('react');
 var ClientQuestionActions = require('../actions/client_question_actions');
 var QuestionStore = require('../stores/question_store');
 var Link = require('react-router').Link;
-var SessionStore = require('../stores/session_store');
-var ClientSurveyActions = require('../actions/client_survey_actions');
+// var SessionStore = require('../stores/session_store');
+// var ClientSurveyActions = require('../actions/client_survey_actions');
 
 var QuestionsIndex = React.createClass ({
   contextTypes: {

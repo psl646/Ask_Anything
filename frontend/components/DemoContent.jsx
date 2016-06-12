@@ -1,5 +1,5 @@
 var React = require('react');
-var Link = require('react-router').Link;
+// var Link = require('react-router').Link;
 var GuestUserConstants = require('../constants/guest_user_constants');
 var UserApiUtil = require('../util/user_api_util');
 var SessionStore = require('../stores/session_store');

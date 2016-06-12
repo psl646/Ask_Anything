@@ -1,9 +1,9 @@
 var React = require('react');
 var Link = require('react-router').Link;
-var SessionApiUtil = require('./../util/session_api_util');
+// var SessionApiUtil = require('./../util/session_api_util');
 var SessionStore = require('./../stores/session_store');
 var UserApiUtil = require('./../util/user_api_util');
-var ErrorActions = require('../actions/error_actions')
+// var ErrorActions = require('../actions/error_actions')
 var ErrorStore = require('./../stores/error_store');
 
 var UserEditForm = React.createClass({

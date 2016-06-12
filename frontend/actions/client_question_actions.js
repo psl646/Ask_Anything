@@ -1,4 +1,4 @@
-var AppDispatcher = require('../dispatcher/dispatcher');
+// var AppDispatcher = require('../dispatcher/dispatcher');
 var QuestionApiUtil = require('../util/question_api_util');
 
 var ClientQuestionActions = {

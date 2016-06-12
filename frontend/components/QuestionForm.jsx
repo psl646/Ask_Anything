@@ -1,5 +1,5 @@
 var React = require('react');
-var Link = require('react-router').Link;
+// var Link = require('react-router').Link;
 var QuestionConstants = require('../constants/question_constants');
 var AnswerInput = require('./AnswerInput');
 var QuestionFormStore = require('../stores/question_form_store');
@@ -111,10 +111,10 @@ var QuestionForm = React.createClass({
     if (e.keyCode === 13) {
       e.preventDefault();
       var questionInput = this.state.question.split("?");
-      var question = questionInput[0];
+      // var question = questionInput[0];
       var answers = questionInput[1];
       var splitAnswers = answers.split(",");
-      
+
       var myAnswers = [];
       splitAnswers.forEach(function(answer){
         myAnswers.push(answer.replace(/^\s+|\s+$/g, ""));

@@ -2,7 +2,7 @@ var React = require('react');
 var Link = require('react-router').Link;
 var SessionStore = require('./../stores/session_store');
 var UserApiUtil = require('./../util/user_api_util');
-var UserEmailPasswordEditForm = require('./UserEmailPasswordEditForm');
+// var UserEmailPasswordEditForm = require('./UserEmailPasswordEditForm');
 var ErrorStore = require('./../stores/error_store');
 
 var UserEditForm = React.createClass({

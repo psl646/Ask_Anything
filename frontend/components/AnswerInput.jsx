@@ -1,6 +1,6 @@
 var React = require('react');
 var QuestionFormActions = require('../actions/question_form_actions');
-var QuestionFormStore = require('../stores/question_form_store');
+// var QuestionFormStore = require('../stores/question_form_store');
 
 var AnswerInput = React.createClass({
   getInitialState: function () {

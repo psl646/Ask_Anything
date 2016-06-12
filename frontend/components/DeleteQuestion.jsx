@@ -1,5 +1,5 @@
 var React = require('react');
-var Link = require('react-router').Link;
+// var Link = require('react-router').Link;
 var ClientQuestionActions = require('../actions/client_question_actions');
 
 var DeleteQuestion = React.createClass({
