@@ -74,7 +74,7 @@ class Question < ActiveRecord::Base
     Question.transaction do
       old_answers = current_question.answers
       current_answers = question[:oldAnswers]
-      
+
       old_answers.each do |old_answer|
         if !current_answers.keys.include?(old_answer[:id].to_s)
           old_answer.destroy
