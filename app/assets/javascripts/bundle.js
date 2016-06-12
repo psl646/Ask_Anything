@@ -38107,6 +38107,12 @@
 	          displayQuestion = displayQuestion.slice(0, 47) + "...";
 	        }
 	
+	        var responses = " Responses";
+	
+	        if (currentQuestion["responses"].length === 1) {
+	          responses = " Response";
+	        }
+	
 	        return React.createElement(
 	          'li',
 	          { id: question_id,
@@ -38142,7 +38148,12 @@
 	                'Delete'
 	              )
 	            ),
-	            React.createElement('div', { className: "fa fa-wifi active-icon " + activatedIcon, id: question_id, 'aria-hidden': 'true' })
+	            React.createElement('div', { className: "fa fa-wifi active-icon " + activatedIcon, id: question_id, 'aria-hidden': 'true' }),
+	            React.createElement(
+	              'div',
+	              { className: 'question-response-count soft-edges' },
+	              currentQuestion["responses"].length + responses
+	            )
 	          )
 	        );
 	      }

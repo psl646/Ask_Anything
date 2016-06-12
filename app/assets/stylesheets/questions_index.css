@@ -54,6 +54,19 @@
   font-size: 22px;
 }
 
+.question-response-count {
+  float: right;
+  position: relative;
+  background: rgb(190, 237, 184);
+  color: #000;
+  padding: 5px;
+  width: 90px;
+  text-align: center;
+  font-size: 10px;
+  bottom: 2px;
+  left: 25px;
+}
+
 .delete-index-question:hover {
   color: red;
   cursor: pointer;

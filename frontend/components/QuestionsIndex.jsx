@@ -54,7 +54,7 @@ var QuestionsIndex = React.createClass ({
   handleClickOnQuestionItem: function (e) {
     e.preventDefault();
     var outerHTMLArray = e.target.outerHTML.split('"');
-    
+
     var targetString = e.currentTarget.outerHTML;
     var questionId = targetString.split('"')[1];
     var url = "questions/" + questionId;
@@ -97,6 +97,12 @@ var QuestionsIndex = React.createClass ({
           displayQuestion = displayQuestion.slice(0, 47) + "...";
         }
 
+        var responses = " Responses";
+
+        if (currentQuestion["responses"].length === 1) {
+          responses = " Response";
+        }
+
         return (
           <li id={ question_id }
             key={ question_id }
@@ -116,6 +122,9 @@ var QuestionsIndex = React.createClass ({
                   onClick={ that.clickedOnDeleteQuestion }>Delete</div>
               </li>
               <div className={ "fa fa-wifi active-icon " + activatedIcon } id={ question_id } aria-hidden="true" />
+              <div className="question-response-count soft-edges">
+                { currentQuestion["responses"].length + responses }
+              </div>
             </ul>
           </li>
         );
