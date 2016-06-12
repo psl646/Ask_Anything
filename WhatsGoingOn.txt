@@ -5,6 +5,8 @@ then you can try regular push to heroku, and if it fails, run rake assets:precom
 
  WHAT?!
 
+Twitter OAuth::Unauthorized (400 Bad Request):???
+Why is heroku so slow
 - update survey index page when responses are registered
 - when question is deleted, response form updates according to delete that question
 WORKING ON clock

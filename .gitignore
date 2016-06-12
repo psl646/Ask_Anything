@@ -15,6 +15,9 @@
 node_modules/
 bundle.js
 bundle.js.map
+WhatsGoingOn.txt
+README.rdoc
+DEVELOPMENT_README.md
 
 # Ignore application configuration
 /config/application.yml

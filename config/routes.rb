@@ -9,5 +9,5 @@ Rails.application.routes.draw do
     resources :responses, only: [:create, :update, :destroy]
   end
 
-  get '/auth/:provider/callback', to: 'api/sessions#create'
+  get "/auth/:provider/callback", to: "api/sessions#create"
 end
