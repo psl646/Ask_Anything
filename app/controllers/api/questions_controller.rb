@@ -75,10 +75,4 @@ class Api::QuestionsController < ApplicationController
     @questions = current_user.questions
     render "api/questions/index"
   end
-
-  private
-
-  def question_params
-    # params.require(:question).permit(:)
-  end
 end
