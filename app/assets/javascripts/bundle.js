@@ -37753,9 +37753,7 @@
 	
 	
 	  getInitialState: function () {
-	    var potentialSurveys = SurveyStore.all();
-	    var surveys = potentialSurveys || {};
-	    return { surveys: surveys, clickedSurveys: {} };
+	    return { surveys: {}, clickedSurveys: {} };
 	  },
 	
 	  setSurveys: function () {
@@ -37842,6 +37840,7 @@
 	  render: function () {
 	    var that = this;
 	    var mySurveys = this.state.surveys;
+	
 	    var surveys = Object.keys(mySurveys).map(function (survey_id) {
 	      var toggleSurvey = "";
 	      var caretIcon = "fa fa-caret-down";
@@ -37883,6 +37882,10 @@
 	        )
 	      );
 	    });
+	
+	    if (Object.keys(mySurveys).length === 0) {
+	      surveys = "";
+	    }
 	
 	    return React.createElement(
 	      'div',

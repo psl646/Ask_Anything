@@ -9,9 +9,7 @@ var ErrorActions = require('../actions/error_actions');
 var SurveysIndex = React.createClass ({
 
   getInitialState: function () {
-    var potentialSurveys = SurveyStore.all();
-    var surveys = potentialSurveys || {};
-    return ({ surveys: surveys, clickedSurveys: {} });
+    return ({ surveys: {}, clickedSurveys: {} });
   },
 
   setSurveys: function () {
@@ -98,6 +96,7 @@ var SurveysIndex = React.createClass ({
   render: function () {
     var that = this;
     var mySurveys = this.state.surveys;
+
     var surveys = Object.keys(mySurveys).map(function(survey_id){
       var toggleSurvey = ""
       var caretIcon = "fa fa-caret-down";
@@ -131,6 +130,11 @@ var SurveysIndex = React.createClass ({
         </li>
       );
     });
+
+    if (Object.keys(mySurveys).length === 0) {
+      surveys = "";
+    }
+
 
     return (
       <div className="surveysindex-container group">
