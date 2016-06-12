@@ -35635,7 +35635,7 @@
 	      )
 	    );
 	
-	    // <div className={ "soft-edges no-question-forms" }>Hey Silly! You need to enter a poll in the box above first.</div>
+	    // <div className={ "soft-edges no-question-forms" }>Hey Silly! You need to enter a question in the box above first.</div>
 	    return React.createElement(
 	      'div',
 	      null,
@@ -37568,7 +37568,7 @@
 	        React.createElement(
 	          'div',
 	          { className: 'h3' },
-	          'This is your last stop before youre creating polls.'
+	          'This is your last stop before youre creating questions.'
 	        )
 	      );
 	      bottomText = React.createElement(
@@ -38753,7 +38753,7 @@
 	      React.createElement(
 	        'div',
 	        { className: 'test-list-items-message' },
-	        "The audience can respond to this poll at Ask--Anything.HerokuApp.com/#/" + this.state.user.username + " as long as the poll is active."
+	        "The audience can respond to this question at Ask--Anything.HerokuApp.com/#/" + this.state.user.username + " as long as the question is active."
 	      )
 	    );
 	

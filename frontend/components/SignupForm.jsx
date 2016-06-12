@@ -81,7 +81,7 @@ var SignupForm = React.createClass({
         topText = (
           <div>
             <div className="h2">Free plan sign up</div>
-            <div className="h3">This is your last stop before youre creating polls.</div>
+            <div className="h3">This is your last stop before youre creating questions.</div>
           </div>
         );
         bottomText = (
