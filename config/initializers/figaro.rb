@@ -1,7 +1,0 @@
-Figaro.require_keys(
-  "TWITTER_API_KEY",
-  "TWITTER_API_SECRET",
-  "PUSHER_APP_ID",
-  "PUSHER_KEY",
-  "PUSHER_SECRET"
-  )
