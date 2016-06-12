@@ -1,8 +1,8 @@
 # Ask Anything!
 
-[Ask Anything! live][heroku] **NB:** This should be a link to your production site
+[Ask Anything! live][heroku]
 
-[heroku]: http://www.ask--anything.herokuapp.com/#/
+[heroku]: http://ask--anything.herokuapp.com/#/?_k=skrkcu
 
 Ask Anything! is a full-stack web application inspired by Poll Everywhere.  It utilizes Ruby on Rails on the backend, a PostgreSQL database, and React.js with a Flux architectural framework on the frontend.  
 
@@ -27,7 +27,7 @@ class Api::SessionsController < ApplicationController
  end
   ```
 
-### Note Rendering and Editing
+### Question Rendering and Editing
 
 
   create_table "questions", force: :cascade do |t|
@@ -41,9 +41,7 @@ class Api::SessionsController < ApplicationController
 
   On the database side, the questions are stored in one table in the database, which contains columns for `id`, `question`, `category`, `survey_id`, and `active`.  Upon login, an API call is made to the database which joins the user table and the the question table through `survey_id`.  These questions are held in the `QuestionStore` until the user's session is destroyed.  
 
-  Questions are rendered in two different components: the `QuestionsIndex` component, which show the question and links to the `QuestionIndexItem` component show page.  In the component's show page, we can see the current status of the `question` as well as any responses that have been registered.  This page has links to Update and Delete the question as well as other features suh as toggling a question to active - making it available for other users to register their response.  The `SurveysIndex` renders all of the `QuestionsIndex`s that belongs to it as subcomponents.  The UI of the taken directly from Poll Everywhere for a professional, clean look:  
-
-![image of Poll Everywhere]
+  Questions are rendered in two different components: the `QuestionsIndex` component, which show the question and links to the `QuestionIndexItem` component show page.  In the component's show page, we can see the current status of the `question` as well as any responses that have been registered.  This page has links to Update and Delete the question as well as other features such as toggling a question to active - making it available for other users to register their response.  The `SurveysIndex` renders all of the `QuestionsIndex`s that belongs to it as subcomponents.  The UI of the taken directly from Poll Everywhere for a professional, clean look.
 
 ### Surveys
 
@@ -115,8 +113,8 @@ In addition to the features already implemented, I plan to continue work on this
 
 ### Search
 
-Searching questions is a standard feature of Poll Everywhere. This search will look go through survey titles and questions.
+Searching questions is a standard feature of Poll Everywhere. This search will look through questions.
 
 ### SMS Answer/Real-time update
 
-Although this is less essential functionality, I also plan to implement SMS Answer/Real-time update for responding to Ask Anything! questions.  To do this, I will use Pusher to implement web sockets so that responses to questions register seamlessly.
+Will add an SMS feature for responding to Ask Anything! questions.  Will also use Pusher to implement web sockets so that responses to questions register in real-time.
