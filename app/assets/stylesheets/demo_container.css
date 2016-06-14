@@ -10,6 +10,7 @@
 
 .demo-container {
   color: rgb(219, 217, 221);
+  text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
   width: 100%;
   min-width: 1200px;
   text-align: center;
@@ -51,6 +52,7 @@
 
 .create-question-button {
   background: #db5242;
+  text-shadow: none;
   float: left;
   width: 350px;
 }

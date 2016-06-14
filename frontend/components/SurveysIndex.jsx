@@ -38,17 +38,16 @@ var SurveysIndex = React.createClass ({
   },
 
   componentDidMount: function () {
-    var that = this;
-
     window.setTimeout(function () {
       ErrorActions.clearErrors();
     }, 0 );
-    that.questionListener = QuestionStore.addListener(that._questionChange);
+
+    this.questionListener = QuestionStore.addListener(this._questionChange);
     ClientSurveyActions.fetchAllSurveys();
 
     window.setTimeout(function() {
-      that.setSurveys();
-    }, 500);
+      this.setSurveys();
+    }.bind(this), 500);
 
     // that.pusher = new Pusher('d7b6b378f3d562f7fd37', {
     //   encrypted: true
@@ -110,11 +109,11 @@ var SurveysIndex = React.createClass ({
     }
   },
 
-  render: function () {
+  mySurveys: function () {
     var that = this;
-    var mySurveys = this.state.surveys;
+    var allSurveys = this.state.surveys;
 
-    var surveys = Object.keys(mySurveys).map(function(survey_id){
+    var surveys = Object.keys(allSurveys).map(function(survey_id){
       var toggleSurvey = ""
       var caretIcon = "fa fa-caret-down";
 
@@ -123,7 +122,7 @@ var SurveysIndex = React.createClass ({
         caretIcon = "fa fa-caret-right";
       }
 
-      var currentSurvey = mySurveys[survey_id];
+      var currentSurvey = allSurveys[survey_id];
       var numberQuestions = "Questions";
 
       if (currentSurvey["question_count"] === 1) {
@@ -147,11 +146,20 @@ var SurveysIndex = React.createClass ({
         </li>
       );
     });
+    
+    return surveys;
+  },
 
-    if (Object.keys(mySurveys).length === 0) {
-      surveys = "";
+  surveysIsNotEmpty: function () {
+    return (Object.keys(this.state.surveys).length !== 0);
+  },
+
+  render: function () {
+    var surveys = "";
+
+    if (this.surveysIsNotEmpty()) {
+      surveys = this.mySurveys();
     }
-
 
     return (
       <div className="surveysindex-container group">

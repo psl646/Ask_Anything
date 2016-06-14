@@ -81,7 +81,7 @@ var DemoContent = React.createClass({
 
     return (
       <div className="demo-container group">
-        <img className="democontentgif" src={window.askAnythingAssets.askanythingvid} alt="Backdrop" />
+        <img className="democontentgif" src={window.askAnythingAssets.background} alt="Backdrop" />
         <div className="forefront-content group">
           <div className="header-size">
             Live Audience Participation
@@ -91,7 +91,7 @@ var DemoContent = React.createClass({
           </div>
           <ul className="main-page-login-options group">
             <li className="hover-pointer soft-edges create-question-button" onClick={ this.handleCreateFirstQuestionClick }>
-              Create your first question as a Guest
+              Create your first question
             </li>
 
             <li>

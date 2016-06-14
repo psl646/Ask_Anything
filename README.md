@@ -13,19 +13,6 @@ Ask Anything! is a full-stack web application inspired by Poll Everywhere.  It u
 
 Ask Anything! is a single-page app; all content is delivered on one static page.  The root page listens to a `SessionStore` and renders content based on a call to `SessionStore.currentUser()`.  Sensitive information is kept out of the frontend of the app by making an API call to `SessionsController#show`.
 
-```ruby
-class Api::SessionsController < ApplicationController
-  def show
-    if current_user
-      @user = current_user
-      render "api/users/show"
-    else
-      @errors = []
-      render "api/shared/errors"
-    end
-  end
- end
-  ```
 
 ### Question Rendering and Editing
 
@@ -53,42 +40,11 @@ The React component structure for surveys mirrored that of questions: the `Surve
 
 ```javascript
 render: function () {
-  var that = this;
-  var mySurveys = this.state.surveys;
+  var surveys = "";
 
-  var surveys = Object.keys(mySurveys).map(function(survey_id){
-    var toggleSurvey = ""
-    var caretIcon = "fa fa-caret-down";
-
-    if (that.state.clickedSurveys[survey_id]) {
-      toggleSurvey = "clicked_survey_li";
-      caretIcon = "fa fa-caret-right";
-    }
-
-    var currentSurvey = mySurveys[survey_id];
-    var numberQuestions = "Questions";
-
-    if (currentSurvey["question_count"] === 1) {
-      numberQuestions = "Question";
-    }
-
-    return (
-      <li className="surveysindex-li hover-pointer" key={ survey_id } onClick={"li", that.clickedSurveyLi }>
-        <div id={ survey_id } className="h14">
-          <div className={ "caret-icon " + caretIcon } />
-          <div>
-            { currentSurvey.title }
-          </div>
-          <div className="question-count h11">
-            { currentSurvey.question_count + " " + numberQuestions }
-          </div>
-        </div>
-        <ul className={ "survey-index-items " + toggleSurvey }>
-          <QuestionsIndex survey={ currentSurvey }/>
-        </ul>
-      </li>
-    );
-  });
+  if (this.surveysIsNotEmpty()) {
+    surveys = this.mySurveys();
+  }
 
   return (
     <div className="surveysindex-container group">

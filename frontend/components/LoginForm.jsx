@@ -3,7 +3,6 @@ var Link = require('react-router').Link;
 var SessionApiUtil = require('./../util/session_api_util');
 var SessionStore = require('./../stores/session_store');
 var ErrorStore = require('./../stores/error_store');
-// var ErrorActions = require('../actions/error_actions');
 var Logo = require('./Logo');
 var Modal = require('react-modal');
 var ModalConstants = require('../constants/modal_constants');
@@ -62,6 +61,17 @@ var LoginForm = React.createClass({
     this.setState({ emailOrUsername: "", password: "", errors: false });
 	},
 
+  handleGuestLogin: function (e) {
+    e.preventDefault();
+    var formData = {
+      username: "user123",
+      email: "user123",
+      password: "user123"
+    };
+
+    SessionApiUtil.login(formData);
+  },
+
   errorMessages: function () {
     var errors = ErrorStore.getErrors();
 
@@ -102,7 +112,7 @@ var LoginForm = React.createClass({
 
           { logo }
 
-          <form className="login-component soft-edges" onSubmit={this.handleSubmit}>
+          <form className="login-component soft-edges" onSubmit={ this.handleSubmit }>
   					{ renderErrors }
 
   	        <h1 className="h1">Log In</h1>
@@ -143,11 +153,17 @@ var LoginForm = React.createClass({
               value="Sign in with my Ask Anything! account" />
 
             <img
-              className="logo-image logo-login-button"
+              className="logo-image logo-login-button hover-pointer"
               src={ window.askAnythingAssets.logo }
               width="15"
               height="15"
-              alt="Logo" />
+              alt="Logo"
+              onClick={ this.handleSubmit }
+              />
+
+            <div className="guest-login-button soft-edges hover-pointer" onClick={ this.handleGuestLogin }>
+              Guest Login
+            </div>
 
             <Link to="signup" className="signup-link">
               Do you need an account? Create one in a few seconds.
