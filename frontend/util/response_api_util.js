@@ -13,7 +13,6 @@ var ResponseApiUtil = {
         ServerQuestionActions.receiveQuestion(question);
       },
       error: function (xhr) {
-        console.log("POST Error in ResponseApiUtil#recordResponse");
         var errors = xhr.responseJSON;
         ErrorActions.setErrors(errors);
       }
@@ -29,7 +28,6 @@ var ResponseApiUtil = {
         ServerQuestionActions.receiveQuestion(question);
       },
       error: function (xhr) {
-        console.log("POST Error in ResponseApiUtil#recordResponse");
         var errors = xhr.responseJSON;
         ErrorActions.setErrors(errors);
       }

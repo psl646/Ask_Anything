@@ -74,11 +74,8 @@ var QuestionEditForm = React.createClass({
   },
 
   _formStoreChange: function () {
-    console.log("FORM STORE CHANGED!");
     var myQuestion = QuestionFormStore.getQuestionFormById(this.state.questionId);
-    console.log(myQuestion);
     var myAnswers = QuestionFormStore.getAllAnswers(this.state.questionId);
-    console.log(myAnswers);
 
     var currentAnswerKeys = Object.keys(myAnswers);
     var oldAnswerFormObjects = this.state.answerFormObjects;

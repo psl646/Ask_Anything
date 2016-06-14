@@ -120,7 +120,6 @@ var QuestionForm = React.createClass({
         myAnswers.push(answer.replace(/^\s+|\s+$/g, ""));
       })
 
-      console.log(myAnswers);
     }
   },
 

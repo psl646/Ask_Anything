@@ -10,7 +10,6 @@ var SurveyApiUtil = {
         ServerSurveyActions.receiveAllSurveys(surveys);
       },
       error: function () {
-        console.log("Fetching error in SurveyApiUtil#fetchAllSurveys");
       }
     });
   },
@@ -25,7 +24,6 @@ var SurveyApiUtil = {
         ServerSurveyActions.receiveAllSurveys(surveys);
       },
       error: function (xhr) {
-        console.log("POST Error in SurveyApiUtil#createSurvey");
         var errors = xhr.responseJSON;
         ErrorActions.setErrors(errors);
       }

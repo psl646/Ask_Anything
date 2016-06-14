@@ -31,7 +31,7 @@ var QuestionIndexItem = React.createClass ({
     this.questionListener = QuestionStore.addListener(this._onChange);
     this.errorListener = ErrorStore.addListener(this._handleErrors);
     var location = window.location.hash.slice(0,11);
-    console.log(location);
+
     ClientQuestionActions.getQuestionById(this.state.questionId, location);
 
     this.pusher = new Pusher('d7b6b378f3d562f7fd37', {

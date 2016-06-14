@@ -11,7 +11,6 @@ var QuestionApiUtil = {
         ServerQuestionActions.receiveAllQuestions(questions);
       },
       error: function (error) {
-			  console.log("Fetch error in QuestionApiUtil#fetchAllQuestions");
 			}
     })
   },
@@ -26,7 +25,6 @@ var QuestionApiUtil = {
         ServerQuestionActions.receiveQuestion(question);
       },
       error: function (xhr) {
-        console.log("Fetch error in QuestionApiUtil#getQuestionById");
         var errors = xhr.responseJSON;
         ErrorActions.setErrors(errors);
       }
@@ -44,7 +42,6 @@ var QuestionApiUtil = {
         ServerQuestionActions.receiveQuestion(question);
       },
       error: function (xhr) {
-        console.log("POST Error in QuestionApiUtil#createQuestions");
         var errors = xhr.responseJSON;
         ErrorActions.setErrors(errors);
       }
@@ -61,7 +58,6 @@ var QuestionApiUtil = {
         ServerQuestionActions.receiveAllQuestions(questions);
       },
       error: function (xhr) {
-        console.log("POST Error in QuestionApiUtil#toggleActive");
       }
     })
   },
@@ -75,7 +71,6 @@ var QuestionApiUtil = {
         ServerQuestionActions.receiveAllQuestions(questions);
       },
       error: function (xhr) {
-        console.log("POST Error in QuestionApiUtil#toggleActive");
       }
     })
   },
@@ -90,7 +85,6 @@ var QuestionApiUtil = {
         ServerQuestionActions.receiveQuestion(question);
       },
       error: function (xhr) {
-        console.log("POST Error in QuestionApiUtil#updateQuestion");
       }
     })
   }

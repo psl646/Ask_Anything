@@ -39,7 +39,6 @@ var ResponseForm = React.createClass({
 
     var channel = this.pusher.subscribe('question_updated');
     channel.bind('question_changed', function(data) {
-      console.log("QUESTION CHANGED!");
       UserApiUtil.findUserByUsername(username);
     });
   },

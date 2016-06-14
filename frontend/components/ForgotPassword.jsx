@@ -63,7 +63,6 @@ var ForgotPassword = React.createClass({
 
   errorMessages: function () {
     var errors = ErrorStore.getErrors();
-    console.log(errors);
     var messages = errors.map(function (errorMsg, i) {
       return <li key={ i }>{ errorMsg }</li>;
     });
