@@ -1,5 +1,4 @@
 var React = require('react');
-// var Link = require('react-router').Link;
 var SessionStore = require('./../stores/session_store');
 var SessionApiUtil = require('./../util/session_api_util');
 var Footer = require('./Footer');
@@ -28,6 +27,7 @@ var App = React.createClass({
   render: function() {
     var navigationBar;
     var rootPageContent;
+    // Footer is taken out for now. Can be placed back in later.
     var footer = <Footer />;
     var minHeight= "min-height-700px";
 
@@ -53,7 +53,6 @@ var App = React.createClass({
         { navigationBar }
         { rootPageContent }
         {this.props.children}
-        { footer }
       </div>
     );
   }
