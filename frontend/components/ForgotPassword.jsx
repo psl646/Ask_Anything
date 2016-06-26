@@ -31,7 +31,7 @@ var ForgotPassword = React.createClass({
     var that = this;
     window.setTimeout(function () {
       that.closeMyself();
-    }, 0 )
+    }, 0 );
     window.setTimeout(function () {
       that.context.router.push("/password_resets");
     }, 0);
@@ -49,11 +49,9 @@ var ForgotPassword = React.createClass({
 	handleSubmit: function (e) {
 		e.preventDefault();
     var email = (this.state.email).toLowerCase();
-
 		var formData = {
 			email: email
 		};
-
     UserApiUtil.findUserByEmail(formData);
     this.setState({ email: "", errors: false });
 	},
@@ -76,57 +74,71 @@ var ForgotPassword = React.createClass({
     this.closeModal();
   },
 
-	render: function () {
-    var renderErrors = "";
+  logo: function () {
     var logo = <Logo />;
-
-    if (this.state.errors) {
-      renderErrors = <div>{ this.errorMessages() }</div>;
-    };
-
     if (this.state.foundUser) {
       logo = "";
     }
+    return logo;
+  },
 
+  renderErrors: function () {
+    var renderErrors = "";
+    if (this.state.errors) {
+      renderErrors = <div>{ this.errorMessages() }</div>;
+    };
+    return renderErrors;
+  },
+
+  forgotPasswordMessage: function () {
+    return (
+      <div className="h11-5">
+        It's ok, this happens to the best of us. Make sure the email you entered above
+        is correct and we'll email you instructions on how to reset your password.
+      </div>
+    );
+  },
+
+  emailField: function () {
+    return (
+      <label> Email <br />
+        <input
+          className="login-input soft-edges"
+          type="text"
+          value={this.state.email}
+          onChange={this.emailChange}
+          />
+      </label>
+    );
+  },
+
+  formButtons: function () {
+    return (
+      <div>
+        <input
+          className="signin-button soft-edges hover-pointer"
+          type="submit"
+          value="Send me password reset instructions"
+          />
+        <div className="cancel-forgot hover-underline hover-pointer text-center"
+          onClick={ this.closeMyself }>
+          Cancel
+        </div>
+      </div>
+    );
+  },
+
+	render: function () {
     return (
       <div className="app">
   			<div className="login-container">
-
-          { logo }
-
+          { this.logo() }
   				<form className="login-component soft-edges" onSubmit={this.handleSubmit}>
-            { renderErrors }
-  	        <h1 className="h1">Log In</h1>
-
-  	        <br />
-  					<label> Email <br />
-  						<input
-                className="login-input soft-edges"
-                type="text"
-                value={this.state.email}
-                onChange={this.emailChange}
-                />
-  					</label>
-
-            <br />
-
-            <div className="h11-5">
-              It's ok, this happens to the best of us. Make sure
-              the email you entered above is correct and we'll
-              email you instructions on how to reset your password.
-            </div>
-
-  	        <br />
-  					<input
-              className="signin-button soft-edges hover-pointer"
-              type="submit"
-              value="Send me password reset instructions"
-              />
-
-
-            <div className="cancel-forgot hover-underline hover-pointer text-center" onClick={ this.closeMyself }>
-              Cancel
-            </div>
+            { this.renderErrors() }
+  	        <h1 className="h1">Log In</h1> <br />
+  					{ this.emailField() }
+            { this.forgotPasswordMessage() } <br/>
+            { this.formButtons() }
   				</form>
   			</div>
       </div>

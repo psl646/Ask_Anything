@@ -3,10 +3,6 @@ var Link = require('react-router').Link;
 var Logo = require('./Logo');
 
 var ForgotPasswordSuccess = React.createClass({
-  contextTypes: {
-    router: React.PropTypes.object.isRequired
-  },
-
 	render: function () {
     return (
       <div className="app">
