@@ -4,7 +4,6 @@ var ReactDOM = require('react-dom');
 var ReactRouter = require('react-router');
 var Router = ReactRouter.Router;
 var Route = ReactRouter.Route;
-// var IndexRoute = ReactRouter.IndexRoute;
 var hashHistory = ReactRouter.hashHistory;
 
 var Modal = require("react-modal");
@@ -20,6 +19,7 @@ var UserEmailPasswordEditForm = require('./components/UserEmailPasswordEditForm.
 var ForgotPasswordSuccess = require('./components/ForgotPasswordSuccess.jsx');
 var NewFeatures = require('./components/NewFeatures.jsx');
 var ResponseForm = require('./components/ResponseForm.jsx');
+var Construction = require('./components/Construction.jsx');
 
 var SessionStore = require('./stores/session_store.js');
 var SessionApiUtil = require('./util/session_api_util.js');
@@ -38,6 +38,7 @@ var Router = (
       <Route path="profile/edit" component={ UserEditForm } onEnter={ _ensureLoggedIn }/>
       <Route path="profile/edit_password_or_email" component={ UserEmailPasswordEditForm } onEnter={ _ensureLoggedIn }/>
       <Route path="new_features" component={ NewFeatures } onEnter={ _ensureLoggedIn }/>
+      <Route path="construction" component={ Construction } onEnter={ _ensureLoggedIn }/>
     </Route>
 
     <Route path="/:username" component={ ResponseForm } />
