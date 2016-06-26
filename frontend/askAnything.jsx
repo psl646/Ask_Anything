@@ -1,12 +1,12 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
+var Modal = require("react-modal");
 
 var ReactRouter = require('react-router');
 var Router = ReactRouter.Router;
 var Route = ReactRouter.Route;
 var hashHistory = ReactRouter.hashHistory;
 
-var Modal = require("react-modal");
 
 var App = require('./components/App.jsx');
 var LoginForm = require('./components/LoginForm.jsx');
@@ -26,13 +26,12 @@ var SessionApiUtil = require('./util/session_api_util.js');
 
 var Router = (
   <Router history={ hashHistory }>
-
     <Route path="/login" component={ LoginForm } onEnter={ _ensureLoggedOut } />
     <Route path="/password_resets" component={ ForgotPasswordSuccess } onEnter={ _ensureLoggedOut }/>
 
     <Route path="/" component={ App } >
       <Route path="signup" component={ SignupPage } onEnter={ _ensureLoggedOut } />
-      <Route path="surveys" component={ SurveysIndex } onEnter={ _ensureLoggedIn }/> // Maybe take out this onEnter hook later to allow non-users to use the site
+      <Route path="surveys" component={ SurveysIndex } onEnter={ _ensureLoggedIn }/>
       <Route path="questions/:questionId" component={ QuestionIndexItem } onEnter={ _ensureQuestionOwner }/>
       <Route path="questions/:questionId/edit" component={ QuestionEditForm } onEnter={ _ensureQuestionOwner }/>
       <Route path="profile/edit" component={ UserEditForm } onEnter={ _ensureLoggedIn }/>
@@ -61,7 +60,6 @@ function _ensureLoggedIn(nextState, replace, asyncDoneCallback) {
   }
 }
 
-// WRITE THIS SO IT DOESN't EVEN DIRECT
 function _ensureQuestionOwner(nextState, replace, asyncDoneCallback) {
   if (SessionStore.currentUserHasBeenFetched()) {
     redirectIfNotLoggedIn();

@@ -19,7 +19,7 @@ var LoginForm = React.createClass({
 
   componentDidMount: function () {
     this.errorListener = ErrorStore.addListener(this.handleErrors);
-    this.sessionListener = SessionStore.addListener(this.redirectIfLoggedIn);
+    this.sessionListener = SessionStore.addListener(this.logInUser);
   },
 
   componentWillUnmount: function () {
@@ -27,7 +27,7 @@ var LoginForm = React.createClass({
     this.sessionListener.remove();
   },
 
-  redirectIfLoggedIn: function () {
+  logInUser: function () {
     if (SessionStore.isUserLoggedIn()) {
       this.context.router.push("surveys");
     }
@@ -74,7 +74,6 @@ var LoginForm = React.createClass({
 
   errorMessages: function () {
     var errors = ErrorStore.getErrors();
-
     var messages = errors.map(function (errorMsg, i) {
       return <li className="error-login" key={ i }>{ errorMsg }</li>;
     });
@@ -92,82 +91,121 @@ var LoginForm = React.createClass({
 		this.setState({ password: newPassword })
 	},
 
-	render: function () {
+  logo: function () {
+    return this.state.modalOpen ? "" : <Logo />;
+  },
+
+  renderErrors: function () {
     var allErrorMessages = "";
     var renderErrors = "";
-    var logo = <Logo />;
 
     if (this.state.errors) {
       allErrorMessages = this.errorMessages();
       renderErrors = <div>{ allErrorMessages }</div>;
     }
+    return renderErrors;
+  },
 
-    if (this.state.modalOpen) {
-      logo = "";
-    }
+  emailInputField: function () {
+    return (
+      <label> Email <small className="login-email">or username</small><br/>
+        <input
+          className="login-input soft-edges"
+          type="text"
+          value={ this.state.emailOrUsername }
+          onChange={ this.emailOrUsernameChange } />
+      </label>
+    );
+  },
 
+  forgotPasswordModal: function () {
+    return (
+      <Modal
+        isOpen={ this.state.modalOpen }
+        onRequestClose={ this.closeModal }
+        style={ ModalConstants.FORGOT_PASSWORD }>
+        <ForgotPassword closeThisModal={ this.closeModal } />
+      </Modal>
+    );
+  },
+
+  passwordInputField: function () {
+    return (
+      <label> Password
+        <small className="lost-password hover-pointer hover-underline" onClick={ this.openModal }>
+          I forgot my password
+          { this.forgotPasswordModal() }
+        </small><br/>
+        <input
+          className="login-input soft-edges"
+          type="password"
+          value={ this.state.password }
+          onChange={ this.passwordChange } />
+      </label>
+    );
+  },
+
+  signInButton: function () {
+    return (
+      <input
+        className="signin-button soft-edges hover-pointer"
+        type="submit"
+        value="Sign in with my Ask Anything! account" />
+    );
+  },
+
+  img: function () {
+    return (
+      <img
+        className="logo-image logo-login-button hover-pointer"
+        src={ window.askAnythingAssets.logo }
+        width="15"
+        height="15"
+        alt="Logo"
+        onClick={ this.handleSubmit }
+        />
+    );
+  },
+
+  guestLogin: function () {
+    return (
+      <div className="guest-login-button soft-edges hover-pointer"
+        onClick={ this.handleGuestLogin }>
+        Guest Login
+      </div>
+    );
+  },
+
+  signUpNewAccount: function () {
+    return (
+      <Link to="signup" className="signup-link">
+        Do you need an account? Create one in a few seconds.
+      </Link>
+    );
+  },
+
+  formButtons: function () {
+    return (
+      <div>
+        { this.signInButton() }
+        { this.img() }
+        { this.guestLogin() }
+        { this.signUpNewAccount() }
+      </div>
+    );
+  },
+
+	render: function () {
 		return (
       <div className="app">
   			<div className="login-container">
-
-          { logo }
-
+          { this.logo() }
           <form className="login-component soft-edges" onSubmit={ this.handleSubmit }>
-  					{ renderErrors }
-
-  	        <h1 className="h1">Log In</h1>
-
-  	        <br />
-  					<label> Email <small className="login-email">or username</small><br/>
-  						<input
-                className="login-input soft-edges"
-                type="text"
-                value={ this.state.emailOrUsername }
-                onChange={ this.emailOrUsernameChange } />
-  					</label>
-
-  	        <br />
-  					<label> Password
-              <small className="lost-password hover-pointer hover-underline" onClick={ this.openModal }>
-                I forgot my password
-                <Modal
-        					isOpen={ this.state.modalOpen }
-                  onRequestClose={ this.closeModal }
-        					style={ ModalConstants.FORGOT_PASSWORD }>
-
-        						<ForgotPassword closeThisModal={ this.closeModal } />
-
-                </Modal>
-              </small><br/>
-  						<input
-                className="login-input soft-edges"
-                type="password"
-                value={ this.state.password }
-                onChange={ this.passwordChange } />
-  					</label>
-
-  	        <br />
-  					<input
-              className="signin-button soft-edges hover-pointer"
-              type="submit"
-              value="Sign in with my Ask Anything! account" />
-
-            <img
-              className="logo-image logo-login-button hover-pointer"
-              src={ window.askAnythingAssets.logo }
-              width="15"
-              height="15"
-              alt="Logo"
-              onClick={ this.handleSubmit }
-              />
-
-            <div className="guest-login-button soft-edges hover-pointer" onClick={ this.handleGuestLogin }>
-              Guest Login
-            </div>
-
-            <Link to="signup" className="signup-link">
-              Do you need an account? Create one in a few seconds.
-            </Link>
+  					{ this.renderErrors() }
+  	        <h1 className="h1">Log In</h1> <br />
+            { this.emailInputField() } <br />
+  					{ this.passwordInputField() } <br />
+            { this.formButtons() }
   				</form>
   			</div>
       </div>

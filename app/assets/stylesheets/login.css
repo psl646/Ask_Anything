@@ -67,6 +67,10 @@
    left: 15px;
 }
 
+.signup-link:hover {
+   text-decoration: underline;
+}
+
 .cancel-forgot {
   font-size: 12px;
   color: #666;
