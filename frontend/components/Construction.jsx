@@ -9,7 +9,6 @@ var Construction = React.createClass({
     return (
       <div>
         The link you clicked is under construction!
-        
       </div>
     );
 
