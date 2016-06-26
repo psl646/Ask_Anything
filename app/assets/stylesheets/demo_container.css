@@ -45,7 +45,7 @@
   top: 320px;
   width: calc(100% - 500px);
   min-width: 800px;
-  height: 450px;
+  height: 600px;
   left: 15%;
   z-index: 5000;
 }
