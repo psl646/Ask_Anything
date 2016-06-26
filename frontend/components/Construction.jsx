@@ -8,7 +8,7 @@ var Construction = React.createClass({
   render: function () {
     return (
       <div>
-        The link you clicked is under construction!
+        The link you clicked on is under construction!
       </div>
     );
 

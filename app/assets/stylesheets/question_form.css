@@ -15,7 +15,7 @@
 
 .single-question-form {
   width: 660px;
-  height: 410px;
+  min-height: 410px;
   background: rgb(227, 235, 250);
   margin: 20px;
 }
@@ -60,8 +60,9 @@
   float: right;
   position: relative;
   right: 15px;
+  min-height: 260px;
+  margin-bottom: 20px;
   width: 475px;
-  height: 260px;
   background: white;
 }
 
@@ -227,6 +228,7 @@
   width: 70px;
   padding: 5px;
   color: #e9eff4;
+  margin-bottom: 40px;
   background-color: #203349;
 }
 
@@ -255,4 +257,3 @@
   color: #f7f8f9;
   background: #113a5c;
 }
- 
