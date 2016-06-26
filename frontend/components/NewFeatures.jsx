@@ -9,7 +9,8 @@ var NewFeatures = React.createClass({
           Login: Login with your email address or username! <br/>
           You can quickly create a guest user account on the landing page. <br/>
           Feel free to log in as our main guest user and poke around! <br/>
-          User information can be changed via Settings in the top navigation bar. Click the Cog icon in the top right!
+          User information can be changed via Settings in the top navigation bar.
+          Click the Cog icon in the top right!
         </div>
       </li>
     );

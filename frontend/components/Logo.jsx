@@ -1,5 +1,4 @@
 var React = require('react');
-// var Link = require('react-router').Link;
 
 var Logo = React.createClass({
   contextTypes: {
@@ -25,15 +24,8 @@ var Logo = React.createClass({
     );
   },
 
-  componentDidMount: function () {
-  },
-
-  componentWillUnmount: function () {
-  },
-
-  render: function () {
+  logoPlacement: function () {
     var logoPlacement = "responseform-logo";
-
     if (this.isLogin()) {
       logoPlacement = "login-logo"
     } else if (this.isPasswordReset()) {
@@ -42,10 +34,18 @@ var Logo = React.createClass({
       logoPlacement = "nouser-navbar-logo"
     }
 
+    return logoPlacement;
+  },
+
+  render: function () {
     return (
-      <div className={ "logo-width " + logoPlacement }>
-        <img className="hover-pointer logo-image" src={window.askAnythingAssets.logo} width="35" height="35" alt="Logo" onClick={ this.handleClick }/>
-        <h1 className="hover-pointer logo-text" onClick={ this.handleClick }>Ask Anything!</h1>
+      <div className={ "logo-width " + this.logoPlacement() }>
+        <img className="hover-pointer logo-image"
+          src={window.askAnythingAssets.logo}
+          width="35" height="35" alt="Logo"
+          onClick={ this.handleClick }/>
+        <h1 className="hover-pointer logo-text"
+          onClick={ this.handleClick }>Ask Anything!</h1>
       </div>
     )
   }
