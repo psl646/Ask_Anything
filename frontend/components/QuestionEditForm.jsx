@@ -21,6 +21,7 @@ var QuestionEditForm = React.createClass({
       answerFormObjects: {}
      });
   },
+
   myQuestionFormData: function () {
     return ({
       question: this.state.newQuestion,
@@ -29,23 +30,27 @@ var QuestionEditForm = React.createClass({
       answers: this.state.answers
     });
   },
+
   sendQuestionFormData: function () {
     var questionFormData = this.myQuestionFormData();
     window.setTimeout(function() {
       QuestionFormActions.sendQuestionFormData(this.state.questionId, questionFormData);
     }.bind(this), 0);
   },
+
   componentDidMount: function () {
     this.questionFormListener = QuestionStore.addListener(this._onChange);
     this.QuestionFormStore = QuestionFormStore.addListener(this._formStoreChange);
     var location = window.location.hash.slice(0,11);
     ClientQuestionActions.getQuestionById(this.state.questionId, location);
   },
+
   componentWillUnmount: function () {
     this.questionFormListener.remove();
     this.QuestionFormStore.remove();
     QuestionFormActions.clearQuestionForms();
   },
+
   _onChange: function () {
     var myQuestion = QuestionStore.getQuestionById(this.state.questionId);
     var question = myQuestion || {};
@@ -61,6 +66,7 @@ var QuestionEditForm = React.createClass({
 
     this.sendQuestionFormData();
   },
+
   _formStoreChange: function () {
     var myQuestion = QuestionFormStore.getQuestionFormById(this.state.questionId);
     var oldAnswerFormObjects = this._getOldAnswers();
@@ -73,6 +79,7 @@ var QuestionEditForm = React.createClass({
       answerFormObjects: oldAnswerFormObjects
     });
   },
+
   _getOldAnswers: function () {
     var myAnswers = QuestionFormStore.getAllAnswers(this.state.questionId);
     var currentAnswerKeys = Object.keys(myAnswers);
@@ -86,11 +93,13 @@ var QuestionEditForm = React.createClass({
 
     return oldAnswerFormObjects;
   },
+
   questionChange: function (e) {
     var newQuestion = e.target.value;
     this.state.newQuestion = newQuestion;
     this.sendQuestionFormData();
   },
+
   answerChange: function (e) {
     var outerHTMLAnswer = e.target.outerHTML.split('"');
     if (outerHTMLAnswer.includes("old")) {
@@ -98,6 +107,7 @@ var QuestionEditForm = React.createClass({
       this.sendQuestionFormData();
     };
   },
+
   createNewAnswer: function(e) {
     var newAnswerValue = e.target.value;
     var answerId = this.state.answerId;
@@ -110,10 +120,12 @@ var QuestionEditForm = React.createClass({
     this.state.answerFormObjects[answerId] = newAnswer;
     this.setState({ answerId: answerId + 1, input: "" });
   },
+
   deleteAnswer: function (e) {
     var answerId = parseInt(e.target.outerHTML.split('"')[1]);
     QuestionFormActions.deleteAnswerToQuestion(this.state.questionId, answerId)
   },
+
   myOldAnswers: function () {
     var myOldAnswersList = "";
     var oldAnswerKeys = Object.keys(this.state.oldAnswers);
@@ -122,6 +134,7 @@ var QuestionEditForm = React.createClass({
     }
     return myOldAnswersList;
   },
+
   showMyOldAnswers: function(oldAnswerKeys) {
     return oldAnswerKeys.map(function (answerId) {
       return (
@@ -138,6 +151,7 @@ var QuestionEditForm = React.createClass({
       );
     }.bind(this));
   },
+
   myNewAnswers: function () {
     return Object.keys(this.state.answerFormObjects).map(function(answerId){
       return (
@@ -147,6 +161,7 @@ var QuestionEditForm = React.createClass({
       );
     }.bind(this));
   },
+
   editQuestionField: function () {
     return (
       <input
@@ -157,6 +172,7 @@ var QuestionEditForm = React.createClass({
         />
     );
   },
+
   allMyAnswers: function () {
     return (
       <ul>
@@ -165,6 +181,7 @@ var QuestionEditForm = React.createClass({
       </ul>
     );
   },
+
   addAnswerField: function () {
     return (
       <div className="edit-question-add-answer-field">
@@ -178,6 +195,7 @@ var QuestionEditForm = React.createClass({
       </div>
     );
   },
+  
 	render: function () {
     return (
       <div className="questionindexitem-container group">
