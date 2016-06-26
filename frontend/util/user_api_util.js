@@ -13,7 +13,6 @@ var UserApiUtil = {
         SessionActions.receiveCurrentUser(currentUser);
       },
       error: function (xhr) {
-        console.log('UserApiUtil#createAccount error');
         var errors = xhr.responseJSON;
         ErrorActions.setErrors(errors);
       }
@@ -31,7 +30,6 @@ var UserApiUtil = {
         alert("Your profile was updated");
       },
       error: function (xhr) {
-        console.log("Error in UserApiUtil#updateUserName");
         var errors = xhr.responseJSON;
         ErrorActions.setErrors(errors);
       }
@@ -49,7 +47,6 @@ var UserApiUtil = {
         alert("User information updated!");
       },
       error: function (xhr) {
-        console.log("Error in UserApiUtil#updateEmailPassword");
         var errors = xhr.responseJSON;
         ErrorActions.setErrors(errors);
       }
@@ -66,7 +63,6 @@ var UserApiUtil = {
         UserActions.userFound(user);
       },
       error: function (xhr) {
-        console.log("Error in UserApiUtil#findUserByEmail");
         var errors = xhr.responseJSON;
         ErrorActions.setErrors(errors);
       }
@@ -83,7 +79,6 @@ var UserApiUtil = {
         UserActions.userFound(user);
       },
       error: function (xhr) {
-        console.log("Error in UserApiUtil#findUserByUsername");
         var errors = xhr.responseJSON;
         ErrorActions.setErrors(errors);
       }

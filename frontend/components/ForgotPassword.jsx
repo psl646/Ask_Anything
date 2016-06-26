@@ -1,12 +1,9 @@
 var React = require('react');
-// var Link = require('react-router').Link;
-var UserStore = require('./../stores/session_store');
 var ErrorStore = require('./../stores/error_store');
 var ErrorActions = require('../actions/error_actions');
 var UserActions = require('../actions/user_actions');
 var UserApiUtil = require('../util/user_api_util');
 var UserStore = require('../stores/user_store');
-
 var Logo = require('./Logo');
 
 var ForgotPassword = React.createClass({
