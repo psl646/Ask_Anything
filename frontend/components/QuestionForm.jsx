@@ -1,15 +1,10 @@
 var React = require('react');
-// var Link = require('react-router').Link;
 var QuestionConstants = require('../constants/question_constants');
 var AnswerInput = require('./AnswerInput');
 var QuestionFormStore = require('../stores/question_form_store');
 var QuestionFormActions = require('../actions/question_form_actions');
 
 var QuestionForm = React.createClass({
-  contextTypes: {
-    router: React.PropTypes.object.isRequired
-  },
-
   getInitialState: function () {
     var myAnswers = QuestionFormStore.getAllAnswers(this.props.questionId);
     var answers = myAnswers || { 1: "", 2: "" };
@@ -49,12 +44,9 @@ var QuestionForm = React.createClass({
     this.questionFormListener.remove();
   },
 
-  _onChange: function () {
-    var question = QuestionFormStore.getQuestionFormById(this.props.questionId)
-
+  oldAnswerObjects: function () {
     var myAnswers = QuestionFormStore.getAllAnswers(this.props.questionId);
     var answers = myAnswers || { 1: "", 2: "" };
-
     var currentAnswerKeys = Object.keys(answers);
     var oldAnswerFormObjects = this.state.answerFormObjects;
 
@@ -63,12 +55,16 @@ var QuestionForm = React.createClass({
         delete oldAnswerFormObjects[answerKey];
       }
     });
+  },
+
+  _onChange: function () {
+    var question = QuestionFormStore.getQuestionFormById(this.props.questionId)
+    var oldAnswerFormObjects = this.oldAnswerObjects();
 
     this.setState({
       question: question.question,
       category: question.category,
-      answers: question.answers,
-      answerFormObjects: oldAnswerFormObjects
+      answers: question.answers
     });
   },
 
@@ -110,6 +106,7 @@ var QuestionForm = React.createClass({
   checkKeyPressed: function (e) {
     if (e.keyCode === 13) {
       e.preventDefault();
+      console.log("ENTER PRESSED");
       var questionInput = this.state.question.split("?");
       // var question = questionInput[0];
       var answers = questionInput[1];
@@ -132,10 +129,6 @@ var QuestionForm = React.createClass({
       if (that.state.category === category) {
         isChecked = "category-checked"
       }
-
-      // currently set to readOnly as I am just working on Multiple Choice
-      // disabled={ that.state.category !== category }
-      // FIX HOVER POINTER
 
       return (
         <li key={ idx } className={ "hover-pointer category-li " + isChecked }>

@@ -184,19 +184,11 @@ var QuestionFormGenerator = React.createClass({
             <div className="green text-inline">Green</div>
           </div>
         </li>
-
-        <li className="h14">
-          Importing a bunch of questions?
-        </li>
-
-        <li>
-          Copy & paste a list of questions and we'll create a question for each line.
-        </li>
       </ul>
     );
 
     // <div className={ "soft-edges no-question-forms" }>Hey Silly! You need to enter a question in the box above first.</div>
-    
+
     // <div>
     //   <i className="fa fa-arrow-right small-arrow" aria-hidden="true"></i>
     // </div>

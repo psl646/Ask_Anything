@@ -5,7 +5,6 @@ var Modal = require('react-modal');
 var ModalConstants = require('../constants/modal_constants');
 var SessionStore = require('./../stores/session_store');
 var SessionApiUtil = require('./../util/session_api_util');
-// var Logo = require('./Logo');
 var QuestionFormGenerator = require('./QuestionFormGenerator');
 
 var UserNavBar = React.createClass({
