@@ -25,7 +25,6 @@ var SessionApiUtil = {
         SessionActions.removeCurrentUser();
       },
 			error: function () {
-			  console.log("Logout error in SessionApiUtil#logout");
 			}
 		});
 	},
@@ -38,7 +37,6 @@ var SessionApiUtil = {
 			  SessionActions.receiveCurrentUser(currentUser);
 			},
 			error: function (xhr) {
-			  console.log("Error in SessionApiUtil#fetchCurrentUser");
 			},
       complete: complete
 		});

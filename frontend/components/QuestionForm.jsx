@@ -106,7 +106,6 @@ var QuestionForm = React.createClass({
   checkKeyPressed: function (e) {
     if (e.keyCode === 13) {
       e.preventDefault();
-      console.log("ENTER PRESSED");
       var questionInput = this.state.question.split("?");
       // var question = questionInput[0];
       var answers = questionInput[1];
