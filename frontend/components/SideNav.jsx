@@ -42,10 +42,6 @@ var SideNav = React.createClass ({
             My Questions
           </Link>
 
-          <Link to="account_question" className="sidenav-list-link soft-edges hover-pointer blue-color-text">
-            Account Questions
-          </Link>
-
         </ul>
       </div>
     )
