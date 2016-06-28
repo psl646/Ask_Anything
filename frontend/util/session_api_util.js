@@ -36,7 +36,11 @@ var SessionApiUtil = {
 			success: function (currentUser) {
 			  SessionActions.receiveCurrentUser(currentUser);
 			},
+<<<<<<< HEAD
 			error: function () {
+=======
+			error: function (xhr) {
+>>>>>>> ec9142743abbca07be25bd6aadef6850048dc798
 			},
       complete: complete
 		});
