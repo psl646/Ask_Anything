@@ -18,6 +18,7 @@
   position: relative;
   right: 0;
   width: 330px;
+  min-height: 500px;
   background: #e9eff4;
   height: 100%;
 }

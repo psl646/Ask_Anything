@@ -69,7 +69,8 @@ var SurveysIndex = React.createClass ({
   },
 
   clickedSurveyLi: function (e) {
-    var surveyId = e.currentTarget.innerHTML.slice(9).split('"')[0];
+    var innerHTML = e.currentTarget.innerHTML;
+    var surveyId = innerHTML.slice(innerHTML.indexOf('id') + 4).split('"')[0];
 
     if ((!this.clickedActivateToggle(e)) && (!this.clickedDeleteQuestion(e))){
       this.toggleShowSurveyItems(surveyId);
@@ -97,9 +98,9 @@ var SurveysIndex = React.createClass ({
   },
 
   toggleShowSurveyItems: function (surveyId) {
-
+    console.log(surveyId);
     var clickedSurveys = this.state.clickedSurveys;
-
+    console.log(clickedSurveys);
     if (clickedSurveys[surveyId]) {
       clickedSurveys[surveyId] = false
       this.setState({ clickedSurveys: clickedSurveys });
@@ -146,7 +147,7 @@ var SurveysIndex = React.createClass ({
         </li>
       );
     });
-    
+
     return surveys;
   },
 

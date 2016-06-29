@@ -28,6 +28,7 @@ var AnswerInput = React.createClass({
   },
 
   deleteAnswer: function (e) {
+    console.log("DELETE ANSWER CLICKED");
     QuestionFormActions.deleteAnswerToQuestion(this.props.questionId, this.props.answerId)
   },
 
@@ -44,6 +45,7 @@ var AnswerInput = React.createClass({
   },
 
   editQuestionAnswerInputField: function () {
+    console.log("QUESTION INPUT ANSWER FIELDS");
     return (
       <div>
         <input
