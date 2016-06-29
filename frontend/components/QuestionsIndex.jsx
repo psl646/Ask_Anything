@@ -2,8 +2,6 @@ var React = require('react');
 var ClientQuestionActions = require('../actions/client_question_actions');
 var QuestionStore = require('../stores/question_store');
 var Link = require('react-router').Link;
-// var SessionStore = require('../stores/session_store');
-// var ClientSurveyActions = require('../actions/client_survey_actions');
 
 var QuestionsIndex = React.createClass ({
   contextTypes: {
@@ -27,48 +25,37 @@ var QuestionsIndex = React.createClass ({
     this.setState({ questions: QuestionStore.all() });
   },
 
-  clickedOnEdit: function (outerHTMLArray) {
-    if (outerHTMLArray.length > 1) {
-      return (outerHTMLArray[1].slice(0,4) === "edit");
-    } else {
-      return false;
-    };
+  clickedOnEdit: function (outerHTML) {
+    return (outerHTML.indexOf("Edit") === -1) ? false : true;
   },
 
-  clickedOnActive: function (outerHTMLArray){
-    if (outerHTMLArray.length > 1) {
-      return (outerHTMLArray[1].slice(0, 10) === "fa fa-wifi");
-    } else {
-      return false;
-    };
+  clickedOnActive: function (outerHTML){
+    return (outerHTML.indexOf("fa fa-wifi") === -1) ? false : true;
   },
 
-  clickedOnDeleteQuestion: function (outerHTMLArray) {
-    if (outerHTMLArray.length > 3) {
-      return (outerHTMLArray[3].slice(0,6) === "delete")
-    } else {
-      return false;
-    };
+  clickedOnDeleteQuestion: function (outerHTML) {
+    if (typeof(outerHTML) === "string"){
+      return (outerHTML.indexOf("Delete") === -1) ? false : true;
+    }
   },
 
   handleClickOnQuestionItem: function (e) {
     e.preventDefault();
-    var outerHTMLArray = e.target.outerHTML.split('"');
+    var outerHTML = e.target.outerHTML;
 
     var targetString = e.currentTarget.outerHTML;
-    var questionId = targetString.split('"')[1];
+    var questionId = targetString.split('"')[3];
+    if (parseInt(questionId).toString() !== questionId){
+      questionId = targetString.split('"')[1];
+    }
     var url = "questions/" + questionId;
 
-    if (outerHTMLArray.length <= 1){
-      return false
-    }
-
-    if (this.clickedOnActive(outerHTMLArray)){
+    if (this.clickedOnActive(outerHTML)){
       ClientQuestionActions.toggleActive(parseInt(questionId));
-    } else if (this.clickedOnDeleteQuestion(outerHTMLArray)) {
-      ClientQuestionActions.deleteQuestion(questionId);
+    } else if (this.clickedOnDeleteQuestion(outerHTML)) {
+      ClientQuestionActions.deleteQuestion(parseInt(questionId));
     } else {
-      if (this.clickedOnEdit(outerHTMLArray)){
+      if (this.clickedOnEdit(outerHTML)){
         url = url + "/edit";
       }
       this.context.router.push(url);
@@ -104,9 +91,10 @@ var QuestionsIndex = React.createClass ({
         }
 
         return (
-          <li id={ question_id }
-            key={ question_id }
+          <li
             className={ "h13 group show-edit-delete " + activeQuestion }
+            id={ question_id }
+            key={ question_id }
             onClick={"li", that.handleClickOnQuestionItem }>
 
             <div className="current-question">{ displayQuestion }</div>
