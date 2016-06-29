@@ -32,6 +32,10 @@
   padding: 18px 11px;
 }
 
+.li-float-right {
+  float: right;
+}
+
 .left-navbar-padding {
   padding: 18px 20px;
 }
@@ -136,4 +140,12 @@
   background: rgb(45, 89, 126);
   padding: 10px;
   margin: 19px 35px 19px 0;
-} 
+}
+
+.empty-link {
+  display: none;
+}
+
+.empty-link:hover {
+  cursor: default;
+}

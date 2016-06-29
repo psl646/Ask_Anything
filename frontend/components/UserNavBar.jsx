@@ -32,7 +32,7 @@ var UserNavBar = React.createClass({
   greeting: function(){
     var username = SessionStore.currentUser().username.toUpperCase();
     return (
-      <li className="li-float-loggedin user-info-container blue-hover">
+      <li className="li-float-loggedin li-float-right user-info-container blue-hover hover-pointer">
         { username }
         <div className="cog-position">
           <i className="fa fa-cog fa-2x" aria-hidden="true"></i>
@@ -72,11 +72,21 @@ var UserNavBar = React.createClass({
     this.context.router.push("new_features");
   },
 
+  leftLinks: function () {
+    var randomLeftLinks = (
+      <div className="empty-link">
+        <Link to="participants" className="li-float-loggedin left-navbar-padding blue-hover"> Participants </Link>
+        <Link to="reports" className="li-float-loggedin left-navbar-padding blue-hover"> Reports </Link>
+      </div>
+    );
+    return "";
+  },
+
   render: function () {
     return (
       <div className="navbar-container">
-        <ul className="navbar-left-ul hover-pointer">
-          <li className="li-float-loggedin left-navbar-padding create-question" onClick={ this.openModal }>
+        <ul className="navbar-left-ul">
+          <li className="li-float-loggedin left-navbar-padding create-question hover-pointer" onClick={ this.openModal }>
             +
             <Modal
               isOpen={this.state.modalOpen}
@@ -88,21 +98,20 @@ var UserNavBar = React.createClass({
             </Modal>
           </li>
 
-          <li className="li-float-loggedin left-navbar-padding my-surveys" onClick={ this.handleQuestionsClick }>
+          <li className="li-float-loggedin left-navbar-padding my-surveys hover-pointer" onClick={ this.handleQuestionsClick }>
             Questions
           </li>
 
-          <Link to="participants" className="li-float-loggedin left-navbar-padding blue-hover"> Participants </Link>
-          <Link to="reports" className="li-float-loggedin left-navbar-padding blue-hover"> Reports </Link>
+          { this.leftLinks() }
         </ul>
 
         <img className="logo-image user-navbar-logo hover-pointer" onClick={ this.handleImageClick } src={window.askAnythingAssets.logo} width="35" height="35" alt="Logo" />
 
-        <ul className="navbar-right-ul hover-pointer">
-          <Link to="plans_pricing" className="li-float-loggedin blue-hover"> Pricing & Upgrades </Link>
-          <Link to="user_guide" className="li-float-loggedin blue-hover"> Help </Link>
-          <Link to="new_features" className="li-float-loggedin blue-hover">  New Features </Link>
+        <ul className="navbar-right-ul">
           { this.greeting() }
+          <Link to="new_features" className="li-float-loggedin li-float-right blue-hover hover-pointer">  New Features </Link>
+          <Link to="user_guide" className="li-float-loggedin li-float-right blue-hover empty-link"> Help </Link>
+          <Link to="plans_pricing" className="li-float-loggedin li-float-right blue-hover empty-link"> Pricing & Upgrades </Link>
         </ul>
       </div>
     )
