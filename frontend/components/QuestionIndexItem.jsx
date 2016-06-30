@@ -64,22 +64,26 @@ var QuestionIndexItem = React.createClass ({
   },
 
   handleTimerClick: function () {
-    var convertedTime = this.convertTimeToMilliseconds();
-    this.setState({ time: "0000", timeBegin: convertedTime, timeLeft: convertedTime });
-    window.setTimeout(function(){
-      ClientQuestionActions.toggleActive(this.state.questionId);
-    }.bind(this), convertedTime)
+    if (this.state.timeLeft === 0){
+      var convertedTime = this.convertTimeToMilliseconds();
+      this.setState({ time: "0000", timeBegin: convertedTime, timeLeft: convertedTime });
+      window.setTimeout(function(){
+        ClientQuestionActions.toggleActive(this.state.questionId);
+      }.bind(this), convertedTime)
+    }
   },
 
   timerChange: function (e) {
-    var input = parseInt((e.target.value).slice(5));
-    var myTime = this.state.time;
+    if (this.state.timeLeft === 0){
+      var input = parseInt((e.target.value).slice(5));
+      var myTime = this.state.time;
 
-    if (TimeConstants.ACCEPTABLE_VALUES.includes(input)){
-      var myTime = myTime.slice(1) + input;
+      if (TimeConstants.ACCEPTABLE_VALUES.includes(input)){
+        var myTime = myTime.slice(1) + input;
+      }
+
+      this.setState({ time: myTime });
     }
-
-		this.setState({ time: myTime });
   },
 
   convertTimeToMilliseconds: function () {
@@ -116,15 +120,14 @@ var QuestionIndexItem = React.createClass ({
       }
       return 0;
     } else {
-      percentage = Math.floor(100 * (this.state.timeLeft / this.state.timeBegin));
+      percentage = 100 * (this.state.timeLeft / this.state.timeBegin);
     }
 
     if (this.timeCounter === undefined) {
       this.timeCounter = window.setInterval(function(){
-        this.setState({timeLeft: this.state.timeLeft - 25})
-      }.bind(this), 25);
+        this.setState({timeLeft: this.state.timeLeft - 10})
+      }.bind(this), 10);
     }
-
 
     return percentage;
   },
