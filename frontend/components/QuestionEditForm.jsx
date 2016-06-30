@@ -97,6 +97,7 @@ var QuestionEditForm = React.createClass({
   questionChange: function (e) {
     var newQuestion = e.target.value;
     this.state.newQuestion = newQuestion;
+    this.setState({ newQuestion: newQuestion });
     this.sendQuestionFormData();
   },
 
