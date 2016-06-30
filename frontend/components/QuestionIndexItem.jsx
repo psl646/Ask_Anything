@@ -20,7 +20,9 @@ var QuestionIndexItem = React.createClass ({
     return ({
       questionId: questionId,
       question: question,
-      time: "0000"
+      time: "0000",
+      timeBegin: 0,
+      timeLeft: 0
     });
   },
 
@@ -42,6 +44,9 @@ var QuestionIndexItem = React.createClass ({
   },
 
   componentWillUnmount: function () {
+    if (this.timeCounter !== undefined) {
+      window.clearInterval(this.timeCounter);
+    }
     this.errorListener.remove();
     this.questionListener.remove();
     this.pusher.unsubscribe('question_' + this.state.questionId);
@@ -59,8 +64,11 @@ var QuestionIndexItem = React.createClass ({
   },
 
   handleTimerClick: function () {
-    // var convertedTime = this.convertTimeToMilliseconds();
-
+    var convertedTime = this.convertTimeToMilliseconds();
+    this.setState({ time: "0000", timeBegin: convertedTime, timeLeft: convertedTime });
+    window.setTimeout(function(){
+      ClientQuestionActions.toggleActive(this.state.questionId);
+    }.bind(this), convertedTime)
   },
 
   timerChange: function (e) {
@@ -96,6 +104,29 @@ var QuestionIndexItem = React.createClass ({
     return Object.keys(sortedAnswerObjects).map(function(key){
       return sortedAnswerObjects[key];
     });
+  },
+
+  getTimePercentage: function () {
+    var percentage;
+    if (this.state.timeLeft === 0) {
+      if (this.timeCounter !== undefined){
+        window.clearInterval(this.timeCounter);
+        this.timeCounter = undefined;
+        this.state.timeBegin = 0;
+      }
+      return 0;
+    } else {
+      percentage = Math.floor(100 * (this.state.timeLeft / this.state.timeBegin));
+    }
+
+    if (this.timeCounter === undefined) {
+      this.timeCounter = window.setInterval(function(){
+        this.setState({timeLeft: this.state.timeLeft - 25})
+      }.bind(this), 25);
+    }
+
+
+    return percentage;
   },
 
   render: function () {
@@ -223,7 +254,12 @@ var QuestionIndexItem = React.createClass ({
     var myTime = that.state.time;
     var time = myTime.slice(0,2) + ":" + myTime.slice(2,4);
 
-    var countdown = "";
+    var percentage = this.getTimePercentage();
+    var countdownTimeBar = {
+      width: percentage + "%",
+      height: "100%",
+      background: "green"
+    };
 
     var activeQuestion = "toggle-button-active ";
     var inactiveToggle = "toggle-button-inactive ";
@@ -289,7 +325,8 @@ var QuestionIndexItem = React.createClass ({
               </li>
             </ul>
             <div className="countdown-time">
-              { countdown }
+              <div style={ countdownTimeBar }>
+              </div>
             </div>
           </div>
         </div>
