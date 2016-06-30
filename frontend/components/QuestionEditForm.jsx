@@ -39,15 +39,17 @@ var QuestionEditForm = React.createClass({
   },
 
   componentDidMount: function () {
-    this.questionFormListener = QuestionStore.addListener(this._onChange);
-    this.QuestionFormStore = QuestionFormStore.addListener(this._formStoreChange);
+    this.questionStoreListener = QuestionStore.addListener(this._onChange);
     var location = window.location.hash.slice(0,11);
     ClientQuestionActions.getQuestionById(this.state.questionId, location);
+    this.interval = window.setInterval(function () {
+      this._formStoreChange();
+    }.bind(this),100);
   },
 
   componentWillUnmount: function () {
-    this.questionFormListener.remove();
-    this.QuestionFormStore.remove();
+    window.clearInterval(this.interval);
+    this.questionStoreListener.remove();
     QuestionFormActions.clearQuestionForms();
   },
 
@@ -60,11 +62,7 @@ var QuestionEditForm = React.createClass({
       oldAnswers[answerObj.id] = answerObj.answer;
     });
 
-    this.state.newQuestion =  question.question;
-    this.state.newCategory = question.category;
-    this.state.oldAnswers = oldAnswers;
-
-    this.sendQuestionFormData();
+    this.setState({ newQuestion: question.question, newCategory: question.category, oldAnswers: oldAnswers });
   },
 
   _formStoreChange: function () {
@@ -98,14 +96,13 @@ var QuestionEditForm = React.createClass({
     var newQuestion = e.target.value;
     this.state.newQuestion = newQuestion;
     this.setState({ newQuestion: newQuestion });
-    this.sendQuestionFormData();
   },
 
   answerChange: function (e) {
     var outerHTMLAnswer = e.target.outerHTML.split('"');
     if (outerHTMLAnswer.includes("old")) {
       this.state.oldAnswers[outerHTMLAnswer[7]] = e.target.value;
-      this.sendQuestionFormData();
+      this.setState({ oldAnswers: this.state.oldAnswers });
     };
   },
 
@@ -202,6 +199,7 @@ var QuestionEditForm = React.createClass({
   },
 
 	render: function () {
+    this.sendQuestionFormData();
     return (
       <div className="questionindexitem-container group">
         <QuestionIndexItemToolbar />

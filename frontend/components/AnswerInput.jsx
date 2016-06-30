@@ -28,6 +28,7 @@ var AnswerInput = React.createClass({
   },
 
   deleteAnswer: function (e) {
+    console.log("CLICKED DELETE ANSWER ON NEW ANSWER");
     QuestionFormActions.deleteAnswerToQuestion(this.props.questionId, this.props.answerId)
   },
 
