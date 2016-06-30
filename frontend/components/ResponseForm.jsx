@@ -30,7 +30,7 @@ var ResponseForm = React.createClass({
       this.setState({ current_user: current_user });
     }.bind(this), 0);
     var username = window.location.hash.slice(2).split("?")[0];
-    UserApiUtil.findUserByUsername(username);
+    UserApiUtil.findUserByUsername(username.toLowerCase());
 
     this.pusher = new Pusher('d7b6b378f3d562f7fd37', {
       encrypted: true
