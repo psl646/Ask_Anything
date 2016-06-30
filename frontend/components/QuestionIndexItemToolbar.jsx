@@ -126,7 +126,7 @@ var QuestionIndexItemToolbar = React.createClass ({
     var bottomOptions = (
       <ul className="bottomOptions-question-menu">
         <Link to={ "questions/" + that.state.questionId + "/edit" } className="bottomOptions-options">Edit</Link>
-        <Link to="construction" className="bottomOptions-options">Export</Link>
+        <div className="bottomOptions-options">Export</div>
         <Link to="surveys" className="bottomOptions-options" onClick={ that.handleDeleteClick } >Delete
           <Modal
             isOpen={ that.state.modalOpen }

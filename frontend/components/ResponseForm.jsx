@@ -1,5 +1,4 @@
 var React = require('react');
-// var Link = require('react-router').Link;
 var Logo = require('./Logo');
 var UserApiUtil = require('../util/user_api_util');
 var UserStore = require('../stores/user_store');
@@ -67,10 +66,10 @@ var ResponseForm = React.createClass({
   },
 
   recordAnswer: function (e) {
-    var answerId = parseInt(e.currentTarget.outerHTML.split('"')[1]);
-
+    var outerHTML = e.currentTarget.outerHTML;
+    var answerId = outerHTML.slice(outerHTML.indexOf('id="') + 4).split('"')[0];
     var formData = {
-      answer_id: answerId,
+      answer_id: parseInt(answerId),
       user_id: this.state.current_user.id
     };
 

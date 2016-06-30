@@ -17,7 +17,6 @@ var QuestionIndexItem = React.createClass ({
     var myQuestion = QuestionStore.getQuestionById(questionId);
     var question = myQuestion || {};
 
-
     return ({
       questionId: questionId,
       question: question,
@@ -89,6 +88,16 @@ var QuestionIndexItem = React.createClass ({
     ClientQuestionActions.toggleActive(this.state.questionId);
   },
 
+  sortAnswerObjects: function (answerObjects) {
+    var sortedAnswerObjects = [];
+    answerObjects.forEach(function(answer){
+      sortedAnswerObjects[answer["id"]] = answer["answer"];
+    });
+    return Object.keys(sortedAnswerObjects).map(function(key){
+      return sortedAnswerObjects[key];
+    });
+  },
+
   render: function () {
     var that = this;
     var myAnswerObjects;
@@ -120,11 +129,9 @@ var QuestionIndexItem = React.createClass ({
     if (Object.keys(that.state.question).length !== 0) {
 
       myAnswerObjects = that.state.question["answers"];
-      myAnswerArray = myAnswerObjects.map(function(answer){
-        var answerId = answer["id"];
-        myGraphAnswerObject[answerId] = 0;
-
-        return answer["answer"];
+      myAnswerArray = this.sortAnswerObjects(myAnswerObjects);
+      myAnswerObjects.forEach(function(answer){
+        myGraphAnswerObject[answer["id"]] = 0;
       });
 
       height = (500 / myAnswerArray.length);
@@ -192,7 +199,6 @@ var QuestionIndexItem = React.createClass ({
         </li>
       );
     });
-
 
     var inactiveQuestionPrompt = (
       <div>
