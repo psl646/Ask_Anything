@@ -107,19 +107,34 @@ var QuestionForm = React.createClass({
   checkKeyPressed: function (e) {
     if (e.keyCode === 13) {
       e.preventDefault();
-
-      // ENTER PRESSED HERE
-      var questionInput = this.state.question.split("?");
-      // var question = questionInput[0];
-      var answers = questionInput[1];
-      var splitAnswers = answers.split(",");
-
       var myAnswers = [];
-      splitAnswers.forEach(function(answer){
-        myAnswers.push(answer.replace(/^\s+|\s+$/g, ""));
-      })
+      var question;
 
+      if (this.state.question.indexOf("?") !== -1) {
+        var questionInput = this.state.question.split("?");
+        var question = questionInput[0];
+        var answers = questionInput[1];
+        var splitAnswers = answers.split(",");
+        splitAnswers.forEach(function(answer){
+          myAnswers.push(answer.replace(/^\s+|\s+$/g, ""));
+        })
+        this.state.question = question + "?";
+        this.createNewAnswers(myAnswers);
+      }
     }
+  },
+
+  createNewAnswers: function (myAnswers) {
+    myAnswers.forEach(function(answer){
+      var answerId = this.state.answerId;
+      var newAnswer = <AnswerInput answer={ answer } answerId={ answerId } questionId={ this.props.questionId } />;
+
+      this.state.answers[answerId]= "";
+      this.state.answerFormObjects[answerId]= newAnswer;
+      this.state.answerId = answerId + 1;
+
+      this.sendQuestionFormData();
+    }.bind(this))
   },
 
 	render: function () {
