@@ -26,7 +26,7 @@ var UserNavBar = React.createClass({
     }
     window.setTimeout(function () {
       this.setState({ modalOpen: true });
-    }.bind(this), 500);
+    }.bind(this), 1000);
   },
 
   greeting: function(){
