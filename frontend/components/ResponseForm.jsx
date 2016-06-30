@@ -102,6 +102,20 @@ var ResponseForm = React.createClass({
     this.context.router.push("/");
   },
 
+  sortAnswers: function (answerArray) {
+    var sortedAnswers = {};
+    answerArray.forEach(function(answer){
+      sortedAnswers[answer["id"]] = answer["answer"];
+    });
+
+    var answerArr = [];
+    Object.keys(sortedAnswers).forEach(function(id){
+      answerArr.push([id, sortedAnswers[id]]);
+    });
+
+    return answerArr;
+  },
+
 	render: function () {
     var that = this;
 
@@ -154,17 +168,16 @@ var ResponseForm = React.createClass({
         }
       }
 
-      var answerArray = this.state.question["answers"];
-
+      var answerArray = this.sortAnswers(this.state.question["answers"]);
       answers = answerArray.map(function(answerObject, idx){
         var vote = "0";
-        if (answerObject.id === myAnswerId) {
+        if (parseInt(answerObject[0]) === myAnswerId) {
           vote = "1";
         }
 
         return (
           <li
-            id={ answerObject.id }
+            id={ answerObject[0] }
             key={ idx }
             className={ "answer-choice-response-form-container group soft-edges " + hoverPointer }
             onClick={"li", that.recordAnswer }
@@ -177,7 +190,7 @@ var ResponseForm = React.createClass({
             </div>
 
             <div className={ answerChoiceResponse }>
-              { answerObject["answer"] }
+              { answerObject[1] }
             </div>
 
           </li>
