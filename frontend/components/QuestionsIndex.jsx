@@ -26,24 +26,34 @@ var QuestionsIndex = React.createClass ({
   },
 
   clickedOnEdit: function (outerHTML) {
-    return (outerHTML.indexOf("Edit") === -1) ? false : true;
+    if (outerHTML.indexOf("</ul>") === -1 && outerHTML.indexOf("Edit") !== -1){
+      return true;
+    }
+    return false;
   },
 
   clickedOnActive: function (outerHTML){
-    return (outerHTML.indexOf("fa fa-wifi") === -1) ? false : true;
+    if (outerHTML.indexOf("</ul>") === -1 && outerHTML.indexOf("fa fa-wifi") !== -1){
+      return true;
+    }
+    return false;
   },
 
   clickedOnDeleteQuestion: function (outerHTML) {
     if (typeof(outerHTML) === "string"){
-      return (outerHTML.indexOf("Delete") === -1) ? false : true;
+      if (outerHTML.indexOf("</li>") === -1 && outerHTML.indexOf("Delete") !== -1){
+        return true;
+      }
     }
+    return false;
   },
 
   handleClickOnQuestionItem: function (e) {
     e.preventDefault();
-    var outerHTML = e.target.outerHTML;
 
+    var outerHTML = e.target.outerHTML;
     var targetString = e.currentTarget.outerHTML;
+
     var questionId = targetString.split('"')[3];
     if (parseInt(questionId).toString() !== questionId){
       questionId = targetString.split('"')[1];

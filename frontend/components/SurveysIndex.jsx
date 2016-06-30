@@ -69,9 +69,8 @@ var SurveysIndex = React.createClass ({
   },
 
   clickedSurveyLi: function (e) {
-    var innerHTML = e.currentTarget.innerHTML;
-    var surveyId = innerHTML.slice(innerHTML.indexOf('id') + 4).split('"')[0];
-
+    var outerHTML = e.currentTarget.outerHTML;
+    var surveyId = outerHTML.slice(outerHTML.indexOf('id') + 4).split('"')[0];
     if ((!this.clickedActivateToggle(e)) && (!this.clickedDeleteQuestion(e))){
       this.toggleShowSurveyItems(surveyId);
     };
@@ -98,9 +97,7 @@ var SurveysIndex = React.createClass ({
   },
 
   toggleShowSurveyItems: function (surveyId) {
-    console.log(surveyId);
     var clickedSurveys = this.state.clickedSurveys;
-    console.log(clickedSurveys);
     if (clickedSurveys[surveyId]) {
       clickedSurveys[surveyId] = false
       this.setState({ clickedSurveys: clickedSurveys });
@@ -131,8 +128,8 @@ var SurveysIndex = React.createClass ({
       }
 
       return (
-        <li className="surveysindex-li hover-pointer" key={ survey_id } onClick={"li", that.clickedSurveyLi }>
-          <div id={ survey_id } className="h14">
+        <li className="surveysindex-li hover-pointer" key={ survey_id }>
+          <div id={ survey_id } className="h14" onClick={"div", that.clickedSurveyLi }>
             <div className={ "caret-icon " + caretIcon } />
             <div>
               { currentSurvey.title }

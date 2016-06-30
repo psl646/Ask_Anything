@@ -59,6 +59,10 @@ class Question < ActiveRecord::Base
     question_data[:answers].each do |answer_data|
       Answer.create(answer: answer_data.last, question: current_user.questions.last)
     end
+
+    if Answer.last.question_id != Question.last.id
+      raise "ERROR"
+    end
   end
 
   def self.inactivate_other_questions(current_question, current_user)
@@ -75,12 +79,16 @@ class Question < ActiveRecord::Base
       old_answers = current_question.answers
       current_answers = question[:oldAnswers]
 
-      old_answers.each do |old_answer|
-        if !current_answers.keys.include?(old_answer[:id].to_s)
-          old_answer.destroy
-        else
-          old_answer[:answer] = current_answers[old_answer[:id].to_s]
-          old_answer.save
+      if current_answers.nil?
+        old_answers.destroy_all
+      else
+        old_answers.each do |old_answer|
+          if !current_answers.keys.include?(old_answer[:id].to_s)
+            old_answer.destroy
+          else
+            old_answer[:answer] = current_answers[old_answer[:id].to_s]
+            old_answer.save
+          end
         end
       end
 
@@ -91,7 +99,11 @@ class Question < ActiveRecord::Base
       end
       current_question[:question] = question[:question]
       current_question[:category] = question[:category]
-      current_question.save
+      if current_question.answers.empty? && Answer.last.question_id != current_question.id
+        raise "ERROR"
+      else
+        current_question.save
+      end
     end
 
     true

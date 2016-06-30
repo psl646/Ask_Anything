@@ -101,7 +101,6 @@ var QuestionForm = React.createClass({
     e.preventDefault();
     var outerHTML = e.target.outerHTML;
     var answerId = outerHTML.slice(outerHTML.indexOf('id="') + 4).split('"')[0];
-    console.log(answerId);
     QuestionFormActions.deleteAnswerToQuestion(this.props.questionId, answerId);
   },
 

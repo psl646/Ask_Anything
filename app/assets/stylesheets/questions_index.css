@@ -91,6 +91,10 @@
   color: rgb(43, 203, 10);
 }
 
+.activated-icon:hover {
+  color: #ccc;
+}
+
 .nonactive-question {
   background: #e9eff4;
 }

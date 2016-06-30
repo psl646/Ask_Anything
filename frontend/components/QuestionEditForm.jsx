@@ -122,8 +122,12 @@ var QuestionEditForm = React.createClass({
   },
 
   deleteAnswer: function (e) {
-    var answerId = parseInt(e.target.outerHTML.split('"')[1]);
-    QuestionFormActions.deleteAnswerToQuestion(this.state.questionId, answerId)
+    var outerHTML = e.target.outerHTML;
+    var answerId = outerHTML.split('"')[1];
+    if (parseInt(answerId).toString() !== answerId) {
+      answerId = outerHTML.slice(outerHTML.indexOf('id="') + 4).split('"')[0];
+    }
+    QuestionFormActions.deleteAnswerToQuestion(this.state.questionId, parseInt(answerId));
   },
 
   myOldAnswers: function () {
@@ -195,7 +199,7 @@ var QuestionEditForm = React.createClass({
       </div>
     );
   },
-  
+
 	render: function () {
     return (
       <div className="questionindexitem-container group">
