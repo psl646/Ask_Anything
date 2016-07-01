@@ -9,8 +9,7 @@ var NewFeatures = React.createClass({
           Login: Login with your email address or username! <br/>
           You can quickly create a guest user account on the landing page. <br/>
           Feel free to log in as our main guest user and poke around! <br/>
-          User information can be changed via Settings in the top navigation bar.
-          Click the Cog icon in the top right!
+          User information can be changed via Settings (hover over cog icon) in the top navigation bar.
         </div>
       </li>
     );
@@ -32,7 +31,12 @@ var NewFeatures = React.createClass({
       <li className="features-li"> Questions
         <div>
           Uses a front-end Flux store to store form data.
-          Create as many questions as you want at a time!
+          Create as many questions as you want at a time!<br/>
+          Use the quick question feature!
+          Hover over 'ProTip' above the 'Create' button
+          on the question form for instructions!<br/>
+          Use the timer feature (hover over the Ask Anything Logo on the bottom of the graph)
+          on the Question Show page to set a limit on how long a question will stay active.
         </div>
       </li>
     );

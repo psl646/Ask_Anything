@@ -180,7 +180,7 @@ var QuestionFormGenerator = React.createClass({
           <div>
             <div>What's your favorite color?</div>
             <div className="red text-inline">Red</div>, &nbsp;
-            <div className="blue text-inline">Blue</div>, or &nbsp;
+            <div className="blue text-inline">Blue</div>, &nbsp;
             <div className="green text-inline">Green</div>
           </div>
         </li>
@@ -214,7 +214,7 @@ var QuestionFormGenerator = React.createClass({
                 className="question-input-field margin-auto placeholder-text h22"
                 type="text"
                 value={ this.state.input }
-                placeholder="What's your favorite color? Red, Blue, or Green"
+                placeholder="What's your favorite color? Red, Blue, Green"
                 onKeyDown={ this.checkKeyPressed }
                 onChange={ this.handleQuestionInputChange }
                 />
