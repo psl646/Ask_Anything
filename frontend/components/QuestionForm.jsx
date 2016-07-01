@@ -126,15 +126,26 @@ var QuestionForm = React.createClass({
 
   createNewAnswers: function (myAnswers) {
     myAnswers.forEach(function(answer){
-      var answerId = this.state.answerId;
-      var newAnswer = <AnswerInput answer={ answer } answerId={ answerId } questionId={ this.props.questionId } />;
+      if (answer !== "") {
+        this.deleteEmptyAnswers();
+        var answerId = this.state.answerId;
+        var newAnswer = <AnswerInput answer={ answer } answerId={ answerId } questionId={ this.props.questionId } />;
 
-      this.state.answers[answerId]= "";
-      this.state.answerFormObjects[answerId]= newAnswer;
-      this.state.answerId = answerId + 1;
+        this.state.answers[answerId]= answer;
+        this.state.answerFormObjects[answerId]= newAnswer;
+        this.state.answerId = answerId + 1;
 
-      this.sendQuestionFormData();
+        this.sendQuestionFormData();
+      }
     }.bind(this))
+  },
+
+  deleteEmptyAnswers: function () {
+    Object.keys(this.state.answers).forEach(function(key){
+      if (this.state.answers[key] === "") {
+        QuestionFormActions.deleteAnswerToQuestion(this.props.questionId, parseInt(key));
+      }
+    }.bind(this));
   },
 
 	render: function () {
