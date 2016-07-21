@@ -43,10 +43,9 @@
   display: block;
   position: absolute;
   top: 320px;
-  width: calc(100% - 500px);
-  min-width: 800px;
+  width: 800px;
   height: 600px;
-  left: 15%;
+  left: calc(50% - 400px);
   z-index: 5000;
 }
 
