@@ -17,7 +17,7 @@ var QuestionEditForm = require('./components/QuestionEditForm.jsx');
 var UserEditForm = require('./components/UserEditForm.jsx');
 var UserEmailPasswordEditForm = require('./components/UserEmailPasswordEditForm.jsx');
 var ForgotPasswordSuccess = require('./components/ForgotPasswordSuccess.jsx');
-var NewFeatures = require('./components/NewFeatures.jsx');
+// var NewFeatures = require('./components/NewFeatures.jsx');
 var ResponseForm = require('./components/ResponseForm.jsx');
 var Construction = require('./components/Construction.jsx');
 
@@ -36,7 +36,6 @@ var Router = (
       <Route path="questions/:questionId/edit" component={ QuestionEditForm } onEnter={ _ensureQuestionOwner }/>
       <Route path="profile/edit" component={ UserEditForm } onEnter={ _ensureLoggedIn }/>
       <Route path="profile/edit_password_or_email" component={ UserEmailPasswordEditForm } onEnter={ _ensureLoggedIn }/>
-      <Route path="new_features" component={ NewFeatures } onEnter={ _ensureLoggedIn }/>
       <Route path="construction" component={ Construction } onEnter={ _ensureLoggedIn }/>
     </Route>
 

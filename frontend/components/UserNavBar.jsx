@@ -109,7 +109,6 @@ var UserNavBar = React.createClass({
 
         <ul className="navbar-right-ul">
           { this.greeting() }
-          <Link to="new_features" className="li-float-loggedin li-float-right blue-hover hover-pointer">  New Features </Link>
           <Link to="user_guide" className="li-float-loggedin li-float-right blue-hover empty-link"> Help </Link>
           <Link to="plans_pricing" className="li-float-loggedin li-float-right blue-hover empty-link"> Pricing & Upgrades </Link>
         </ul>
