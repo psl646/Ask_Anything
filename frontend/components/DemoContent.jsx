@@ -74,7 +74,7 @@ var DemoContent = React.createClass({
       <ul className="main-page-login-options group">
         <li className="hover-pointer soft-edges create-question-button"
           onClick={ this.handleCreateFirstQuestionClick }>
-          Create a new guest account
+          Log in as a guest
         </li>
         <li>
           <a href="auth/twitter" className="soft-edges hover-pointer twitter-login">Twitter Login</a>
