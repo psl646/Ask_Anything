@@ -7,7 +7,10 @@
 Ask Anything! is a full-stack web application inspired by Poll Everywhere.  It utilizes Ruby on Rails on the backend, a PostgreSQL database, and React.js with a Flux architectural framework on the frontend.  
 
 
-![Alt text](./app/assets/images/examplequestion.jpg)
+![Main Question](./app/assets/images/main_small.png)
+![Form Question](./app/assets/images/form_small.png)
+![Example Question](./app/assets/images/example_question_small.png)
+![Response Question](./app/assets/images/response_small.png)
 
 ## Features & Implementation
 
