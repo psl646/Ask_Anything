@@ -96,7 +96,7 @@ Response.create(answer: Answer.last, user: User.last)
 Answer.create(answer: "No", question: Question.last)
 
 #Survey for user 123
-Survey.create(title: "About Me", author: User.last)
+Survey.create(title: "Ask Anything FAQ", author: User.last)
 Question.create(question: "How do I use this site?", category: "Multiple Choice", survey_id: Survey.last.id)
 Answer.create(answer: "Step 1: Click on Create Question on the Left panel.", question: Question.last)
 Answer.create(answer: "Step 2: Fill out form and click Create.", question: Question.last)
