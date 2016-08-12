@@ -94,3 +94,19 @@ Response.create(answer: Answer.last, user: User.all[2])
 Response.create(answer: Answer.last, user: User.all[3])
 Response.create(answer: Answer.last, user: User.last)
 Answer.create(answer: "No", question: Question.last)
+
+#Survey for user 123
+Survey.create(title: "About Me", author: User.last)
+Question.create(question: "How do I use this site?", category: "Multiple Choice", survey_id: Survey.last.id)
+Answer.create(answer: "Step 1: Click on Create Question on the Left panel.", question: Question.last)
+Answer.create(answer: "Step 2: Fill out form and click Create.", question: Question.last)
+Answer.create(answer: "Hover over the ProTip for a quick way to make a question!", question: Question.last)
+
+Question.create(question: "How can others answer my question?", category: "Multiple Choice", survey_id: Survey.last.id)
+Answer.create(answer: "Click on the Wifi icon next to the question in the question page or on the main page.", question: Question.last)
+Answer.create(answer: "Hover over the Ask Anything logo on the bottom left corner of the graph to open up the timer for each individual question!", question: Question.last)
+
+Question.create(question: "General Question FAQ", category: "Multiple Choice", survey_id: Survey.last.id)
+Answer.create(answer: "Multiple questions can be created at a time.", question: Question.last)
+Answer.create(answer: "Only one question can be active at a time.", question: Question.last)
+Answer.create(answer: "A user can only record 1 response to a question.", question: Question.last)

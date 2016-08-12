@@ -56,6 +56,10 @@
   width: 350px;
 }
 
+.create-question-button:hover {
+  color: red;
+}
+
 .main-page-login-options {
   margin-top: 20px;
 }

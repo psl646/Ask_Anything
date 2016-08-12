@@ -1,6 +1,7 @@
 var React = require('react');
 var GuestUserConstants = require('../constants/guest_user_constants');
 var UserApiUtil = require('../util/user_api_util');
+var SessionApiUtil = require('../util/session_api_util');
 var SessionStore = require('../stores/session_store');
 
 var DemoContent = React.createClass({
@@ -58,14 +59,22 @@ var DemoContent = React.createClass({
     if (SessionStore.isUserLoggedIn()) {
       this.context.router.push("surveys");
     } else {
+      // var formData = {
+      //   first_name: "Guest",
+      //   last_name: "User",
+      //   email: this.generateRandomEmail(),
+      //   password: "password"
+      // };
+
+      // UserApiUtil.signup(formData);
+
       var formData = {
-        first_name: "Guest",
-        last_name: "User",
-        email: this.generateRandomEmail(),
-        password: "password"
+        username: "user123",
+        email: "user123",
+        password: "user123"
       };
 
-      UserApiUtil.signup(formData);
+      SessionApiUtil.login(formData);
     }
   },
 
