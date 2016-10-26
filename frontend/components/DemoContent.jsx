@@ -88,7 +88,6 @@ var DemoContent = React.createClass({
         <li>
           <a href="auth/twitter" className="soft-edges hover-pointer twitter-login">Twitter Login</a>
         </li>
-        <div className="thirty-seconds">No signup required</div>
       </ul>
     );
   },
