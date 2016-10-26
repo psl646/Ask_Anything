@@ -68,8 +68,20 @@
   padding: 10px 0;
 }
 
+.twitter-login {
+  background: #db5242;
+  text-shadow: none;
+  position: absolute;
+  float: right;
+  top: 94px;
+  left: 450px;
+  width: 350px;
+  padding: 10px 0px;
+
+}
+
 .twitter-login:hover {
-  color: red;
+  color: black;
 }
 
 .header-size {
