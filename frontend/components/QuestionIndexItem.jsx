@@ -309,7 +309,7 @@ var QuestionIndexItem = React.createClass ({
           <div className="graph-bottom group">
             <ul className="question-index-item-timer group">
               <img
-                className="hover-pointer logo-image"
+                className="logo-image"
                 src={window.askAnythingAssets.logo}
                 width="25" height="25" alt="Logo"
                 />

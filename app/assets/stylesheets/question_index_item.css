@@ -121,9 +121,11 @@
 }
 
 .question-index-item-timer {
+  cursor: default;
   float: left;
   width: 170px;
   padding: 5px;
+  background-color: red;
 }
 
 
@@ -138,8 +140,8 @@
 .question-timer-input {
   display: none;
   position: relative;
-  left: 0;
-  bottom: 60px;
+  left: 10px;
+  bottom: 70px;
   background: #6598c4;
   margin: auto;
   border: 1px solid rgb(19, 82, 147);
