@@ -232,12 +232,6 @@ var QuestionIndexItemToolbar = React.createClass ({
           </li>
         </ul>
 
-        { configureList }
-
-        { testList }
-
-        { presentList }
-
         { bottomOptions }
 
       </div>
