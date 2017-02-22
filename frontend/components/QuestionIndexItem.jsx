@@ -234,17 +234,21 @@ var QuestionIndexItem = React.createClass ({
       );
     });
 
+    var url = window.location.href;
+    var hostNameArray = url.split("#")[0].split('/');
+    var hostName = hostNameArray[hostNameArray.length - 2];
+
     var inactiveQuestionPrompt = (
       <div>
         <div className="fa fa-wifi active-icon-question-index-item"aria-hidden="true" />
-        When question is active, respond at <strong>www.askanything.site/#/{ username }</strong>
+        When question is active, respond at <strong>{ hostName }/#/{ username }</strong>
       </div>
     );
 
     var activeQuestionPrompt = (
       <div>
         <div className="fa fa-desktop active-icon-question-index-item"aria-hidden="true" />
-        Respond at <strong><Link to={ "/" + username } className="hover-pointer">Ask--Anything.HerokuApp.com/#/{ username }</Link></strong>
+        Respond at <strong><Link to={ "/" + username } className="hover-pointer">{ hostName }/#/{ username }</Link></strong>
       </div>
     );
 
