@@ -64,4 +64,8 @@ ul {
 .hover-pointer:hover {
   cursor: pointer;
 }
- 
+
+.highlight-pointer:hover{
+  color: rgb(60, 116, 158);
+  text-decoration: underline;
+}

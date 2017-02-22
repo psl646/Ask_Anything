@@ -43,6 +43,7 @@
 
 .question-prompt {
   text-align: center;
+  cursor: default;
   margin: 5px;
   font-size: 18px;
 }

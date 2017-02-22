@@ -248,7 +248,7 @@ var QuestionIndexItem = React.createClass ({
     var activeQuestionPrompt = (
       <div>
         <div className="fa fa-desktop active-icon-question-index-item"aria-hidden="true" />
-        Respond at <strong><Link to={ "/" + username } className="hover-pointer">{ hostName }/#/{ username }</Link></strong>
+        Respond at <strong><Link to={ "/" + username } className="hover-pointer highlight-pointer">{ hostName }/#/{ username }</Link></strong>
       </div>
     );
 
