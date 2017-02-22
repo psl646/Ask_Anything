@@ -237,7 +237,7 @@ var QuestionIndexItem = React.createClass ({
     var inactiveQuestionPrompt = (
       <div>
         <div className="fa fa-wifi active-icon-question-index-item"aria-hidden="true" />
-        When question is active, respond at <strong>Ask--Anything.HerokuApp.com/#/{ username }</strong>
+        When question is active, respond at <strong>www.askanything.site/#/{ username }</strong>
       </div>
     );
 
