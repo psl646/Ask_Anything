@@ -38,4 +38,16 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+
+  config.action_mailer.delivery_method = :smtp
+  #STMP settings for gmail
+  config.action_mailer.smtp_settings = {
+   :address              => "smtp.gmail.com",
+   :port                 => 587,
+   :domain               => "AskAnything.site",
+   :authentication       => "plain",
+   :enable_starttls_auto => true,
+   :user_name            => ENV['gmail_username'],
+   :password             => ENV['gmail_password']
+  }
 end
