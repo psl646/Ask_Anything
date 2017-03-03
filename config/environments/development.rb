@@ -39,15 +39,24 @@ Rails.application.configure do
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
+  config.action_mailer.perform_deliveries = true
+  # Ignore bad email addresses and do not raise email delivery errors.
+  # Set this to true and configure the email server for immediate delivery to raise delivery errors.
+  config.action_mailer.raise_delivery_errors = true
+
   config.action_mailer.delivery_method = :smtp
+  config.action_mailer.default :charset => "utf-8"
+
   #STMP settings for gmail
   config.action_mailer.smtp_settings = {
    :address              => "smtp.gmail.com",
    :port                 => 587,
-   :domain               => "AskAnything.site",
+   :domain               => "ask--anything.herokuapp.com",
    :authentication       => "plain",
    :enable_starttls_auto => true,
    :user_name            => ENV['gmail_username'],
    :password             => ENV['gmail_password']
   }
+
+  config.action_mailer.default_url_options = { :host => 'ask--anything.herokuapp.com' }
 end
