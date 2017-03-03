@@ -37,6 +37,9 @@ gem 'omniauth-twitter'
 gem 'figaro'
 gem 'pusher'
 
+#Email delivery/testing framework. Read more: https://github.com/rails/rails/tree/master/actionmailer
+gem 'actionmailer'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'

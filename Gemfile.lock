@@ -173,6 +173,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  actionmailer
   bcrypt (~> 3.1.7)
   better_errors
   binding_of_caller
@@ -195,4 +196,4 @@ DEPENDENCIES
   web-console (~> 2.0)
 
 BUNDLED WITH
-   1.11.2
+   1.14.5
