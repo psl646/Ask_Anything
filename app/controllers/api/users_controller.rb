@@ -5,7 +5,7 @@ class Api::UsersController < ApplicationController
 
 		if @user.save
 			login(@user)
-			# UserMailer.welcome_email(@user).deliver_later
+			UserMailer.welcome_email(@user).deliver_later
 			render "api/users/show"
 		else
 			@errors = @user.errors.full_messages
