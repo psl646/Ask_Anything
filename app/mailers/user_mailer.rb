@@ -1,6 +1,6 @@
 class UserMailer < ApplicationMailer
   default from: "support@AskAnything.site"
-  
+
   def welcome_email(user)
     @user = user
     @url  = 'http://www.askanything.site/'
