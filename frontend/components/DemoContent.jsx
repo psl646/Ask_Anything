@@ -79,17 +79,21 @@ var DemoContent = React.createClass({
   },
 
   demoPageLinks: function () {
-    return (
-      <ul className="main-page-login-options group">
-        <li className="hover-pointer soft-edges create-question-button"
-          onClick={ this.handleCreateFirstQuestionClick }>
-          Log in as a guest
-        </li>
-        <li>
-          <a href="auth/twitter" className="soft-edges hover-pointer twitter-login">Twitter Login</a>
-        </li>
-      </ul>
-    );
+    if (SessionStore.isUserLoggedIn()) {
+      return;
+    } else {
+      return (
+        <ul className="main-page-login-options group">
+          <li className="hover-pointer soft-edges create-question-button"
+            onClick={ this.handleCreateFirstQuestionClick }>
+            Log in as a guest
+          </li>
+          <li>
+            <a href="auth/twitter" className="soft-edges hover-pointer twitter-login">Twitter Login</a>
+          </li>
+        </ul>
+      );
+    }
   },
 
   demoPageContent: function () {
