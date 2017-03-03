@@ -1,7 +1,8 @@
 require_relative 'survey'
 
 class User < ActiveRecord::Base
-
+	devise :database_authenticatable, :async, :confirmable
+	
 	attr_reader :password
 
 	validates :first_name, :last_name, :email, :password_digest, :session_token, presence: true
