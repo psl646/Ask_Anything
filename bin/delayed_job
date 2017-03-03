@@ -32,3 +32,5 @@ RAILS_ENV=production script/delayed_job --pool=tracking --pool=mailers,tasks:2 -
 RAILS_ENV=production script/delayed_job run --exit-on-complete
 
 RAILS_ENV=development script/delayed_job run --exit-on-complete
+
+QUEUES=mailers,tasks rake jobs:work
