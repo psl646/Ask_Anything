@@ -5,7 +5,7 @@ class Api::UsersController < ApplicationController
 
 		if @user.save
 			login(@user)
-			UserMailer.welcome_email(@user).deliver_later
+			UserMailer.delay.welcome_email(@user)
 			render "api/users/show"
 		else
 			@errors = @user.errors.full_messages
@@ -27,7 +27,7 @@ class Api::UsersController < ApplicationController
 
 		if @user
 			if (!params[:user][:email].nil?)
-				UserMailer.forgot_password(@user).deliver_later
+				UserMailer.delay.forgot_password(@user)
 			else
 				render "api/users/show"
 			end
