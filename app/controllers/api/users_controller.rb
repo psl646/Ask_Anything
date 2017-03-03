@@ -26,7 +26,11 @@ class Api::UsersController < ApplicationController
 		end
 
 		if @user
-			render "api/users/show"
+			if (!params[:user][:email].nil?)
+				UserMailer.forgot_password(@user).deliver_later
+			else
+				render "api/users/show"
+			end
 		else
 			@errors = ["We could not find a user with that email address."]
 			render "api/shared/errors", status: 404

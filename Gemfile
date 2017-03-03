@@ -38,6 +38,8 @@ gem 'pusher'
 
 #Email delivery/testing framework. Read more: https://github.com/rails/rails/tree/master/actionmailer
 gem 'actionmailer'
+#Backend async
+gem 'delayed_job_active_record'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

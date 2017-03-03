@@ -6,4 +6,11 @@ class UserMailer < ApplicationMailer
     @url  = 'http://www.askanything.site/'
     mail(to: @user.email, subject: 'Welcome to AskAnything!')
   end
+
+  def forgot_password(user)
+    @user = user
+    @reset_password_url = 'testing'
+    @url  = 'http://www.askanything.site/'
+    mail(to: @user.email, subject: 'AskAnything: Account Password Reset')
+  end
 end
