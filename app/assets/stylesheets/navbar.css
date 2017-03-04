@@ -142,6 +142,10 @@
   margin: 19px 35px 19px 0;
 }
 
+.signup-main:hover {
+  color: red;
+}
+
 .empty-link {
   display: none;
 }

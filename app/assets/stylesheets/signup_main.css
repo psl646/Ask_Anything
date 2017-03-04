@@ -34,6 +34,11 @@
   padding: 2px;
 }
 
+.signup-options:hover {
+  color: blue;
+  transition: 0.5s;
+}
+
 .signup-images {
   margin: 20px 80px;
 }

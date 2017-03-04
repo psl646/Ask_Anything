@@ -33,7 +33,7 @@ var NoUserNavBar = React.createClass({
         <li className="login-main hover-nouser-nav" onClick={ this.handleLoginClick } >
           Log in
         </li>
-        <li className="signup-main soft-edges hover-pointer" onClick={ this.handleSignupClick }>
+        <li className="signup-main hover-nouser-nav soft-edges hover-pointer" onClick={ this.handleSignupClick }>
           Sign up
         </li>
       </ul>
