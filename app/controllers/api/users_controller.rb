@@ -26,7 +26,7 @@ class Api::UsersController < ApplicationController
 		end
 
 		if @user
-			if (!params[:user][:email].nil?)
+			if (!params[:username])
 				UserMailer.delay.forgot_password(@user)
 			else
 				render "api/users/show"
