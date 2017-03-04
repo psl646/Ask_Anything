@@ -6,6 +6,7 @@ class UserMailer < ApplicationMailer
     @url  = 'http://www.askanything.site/'
     mail(to: @user.email, subject: 'Welcome to AskAnything!')
   end
+  handle_asynchronously :welcome_email, :priority => 20
 
   def forgot_password(user)
     @user = user
@@ -13,4 +14,5 @@ class UserMailer < ApplicationMailer
     @url  = 'http://www.askanything.site/'
     mail(to: @user.email, subject: 'AskAnything: Account Password Reset')
   end
+  handle_asynchronously :forgot_password, :priority => 20
 end
