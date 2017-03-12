@@ -275,6 +275,23 @@ var QuestionIndexItem = React.createClass ({
       activeQuestion = "";
     }
 
+    var timeLi = (
+      <li className="question-timer-input group soft-edges">
+        <input
+          className="time-input-field soft-edges hover-text"
+          type="text"
+          value={ time }
+          onChange={ this.timerChange }
+          />
+
+        <div
+          className="fa fa-clock-o clock-icon hover-pointer"
+          aria-hidden="true"
+          onClick={ this.handleTimerClick }
+        />
+      </li>
+    );
+
     return (
       <div className="questionindexitem-container group">
         <QuestionIndexItemToolbar />
@@ -316,20 +333,7 @@ var QuestionIndexItem = React.createClass ({
               <div className="graph-bottom-logo-text">
                 Ask Anything!
               </div>
-              <li className="question-timer-input group soft-edges">
-                <input
-                  className="time-input-field soft-edges hover-text"
-                  type="text"
-                  value={ time }
-                  onChange={ this.timerChange }
-                  />
-
-                <div
-                  className="fa fa-clock-o clock-icon hover-pointer"
-                  aria-hidden="true"
-                  onClick={ this.handleTimerClick }
-                />
-              </li>
+              { timeLi }
             </ul>
             <div className="countdown-time">
               <div style={ countdownTimeBar }>
