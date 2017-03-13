@@ -133,33 +133,36 @@ var QuestionIndexItem = React.createClass ({
     return percentage;
   },
 
+  getColor: function(percentage){
+    if (percentage > 67){
+      return "green";
+    } else if (percentage > 34){
+      return "yellow";
+    } else {
+      return "red";
+    }
+  },
+
   render: function () {
     var that = this;
     var myAnswerObjects;
     var myAnswerArray = [];
     var question = "";
     var username = "";
+    var numResponses = 0;
 
     if (that.state.question.question !== undefined){
       question = that.state.question.question;
       username = that.state.question.author.username;
-      if (question.length > 30) {
-        question = question.slice(0, 27) + "...";
-      }
     };
-
-    var numResponses = 0;
 
     if (Object.keys(that.state.question).length !== 0) {
       if (that.state.question["responses"]) {
         var myResponseObjects = that.state.question["responses"];
-        numResponses = myResponseObjects.length;
       }
     }
 
     var myGraphAnswerObject = {};
-
-    var height;
 
     if (Object.keys(that.state.question).length !== 0) {
 
@@ -169,64 +172,20 @@ var QuestionIndexItem = React.createClass ({
         myGraphAnswerObject[answer["id"]] = 0;
       });
 
-      height = (500 / myAnswerArray.length);
       myResponseObjects = that.state.question["responses"];
 
       if (myResponseObjects) {
         myResponseObjects.forEach(function(responseObj){
           myGraphAnswerObject[responseObj["answer_id"]] += 1;
+          numResponses++;
         });
       }
     }
 
-    var myGraph = "";
     var graphKeys = Object.keys(myGraphAnswerObject);
-    console.log(myGraphAnswerObject);
-    console.log(graphKeys);
     var graphAnswers = graphKeys.map(function(key){
         return myGraphAnswerObject[key];
     });
-    console.log(graphAnswers);
-    if (graphKeys !== 0) {
-      if (that.state.question["responses"]) {
-        if (that.state.question["responses"].length !== 0){
-          myGraph = graphKeys.map(function(answerId){
-
-            var width = (100/numResponses) * myGraphAnswerObject[answerId];
-
-            var graphStyle = {
-              height: height + "px",
-              width: width + "%",
-              background: "rgb(60, 116, 158)",
-              color: "white",
-              fontSize: "20px"
-            };
-
-            if (width.toString().length > 5) {
-              width = width.toString().slice(0, 5) + "%";
-            } else if (numResponses === 0) {
-              width = "";
-            } else {
-              width = width + "%"
-            }
-
-            return (
-              <li key= { answerId } style={ graphStyle }>
-                <div className="percentage-graph">
-                  { width }
-                </div>
-              </li>
-            );
-          });
-        }
-      }
-    }
-
-    var myHeight = {
-      height: height + "px",
-      position: "relative",
-      top: (height/2) + "px"
-    };
 
     var url = window.location.href;
     var hostNameArray = url.split("#")[0].split('/');
@@ -256,10 +215,12 @@ var QuestionIndexItem = React.createClass ({
     var time = myTime.slice(0,2) + ":" + myTime.slice(2,4);
 
     var percentage = this.getTimePercentage();
+    console.log(percentage);
+    var color = this.getColor(percentage);
     var countdownTimeBar = {
       width: percentage + "%",
       height: "100%",
-      background: "green"
+      background: color
     };
 
     var activeQuestion = "toggle-button-active ";
@@ -288,11 +249,11 @@ var QuestionIndexItem = React.createClass ({
 
     var config = {
       chart: {type: 'bar'},
-      title: {text: ''},
+      title: {text: question},
       xAxis: {categories: myAnswerArray},
       yAxis: {title: {text: ''}},
       series: [{
-        name: "Recorded responses",
+        name: `Total Recorded responses: ${numResponses}`,
         data: graphAnswers
       }]
     };
@@ -305,10 +266,6 @@ var QuestionIndexItem = React.createClass ({
         <QuestionIndexItemToolbar />
         <div className="question-graph-container group">
           <div className="my-current-question">
-            { question }
-          </div>
-
-          <div className="question-prompt">
             { inactiveQuestionPrompt }
             { activeQuestionPrompt }
           </div>

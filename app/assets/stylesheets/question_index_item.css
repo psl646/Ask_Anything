@@ -26,10 +26,18 @@
 .my-current-question {
   background: blue;
   color: white;
-  font-size: 28px;
+  font-size: 18px;
   padding: 17px 0;
   background: #255073;
   text-align: center;
+  cursor: default;
+}
+
+.question-prompt {
+  text-align: center;
+
+  margin: 5px;
+  font-size: 18px;
 }
 
 .graph-bottom {
@@ -39,13 +47,6 @@
   background: black;
   color: white;
   height: 35px;
-}
-
-.question-prompt {
-  text-align: center;
-  cursor: default;
-  margin: 5px;
-  font-size: 18px;
 }
 
 .active-icon-question-index-item {
@@ -63,7 +64,6 @@
 
 .answers-graph {
   width: calc(100% - 70px);
-  background-color: red;
   min-height: 100%;
   float: left;
   overflow: hidden;
