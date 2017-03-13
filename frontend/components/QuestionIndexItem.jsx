@@ -6,6 +6,7 @@ var QuestionIndexItemToolbar = require('./QuestionIndexItemToolbar');
 var TimeConstants = require('../constants/time_constants');
 var ClientQuestionActions = require('../actions/client_question_actions');
 var ErrorStore = require('./../stores/error_store');
+var ReactHighcharts = require('react-highcharts');
 
 var QuestionIndexItem = React.createClass ({
   contextTypes: {
@@ -180,7 +181,12 @@ var QuestionIndexItem = React.createClass ({
 
     var myGraph = "";
     var graphKeys = Object.keys(myGraphAnswerObject);
-
+    console.log(myGraphAnswerObject);
+    console.log(graphKeys);
+    var graphAnswers = graphKeys.map(function(key){
+        return myGraphAnswerObject[key];
+    });
+    console.log(graphAnswers);
     if (graphKeys !== 0) {
       if (that.state.question["responses"]) {
         if (that.state.question["responses"].length !== 0){
@@ -221,18 +227,6 @@ var QuestionIndexItem = React.createClass ({
       position: "relative",
       top: (height/2) + "px"
     };
-
-    var myAnswers = myAnswerArray.map(function(currentAnswer, idx){
-      if (currentAnswer.length > 17) {
-        currentAnswer = currentAnswer.slice(0, 14) + "...";
-      }
-
-      return (
-        <li key={ idx } style={ myHeight } className="answer-item-single">
-          { currentAnswer }
-        </li>
-      );
-    });
 
     var url = window.location.href;
     var hostNameArray = url.split("#")[0].split('/');
@@ -292,6 +286,20 @@ var QuestionIndexItem = React.createClass ({
       </li>
     );
 
+    var config = {
+      chart: {type: 'bar'},
+      title: {text: ''},
+      xAxis: {categories: myAnswerArray},
+      yAxis: {title: {text: ''}},
+      series: [{
+        name: "Recorded responses",
+        data: graphAnswers
+      }]
+    };
+
+    var currentChart = React.createElement(
+      ReactHighcharts, { config: config });
+
     return (
       <div className="questionindexitem-container group">
         <QuestionIndexItemToolbar />
@@ -307,12 +315,7 @@ var QuestionIndexItem = React.createClass ({
 
           <div className="answers-graph-container group">
             <div className="answers-graph group">
-              <ul className="answers-graph-left">
-                { myAnswers }
-              </ul>
-              <ul className="answers-graph-right group">
-                { myGraph }
-              </ul>
+            {currentChart}
             </div>
             <ul className="question-toggle-buttons">
               <li

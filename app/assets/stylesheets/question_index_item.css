@@ -63,6 +63,7 @@
 
 .answers-graph {
   width: calc(100% - 70px);
+  background-color: red;
   min-height: 100%;
   float: left;
   overflow: hidden;
