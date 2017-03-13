@@ -252,7 +252,7 @@ var QuestionIndexItem = React.createClass ({
       xAxis: {categories: myAnswerArray},
       yAxis: {title: {text: ''}},
       series: [{
-        name: `Total Recorded responses: ${numResponses}`,
+        name: "Total Recorded responses: " + numResponses,
         data: graphAnswers
       }]
     };
