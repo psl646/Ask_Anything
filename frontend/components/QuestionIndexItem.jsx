@@ -215,7 +215,6 @@ var QuestionIndexItem = React.createClass ({
     var time = myTime.slice(0,2) + ":" + myTime.slice(2,4);
 
     var percentage = this.getTimePercentage();
-    console.log(percentage);
     var color = this.getColor(percentage);
     var countdownTimeBar = {
       width: percentage + "%",
