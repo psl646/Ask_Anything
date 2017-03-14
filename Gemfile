@@ -24,19 +24,19 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'bcrypt', '~> 3.1.7'
 
 gem 'font-awesome-rails'
-# Use Unicorn as the app server
-# gem 'unicorn'
-
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
 
 gem 'omniauth'
 gem 'omniauth-twitter'
 
+# Protect environment variables in Ruby on Rails with figaro
+# Read more: https://rubygems.org/gems/figaro/versions/1.1.1
 gem 'figaro'
+
+# Real-time notifications with pusher.  Read more: https://pusher.com/tutorials
 gem 'pusher'
 
-#Email delivery/testing framework. Read more: https://github.com/rails/rails/tree/master/actionmailer
+# Email delivery/testing framework.
+# Read more: https://github.com/rails/rails/tree/master/actionmailer
 gem 'actionmailer'
 #Backend async
 gem 'delayed_job_active_record'
