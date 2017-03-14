@@ -39,6 +39,7 @@ var Router = (
       <Route path="construction" component={ Construction } onEnter={ _ensureLoggedIn }/>
     </Route>
 
+    <Route path="/messages/reply" />
     <Route path="/:username" component={ ResponseForm } />
   </Router>
 );
