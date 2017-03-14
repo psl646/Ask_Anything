@@ -35,10 +35,14 @@ gem 'figaro'
 # Real-time notifications with pusher.  Read more: https://pusher.com/tutorials
 gem 'pusher'
 
+# Add SMS feature to application.  Read more: https://github.com/twilio/twilio-ruby
+gem 'twilio-ruby'
+
 # Email delivery/testing framework.
 # Read more: https://github.com/rails/rails/tree/master/actionmailer
 gem 'actionmailer'
-#Backend async
+
+# Backend async
 gem 'delayed_job_active_record'
 gem 'daemons'
 gem 'devise-async'
