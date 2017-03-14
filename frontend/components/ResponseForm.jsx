@@ -8,9 +8,7 @@ var UserActions = require('../actions/user_actions');
 
 // components
 var Logo = require('./Logo');
-
-// elements
-var CustomInvalid = require('../elements/CustomInvalid');
+var CustomInvalid = require('./CustomInvalid');
 
 // stores
 var QuestionStore = require('../stores/question_store');
@@ -43,8 +41,8 @@ var ResponseForm = React.createClass({
     var username = window.location.hash.slice(2).split("?")[0];
     UserApiUtil.findUserByUsername(username.toLowerCase());
 
-    this.pusher = new Pusher(Pusher.key, {
-      encrypted: Pusher.encrypted
+    this.pusher = new Pusher('d7b6b378f3d562f7fd37', {
+      encrypted: true
     });
 
     var channel = this.pusher.subscribe('question_updated');
