@@ -1,5 +1,5 @@
 var React = require('react');
-var GuestUserConstants = require('../constants/guest_user_constants');
+var LettersNumbers = require('../constants/letters_numbers');
 var UserApiUtil = require('../util/user_api_util');
 var SessionApiUtil = require('../util/session_api_util');
 var SessionStore = require('../stores/session_store');
@@ -10,7 +10,7 @@ var DemoContent = React.createClass({
   },
 
   getInitialState: function () {
-    return ({ letters: GuestUserConstants.letters, numbers: GuestUserConstants.numbers });
+    return ({ letters: LettersNumbers.letters, numbers: LettersNumbers.numbers });
   },
 
   componentDidMount: function () {

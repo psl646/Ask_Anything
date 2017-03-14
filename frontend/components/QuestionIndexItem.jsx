@@ -7,6 +7,7 @@ var TimeConstants = require('../constants/time_constants');
 var ClientQuestionActions = require('../actions/client_question_actions');
 var ErrorStore = require('./../stores/error_store');
 var ReactHighcharts = require('react-highcharts');
+var LettersNumbers = require('../constants/letters_numbers');
 
 var QuestionIndexItem = React.createClass ({
   contextTypes: {
@@ -102,12 +103,13 @@ var QuestionIndexItem = React.createClass ({
   },
 
   sortAnswerObjects: function (answerObjects) {
+    var alphabet = LettersNumbers.letters;
     var sortedAnswerObjects = [];
     answerObjects.forEach(function(answer){
       sortedAnswerObjects[answer["id"]] = answer["answer"];
     });
-    return Object.keys(sortedAnswerObjects).map(function(key){
-      return sortedAnswerObjects[key];
+    return Object.keys(sortedAnswerObjects).map(function(key, idx){
+      return alphabet[idx].toUpperCase() + ") " + sortedAnswerObjects[key];
     });
   },
 
@@ -194,14 +196,20 @@ var QuestionIndexItem = React.createClass ({
     var inactiveQuestionPrompt = (
       <div>
         <div className="fa fa-wifi active-icon-question-index-item"aria-hidden="true" />
-        When question is active, respond at <strong>{ hostName }/#/{ username }</strong>
+        When question is active, respond at<br />
+        <strong>
+          { hostName }/#/{ username } or text answer to 914-292-3261
+        </strong>
       </div>
     );
 
     var activeQuestionPrompt = (
       <div>
         <div className="fa fa-desktop active-icon-question-index-item"aria-hidden="true" />
-        Respond at <strong><Link to={ "/" + username } className="hover-pointer highlight-pointer">{ hostName }/#/{ username }</Link></strong>
+        Question is active, respond at<br />
+        <strong>
+          <Link to={ "/" + username } className="hover-pointer highlight-pointer">{ hostName }/#/{ username }</Link> or text answer to 914-292-3261
+        </strong>
       </div>
     );
 
