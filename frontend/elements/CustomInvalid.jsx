@@ -1,7 +1,7 @@
 var React = require('react');
 
 // components
-var Logo = require('./components/Logo');
+var Logo = require('../components/Logo');
 
 var CustomInvalid = React.createElement(
   (<div>

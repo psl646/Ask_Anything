@@ -10,7 +10,7 @@ var UserActions = require('../actions/user_actions');
 var Logo = require('./Logo');
 
 // elements
-var CustomInvalid = require('./CustomInvalid');
+var CustomInvalid = require('../elements/CustomInvalid');
 
 // stores
 var QuestionStore = require('../stores/question_store');
