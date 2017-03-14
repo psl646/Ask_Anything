@@ -1,6 +1,8 @@
 class MessagesController < ApplicationController
-  skip_before_filter :verify_authenticity_token
-  # skip_before_filter :authenticate_user!, :only => "reply"
+  include Webhookable
+
+  after_filter :set_header
+  skip_before_action :verify_authenticity_token
 
   def reply
     message_body = params["Body"]

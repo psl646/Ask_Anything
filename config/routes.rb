@@ -11,9 +11,11 @@ Rails.application.routes.draw do
 
   get "/auth/:provider/callback", to: "api/sessions#create"
 
-  resource :messages do
-    collection do
-      post 'reply'
-    end
-  end
+  # resource :messages do
+  #   collection do
+  #     post 'reply'
+  #   end
+  # end
+
+  post 'messages/reply', to: 'messages#reply'
 end
