@@ -34,8 +34,8 @@ var QuestionIndexItem = React.createClass ({
 
     ClientQuestionActions.getQuestionById(this.state.questionId, location);
 
-    this.pusher = new Pusher('d7b6b378f3d562f7fd37', {
-      encrypted: true
+    this.pusher = new Pusher(Pusher.key, {
+      encrypted: Pusher.encrypted
     });
 
     var channel = this.pusher.subscribe('question_' + this.state.questionId);

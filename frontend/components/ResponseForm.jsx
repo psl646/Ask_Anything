@@ -1,14 +1,25 @@
 var React = require('react');
-var Logo = require('./Logo');
-var UserApiUtil = require('../util/user_api_util');
-var UserStore = require('../stores/user_store');
-var UserActions = require('../actions/user_actions');
+
+// actions
 var ClientQuestionActions = require('../actions/client_question_actions');
+var ErrorActions = require('../actions/error_actions');
+var ResponseActions = require('../actions/response_actions');
+var UserActions = require('../actions/user_actions');
+
+// components
+var Logo = require('./Logo');
+
+// elements
+var CustomInvalid = require('./CustomInvalid');
+
+// stores
 var QuestionStore = require('../stores/question_store');
 var SessionStore = require('../stores/session_store');
+var UserStore = require('../stores/user_store');
+
+// util
 var SessionApiUtil = require('../util/session_api_util');
-var ResponseActions = require('../actions/response_actions');
-var ErrorActions = require('../actions/error_actions');
+var UserApiUtil = require('../util/user_api_util');
 
 var ResponseForm = React.createClass({
   contextTypes: {
@@ -32,8 +43,8 @@ var ResponseForm = React.createClass({
     var username = window.location.hash.slice(2).split("?")[0];
     UserApiUtil.findUserByUsername(username.toLowerCase());
 
-    this.pusher = new Pusher('d7b6b378f3d562f7fd37', {
-      encrypted: true
+    this.pusher = new Pusher(Pusher.key, {
+      encrypted: Pusher.encrypted
     });
 
     var channel = this.pusher.subscribe('question_updated');
@@ -239,30 +250,7 @@ var ResponseForm = React.createClass({
     }
 
     if (Object.keys(this.state.user).length === 0){
-      user = (
-        <div>
-          <Logo />
-          <div className="no-user-message-container soft-edges">
-            <div className="end-of-internet">
-              You've reached the end of the Internet
-            </div>
-            <div className="h11-5 404-message">
-              The page you're looking for can't be found. (404)
-            </div>
-            <ul className="no-user-message-ul">
-              <div className="">
-                Try these:
-              </div>
-              <li>
-                Make sure the URL is correct.
-              </li>
-              <li>
-                Has this question or presenter been deleted?
-              </li>
-            </ul>
-          </div>
-        </div>
-      );
+      user = <CustomInvalid />
     }
 
     return (

@@ -48,22 +48,9 @@ var SurveysIndex = React.createClass ({
     window.setTimeout(function() {
       this.setSurveys();
     }.bind(this), 500);
-
-    // that.pusher = new Pusher('d7b6b378f3d562f7fd37', {
-    //   encrypted: true
-    // });
-    //
-    // var channel = that.pusher.subscribe('survey_changed');
-    // channel.bind('response_recorded', function(data) {
-    //   ClientSurveyActions.fetchAllSurveys();
-    //   window.setTimeout(function() {
-    //     that.setSurveys();
-    //   }, 500);
-    // });
   },
 
   componentWillUnmount: function () {
-    // this.pusher.unsubscribe('survey_changed');
     this.questionListener.remove();
     ServerSurveyActions.clearSurveys();
   },
