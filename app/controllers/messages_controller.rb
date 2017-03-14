@@ -8,11 +8,13 @@ class MessagesController < ApplicationController
     message_body = params["Body"]
     from_number = params["From"]
     boot_twilio
+
     sms = @client.messages.create(
       from: ENV['TWILIO_PHONE_NUMBER'],
       to: from_number,
       body: "Thanks for voting! Your response of: #{message_body} was recorded!"
     )
+
     render json: {}
   end
 
