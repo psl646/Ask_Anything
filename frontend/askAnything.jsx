@@ -17,7 +17,6 @@ var QuestionEditForm = require('./components/QuestionEditForm.jsx');
 var UserEditForm = require('./components/UserEditForm.jsx');
 var UserEmailPasswordEditForm = require('./components/UserEmailPasswordEditForm.jsx');
 var ForgotPasswordSuccess = require('./components/ForgotPasswordSuccess.jsx');
-// var NewFeatures = require('./components/NewFeatures.jsx');
 var ResponseForm = require('./components/ResponseForm.jsx');
 var Construction = require('./components/Construction.jsx');
 

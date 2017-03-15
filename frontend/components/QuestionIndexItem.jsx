@@ -1,6 +1,5 @@
 var Link = require('react-router').Link;
 var React = require('react');
-var ReactHighcharts = require('react-highcharts');
 // actions
 var ClientQuestionActions = require('../actions/client_question_actions');
 // components
@@ -8,7 +7,6 @@ var Graph = require('./Graph');
 var QuestionIndexItemToolbar = require('./QuestionIndexItemToolbar');
 var Timebar = require('./Timebar');
 // stores
-var ErrorStore = require('./../stores/error_store');
 var QuestionStore = require('../stores/question_store')
 
 var QuestionIndexItem = React.createClass ({
