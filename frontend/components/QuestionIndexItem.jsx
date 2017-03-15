@@ -140,6 +140,11 @@ var QuestionIndexItem = React.createClass ({
   render: function () {
     var that = this;
     var username = "";
+
+    if (Object.keys(this.state.question).length !== 0){
+        username = this.state.question.author.username;
+    }
+
     var url = window.location.href;
     var hostNameArray = url.split("#")[0].split('/');
     var hostName = hostNameArray[hostNameArray.length - 2];
