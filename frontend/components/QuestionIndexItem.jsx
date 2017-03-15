@@ -33,33 +33,17 @@ var QuestionIndexItem = React.createClass ({
 
   componentDidMount: function () {
     this.questionListener = QuestionStore.addListener(this._onChange);
-    this.errorListener = ErrorStore.addListener(this._handleErrors);
     var location = window.location.hash.slice(0,11);
 
     ClientQuestionActions.getQuestionById(this.state.questionId, location);
-
-    this.pusher = new Pusher('d7b6b378f3d562f7fd37', {
-      encrypted: true
-    });
-
-    var channel = this.pusher.subscribe('question_' + this.state.questionId);
-    channel.bind('response_recorded', function(data) {
-      ClientQuestionActions.getQuestionById(this.state.questionId, location);
-    }.bind(this));
   },
 
   componentWillUnmount: function () {
     if (this.timeCounter !== undefined) {
       window.clearInterval(this.timeCounter);
     }
-    this.errorListener.remove();
-    this.questionListener.remove();
-    this.pusher.unsubscribe('question_' + this.state.questionId);
-  },
 
-  _handleErrors: function () {
-    alert(ErrorStore.getErrors());
-    this.context.router.push("surveys");
+    this.questionListener.remove();
   },
 
   _onChange: function () {

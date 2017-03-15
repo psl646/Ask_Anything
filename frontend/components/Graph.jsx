@@ -75,7 +75,7 @@ var Graph = React.createClass({
     });
   },
 
-  getHighchart: function(){
+  getChartData: function(){
     var answerObjectsArray = this.getAnswers();
     var formattedAnswersArray = answerObjectsArray ? this.formatAnswerObjects(answerObjectsArray) : [];
     var responseObjectsArray = this.getResponses();
@@ -101,9 +101,11 @@ var Graph = React.createClass({
 
   render: function (){
     var currentChart = "";
-
+    console.log("rendering");
+    console.log(this.state.questionId);
+    console.log(this.state.question);
     if (this.checkIfQuestionExist()){
-      currentChart = this.getHighchart();
+      currentChart = this.getChartData()
     }
 
     return (
