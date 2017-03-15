@@ -58,13 +58,14 @@ class Api::UsersController < ApplicationController
 					@errors.push("Email has already been taken")
 				end
 
-				if (input[:password1].length < 7 && input[:password1].length > 1)
+				if (input[:password1] != input[:password2])
+					@errors.push("Passwords do not match")
+				end
+
+				if (input[:password1].length < 7)
 					@errors.push("Password is too short (minimum is 7 characters)")
 				end
 
-				if (input[:password1] != input[:password2])
-					@errors.push("Password confirmation does not match password")
-				end
 
 				if @errors.empty?
 					@user[:email] = input[:email]
