@@ -101,9 +101,6 @@ var Graph = React.createClass({
 
   render: function (){
     var currentChart = "";
-    console.log("rendering");
-    console.log(this.state.questionId);
-    console.log(this.state.question);
     if (this.checkIfQuestionExist()){
       currentChart = this.getChartData()
     }
