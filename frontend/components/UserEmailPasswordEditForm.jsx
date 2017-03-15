@@ -1,9 +1,7 @@
 var React = require('react');
 var Link = require('react-router').Link;
-// var SessionApiUtil = require('./../util/session_api_util');
 var SessionStore = require('./../stores/session_store');
 var UserApiUtil = require('./../util/user_api_util');
-// var ErrorActions = require('../actions/error_actions')
 var ErrorStore = require('./../stores/error_store');
 
 var UserEditForm = React.createClass({
@@ -87,7 +85,11 @@ var UserEditForm = React.createClass({
       password2: this.state.password2
 		};
 
-    UserApiUtil.updateEmailPassword(formData);
+    if (this.state.email === "user123"){
+      alert("You cannot edit guest user.");
+    } else {
+      UserApiUtil.updateEmailPassword(formData);
+    }
 	},
 
   errorMessages: function () {
