@@ -30,7 +30,7 @@ class Response < ActiveRecord::Base
 
   # a question input is valid if the input is an integer and
   # if the integer is the id of an active question
-  def is_valid_question_id?(question_input)
+  def self.is_valid_question_id?(question_input)
     return false unless is_valid_number?(question_input)
     current_question = Question.find_by_id(question_input.to_i)
     return false unless current_question
@@ -40,11 +40,11 @@ class Response < ActiveRecord::Base
     current_question
   end
 
-  def is_valid_number?(question_input)
+  def self.is_valid_number?(question_input)
     question_input.to_i.to_s == question_input
   end
 
-  def is_valid_answer_choice?(answer_choice, valid_question)
+  def self.is_valid_answer_choice?(answer_choice, valid_question)
     letter = answer_choice.downcase
     return false unless is_valid_letter?(letter)
     answer_idx = ALPHABETS_HASH[letter]
@@ -55,7 +55,7 @@ class Response < ActiveRecord::Base
     current_answer
   end
 
-  def is_valid_letter?(letter)
+  def self.is_valid_letter?(letter)
     ALPHABETS_ARRAY.include?(letter)
   end
 end
