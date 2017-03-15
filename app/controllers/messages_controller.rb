@@ -20,6 +20,8 @@ class MessagesController < ApplicationController
       return_message = "Invalid response to question, try again!"
     else
       Response.create(answer_id: current_answer.id)
+      Pusher.trigger('question_' + valid_question.id.to_s, 'response_recorded', {})
+      Pusher.trigger('survey_changed', 'response_recorded', {})
       return_message = "Your response of: #{answer_choice} to question #{question_id} was recorded! Thanks!"
     end
 
