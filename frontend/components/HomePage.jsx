@@ -1,16 +1,17 @@
 var React = require('react');
-var LettersNumbers = require('../constants/letters_numbers');
+// stores
+var SessionStore = require('../stores/session_store');
+// util
 var UserApiUtil = require('../util/user_api_util');
 var SessionApiUtil = require('../util/session_api_util');
-var SessionStore = require('../stores/session_store');
 
-var DemoContent = React.createClass({
+var HomePage = React.createClass({
   contextTypes: {
     router: React.PropTypes.object.isRequired
   },
 
   getInitialState: function () {
-    return ({ letters: LettersNumbers.letters, numbers: LettersNumbers.numbers });
+    return ({ });
   },
 
   componentDidMount: function () {
@@ -27,53 +28,15 @@ var DemoContent = React.createClass({
     }
   },
 
-  generateRandomEmail: function () {
-    var first_name = this.generateRandomLetters(5);
-    var last_name = this.generateRandomLetters(3);
-    var numbers = this.generateRandomNumbers(6);
-    var email = first_name + last_name + numbers + "@askanything.site";
-    return email;
-  },
-
-  generateRandomLetters: function (number) {
-    var letters = "";
-    for (var i = 0; i < number; i++) {
-      letters = letters.concat(
-        this.state.letters[Math.floor(Math.random() * this.state.letters.length)]
-      );
-    }
-    return letters;
-  },
-
-  generateRandomNumbers: function (number) {
-    var numbers = "";
-    for (var i = 0; i < number; i++) {
-      numbers = numbers.concat(
-        this.state.numbers[Math.floor(Math.random() * this.state.numbers.length)]
-      );
-    }
-    return numbers;
-  },
-
   handleCreateFirstQuestionClick: function () {
     if (SessionStore.isUserLoggedIn()) {
       this.context.router.push("surveys");
     } else {
-      // var formData = {
-      //   first_name: "Guest",
-      //   last_name: "User",
-      //   email: this.generateRandomEmail(),
-      //   password: "password"
-      // };
-
-      // UserApiUtil.signup(formData);
-
       var formData = {
         username: "user123",
         email: "user123",
         password: "user123"
       };
-
       SessionApiUtil.login(formData);
     }
   },
@@ -109,9 +72,10 @@ var DemoContent = React.createClass({
   },
 
   demoGraph: function () {
+    // <img className="dinosaur-image" src={window.askAnythingAssets.examplequestion} alt="Dinosaur Question" />
     return (
       <div className="demo-page-graph">
-        <img className="dinosaur-image" src={window.askAnythingAssets.examplequestion} alt="Dinosaur Question" />
+
       </div>
     );
   },
@@ -121,10 +85,9 @@ var DemoContent = React.createClass({
       <div className="demo-container group">
         <img className="democontentgif" src={window.askAnythingAssets.background} alt="Backdrop" />
         { this.demoPageContent() }
-        { this.demoGraph() }
       </div>
     );
   }
 });
 
-module.exports = DemoContent;
+module.exports = HomePage;

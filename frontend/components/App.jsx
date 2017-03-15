@@ -1,9 +1,12 @@
 var React = require('react');
-var SessionStore = require('./../stores/session_store');
-var SessionApiUtil = require('./../util/session_api_util');
-var UserNavBar = require('./UserNavBar');
+// components
+var HomePage = require('./HomePage');
 var NoUserNavBar = require('./NoUserNavBar');
-var RootPageContent = require('./RootPageContent');
+var UserNavBar = require('./UserNavBar');
+// stores
+var SessionStore = require('./../stores/session_store');
+// util
+var SessionApiUtil = require('./../util/session_api_util');
 
 var App = React.createClass({
   componentDidMount: function () {
@@ -15,26 +18,26 @@ var App = React.createClass({
     this.sessionListener.remove();
   },
 
-  isRootPage: function () {
+  isHomePage: function () {
     return (window.location.hash.slice(0, 4).toUpperCase() === "#/?_");
   },
 
   render: function() {
     var navigationBar = <NoUserNavBar />;
-    var rootPageContent = "";
+    var homePage = "";
 
     if (SessionStore.isUserLoggedIn()) {
       navigationBar = <UserNavBar />;
     }
 
-    if (this.isRootPage()) {
-      rootPageContent = <RootPageContent />
+    if (this.isHomePage()) {
+      homePage = <HomePage />
     }
 
     return (
       <div className="app">
         { navigationBar }
-        { rootPageContent }
+        { homePage }
         {this.props.children}
       </div>
     );
