@@ -73,10 +73,6 @@ Answers are maintained on the frontend in the `QuestionFormStore`.  Because crea
 
 In addition to the features already implemented, I plan to continue work on this project.  The next steps for Ask Anything! are outlined below.
 
-### Search
+### Search feature
 
-Searching questions is a standard feature of Poll Everywhere. This search will look through questions.
-
-### SMS Answer/Real-time update
-
-Will add an SMS feature for responding to Ask Anything! questions.  Will also use Pusher to implement web sockets so that responses to questions register in real-time.
+Plan to implement a search feature to search for particular questions
