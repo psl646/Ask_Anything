@@ -1,13 +1,16 @@
-var React = require('react');
 var Link = require('react-router').Link;
-var ClientQuestionActions = require('../actions/client_question_actions');
-var QuestionStore = require('../stores/question_store')
-var QuestionIndexItemToolbar = require('./QuestionIndexItemToolbar');
-var TimeConstants = require('../constants/time_constants');
-var ClientQuestionActions = require('../actions/client_question_actions');
-var ErrorStore = require('./../stores/error_store');
+var React = require('react');
 var ReactHighcharts = require('react-highcharts');
-var LettersNumbers = require('../constants/letters_numbers');
+// actions
+var ClientQuestionActions = require('../actions/client_question_actions');
+// components
+var Graph = require('./Graph');
+var QuestionIndexItemToolbar = require('./QuestionIndexItemToolbar');
+// constants
+var TimeConstants = require('../constants/time_constants');
+// stores
+var ErrorStore = require('./../stores/error_store');
+var QuestionStore = require('../stores/question_store')
 
 var QuestionIndexItem = React.createClass ({
   contextTypes: {
@@ -102,17 +105,6 @@ var QuestionIndexItem = React.createClass ({
     ClientQuestionActions.toggleActive(this.state.questionId);
   },
 
-  sortAnswerObjects: function (answerObjects) {
-    var alphabet = LettersNumbers.letters;
-    var sortedAnswerObjects = [];
-    answerObjects.forEach(function(answer){
-      sortedAnswerObjects[answer["id"]] = answer["answer"];
-    });
-    return Object.keys(sortedAnswerObjects).map(function(key, idx){
-      return alphabet[idx].toUpperCase() + ") " + sortedAnswerObjects[key];
-    });
-  },
-
   getTimePercentage: function () {
     var percentage;
     if (this.state.timeLeft === 0) {
@@ -147,48 +139,7 @@ var QuestionIndexItem = React.createClass ({
 
   render: function () {
     var that = this;
-    var myAnswerObjects;
-    var myAnswerArray = [];
-    var question = "";
     var username = "";
-    var numResponses = 0;
-
-    if (that.state.question.question !== undefined){
-      question = that.state.question.question;
-      username = that.state.question.author.username;
-    };
-
-    if (Object.keys(that.state.question).length !== 0) {
-      if (that.state.question["responses"]) {
-        var myResponseObjects = that.state.question["responses"];
-      }
-    }
-
-    var myGraphAnswerObject = {};
-
-    if (Object.keys(that.state.question).length !== 0) {
-
-      myAnswerObjects = that.state.question["answers"];
-      myAnswerArray = this.sortAnswerObjects(myAnswerObjects);
-      myAnswerObjects.forEach(function(answer){
-        myGraphAnswerObject[answer["id"]] = 0;
-      });
-
-      myResponseObjects = that.state.question["responses"];
-
-      if (myResponseObjects) {
-        myResponseObjects.forEach(function(responseObj){
-          myGraphAnswerObject[responseObj["answer_id"]] += 1;
-          numResponses++;
-        });
-      }
-    }
-
-    var graphKeys = Object.keys(myGraphAnswerObject);
-    var graphAnswers = graphKeys.map(function(key){
-        return myGraphAnswerObject[key];
-    });
-
     var url = window.location.href;
     var hostNameArray = url.split("#")[0].split('/');
     var hostName = hostNameArray[hostNameArray.length - 2];
@@ -254,20 +205,6 @@ var QuestionIndexItem = React.createClass ({
       </li>
     );
 
-    var config = {
-      chart: {type: 'bar'},
-      title: {text: question},
-      xAxis: {categories: myAnswerArray},
-      yAxis: {title: {text: ''}},
-      series: [{
-        name: "Total Recorded responses: " + numResponses,
-        data: graphAnswers
-      }]
-    };
-
-    var currentChart = React.createElement(
-      ReactHighcharts, { config: config });
-
     return (
       <div className="questionindexitem-container group">
         <QuestionIndexItemToolbar />
@@ -279,7 +216,7 @@ var QuestionIndexItem = React.createClass ({
 
           <div className="answers-graph-container group">
             <div className="answers-graph group">
-            {currentChart}
+              <Graph questionId={ this.state.questionId } />
             </div>
             <ul className="question-toggle-buttons">
               <li
