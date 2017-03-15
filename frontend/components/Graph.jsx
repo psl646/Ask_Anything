@@ -75,6 +75,26 @@ var Graph = React.createClass({
     });
   },
 
+  getHighchart: function(){
+    var answerObjectsArray = this.getAnswers();
+    var formattedAnswersArray = answerObjectsArray ? this.formatAnswerObjects(answerObjectsArray) : [];
+    var responseObjectsArray = this.getResponses();
+    var formattedResponsesArray = this.formatResponseObjects(answerObjectsArray, responseObjectsArray);
+
+    var config = {
+      chart: {type: 'bar'},
+      title: {text: this.state.question.question},
+      xAxis: {categories: formattedAnswersArray},
+      yAxis: {title: {text: ''}},
+      series: [{
+        name: "Total Recorded responses: " + responseObjectsArray.length,
+        data: formattedResponsesArray
+      }]
+    };
+
+    return React.createElement(ReactHighcharts, { config: config });
+  },
+
   checkIfQuestionExist: function (){
     return (Object.keys(this.state.question).length !== 0);
   },
@@ -83,23 +103,7 @@ var Graph = React.createClass({
     var currentChart = "";
 
     if (this.checkIfQuestionExist()){
-      var answerObjectsArray = this.getAnswers();
-      var formattedAnswersArray = answerObjectsArray ? this.formatAnswerObjects(answerObjectsArray) : [];
-      var responseObjectsArray = this.getResponses();
-      var formattedResponsesArray = this.formatResponseObjects(answerObjectsArray, responseObjectsArray);
-
-      var config = {
-        chart: {type: 'bar'},
-        title: {text: this.state.question.question},
-        xAxis: {categories: formattedAnswersArray},
-        yAxis: {title: {text: ''}},
-        series: [{
-          name: "Total Recorded responses: " + responseObjectsArray.length,
-          data: formattedResponsesArray
-        }]
-      };
-
-      currentChart = React.createElement(ReactHighcharts, { config: config });
+      currentChart = this.getHighchart();
     }
 
     return (
