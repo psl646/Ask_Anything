@@ -10,103 +10,112 @@ User.destroy_all
 Survey.destroy_all
 Question.destroy_all
 
-User.create(first_name: "Peter", last_name: "Lin", email: "peterlin", password: "password")
-User.create(first_name: "Guest", last_name: "User", email: "guestuser@guest.com", password: "password")
-User.create(first_name: "Guest2", last_name: "User2", email: "guestuser2@guest.com", password: "password")
-User.create(first_name: "Guest3", last_name: "User3", email: "guestuser3@guest.com", password: "password")
-User.create(first_name: "Guest4", last_name: "User4", email: "guestuser4@guest.com", password: "password")
-User.create(first_name: "user123", last_name: "user123", email: "user123", password: "user123")
+def create_user(input_value)
+  User.create(
+    first_name: input_value,
+    last_name: input_value,
+    email: input_value,
+    password: input_value
+  )
+end
+
+create_user("apple123")
+create_user("banana123")
+create_user("mango123")
+create_user("orange123")
+create_user("pear123")
+create_user("strawberry123")
+create_user("watermelon123")
+create_user("user123")
+
+ALL_USERS = User.all
+NUM_USERS = ALL_USERS.length
+
+EVEN_USERS = ALL_USERS.select {|user| user.id % 2 == 0}
+ODD_USERS = ALL_USERS.select {|user| user.id % 2 == 1}
+FIRST_HALF_USERS = ALL_USERS.slice(0, NUM_USERS / 2)
+SECOND_HALF_USERS = ALL_USERS.slice(NUM_USERS / 2, NUM_USERS)
+
+def respond_to_last_question_with_last_answer(users_array)
+  if (!users_array.is_a?(Array))
+    users_array = [users_array]
+  end
+  users_array.each do |current_user|
+    Response.create(answer: Answer.last, user: current_user)
+  end
+end
 
 # UNGROUPED for user123
 Question.create(question: "What is your favorite color?", category: "Multiple Choice", survey_id: Survey.last.id)
 Answer.create(answer: "Blue", question: Question.last)
+respond_to_last_question_with_last_answer(ODD_USERS)
 Answer.create(answer: "Red", question: Question.last)
+respond_to_last_question_with_last_answer(EVEN_USERS)
 Answer.create(answer: "Yellow", question: Question.last)
 
 Question.create(question: "What is your favorite season?", category: "Multiple Choice", survey_id: Survey.last.id)
 Answer.create(answer: "Spring", question: Question.last)
+respond_to_last_question_with_last_answer(ALL_USERS[0, 2])
 Answer.create(answer: "Summer", question: Question.last)
+respond_to_last_question_with_last_answer(ALL_USERS[2, 3])
 Answer.create(answer: "Autumn", question: Question.last)
+respond_to_last_question_with_last_answer(ALL_USERS[5, 2])
 Answer.create(answer: "Winter", question: Question.last)
-
-Question.create(question: "Do you put your toilet paper facing in or out?", category: "Multiple Choice", survey_id: Survey.last.id)
-Answer.create(answer: "In", question: Question.last)
-Answer.create(answer: "Out", question: Question.last)
-
-Question.create(question: "Apple Vs Android?", category: "Multiple Choice", survey_id: Survey.last.id)
-Answer.create(answer: "Apple", question: Question.last)
-Response.create(answer: Answer.last, user: User.first)
-Answer.create(answer: "Android", question: Question.last)
-Response.create(answer: Answer.last, user: User.all[2])
+respond_to_last_question_with_last_answer(ALL_USERS.last)
 
 Question.create(question: "Preferred Movie Genre", category: "Multiple Choice", survey_id: Survey.last.id)
 Answer.create(answer: "Action", question: Question.last)
 Answer.create(answer: "Animation", question: Question.last)
-Response.create(answer: Answer.last, user: User.first)
-Response.create(answer: Answer.last, user: User.all[2])
 Answer.create(answer: "Comedy", question: Question.last)
-Response.create(answer: Answer.last, user: User.all[1])
+respond_to_last_question_with_last_answer(ODD_USERS)
 Answer.create(answer: "Drama", question: Question.last)
 Answer.create(answer: "Horror", question: Question.last)
+respond_to_last_question_with_last_answer(ALL_USERS.first)
 Answer.create(answer: "Western", question: Question.last)
+
+Question.create(question: "Do you put your toilet paper facing in or out?", category: "Multiple Choice", survey_id: Survey.last.id)
+Answer.create(answer: "In", question: Question.last)
+respond_to_last_question_with_last_answer(FIRST_HALF_USERS)
+Answer.create(answer: "Out", question: Question.last)
+respond_to_last_question_with_last_answer(SECOND_HALF_USERS)
+
+Question.create(question: "Apple Vs Android?", category: "Multiple Choice", survey_id: Survey.last.id)
+Answer.create(answer: "Apple", question: Question.last)
+respond_to_last_question_with_last_answer(FIRST_HALF_USERS)
+Answer.create(answer: "Android", question: Question.last)
+respond_to_last_question_with_last_answer(SECOND_HALF_USERS)
 
 Question.create(question: "What's your favorite dinosaur?", category: "Multiple Choice", survey_id: Survey.last.id)
 Answer.create(answer: "Tyrannosaurus Rex", question: Question.last)
-Response.create(answer: Answer.last, user: User.all[0])
-Response.create(answer: Answer.last, user: User.all[1])
+respond_to_last_question_with_last_answer(FIRST_HALF_USERS)
 Answer.create(answer: "Stegosaurus", question: Question.last)
-Response.create(answer: Answer.last, user: User.all[2])
+respond_to_last_question_with_last_answer(ALL_USERS.last)
 Answer.create(answer: "Triceratops", question: Question.last)
-Response.create(answer: Answer.last, user: User.all[3])
-Response.create(answer: Answer.last, user: User.all[4])
-Response.create(answer: Answer.last, user: User.all[5])
+respond_to_last_question_with_last_answer(ALL_USERS[5,2])
 
 #Survey for user 123
-Survey.create(title: "a/A Questions", author: User.last)
+Survey.create(title: "a/A Questions", author: ALL_USERS.last)
 Question.create(question: "Which pod do you like working at best?", category: "Multiple Choice", survey_id: Survey.last.id)
 Answer.create(answer: "Bronx", question: Question.last)
-Response.create(answer: Answer.last, user: User.first)
-Answer.create(answer: "Cobble Hill", question: Question.last)
-Response.create(answer: Answer.last, user: User.all[1])
+respond_to_last_question_with_last_answer(EVEN_USERS)
 Answer.create(answer: "Park Slope", question: Question.last)
-Response.create(answer: Answer.last, user: User.all[2])
 Answer.create(answer: "West Village", question: Question.last)
-Response.create(answer: Answer.last, user: User.last)
+respond_to_last_question_with_last_answer(ODD_USERS)
+Answer.create(answer: "Cobble Hill", question: Question.last)
 
 Question.create(question: "Which was the hardest assessment?", category: "Multiple Choice", survey_id: Survey.last.id)
 Answer.create(answer: "General Programming", question: Question.last)
-Answer.create(answer: "BlackJack game", question: Question.last)
-Answer.create(answer: "SQL ActiveRecord", question: Question.last)
-Answer.create(answer: "Rails Auth", question: Question.last)
-Response.create(answer: Answer.last, user: User.last)
-Answer.create(answer: "Javascript", question: Question.last)
+Answer.create(answer: "Card game", question: Question.last)
+Answer.create(answer: "SQL", question: Question.last)
+Answer.create(answer: "Rails", question: Question.last)
+respond_to_last_question_with_last_answer(ALL_USERS.last)
+Answer.create(answer: "JavaScript", question: Question.last)
 Answer.create(answer: "React", question: Question.last)
 Answer.create(answer: "CSS", question: Question.last)
-Response.create(answer: Answer.last, user: User.first)
-Response.create(answer: Answer.last, user: User.all[1])
-Response.create(answer: Answer.last, user: User.all[2])
+respond_to_last_question_with_last_answer(ALL_USERS[0, 6])
 
-Question.create(question: "Are you ready for the Job Search curriculum?", category: "Multiple Choice", survey_id: Survey.last.id)
-Answer.create(answer: "Yes", question: Question.last)
-Response.create(answer: Answer.last, user: User.first)
-Response.create(answer: Answer.last, user: User.all[1])
-Response.create(answer: Answer.last, user: User.all[2])
-Response.create(answer: Answer.last, user: User.all[3])
-Response.create(answer: Answer.last, user: User.last)
-Answer.create(answer: "No", question: Question.last)
-
-#Survey for user 123
-Survey.create(title: "Ask Anything FAQ", author: User.last)
-Question.create(question: "How do I use this site?", category: "Multiple Choice", survey_id: Survey.last.id)
-Answer.create(answer: "Step 1: Click on Create Question on the Left panel.", question: Question.last)
-Answer.create(answer: "Step 2: Fill out form and click Create.", question: Question.last)
-Answer.create(answer: "Hover over the ProTip for a quick way to make a question!", question: Question.last)
-
-Question.create(question: "How can others answer my question?", category: "Multiple Choice", survey_id: Survey.last.id)
-Answer.create(answer: "Click on the Wifi icon next to the question in the question page or on the main page.", question: Question.last)
-Answer.create(answer: "Hover over the Ask Anything logo on the bottom left corner of the graph to open up the timer for each individual question!", question: Question.last)
-
-Question.create(question: "General Question FAQ", category: "Multiple Choice", survey_id: Survey.last.id)
-Answer.create(answer: "Multiple questions can be created at a time.", question: Question.last)
-Answer.create(answer: "Only one question can be active at a time.", question: Question.last)
-Answer.create(answer: "A user can only record 1 response to a question.", question: Question.last)
+Question.create(question: "JavaScript or Ruby?", category: "Multiple Choice", survey_id: Survey.last.id)
+Answer.create(answer: "JavaScript", question: Question.last)
+respond_to_last_question_with_last_answer(ALL_USERS[2, 5])
+Answer.create(answer: "Ruby", question: Question.last)
+respond_to_last_question_with_last_answer(ALL_USERS[0, 2])
