@@ -63,7 +63,7 @@ var QuestionIndexItem = React.createClass ({
         <div className="fa fa-wifi active-icon-question-index-item"aria-hidden="true" />
         When question is active, respond at<br />
         <strong>
-          { hostName }/#/{ username } or text answer to 914-292-3261
+          { hostName }/#/{ username } or text {this.state.questionId} with your answer to 914-292-3261
         </strong>
       </div>
     );
@@ -73,7 +73,7 @@ var QuestionIndexItem = React.createClass ({
         <div className="fa fa-desktop active-icon-question-index-item"aria-hidden="true" />
         Question is active, respond at<br />
         <strong>
-          <Link to={ "/" + username } className="hover-pointer highlight-pointer">{ hostName }/#/{ username }</Link> or text answer to 914-292-3261
+          <Link to={ "/" + username } className="hover-pointer highlight-pointer">{ hostName }/#/{ username }</Link> or text {this.state.questionId} with your answer to 914-292-3261
         </strong>
       </div>
     );

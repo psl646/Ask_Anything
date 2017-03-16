@@ -211,17 +211,16 @@ var QuestionIndexItemToolbar = React.createClass ({
       </div>
     );
 
-
-    if (this.state.configure) {
-      testList = "";
-      testChecked = "";
-      phoneImage = ""
+    if (this.state.test || this.state.question.active) {
+      configureList = "";
+      configureChecked = "";
 
       presentList = "";
       presentChecked = "";
-    } else if (this.state.test) {
-      configureList = "";
-      configureChecked = "";
+    } else if (this.state.configure) {
+      testList = "";
+      testChecked = "";
+      phoneImage = ""
 
       presentList = "";
       presentChecked = "";
