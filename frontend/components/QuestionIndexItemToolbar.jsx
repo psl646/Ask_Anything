@@ -173,7 +173,6 @@ var QuestionIndexItemToolbar = React.createClass ({
     var url = window.location.href;
     var hostNameArray = url.split("#")[0].split('/');
     var hostName = hostNameArray[hostNameArray.length - 2];
-    console.log(hostName);
     var username = this.state.user.username;
 
     var testList = (
@@ -184,7 +183,8 @@ var QuestionIndexItemToolbar = React.createClass ({
           <Link to={ "/" + username } className="hover-pointer highlight-pointer">{ hostName }/#/{ username }</Link><br />
           as long as the question is active<br />
           OR<br />
-          text answer to 914-292-3261
+          text { that.state.questionId } with your answer to <br />
+          914-292-3261
         </div>
       </ul>
     );
@@ -203,7 +203,12 @@ var QuestionIndexItemToolbar = React.createClass ({
     );
 
     var phoneImage = (
-      <img className="phone-image" src={ window.askAnythingAssets.phone } width="250" height="450" alt="Phone" />
+      <div>
+        <img className="phone-image" src={ window.askAnythingAssets.phone } width="250" height="450" alt="Phone" />
+        <div className="sms-answer">
+          {that.state.questionId} A
+        </div>
+      </div>
     );
 
 

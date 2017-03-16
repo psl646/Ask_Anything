@@ -98,7 +98,6 @@ var Timebar = React.createClass({
 
   render: function (){
     var percentage = this.getTimePercentage();
-    console.log(percentage);
     var color = this.getColor(percentage);
     var timeBarStyle = this.getTimebarStyle(percentage, color);
 

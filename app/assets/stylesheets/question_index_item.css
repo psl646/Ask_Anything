@@ -261,3 +261,10 @@
   left: 43px;
   top: 20px;
 }
+
+.sms-answer {
+  position: relative;
+  left: 75px;
+  bottom: 10px;
+  color: white;
+}
