@@ -2,6 +2,9 @@ class Api::QuestionsController < ApplicationController
   def index
     if current_user
       @questions = current_user.questions
+      if (!params[:search].nil?)
+        @questions = Question.filterQuestions(@questions, params[:search])
+      end
       render "api/questions/index"
     else
       @errors = ["These aren't the questions you’re looking for!"]

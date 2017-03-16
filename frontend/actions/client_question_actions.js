@@ -5,6 +5,10 @@ var ClientQuestionActions = {
     QuestionApiUtil.fetchAllQuestions();
   },
 
+  fetchQuestionsByQuery: function (search) {
+    QuestionApiUtil.fetchQuestionsByQuery(search);
+  },
+
   getQuestionById: function(question_id, location) {
     QuestionApiUtil.getQuestionById(question_id, location);
   },

@@ -15,6 +15,20 @@ var QuestionApiUtil = {
     })
   },
 
+  fetchQuestionsByQuery: function (search) {
+    $.ajax({
+      url: 'api/questions',
+      type: 'GET',
+      dataType: 'json',
+      data: { search : search },
+      success: function (questions) {
+        ServerQuestionActions.receiveAllQuestions(questions);
+      },
+      error: function (error) {
+			}
+    })
+  },
+
   getQuestionById: function (question_id, location) {
     $.ajax({
       url: 'api/questions/' + question_id,

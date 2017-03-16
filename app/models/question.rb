@@ -108,4 +108,16 @@ class Question < ActiveRecord::Base
 
     true
   end
+
+  def self.filterQuestions(questions, search_query)
+    return_questions = []
+
+    questions.each do |question|
+      current_question_string = question.question.downcase
+      if (current_question_string.include?(search_query.downcase))
+        return_questions.push(question)
+      end
+    end
+    return return_questions
+  end
 end
