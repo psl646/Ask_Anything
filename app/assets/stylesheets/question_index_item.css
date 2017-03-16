@@ -18,7 +18,7 @@
   position: relative;
   right: 0;
   width: 330px;
-  min-height: 500px;
+  min-height: 720px;
   background: #e9eff4;
   height: 100%;
 }
@@ -254,4 +254,10 @@
 
 .presentChecked {
   background: rgb(69, 150, 226);
+}
+
+.phone-image {
+  position: relative;
+  left: 43px;
+  top: 20px;
 }

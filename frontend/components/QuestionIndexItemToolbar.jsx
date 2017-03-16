@@ -170,10 +170,21 @@ var QuestionIndexItemToolbar = React.createClass ({
       </ul>
     );
 
+    var url = window.location.href;
+    var hostNameArray = url.split("#")[0].split('/');
+    var hostName = hostNameArray[hostNameArray.length - 2];
+    console.log(hostName);
+    var username = this.state.user.username;
+
     var testList = (
       <ul className="test-list-items group">
         <div className="test-list-items-message">
-          { "The audience can respond to this question at Ask--Anything.HerokuApp.com/#/" + this.state.user.username + " as long as the question is active." }
+          The audience can respond<br />
+          to this question at<br />
+          <Link to={ "/" + username } className="hover-pointer highlight-pointer">{ hostName }/#/{ username }</Link><br />
+          as long as the question is active<br />
+          OR<br />
+          text answer to 914-292-3261
         </div>
       </ul>
     );
@@ -191,11 +202,15 @@ var QuestionIndexItemToolbar = React.createClass ({
       </ul>
     );
 
+    var phoneImage = (
+      <img className="phone-image" src={ window.askAnythingAssets.phone } width="250" height="450" alt="Phone" />
+    );
 
 
     if (this.state.configure) {
       testList = "";
       testChecked = "";
+      phoneImage = ""
 
       presentList = "";
       presentChecked = "";
@@ -207,7 +222,8 @@ var QuestionIndexItemToolbar = React.createClass ({
       presentChecked = "";
     } else {
       configureList = "";
-      testChecked = "";
+      configureChecked = "";
+      phoneImage = "";
 
       testList = "";
       testChecked = "";
@@ -220,20 +236,18 @@ var QuestionIndexItemToolbar = React.createClass ({
             onClick={ this.handleConfigureClick }>
             1. Configure
           </li>
-
           <li className={ "topOptions-options" + testChecked + presentChecked}
             onClick={ this.handleTestClick }>
             2. Test
           </li>
-
           <li className={ "topOptions-options" + presentChecked }
             onClick={ this.handlePresentClick }>
             3. Present
           </li>
         </ul>
-
+        {testList}
+        {phoneImage}
         { bottomOptions }
-
       </div>
     )
   }
