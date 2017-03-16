@@ -25,7 +25,9 @@ var UserNavBar = React.createClass({
       this.context.router.push("surveys");
     }
     window.setTimeout(function () {
-      this.setState({ modalOpen: true });
+      if (window.location.hash.slice(2, 9).toUpperCase() === "SURVEYS"){
+        this.setState({ modalOpen: true });
+      }
     }.bind(this), 1000);
   },
 
