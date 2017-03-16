@@ -5,10 +5,14 @@ var Searchbar = React.createClass({
     router: React.PropTypes.object.isRequired
   },
 
+  handleSearch: function(e){
+    var searchQuery = e.target.value;
+  },
+
   render: function () {
     return (
       <div>
-        <input className="searchbar-input" placeholder="           Search...">
+        <input className="searchbar-input" placeholder="           Search..." onChange={ this.handleSearch }>
         </input>
       </div>
     )
