@@ -42,4 +42,10 @@
   color: #3c749e;
   font-weight: normal;
 }
- 
+
+.searchbar-input {
+  position: relative;
+  right: 8px;
+  width: 151px;
+  height: 25px;
+}

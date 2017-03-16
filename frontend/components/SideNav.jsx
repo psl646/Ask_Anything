@@ -3,6 +3,7 @@ var Link = require('react-router').Link;
 var Modal = require('react-modal');
 var ModalConstants = require('../constants/modal_constants');
 var QuestionFormGenerator = require('./QuestionFormGenerator');
+var Searchbar = require('./Searchbar');
 
 var SideNav = React.createClass ({
   contextTypes: {
@@ -38,9 +39,9 @@ var SideNav = React.createClass ({
             </Modal>
           </li>
 
-          <Link to="surveys" className="sidenav-list-link soft-edges hover-pointer">
-            My Questions
-          </Link>
+          <div className="sidenav-list-link soft-edges">
+            <Searchbar />
+          </div>
 
         </ul>
       </div>
