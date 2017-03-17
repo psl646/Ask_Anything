@@ -60,8 +60,8 @@ var SideNav = React.createClass ({
       ]
     })
     intro.start().oncomplete(function(){
-      console.log("TOUR COMPLETED");
-    });
+      this.openModal();
+    }.bind(this));
   },
 
   render: function () {

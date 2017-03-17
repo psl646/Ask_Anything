@@ -187,11 +187,6 @@ var QuestionFormGenerator = React.createClass({
       </ul>
     );
 
-    // <div className={ "soft-edges no-question-forms" }>Hey Silly! You need to enter a question in the box above first.</div>
-
-    // <div>
-    //   <i className="fa fa-arrow-right small-arrow" aria-hidden="true"></i>
-    // </div>
     return (
       <div>
         <form onSubmit={ this.handleSubmit } >
