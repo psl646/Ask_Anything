@@ -72,7 +72,6 @@ var HomePage = React.createClass({
   },
 
   demoGraph: function () {
-    // <img className="dinosaur-image" src={window.askAnythingAssets.examplequestion} alt="Dinosaur Question" />
     return (
       <div className="demo-page-graph">
 
