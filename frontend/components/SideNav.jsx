@@ -5,6 +5,8 @@ var ModalConstants = require('../constants/modal_constants');
 var QuestionFormGenerator = require('./QuestionFormGenerator');
 var Searchbar = require('./Searchbar');
 var SessionStore = require('../stores/session_store.js');
+var SessionActions = require('../actions/session_actions.js');
+
 var SideNav = React.createClass ({
   contextTypes: {
     router: React.PropTypes.object.isRequired
@@ -62,6 +64,7 @@ var SideNav = React.createClass ({
     intro.start().oncomplete(function(){
       this.openModal();
     }.bind(this));
+    SessionActions.completedTourPart1();
   },
 
   render: function () {

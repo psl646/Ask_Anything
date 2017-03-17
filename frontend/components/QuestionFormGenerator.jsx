@@ -7,6 +7,7 @@ var ErrorActions = require('../actions/error_actions');
 var QuestionForm = require('./QuestionForm');
 var QuestionFormStore = require('../stores/question_form_store');
 var QuestionFormActions = require('../actions/question_form_actions');
+var SessionStore = require('../stores/session_store.js');
 
 var QuestionFormGenerator = React.createClass({
   contextTypes: {
@@ -31,6 +32,31 @@ var QuestionFormGenerator = React.createClass({
     this.errorListener = ErrorStore.addListener(this._handleErrors);
     this.questionListener = QuestionStore.addListener(this._questionsCreated);
     this.questionFormListener = QuestionFormStore.addListener(this.updateQuestions)
+    var currentUser = SessionStore.currentUser();
+    if (currentUser["tour"] === "true"){
+      this.handleTour();
+    }
+  },
+
+  handleTour: function(){
+    var intro = introJs();
+    intro.setOptions({
+      showStepNumbers: false,
+      doneLabel: "Continue Tour",
+      steps:[
+        {
+          intro: "This is the form we use to create a question."
+        },
+        {
+          element: document.getElementById("introjs-protip"),
+          intro: "Hover over our ProTip to learn a new way to quickly create a question.",
+          position: "right"
+        }
+      ]
+    })
+    intro.start().oncomplete(function(){
+      console.log("TEST");
+    }.bind(this));
   },
 
   componentWillUnmount: function () {
@@ -201,7 +227,7 @@ var QuestionFormGenerator = React.createClass({
           <div className="question-form-generator-container soft-edges">
             <div className="protip-custom">
               { popUpProTip }
-              <div className="protip-only">ProTip</div>
+              <div id="introjs-protip" className="protip-only">ProTip</div>
               <div className="TM-only">TM</div>
             </div>
             <label className="add-question h12">{ addQuestion }
