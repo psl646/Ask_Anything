@@ -8,6 +8,9 @@ var QuestionForm = require('./QuestionForm');
 var QuestionFormStore = require('../stores/question_form_store');
 var QuestionFormActions = require('../actions/question_form_actions');
 var SessionStore = require('../stores/session_store.js');
+var TourStore = require('../stores/tour_store.js');
+var TourActions = require('../actions/tour_actions.js');
+
 
 var QuestionFormGenerator = React.createClass({
   contextTypes: {
@@ -33,7 +36,8 @@ var QuestionFormGenerator = React.createClass({
     this.questionListener = QuestionStore.addListener(this._questionsCreated);
     this.questionFormListener = QuestionFormStore.addListener(this.updateQuestions)
     var currentUser = SessionStore.currentUser();
-    if (currentUser["tour"] === "true"){
+    var currentPart = TourStore.getPart();
+    if (currentUser["tour"] === "true" && currentPart === 1){
       this.handleTour();
     }
   },
@@ -42,21 +46,31 @@ var QuestionFormGenerator = React.createClass({
     var intro = introJs();
     intro.setOptions({
       showStepNumbers: false,
-      doneLabel: "Continue Tour",
       steps:[
         {
           intro: "This is the form we use to create a question."
         },
         {
+          element: document.getElementById("introjs-question-input-box"),
+          intro: "Type in your question here."
+        },
+        {
+          element: document.getElementById("introjs-question-create-button"),
+          intro: "When you are all done with your question, click here!",
+          position: "right"
+        },
+        {
           element: document.getElementById("introjs-protip"),
           intro: "Hover over our ProTip to learn a new way to quickly create a question.",
           position: "right"
+        },
+        {
+          intro: "Try creating a question now!"
         }
       ]
     })
-    intro.start().oncomplete(function(){
-      console.log("TEST");
-    }.bind(this));
+    intro.start();
+    TourActions.partTwoComplete();
   },
 
   componentWillUnmount: function () {
@@ -232,6 +246,7 @@ var QuestionFormGenerator = React.createClass({
             </div>
             <label className="add-question h12">{ addQuestion }
               <input
+                id="introjs-question-input-box"
                 className="question-input-field margin-auto placeholder-text h22"
                 type="text"
                 value={ this.state.input }
@@ -247,7 +262,7 @@ var QuestionFormGenerator = React.createClass({
             onClick={ this.closeMyself }>
             Cancel
           </div>
-          <input className="soft-edges hover-pointer question-creation-button" type="submit" value={ createText } />
+          <input id="introjs-question-create-button" className="soft-edges hover-pointer question-creation-button" type="submit" value={ createText } />
         </form>
       </div>
 		);

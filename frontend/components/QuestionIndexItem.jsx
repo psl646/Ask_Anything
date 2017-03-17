@@ -2,12 +2,15 @@ var Link = require('react-router').Link;
 var React = require('react');
 // actions
 var ClientQuestionActions = require('../actions/client_question_actions');
+var TourActions = require('../actions/tour_actions');
 // components
 var Graph = require('./Graph');
 var QuestionIndexItemToolbar = require('./QuestionIndexItemToolbar');
 var Timebar = require('./Timebar');
 // stores
-var QuestionStore = require('../stores/question_store')
+var QuestionStore = require('../stores/question_store');
+var SessionStore = require('../stores/session_store');
+var TourStore = require('../stores/tour_store');
 
 var QuestionIndexItem = React.createClass ({
   contextTypes: {
@@ -30,6 +33,26 @@ var QuestionIndexItem = React.createClass ({
     var location = window.location.hash.slice(0,11);
 
     ClientQuestionActions.getQuestionById(this.state.questionId, location);
+    var currentUser = SessionStore.currentUser();
+    var currentPart = TourStore.getPart();
+    if (currentUser["tour"] === "true" && currentPart === 1){
+      this.handleTour();
+    }
+  },
+
+
+  handleTour: function(){
+    var intro = introJs();
+    intro.setOptions({
+      showStepNumbers: false,
+      steps:[
+        {
+          intro: "This is the form we use to create a question."
+        }
+      ]
+    })
+    intro.start();
+    TourActions.partTwoComplete();
   },
 
   componentWillUnmount: function () {

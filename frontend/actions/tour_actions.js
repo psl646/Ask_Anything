@@ -1,19 +1,24 @@
-var SessionConstants = require('../constants/session_constants');
+var TourConstants = require('../constants/tour_constants');
 var AppDispatcher = require('../dispatcher/dispatcher');
 
-var SessionActions = {
-  receiveCurrentUser: function (currentUser) {
+var TourActions = {
+  partOneComplete: function () {
     AppDispatcher.dispatch({
-      actionType: SessionConstants.LOGIN,
-      currentUser: currentUser
+      actionType: TourConstants.PARTONECOMPLETE
     });
   },
 
-  removeCurrentUser: function () {
+  partTwoComplete: function () {
     AppDispatcher.dispatch({
-      actionType: SessionConstants.LOGOUT
+      actionType: TourConstants.PARTTWOCOMPLETE
+    });
+  },
+  
+  partThreeComplete: function () {
+    AppDispatcher.dispatch({
+      actionType: TourConstants.PARTTHREECOMPLETE
     });
   }
 };
 
-module.exports = SessionActions;
+module.exports = TourActions;
