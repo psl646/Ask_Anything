@@ -28,7 +28,7 @@ var HomePage = React.createClass({
     }
   },
 
-  handleCreateFirstQuestionClick: function () {
+  guestLogin: function () {
     if (SessionStore.isUserLoggedIn()) {
       this.context.router.push("surveys");
     } else {
@@ -47,8 +47,7 @@ var HomePage = React.createClass({
     } else {
       return (
         <ul className="main-page-login-options group">
-          <li className="hover-pointer soft-edges create-question-button"
-            onClick={ this.handleCreateFirstQuestionClick }>
+          <li id="introjs-guestlogin" className="hover-pointer soft-edges create-question-button" onClick={ this.guestLogin }>
             Log in as a guest
           </li>
           <li>

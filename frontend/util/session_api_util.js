@@ -2,6 +2,21 @@ var SessionActions = require('./../actions/session_actions');
 var ErrorActions = require('./../actions/error_actions');
 
 var SessionApiUtil = {
+	tourlogin: function (formData){
+		$.ajax({
+			url: '/api/session',
+			type: 'POST',
+			data: {user: formData},
+			success: function (currentUser) {
+				SessionActions.receiveCurrentUser(currentUser);
+			},
+			error: function (xhr) {
+				var errors = xhr.responseJSON;
+				ErrorActions.setErrors(errors);
+			}
+		});
+	},
+
 	login: function (credentials) {
 		$.ajax({
 			url: '/api/session',

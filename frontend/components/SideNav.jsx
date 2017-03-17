@@ -4,13 +4,20 @@ var Modal = require('react-modal');
 var ModalConstants = require('../constants/modal_constants');
 var QuestionFormGenerator = require('./QuestionFormGenerator');
 var Searchbar = require('./Searchbar');
-
+var SessionStore = require('../stores/session_store.js');
 var SideNav = React.createClass ({
   contextTypes: {
     router: React.PropTypes.object.isRequired
   },
   getInitialState: function () {
     return ({ modalOpen: false });
+  },
+
+  componentDidMount: function () {
+    var currentUser = SessionStore.currentUser();
+    if (currentUser["tour"] === "true"){
+      this.handleTour();
+    }
   },
 
   closeModal: function(){
@@ -23,11 +30,45 @@ var SideNav = React.createClass ({
     }.bind(this), 500);
   },
 
+  handleTour: function(){
+    var intro = introJs();
+    intro.setOptions({
+      showStepNumbers: false,
+      doneLabel: "Continue Tour",
+      steps:[
+        {
+          intro: "This is where you can view a list of all your questions.  When hovering over a question, you can edit/delete existing questions by selecting the corresponding options."
+        },
+        {
+          intro: "Additionally, an active question that others can respond to will have a green background.  You can activate/deactivate a question by selecting the wifi icon."
+        },
+        {
+          element: document.getElementById("introjs-searchbar"),
+          intro: "You can search for a particular question here.",
+          position: "right"
+        },
+        {
+          element: document.getElementById("introjs-show-all-questions"),
+          intro: "You can view all your questions by clicking here.",
+          position: "right"
+        },
+        {
+          element: document.getElementById("introjs-question-form-button"),
+          intro: "You can create a question by clicking here. Let's create a question now.  Click 'Continue Tour' below.",
+          position: "right"
+        }
+      ]
+    })
+    intro.start().oncomplete(function(){
+      console.log("TOUR COMPLETED");
+    });
+  },
+
   render: function () {
     return (
       <div className="sidenav-container">
         <ul className="sidenav-list">
-          <li className="question-form-button soft-edges hover-pointer" onClick={this.openModal}>
+          <li id="introjs-question-form-button" className="question-form-button soft-edges hover-pointer" onClick={this.openModal}>
             Create
             <Modal
               isOpen={this.state.modalOpen}

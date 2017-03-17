@@ -2,6 +2,7 @@ class Api::SessionsController < ApplicationController
 	def create
 		if auth_hash
 			@user = User.find_or_create_from_auth_hash(auth_hash)
+			@user[:tour] = "false"
 			login(@user)
 			redirect_to "/"
 			return
@@ -14,6 +15,7 @@ class Api::SessionsController < ApplicationController
 		end
 
     if @user
+			@user[:tour] = params[:user][:tour].nil? ? "false" : "true"
 			login(@user)
 			render "api/users/show"
 		else

@@ -47,7 +47,7 @@ var SurveysIndex = React.createClass ({
 
     window.setTimeout(function() {
       this.setSurveys();
-    }.bind(this), 500);
+    }.bind(this), 333);
   },
 
   componentWillUnmount: function () {
@@ -115,7 +115,7 @@ var SurveysIndex = React.createClass ({
       }
 
       return (
-        <li className="surveysindex-li hover-pointer" key={ survey_id }>
+        <li className="lead surveysindex-li hover-pointer" key={ survey_id }>
           <div id={ survey_id } className="h14" onClick={"div", that.clickedSurveyLi }>
             <div className={ "caret-icon " + caretIcon } />
             <div>

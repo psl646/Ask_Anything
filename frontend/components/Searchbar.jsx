@@ -37,10 +37,10 @@ var Searchbar = React.createClass({
   render: function () {
     return (
       <div>
-        <div>
+        <div id="introjs-searchbar">
           <input className="sidenav-list-link soft-edges" placeholder=" Search questions..." onChange={ this.handleSearch } value={ this.state.search }/>
         </div>
-        <div className="sidenav-list-link soft-edges hover-pointer" onClick={ this.showAllQuestions }>
+        <div id="introjs-show-all-questions" className="sidenav-list-link soft-edges hover-pointer" onClick={ this.showAllQuestions }>
           Show All Questions
         </div>
       </div>

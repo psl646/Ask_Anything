@@ -1,6 +1,7 @@
 var React = require('react');
 var Link = require('react-router').Link;
 var Logo = require('./Logo');
+var SessionApiUtil = require('../util/session_api_util');
 
 var NoUserNavBar = React.createClass({
   contextTypes: {
@@ -30,6 +31,9 @@ var NoUserNavBar = React.createClass({
   rightLinks: function () {
     return (
       <ul className="nouser-navbar-right-ul group">
+        <li id="introjs-starttour" className="login-main hover-nouser-nav" onClick={ this.handleTour } data-step="1" data-intro="Welcome to AskAnything! Start by logging in as a guest!">
+          Guided Tour
+        </li>
         <li className="login-main hover-nouser-nav" onClick={ this.handleLoginClick } >
           Log in
         </li>
@@ -38,6 +42,34 @@ var NoUserNavBar = React.createClass({
         </li>
       </ul>
     );
+  },
+
+  handleTour: function(e){
+    e.preventDefault();
+    var intro = introJs();
+    intro.setOptions({
+      showStepNumbers: false,
+      doneLabel: "Continue Tour",
+      steps:[
+        {
+          element: document.getElementById("introjs-starttour"),
+          intro: "Welcome to AskAnything! A place where you can ask questions and receive responses!"
+        },
+        {
+          element: document.getElementById("introjs-guestlogin"),
+          intro: "We'll begin by logging you into our guest user account. Click 'Continue Tour' below."
+        }
+      ]
+    })
+    intro.start().oncomplete(function(){
+      var formData = {
+        username: "user123",
+        email: "user123",
+        password: "user123",
+        tour: true
+      };
+      SessionApiUtil.tourlogin(formData);
+    });
   },
 
   render: function () {
