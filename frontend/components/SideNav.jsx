@@ -39,9 +39,7 @@ var SideNav = React.createClass ({
             </Modal>
           </li>
 
-          <div className="sidenav-list-link soft-edges">
-            <Searchbar />
-          </div>
+          <Searchbar />
 
         </ul>
       </div>

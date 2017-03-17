@@ -11,7 +11,7 @@ var Searchbar = React.createClass({
 
   handleSearch: function (e){
     var searchQuery = e.target.value;
-    this.setState({ search: searchQuery })
+    this.setState({ search: searchQuery });
     window.setTimeout(function(){
       if (this.compareSearch(searchQuery)){
         var mySearch = this.state.search;
@@ -28,11 +28,21 @@ var Searchbar = React.createClass({
     return currentSearchQuery === this.state.search;
   },
 
+  showAllQuestions: function (e){
+    e.preventDefault();
+    this.setState({ search: "" });
+    ClientQuestionActions.fetchAllQuestions();
+  },
+
   render: function () {
     return (
       <div>
-        <input className="searchbar-input" placeholder="           Search..." onChange={ this.handleSearch }>
-        </input>
+        <div>
+          <input className="sidenav-list-link soft-edges" placeholder=" Search questions..." onChange={ this.handleSearch } value={ this.state.search }/>
+        </div>
+        <div className="sidenav-list-link soft-edges hover-pointer" onClick={ this.showAllQuestions }>
+          Show All Questions
+        </div>
       </div>
     )
   }
