@@ -38,6 +38,9 @@ gem 'pusher'
 # Add SMS feature to application.  Read more: https://github.com/twilio/twilio-ruby
 gem 'twilio-ruby'
 
+# Intro.js provides a step-by-step users guide to a website. Read more: http://introjs.com/
+gem 'introjs-rails'
+
 # Email delivery/testing framework.
 # Read more: https://github.com/rails/rails/tree/master/actionmailer
 gem 'actionmailer'
