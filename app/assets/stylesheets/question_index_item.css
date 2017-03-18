@@ -244,18 +244,6 @@
   padding-right: 5px;
 }
 
-.configureChecked {
-  background: rgb(69, 150, 226);
-}
-
-.testChecked {
-  background: rgb(69, 150, 226);
-}
-
-.presentChecked {
-  background: rgb(69, 150, 226);
-}
-
 .phone-image {
   position: relative;
   left: 43px;
