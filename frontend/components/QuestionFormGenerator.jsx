@@ -70,7 +70,9 @@ var QuestionFormGenerator = React.createClass({
       ]
     })
     intro.start();
-    TourActions.partTwoComplete();
+    window.setTimeout(function(){
+      TourActions.partTwoComplete();
+    }, 0);
   },
 
   componentWillUnmount: function () {

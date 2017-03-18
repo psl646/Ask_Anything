@@ -52,7 +52,6 @@ var NoUserNavBar = React.createClass({
       doneLabel: "Continue Tour",
       steps:[
         {
-          element: document.getElementById("introjs-starttour"),
           intro: "Welcome to AskAnything! A place where you can ask questions and receive responses!"
         },
         {

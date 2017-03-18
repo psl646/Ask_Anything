@@ -35,24 +35,46 @@ var QuestionIndexItem = React.createClass ({
     ClientQuestionActions.getQuestionById(this.state.questionId, location);
     var currentUser = SessionStore.currentUser();
     var currentPart = TourStore.getPart();
-    if (currentUser["tour"] === "true" && currentPart === 1){
+    if (currentUser["tour"] === "true" && currentPart === 2){
       this.handleTour();
     }
   },
-
 
   handleTour: function(){
     var intro = introJs();
     intro.setOptions({
       showStepNumbers: false,
+      doneLabel: "Tour complete!",
       steps:[
         {
-          intro: "This is the form we use to create a question."
+          intro: "Here you can view your individual question and any recorded responses in a bar chart."
+        },
+        {
+          element: document.getElementById("introjs-activebutton"),
+          intro: "Set a question as active to begin recording answers.",
+          position: "right"
+        },
+        {
+          element: document.getElementById("introjs-question-link"),
+          intro: "You can respond to a question on the web by clicking here.",
+          position: "left"
+        },
+        {
+          element: document.getElementById("introjs-sms-answer"),
+          intro: "You can also respond to a question by texting 914-292-3261 with the question number and your answer choice.",
+          position: "left"
+        },
+        {
+          intro: "That completes the tour!  Try answering this question!"
         }
       ]
     })
-    intro.start();
-    TourActions.partTwoComplete();
+    intro.start().oncomplete(function(){
+      this.handleActiveToggle();
+    }.bind(this));
+    window.setTimeout(function(){
+      TourActions.partThreeComplete();
+    }, 0);
   },
 
   componentWillUnmount: function () {
@@ -130,6 +152,7 @@ var QuestionIndexItem = React.createClass ({
             </div>
             <ul className="question-toggle-buttons">
               <li
+                id="introjs-activebutton"
                 className={ "fa fa-wifi hover-pointer " + activeQuestion + inactiveToggle }
                 onClick={ this.handleActiveToggle }
                 />

@@ -54,15 +54,11 @@
   font-size: 14px;
   display: block;
   float: left;
-  width: 110px;
   padding: 12px 0;
   text-align: center;
   position: relative;
   height: 100%;
-}
-
-.topOptions-options:hover {
-  cursor: pointer;
+  width: 100%;
 }
 
 .test-list-items > ul {

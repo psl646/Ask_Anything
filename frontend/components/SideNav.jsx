@@ -12,6 +12,7 @@ var SideNav = React.createClass ({
   contextTypes: {
     router: React.PropTypes.object.isRequired
   },
+
   getInitialState: function () {
     return ({ modalOpen: false });
   },
@@ -19,6 +20,7 @@ var SideNav = React.createClass ({
   componentDidMount: function () {
     var currentUser = SessionStore.currentUser();
     var currentPart = TourStore.getPart();
+
     if (currentUser["tour"] === "true" && currentPart === 0){
       this.handleTour();
     }
@@ -66,7 +68,9 @@ var SideNav = React.createClass ({
     intro.start().oncomplete(function(){
       this.openModal();
     }.bind(this));
-    TourActions.partOneComplete();
+    window.setTimeout(function(){
+      TourActions.partOneComplete();
+    }, 0);
   },
 
   render: function () {

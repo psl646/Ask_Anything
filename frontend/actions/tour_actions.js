@@ -13,7 +13,7 @@ var TourActions = {
       actionType: TourConstants.PARTTWOCOMPLETE
     });
   },
-  
+
   partThreeComplete: function () {
     AppDispatcher.dispatch({
       actionType: TourConstants.PARTTHREECOMPLETE

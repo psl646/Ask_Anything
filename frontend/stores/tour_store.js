@@ -26,15 +26,12 @@ TourStore.__onDispatch = function (payload) {
   switch(payload.actionType) {
     case TourConstants.PARTONECOMPLETE:
     	_completePartOne();
-      TourStore.__emitChange();
       break;
     case TourConstants.PARTTWOCOMPLETE:
     	_completePartTwo();
-      TourStore.__emitChange();
       break;
     case TourConstants.PARTTHREECOMPLETE:
     	_completePartThree();
-      TourStore.__emitChange();
       break;
   }
 };
