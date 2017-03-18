@@ -37,7 +37,7 @@ var QuestionFormGenerator = React.createClass({
     this.questionFormListener = QuestionFormStore.addListener(this.updateQuestions)
     var currentUser = SessionStore.currentUser();
     var currentPart = TourStore.getPart();
-    if (currentUser["tour"] === "true" && currentPart === 1){
+    if (currentUser["tour"] === "true" && currentPart === 1 && window.localStorage["tourPart"] === "one"){
       this.handleTour();
     }
   },
@@ -72,6 +72,7 @@ var QuestionFormGenerator = React.createClass({
     intro.start();
     window.setTimeout(function(){
       TourActions.partTwoComplete();
+      window.localStorage["tourPart"] = "two";
     }, 0);
   },
 
@@ -80,13 +81,10 @@ var QuestionFormGenerator = React.createClass({
     this.questionListener.remove();
     this.questionFormListener.remove();
 
-
-    // CAN I GET RID OF THESE TIMEOUTS now that I moved the listeners on top? TRY LATER
     window.setTimeout(function(){
       ErrorActions.clearErrors();
     }, 0);
 
-    // Can possibly revamp this so that we can persist state for un-saved/sent questions
     window.setTimeout(function(){
       QuestionFormActions.clearQuestionForms();
     }, 0);

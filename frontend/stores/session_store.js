@@ -15,6 +15,7 @@ function _login(currentUser) {
 function _logout() {
   _currentUser = {};
   _currentUserHasBeenFetched = true;
+  window.localStorage.clear();
 }
 
 SessionStore.__onDispatch = function (payload) {

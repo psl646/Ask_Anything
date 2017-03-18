@@ -35,7 +35,8 @@ var QuestionIndexItem = React.createClass ({
     ClientQuestionActions.getQuestionById(this.state.questionId, location);
     var currentUser = SessionStore.currentUser();
     var currentPart = TourStore.getPart();
-    if (currentUser["tour"] === "true" && currentPart === 2){
+
+    if (currentUser["tour"] === "true" && currentPart === 2 && window.localStorage["tourPart"] === "two"){
       this.handleTour();
     }
   },
@@ -74,6 +75,7 @@ var QuestionIndexItem = React.createClass ({
     }.bind(this));
     window.setTimeout(function(){
       TourActions.partThreeComplete();
+      window.localStorage["tourPart"] = "three";
     }, 0);
   },
 

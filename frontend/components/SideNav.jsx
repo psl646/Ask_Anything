@@ -21,7 +21,7 @@ var SideNav = React.createClass ({
     var currentUser = SessionStore.currentUser();
     var currentPart = TourStore.getPart();
 
-    if (currentUser["tour"] === "true" && currentPart === 0){
+    if (currentUser["tour"] === "true" && currentPart === 0 && window.localStorage["tourPart"] === undefined){
       this.handleTour();
     }
   },
@@ -70,6 +70,7 @@ var SideNav = React.createClass ({
     }.bind(this));
     window.setTimeout(function(){
       TourActions.partOneComplete();
+      window.localStorage["tourPart"] = "one";
     }, 0);
   },
 
