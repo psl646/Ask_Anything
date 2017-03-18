@@ -4,6 +4,7 @@
   position: relative;
   width: 100%;
   min-width: 1200px;
+  height: 100%;
 }
 
 .demo-container {
@@ -48,13 +49,6 @@
   z-index: 5000;
 }
 
-.create-question-button {
-  background: #db5242;
-  text-shadow: none;
-  float: left;
-  width: 350px;
-}
-
 .create-question-button:hover {
   color: black;
 }
@@ -65,18 +59,19 @@
 
 .main-page-login-options > li {
   padding: 10px 0;
+  background-color: red;
+  width: 350px;
+  background: #db5242;
+  text-shadow: none;
+}
+
+.create-question-button {
+  float: left;
 }
 
 .twitter-login {
-  background: #db5242;
-  text-shadow: none;
-  position: absolute;
   float: right;
-  top: 94px;
-  left: 450px;
-  width: 350px;
   padding: 10px 0px;
-
 }
 
 .twitter-login:hover {

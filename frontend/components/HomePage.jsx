@@ -41,17 +41,21 @@ var HomePage = React.createClass({
     }
   },
 
+  twitterLogin: function(){
+    window.location.href = "auth/twitter";
+  },
+
   demoPageLinks: function () {
     if (SessionStore.isUserLoggedIn()) {
       return;
     } else {
       return (
         <ul className="main-page-login-options group">
-          <li id="introjs-guestlogin" className="hover-pointer soft-edges create-question-button" onClick={ this.guestLogin }>
+          <li id="introjs-guestlogin" className="create-question-button soft-edges hover-pointer" onClick={ this.guestLogin }>
             Log in as a guest
           </li>
-          <li>
-            <a href="auth/twitter" className="soft-edges hover-pointer twitter-login">Twitter Login</a>
+          <li className="create-question-button twitter-login soft-edges hover-pointer" onClick={ this.twitterLogin }>
+            Twitter Login
           </li>
         </ul>
       );
