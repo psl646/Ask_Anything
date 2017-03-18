@@ -49,10 +49,6 @@
   z-index: 5000;
 }
 
-.create-question-button:hover {
-  color: black;
-}
-
 .main-page-login-options {
   margin-top: 20px;
 }
@@ -69,13 +65,12 @@
   float: left;
 }
 
-.twitter-login {
-  float: right;
-  padding: 10px 0px;
+.create-question-button:hover {
+  color: black;
 }
 
-.twitter-login:hover {
-  color: black;
+.twitter-login {
+  float: right;
 }
 
 .header-size {
