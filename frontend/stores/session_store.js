@@ -10,6 +10,7 @@ var _currentUser = {},
 function _login(currentUser) {
   _currentUser = currentUser;
   _currentUserHasBeenFetched = true;
+  window.localStorage["tourPart"] = "zero";
 }
 
 function _logout() {

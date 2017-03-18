@@ -18,7 +18,7 @@ var SideNav = React.createClass ({
   componentDidMount: function () {
     var currentUser = SessionStore.currentUser();
 
-    if (currentUser["tour"] === "true" && window.localStorage["tourPart"] === undefined){
+    if (currentUser["tour"] === "true" && window.localStorage["tourPart"] === "zero"){
       this.handleTour();
     }
   },
