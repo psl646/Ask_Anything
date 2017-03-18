@@ -8,9 +8,6 @@ var QuestionForm = require('./QuestionForm');
 var QuestionFormStore = require('../stores/question_form_store');
 var QuestionFormActions = require('../actions/question_form_actions');
 var SessionStore = require('../stores/session_store.js');
-var TourStore = require('../stores/tour_store.js');
-var TourActions = require('../actions/tour_actions.js');
-
 
 var QuestionFormGenerator = React.createClass({
   contextTypes: {
@@ -36,8 +33,8 @@ var QuestionFormGenerator = React.createClass({
     this.questionListener = QuestionStore.addListener(this._questionsCreated);
     this.questionFormListener = QuestionFormStore.addListener(this.updateQuestions)
     var currentUser = SessionStore.currentUser();
-    var currentPart = TourStore.getPart();
-    if (currentUser["tour"] === "true" && currentPart === 1 && window.localStorage["tourPart"] === "one"){
+
+    if (currentUser["tour"] === "true" && window.localStorage["tourPart"] === "one"){
       this.handleTour();
     }
   },
@@ -71,7 +68,6 @@ var QuestionFormGenerator = React.createClass({
     })
     intro.start();
     window.setTimeout(function(){
-      TourActions.partTwoComplete();
       window.localStorage["tourPart"] = "two";
     }, 0);
   },

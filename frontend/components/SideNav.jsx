@@ -5,8 +5,6 @@ var ModalConstants = require('../constants/modal_constants');
 var QuestionFormGenerator = require('./QuestionFormGenerator');
 var Searchbar = require('./Searchbar');
 var SessionStore = require('../stores/session_store.js');
-var TourStore = require('../stores/tour_store.js');
-var TourActions = require('../actions/tour_actions.js');
 
 var SideNav = React.createClass ({
   contextTypes: {
@@ -19,9 +17,8 @@ var SideNav = React.createClass ({
 
   componentDidMount: function () {
     var currentUser = SessionStore.currentUser();
-    var currentPart = TourStore.getPart();
 
-    if (currentUser["tour"] === "true" && currentPart === 0 && window.localStorage["tourPart"] === undefined){
+    if (currentUser["tour"] === "true" && window.localStorage["tourPart"] === undefined){
       this.handleTour();
     }
   },
@@ -69,7 +66,6 @@ var SideNav = React.createClass ({
       this.openModal();
     }.bind(this));
     window.setTimeout(function(){
-      TourActions.partOneComplete();
       window.localStorage["tourPart"] = "one";
     }, 0);
   },

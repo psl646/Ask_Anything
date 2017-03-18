@@ -2,7 +2,6 @@ var Link = require('react-router').Link;
 var React = require('react');
 // actions
 var ClientQuestionActions = require('../actions/client_question_actions');
-var TourActions = require('../actions/tour_actions');
 // components
 var Graph = require('./Graph');
 var QuestionIndexItemToolbar = require('./QuestionIndexItemToolbar');
@@ -10,7 +9,6 @@ var Timebar = require('./Timebar');
 // stores
 var QuestionStore = require('../stores/question_store');
 var SessionStore = require('../stores/session_store');
-var TourStore = require('../stores/tour_store');
 
 var QuestionIndexItem = React.createClass ({
   contextTypes: {
@@ -34,9 +32,8 @@ var QuestionIndexItem = React.createClass ({
 
     ClientQuestionActions.getQuestionById(this.state.questionId, location);
     var currentUser = SessionStore.currentUser();
-    var currentPart = TourStore.getPart();
 
-    if (currentUser["tour"] === "true" && currentPart === 2 && window.localStorage["tourPart"] === "two"){
+    if (currentUser["tour"] === "true" && window.localStorage["tourPart"] === "two"){
       this.handleTour();
     }
   },
@@ -74,7 +71,6 @@ var QuestionIndexItem = React.createClass ({
       this.handleActiveToggle();
     }.bind(this));
     window.setTimeout(function(){
-      TourActions.partThreeComplete();
       window.localStorage["tourPart"] = "three";
     }, 0);
   },
