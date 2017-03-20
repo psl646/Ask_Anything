@@ -73,6 +73,10 @@ Answers are maintained on the frontend in the `QuestionFormStore`.  Because crea
 
 In addition to the features already implemented, I plan to continue work on this project.  The next steps for Ask Anything! are outlined below.
 
-### Search feature
+### Draggable Edits
 
-Plan to implement a search feature to search for particular questions
+Enable draggable functionality on question edit form to reorder answer choices quickly within the viewport.
+
+### Question types
+
+Add functionality for different question types such as open-ended questions, ranking questions, and clickable images.
