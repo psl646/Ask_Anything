@@ -1,4 +1,6 @@
 var React = require('react');
+var ReactDOM = require('react-dom');
+var Dragula = require('react-dragula')
 var AnswerInput = require('./AnswerInput');
 var QuestionStore = require('../stores/question_store');
 var QuestionFormStore = require('../stores/question_form_store');
@@ -177,11 +179,19 @@ var QuestionEditForm = React.createClass({
 
   allMyAnswers: function () {
     return (
-      <ul>
+      <ul className="dragula-container" ref={ this.dragulaContainer }>
         { this.myOldAnswers() }
         { this.myNewAnswers() }
       </ul>
     );
+  },
+
+  dragulaContainer: function (componentInstance){
+    if (componentInstance){
+      var options = { };
+      Dragula([componentInstance], options);
+      console.log(componentInstance);
+    }
   },
 
   addAnswerField: function () {
