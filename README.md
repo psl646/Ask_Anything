@@ -75,8 +75,12 @@ In addition to the features already implemented, I plan to continue work on this
 
 ### Draggable Edits
 
-Enable draggable functionality on question edit form to reorder answer choices quickly within the viewport.
+Enable draggable functionality with [dragula]: https://bevacqua.github.io/dragula/ on question edit form to reorder answer choices quickly within the viewport.
 
 ### Question types
 
 Add functionality for different question types such as open-ended questions, ranking questions, and clickable images.
+
+### Speech Recognition
+
+Add the [annyang]: https://www.talater.com/annyang/ speech recognition library for responses to new question type: open-ended questions.
