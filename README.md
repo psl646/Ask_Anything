@@ -4,7 +4,7 @@
 
 [heroku]: http://www.askanything.site/
 
-Ask Anything! is a full-stack web application inspired by Poll Everywhere.  It utilizes Ruby on Rails on the backend, a PostgreSQL database, and React.js with a Flux architectural framework on the frontend.  
+Ask Anything! is a full-stack web application inspired by Poll Everywhere.  It utilizes Ruby on Rails on the backend, a PostgreSQL database, and React.JS with a Flux architectural framework on the frontend.  
 
 
 ![Main Question](./app/assets/images/main_small.png)
@@ -75,7 +75,7 @@ In addition to the features already implemented, I plan to continue work on this
 
 ### Draggable Edits
 
-Enable draggable functionality with [dragula]: https://bevacqua.github.io/dragula/ on question edit form to reorder answer choices quickly within the viewport.
+Enable draggable functionality with [dragula](https://bevacqua.github.io/dragula/) on question edit form to reorder answer choices quickly within the viewport.
 
 ### Question types
 
@@ -83,4 +83,4 @@ Add functionality for different question types such as open-ended questions, ran
 
 ### Speech Recognition
 
-Add the [annyang]: https://www.talater.com/annyang/ speech recognition library for responses to new question type: open-ended questions.
+Add the [annyang](https://www.talater.com/annyang/) speech recognition library for responses to new question type: open-ended questions.
