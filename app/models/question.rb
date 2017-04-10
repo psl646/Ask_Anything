@@ -60,8 +60,10 @@ class Question < ActiveRecord::Base
       Answer.create(answer: answer_data.last, question: current_user.questions.last)
     end
 
-    if Answer.last.question_id != Question.last.id
-      raise "ERROR"
+    if question_data[:category] != "Open Ended"
+      if Answer.last.question_id != Question.last.id
+        raise "ERROR"
+      end
     end
   end
 
