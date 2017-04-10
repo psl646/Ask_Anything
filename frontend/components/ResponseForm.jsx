@@ -251,6 +251,38 @@ var ResponseForm = React.createClass({
       user = <CustomInvalid />
     }
 
+    console.log(this.state.question["category"] === "Open Ended");
+    if (this.state.question["category"] === "Open Ended") {
+      if (annyang) {
+        // Let's define a command.
+        var commands = {
+          'hello': sayHello,
+          'hi': function () { console.log("Hi"); },
+          'show me *tag': recordAnswer,
+          'abort': abortAnnyang
+        };
+
+        // Add our commands to annyang
+        annyang.addCommands(commands);
+
+        var sayHello = function () {
+          console.log("Hello");
+        }
+
+        var recordAnswer = function (tag) {
+          console.log("RECORDING");
+          console.log(tag);
+        }
+
+        var abortAnnyang = function () {
+          console.log("ABORTING");
+          annyang.abort();
+        }
+
+        // Start listening.
+        annyang.start();
+      }
+    };
     return (
       <div className="responseform-page">
         <div className="responseform-menu">
