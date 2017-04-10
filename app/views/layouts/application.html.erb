@@ -2,7 +2,6 @@
 <html>
 <head>
   <title>Ask Anything!</title>
-  <script src="https://js.pusher.com/3.1/pusher.min.js"></script>
   <%= stylesheet_link_tag    'application', media: 'all'%>
   <%= csrf_meta_tags %>
   <%= javascript_include_tag 'application' %>
@@ -12,5 +11,20 @@
 <body>
 
 <%= yield %>
+<script src="https://js.pusher.com/3.1/pusher.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.6.0/annyang.min.js"></script>
+<script>
+  if (annyang) {
+    // Let's define a command.
+    var commands = {
+      'hello': function() { alert('Hello world!'); }
+    };
 
+    // Add our commands to annyang
+    annyang.addCommands(commands);
+
+    // Start listening.
+    annyang.start();
+  }
+</script>
 </body>
