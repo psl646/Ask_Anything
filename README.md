@@ -2,7 +2,7 @@
 
 [Ask Anything! live][heroku]
 
-[heroku]: http://www.askanything.site/
+[heroku]: https://ask--anything.herokuapp.com/
 
 Ask Anything! is a full-stack web application inspired by Poll Everywhere.  It utilizes Ruby on Rails on the backend, a PostgreSQL database, and React.JS with a Flux architectural framework on the frontend.  
 
